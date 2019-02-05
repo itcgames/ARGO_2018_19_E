@@ -18,10 +18,13 @@ Game::Game()
 	m_options = new OptionScreen();
 	m_credits = new CreditScreen();
 	m_screenSize = { 0,0,1200,700 };
-	m_pistol = new Entity();
 
 	p = new Player(m_renderer);
 	ai = new AI(m_renderer);
+
+
+	p = new Player(m_renderer);
+	pistol = new Gun(m_renderer);
 
 	initialise();
 }
@@ -85,6 +88,7 @@ void Game::update() {
 	
 	m_hs.update();
 	m_as.update();
+	m_guns.update();
 	SDL_PollEvent(&event);
 	m_cs.update(event);
 	m_ps.update();
@@ -132,23 +136,19 @@ void Game::setGameState(GameState gameState)
 void Game::initialise()
 {
 
-	SpriteComponent* spriteComponent = new SpriteComponent(0, 0, 257, 259);
-	spriteComponent->loadFromFile("human.png", m_renderer);
-	spriteComponent->setPosition(v2(300, 100));
-	spriteComponent->setScale(v2(0.5f, 0.5f));
-
-	m_pistol->addComponent(spriteComponent);
-	m_pistol->addComponent(new PositionComponent(600, 100));
-
 	m_hs.addEntity((Entity*)p);
 	m_cs.addEntity((Entity*)p);
 
-	m_rs.addEntity((Entity*)p);
+	m_cs.addEntity((Entity*)pistol);
 
-	m_rs.addEntity(m_pistol);
+	m_rs.addEntity((Entity*)p);
+	m_rs.addEntity((Entity*)pistol);
+
 	m_ps.addEntity((Entity*)p);
 
 	m_ais.addEntity((Entity*)ai);
-	//m_ps.addEntity((Entity*)ai);
+	m_ps.addEntity((Entity*)pistol);
+
+	m_guns.addEntity((Entity*)pistol);
 }
 

@@ -17,6 +17,7 @@
     <ClCompile Include="src\Systems\RenderSystem.cpp" />
     <ClCompile Include="src\Systems\SoundSystem.cpp" />
     <ClCompile Include="src\AI.cpp" />
+    <ClCompile Include="src\Gun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\AIComponent.h" />
@@ -46,5 +47,7 @@
     <ClInclude Include="src\Systems\RenderSystem.h" />
     <ClInclude Include="src\Systems\SoundSystem.h" />
     <ClInclude Include="src\AI.h" />
+    <ClInclude Include="src\Gun.h" />
+    <ClInclude Include="src\Components\TagComponent.h" />
   </ItemGroup>
 </Project>

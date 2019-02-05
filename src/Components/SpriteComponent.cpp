@@ -16,6 +16,7 @@ SpriteComponent::SpriteComponent(int x, int y, int textureWidth, int textureHeig
 	m_rotationAngle = 0.0f;
 	m_scaledWidth = 0;
 	m_scaledHeight = 0;
+	m_flipValue = SDL_FLIP_NONE;
 
 	//Set up source rectangle for the image
 	m_sRect->x = x;
@@ -79,7 +80,7 @@ void SpriteComponent::render(SDL_Renderer* gRenderer)
 	m_dRect->w = m_scaledWidth;
 	m_dRect->h = m_scaledHeight;
 
-	SDL_RenderCopyEx(gRenderer, m_texture, m_sRect, m_dRect, m_rotationAngle, NULL, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(gRenderer, m_texture, m_sRect, m_dRect, m_rotationAngle, NULL, m_flipValue);
 }
 
 void SpriteComponent::freeTexture()

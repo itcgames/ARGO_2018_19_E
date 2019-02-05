@@ -13,8 +13,10 @@
 
 #include "Player.h"
 #include "AI.h"
+#include "Gun.h"
 
 #include "./Systems/PhysicsSystem.h"
+#include "./Systems/GunSystem.h"
 
 
 using namespace std;
@@ -53,19 +55,16 @@ private:
 	SDL_Event event;
 	bool exit;
 
-	Entity* m_player;
-	Entity* m_cat;
-	Entity* m_alien;
-	Entity* m_dog;
 
 	Player* p;
 	AI *ai;
+	Gun* pistol;
 
-	Entity* m_pistol;
 
 	HealthSystem m_hs;
 	ControlSystem m_cs;
 	RenderSystem m_rs;
+	GunSystem m_guns;
 	AISystem m_as;
 	PhysicsSystem m_ps;
 	AISystem m_ais;
