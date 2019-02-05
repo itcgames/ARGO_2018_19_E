@@ -21,26 +21,27 @@ void SoundSystem::render(SDL_Renderer* renderer) {
 		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 		SpriteComponent * gc = (SpriteComponent*)entity->getCompByType("SPRITE");
 	
-		m_position = { pc->getX(), pc->getY(), 100,100 };
-		screenRect = { 0,0,1200,700 };
-		imageRect = { m_position };
-		centre.x = imageRect.w / 2;
-		centre.y = imageRect.h / 2;
+		//m_position = { pc->getX(), pc->getY(), 100,100 };
+		//screenRect = { 0,0,1200,700 };
+		//imageRect = { m_position };
+		//centre.x = imageRect.w / 2;
+		//centre.y = imageRect.h / 2;
 
-		SDL_QueryTexture(gc->getTexturePath(), nullptr, nullptr, gc->getW(), gc->getH());
+		//SDL_QueryTexture(gc->getTexturePath(), nullptr, nullptr, gc->getW(), gc->getH());
 		
 		
-		SDL_RenderCopyEx(renderer, gc->getTexturePath(), &screenRect, &imageRect, 0, &centre, SDL_FLIP_NONE);
+		//SDL_RenderCopyEx(renderer, gc->getTexturePath(), &screenRect, &imageRect, 0, &centre, SDL_FLIP_NONE);
 	}
 
 
 }
 
+
 /*This source code copyrighted by Lazy Foo' Productions (2004-2019)
 and may not be redistributed without written permission.*/
 
 //Using SDL, SDL_image, SDL_ttf, SDL_mixer, standard IO, math, and strings
-#include <SDL.h>
+/*#include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include <stdio.h>
@@ -516,6 +517,6 @@ int main(int argc, char* args[])
 	close();
 
 	return 0;
-}
+}*/
 
 
