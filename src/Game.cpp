@@ -76,22 +76,27 @@ void Game::render() {
 
 void Game::initialise()
 {
-	m_player->addComponent(new HealthComponent(10));
-	m_player->addComponent(new PositionComponent(300, 500));
-	m_player->addComponent(new ControlComponent());
+	
 	
 
 
+	SpriteComponent* spriteComponent = new SpriteComponent(0, 0, 257, 259);
+	spriteComponent->loadFromFile("human.png", m_renderer);
+	spriteComponent->setPosition(v2(300, 100));
+	spriteComponent->setScale(v2(0.5f, 0.5f));
 
+
+
+	m_pistol->addComponent(spriteComponent);
 	m_pistol->addComponent(new PositionComponent(600, 100));
 
 
-	m_hs.addEntity(m_player);
-	m_cs.addEntity(m_player);
+	m_hs.addEntity((Entity*)p);
+	m_cs.addEntity((Entity*)p);
 
 	m_rs.addEntity((Entity*)p);
 
 	m_rs.addEntity(m_pistol);
-	m_ps.addEntity(m_player);
+	m_ps.addEntity((Entity*)p);
 }
 

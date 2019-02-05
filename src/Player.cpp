@@ -13,4 +13,8 @@ Player::Player(SDL_Renderer* renderer)
 	m_spriteComponent->setPosition(v2(300, 100));
 	m_spriteComponent->setScale(v2(0.5f, 0.5f));
 	this->addComponent(m_spriteComponent);
+
+	this->addComponent(new HealthComponent(10));
+	this->addComponent(new PositionComponent(300, 500));
+	this->addComponent(new ControlComponent());
 }
