@@ -3,7 +3,6 @@
 
 #include "Components.h"
 #include <SDL_image.h>
-#include 
 #include <iostream>
 
 using namespace std;

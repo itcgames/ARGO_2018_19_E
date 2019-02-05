@@ -51,6 +51,9 @@
     <ClCompile Include="SpriteComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\Systems\PhysicsSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Entity.h">
@@ -89,10 +92,13 @@
     <ClInclude Include="src\Components\SpriteComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="cute_c2.h">
+    <ClInclude Include="src\Systems\PhysicsSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cute_c2.h">
       <Filter>Header Files\cuteheaders</Filter>
     </ClInclude>
-    <ClInclude Include="cute_math2d.h">
+    <ClInclude Include="src\cute_math2d.h">
       <Filter>Header Files\cuteheaders</Filter>
     </ClInclude>
   </ItemGroup>
