@@ -33,6 +33,8 @@ private:
 	Entity* m_alien;
 	Entity* m_dog;
 
+	Entity* m_pistol;
+
 	HealthSystem m_hs;
 	ControlSystem m_cs;
 	RenderSystem m_rs;

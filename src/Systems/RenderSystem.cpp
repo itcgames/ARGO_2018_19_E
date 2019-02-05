@@ -19,7 +19,7 @@ void RenderSystem::render(SDL_Renderer* renderer) {
 
 		//Render texture to screen
 		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
-		GraphicComponent * gc = (GraphicComponent*)entity->getCompByType("GRAPHIC");
+		SpriteComponent * gc = (SpriteComponent*)entity->getCompByType("SPRITE");
 	
 		m_position = { pc->getX(), pc->getY(), 100,100 };
 		screenRect = { 0,0,1200,700 };

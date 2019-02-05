@@ -14,6 +14,8 @@ Game::Game()
 	
 	m_player = new Entity();
 
+	m_pistol = new Entity();
+
 	initialise();
 }
 
@@ -74,11 +76,16 @@ void Game::initialise()
 	m_player->addComponent(new HealthComponent(10));
 	m_player->addComponent(new PositionComponent(300, 100));
 	m_player->addComponent(new ControlComponent());
-	m_player->addComponent(new GraphicComponent(*loadTexture("human.png"), 200, 200));
+	m_player->addComponent(new SpriteComponent(*loadTexture("human.png"), 200, 200));
+
+	m_pistol->addComponent(new PositionComponent(600, 100));
+	m_pistol->addComponent(new SpriteComponent(*loadTexture("assets/pistol.png"),29.5,21));
 
 	m_hs.addEntity(m_player);
 	m_cs.addEntity(m_player);
 	m_rs.addEntity(m_player);
+
+	m_rs.addEntity(m_pistol);
 }
 
 SDL_Texture* Game::loadTexture(std::string file)
