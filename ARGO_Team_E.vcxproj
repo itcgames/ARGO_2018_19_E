@@ -131,7 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="src\Components\SpriteComponent.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Systems\AISystem.cpp" />
@@ -142,8 +142,9 @@
   <ItemGroup>
     <ClInclude Include="cute_c2.h" />
     <ClInclude Include="cute_math2d.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="src\Components\AIComponent.h" />
-    <ClInclude Include="src\Components\Components.h" />
+    <ClInclude Include="src\Components\Component.h" />
     <ClInclude Include="src\Components\ControlComponent.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\Components\HealthComponents.h" />

@@ -1,7 +1,7 @@
 #ifndef POSITIONCOMPONENT_H
 #define POSITIONCOMPONENT_H
 
-#include "Components.h"
+#include "Component.h"
 #include <SDL.h>
 
 class PositionComponent : public Component

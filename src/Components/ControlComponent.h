@@ -1,7 +1,7 @@
 #ifndef CONTROLCOMPONENT_H
 #define CONTROLCOMPONENT_H
 
-#include "Components.h"
+#include "Component.h"
 
 class ControlComponent : public Component
 {
