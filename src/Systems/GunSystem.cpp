@@ -8,13 +8,16 @@ void GunSystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
-void GunSystem::shoot() {
+void GunSystem::update() {
 
 	for (Entity * entity : m_entities) {
 
 		//Render texture to screen
 		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 		SpriteComponent * gc = (SpriteComponent*)entity->getCompByType("SPRITE");
+		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
+
+		cc->getAngle();
 
 		//m_position = { pc->getX(), pc->getY(), 100,100 };
 		//screenRect = { 0,0,1200,700 };

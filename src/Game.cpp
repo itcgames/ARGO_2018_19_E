@@ -53,6 +53,7 @@ void Game::run()
 void Game::update() {
 	m_hs.update();
 	m_as.update();
+	m_guns.update();
 	SDL_PollEvent(&event);
 	m_cs.update(event);
 	m_ps.update();
@@ -88,6 +89,8 @@ void Game::initialise()
 
 	m_rs.addEntity(m_pistol);
 	m_ps.addEntity(m_player);
+
+	m_guns.addEntity(m_pistol);
 }
 
 SDL_Texture* Game::loadTexture(std::string file)

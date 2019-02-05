@@ -15,7 +15,7 @@ class GunSystem
 public:
 	GunSystem();
 	void addEntity(Entity * e);
-	void shoot();
+	void update();
 
 private:
 
