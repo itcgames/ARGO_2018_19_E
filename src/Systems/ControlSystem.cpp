@@ -82,10 +82,13 @@ void ControlSystem::update(SDL_Event e) {
 		}
 		
 		if (leftX > JOYSTICK_DEAD_ZONE || leftX < -JOYSTICK_DEAD_ZONE ||
-			leftY > JOYSTICK_DEAD_ZONE || leftY < -JOYSTICK_DEAD_ZONE)
+			leftY > JOYSTICK_DEAD_ZONE || leftY < -JOYSTICK_DEAD_ZONE) {
 			joystickAngle = atan2((double)leftX, (double)leftY) * (180.0 / M_PI);
-		else
+		}
+		else {
 			joystickAngle = 0.0;
+		}
+		cc->setAngle(joystickAngle);
 		std::cout << joystickAngle << std::endl;
 	}
 }
