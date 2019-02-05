@@ -17,7 +17,7 @@ void GunSystem::update() {
 		SpriteComponent * gc = (SpriteComponent*)entity->getCompByType("SPRITE");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 
-		cc->getAngle();
+		std::cout << cc->getAngle() << std::endl;
 
 		//m_position = { pc->getX(), pc->getY(), 100,100 };
 		//screenRect = { 0,0,1200,700 };

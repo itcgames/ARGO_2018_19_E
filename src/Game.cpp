@@ -82,6 +82,7 @@ void Game::initialise()
 
 	m_pistol->addComponent(new PositionComponent(600, 100));
 	m_pistol->addComponent(new SpriteComponent(*loadTexture("assets/pistol.png"),29.5,21));
+	m_pistol->addComponent(new ControlComponent());
 
 	m_hs.addEntity(m_player);
 	m_cs.addEntity(m_player);
@@ -89,6 +90,7 @@ void Game::initialise()
 
 	m_rs.addEntity(m_pistol);
 	m_ps.addEntity(m_player);
+	//m_cs.addEntity(m_pistol);
 
 	m_guns.addEntity(m_pistol);
 }
