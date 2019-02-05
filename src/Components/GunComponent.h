@@ -1,7 +1,7 @@
 #ifndef GUNCOMPONENT_H
 #define GUNCOMPONENT_H
 
-#include "Components.h"
+#include "Component.h"
 #include <SDL_image.h>
 #include <iostream>
 

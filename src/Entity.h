@@ -8,6 +8,7 @@
 #include "./Components/SpriteComponent.h"
 #include "./Components/HealthComponents.h"
 #include "./Components/PositionComponent.h"
+#include "./Components/TagComponent.h"
 #include <SDL.h>
 
 class Entity

@@ -16,8 +16,14 @@ void GunSystem::update() {
 		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 		SpriteComponent * gc = (SpriteComponent*)entity->getCompByType("SPRITE");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
+		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 
 		std::cout << cc->getAngle() << std::endl;
+
+		//if (tc->getTag() == "Gun")
+		//{
+			//gc->setRotation((cc->getAngle())*-1);
+		//}
 
 		//m_position = { pc->getX(), pc->getY(), 100,100 };
 		//screenRect = { 0,0,1200,700 };

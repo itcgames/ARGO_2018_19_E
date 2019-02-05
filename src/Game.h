@@ -6,8 +6,13 @@
 #include "./Systems/ControlSystem.h"
 #include "./Systems/RenderSystem.h"
 #include "./Systems/AISystem.h"
+
+#include "Player.h"
+#include "Gun.h"
+
 #include "./Systems/PhysicsSystem.h"
 #include "./Systems/GunSystem.h"
+
 
 using namespace std;
 
@@ -34,6 +39,9 @@ private:
 	Entity* m_cat;
 	Entity* m_alien;
 	Entity* m_dog;
+
+	Player* p;
+	Gun* pistol;
 
 	Entity* m_pistol;
 

@@ -12,9 +12,10 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	
-	m_player = new Entity();
 
-	m_pistol = new Entity();
+
+	p = new Player(m_renderer);
+	pistol = new Gun(m_renderer);
 
 	initialise();
 }
@@ -75,42 +76,26 @@ void Game::render() {
 
 void Game::initialise()
 {
-	m_player->addComponent(new HealthComponent(10));
-	m_player->addComponent(new PositionComponent(300, 500));
-	m_player->addComponent(new ControlComponent());
-	m_player->addComponent(new SpriteComponent(*loadTexture("human.png"), 200, 200));
 
-	m_pistol->addComponent(new PositionComponent(600, 100));
-	m_pistol->addComponent(new SpriteComponent(*loadTexture("assets/pistol.png"),29.5,21));
-	m_pistol->addComponent(new ControlComponent());
+	//SpriteComponent* spriteComponent = new SpriteComponent(0, 0, 257, 259);
+	//spriteComponent->loadFromFile("human.png", m_renderer);
+	//spriteComponent->setPosition(v2(300, 100));
+	//spriteComponent->setScale(v2(0.5f, 0.5f));
 
-	m_hs.addEntity(m_player);
-	m_cs.addEntity(m_player);
-	m_rs.addEntity(m_player);
 
-	m_rs.addEntity(m_pistol);
-	m_ps.addEntity(m_player);
-	//m_cs.addEntity(m_pistol);
+	//m_guns.addEntity((Entity*)pistol);
 
-	m_guns.addEntity(m_pistol);
+	m_hs.addEntity((Entity*)p);
+	m_cs.addEntity((Entity*)p);
+
+	m_cs.addEntity((Entity*)pistol);
+
+	m_rs.addEntity((Entity*)p);
+	m_rs.addEntity((Entity*)pistol);
+
+	m_ps.addEntity((Entity*)p);
+	m_ps.addEntity((Entity*)pistol);
+
+	m_guns.addEntity((Entity*)pistol);
 }
 
-SDL_Texture* Game::loadTexture(std::string file)
-{
-	SDL_Texture* newTexture = NULL;
-
-	SDL_Surface* loadedSurface = IMG_Load(file.c_str());
-
-	if (loadedSurface == NULL) {
-		printf("Unable to load image &s! SDL_image Error: %s\n", file.c_str(), IMG_GetError());
-	}
-	else {
-		newTexture = SDL_CreateTextureFromSurface(m_renderer, loadedSurface);
-		if (newTexture == NULL)
-		{
-			printf("Unable to create texture from &s! SDL_Error: %s\n", file.c_str(), SDL_GetError());
-		}
-		SDL_FreeSurface(loadedSurface);
-	}
-	return newTexture;
-}
