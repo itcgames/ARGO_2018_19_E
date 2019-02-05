@@ -53,6 +53,7 @@ void Game::update() {
 	m_as.update();
 	SDL_PollEvent(&event);
 	m_cs.update(event);
+	m_ps.update();
 }
 
 void Game::render() {
@@ -72,13 +73,14 @@ void Game::render() {
 void Game::initialise()
 {
 	m_player->addComponent(new HealthComponent(10));
-	m_player->addComponent(new PositionComponent(300, 100));
+	m_player->addComponent(new PositionComponent(300, 500));
 	m_player->addComponent(new ControlComponent());
-	m_player->addComponent(new GraphicComponent(*loadTexture("human.png"), 200, 200));
+	m_player->addComponent(new SpriteComponent(*loadTexture("human.png"), 200, 200));
 
 	m_hs.addEntity(m_player);
 	m_cs.addEntity(m_player);
 	m_rs.addEntity(m_player);
+	m_ps.addEntity(m_player);
 }
 
 SDL_Texture* Game::loadTexture(std::string file)
