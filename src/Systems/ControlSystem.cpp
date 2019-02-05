@@ -51,6 +51,10 @@ void ControlSystem::update(SDL_Event e) {
 		bool AButton = false;
 		int StickX = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_LEFTX);
 		int StickY = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_LEFTY);
+
+		int leftX = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_RIGHTX);
+		int leftY = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_RIGHTY);
+
 		AButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_A);
 		if (AButton) {
 			if(aIndex == 0)
@@ -76,9 +80,16 @@ void ControlSystem::update(SDL_Event e) {
 		else {
 			cc->setRight(false);
 		}
-			
 		
-				
+		if (leftX > JOYSTICK_DEAD_ZONE || leftX < -JOYSTICK_DEAD_ZONE ||
+			leftY > JOYSTICK_DEAD_ZONE || leftY < -JOYSTICK_DEAD_ZONE) {
+			joystickAngle = atan2((double)leftX, (double)leftY) * (180.0 / M_PI);
+		}
+		else {
+			joystickAngle = 0.0;
+		}
+		cc->setAngle(joystickAngle);
+		std::cout << joystickAngle << std::endl;
 	}
 }
 

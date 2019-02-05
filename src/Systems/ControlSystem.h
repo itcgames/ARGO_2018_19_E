@@ -18,5 +18,7 @@ public:
 	const int JOYSTICK_DEAD_ZONE = 8000;
 
 	int aIndex = 0;
+
+	double joystickAngle = 0;
 };
 #endif // !CONTROLSYSTEM_H
