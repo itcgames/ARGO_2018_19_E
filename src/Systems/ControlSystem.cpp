@@ -48,23 +48,13 @@ void ControlSystem::update(SDL_Event e) {
 	for (Entity * entity : m_entities) {
 
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
-		bool AButton = false;
 		int StickX = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_LEFTX);
 		int StickY = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_LEFTY);
 
 		int leftX = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_RIGHTX);
 		int leftY = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_RIGHTY);
 
-		AButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_A);
-		if (AButton) {
-			if(aIndex == 0)
-				cc->setJump(AButton);
-			aIndex++;
-		}
-		else {
-			aIndex = 0;
-		}
-			
+		setButtons(*cc);
 
 		if (StickX < -JOYSTICK_DEAD_ZONE) {
 			cc->setLeft(true);
@@ -90,6 +80,39 @@ void ControlSystem::update(SDL_Event e) {
 		}
 		cc->setAngle(joystickAngle);
 		std::cout << joystickAngle << std::endl;
+	}
+}
+
+void ControlSystem::setButtons(ControlComponent & cc) {
+
+	bool AButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_A);
+	bool XButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_X);
+	
+	//int leftX = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_RIGHTX);
+	int RT = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+	
+	if (RT > 5000) {
+		cc.setFire(true);
+	}
+	else {
+		cc.setFire(false);
+	}
+
+	if (AButton) {
+		if (aIndex == 0)
+			cc.setJump(AButton);
+		aIndex++;
+	}
+	else {
+		aIndex = 0;
+	}
+	if (XButton) {
+		if (xIndex == 0)
+			cc.setThrowWeapon(true);
+		xIndex++;
+	}
+	else {
+		xIndex = 0;
 	}
 }
 
