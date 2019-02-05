@@ -76,8 +76,12 @@ public:
 	int getRotation();
 	int getWidth();
 	int getHeight();
+	void setCentreX(double x);
+	void setCentreY(double y);
 
 	SDL_RendererFlip m_flipValue;
+
+	SDL_Point m_centre;
 
 private:
 	SDL_Texture* m_texture;

@@ -25,10 +25,14 @@ void PhysicsSystem::update() {
 		}
 		if (tc->getTag() == "Gun")
 		{
-			if (playerPositionX >= pc->getX() - 100 && playerPositionX <= pc->getX() + 100)
+			if (playerPositionX >= pc->getX() - 300 && playerPositionX <= pc->getX() + 300)
 			{
-				pc->setX(playerPositionX);
-				pc->setY(playerPositionY);
+				pc->setX(playerPositionX + 32.125);
+				pc->setY(playerPositionY + 64.75);
+				sc->setCentreX(32.125);
+				sc->setCentreY(-32.375);
+				//sc->setCentreX(playerPositionX);
+				//sc->setCentreY(playerPositionY);
 			}
 		}
 		//std::cout << cc->getAngle() << std::endl;
@@ -45,12 +49,14 @@ void PhysicsSystem::update() {
 			sc->m_flipValue = SDL_FLIP_NONE;
 		}
 
-
-		if (pc->getY() <= 500) {
-			pc->setVelY(pc->getVelY() + Friction->y);
-		}
-		else {
-			pc->setVelY(0);
+		if (tc->getTag() == "Player")  // Replace with bool to check if gun is grabbed so gun falls
+		{
+			if (pc->getY() <= 500) {
+				pc->setVelY(pc->getVelY() + Friction->y);
+			}
+			else {
+				pc->setVelY(0);
+			}
 		}
 		if (tc->getTag() == "Player")
 		{
