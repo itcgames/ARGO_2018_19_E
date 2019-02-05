@@ -3,8 +3,10 @@
 
 #include "Component.h"
 #include <SDL_image.h>
-#include "../../cute_c2.h"
-#include "../../cute_math2d.h"
+
+#include "../cute_c2.h"
+#include "../cute_math2d.h"
+
 #include <iostream>
 
 

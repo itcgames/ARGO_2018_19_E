@@ -51,6 +51,16 @@
     <ClCompile Include="src\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="src\Systems\GunSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Systems\SoundSystem.cpp">
+=======
+    <ClCompile Include="src\Systems\PhysicsSystem.cpp">
+>>>>>>> 1574ee742fe25f80f73025513845554d59d17890
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Entity.h">
@@ -86,6 +96,7 @@
     <ClInclude Include="src\Components\SpriteComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="cute_c2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -97,6 +108,28 @@
     </ClInclude>
     <ClInclude Include="src\Player.h">
       <Filter>Header Files</Filter>
+=======
+    <ClInclude Include="src\Systems\PhysicsSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cute_c2.h">
+      <Filter>Header Files\cuteheaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cute_math2d.h">
+      <Filter>Header Files\cuteheaders</Filter>
+>>>>>>> 0786ee838a675490f13f2a5809a472d919d2bd2d
+    </ClInclude>
+    <ClInclude Include="src\Systems\GunSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\GunComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\SoundComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Systems\SoundSystem.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

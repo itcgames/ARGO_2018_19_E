@@ -7,6 +7,7 @@ Player::Player()
 
 Player::Player(SDL_Renderer* renderer)
 {
+	//Set up Sprite component and add to entity component vector
 	m_spriteComponent = new SpriteComponent(0, 0, 257, 259);
 	m_spriteComponent->loadFromFile("human.png", renderer);
 	m_spriteComponent->setPosition(v2(300, 100));
