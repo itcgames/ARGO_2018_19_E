@@ -77,6 +77,8 @@ public:
 	int getWidth();
 	int getHeight();
 
+	SDL_RendererFlip m_flipValue;
+
 private:
 	SDL_Texture* m_texture;
 	SDL_Rect* m_sRect;
