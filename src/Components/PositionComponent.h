@@ -1,28 +1,40 @@
 #ifndef POSITIONCOMPONENT_H
 #define POSITIONCOMPONENT_H
 
-#include "Components.h"
+#include "Component.h"
 #include <SDL.h>
+#include "../cute_math2d.h"
 
 class PositionComponent : public Component
 {
 public:
-	PositionComponent(int x, int y) : x(x), y(y){}
+	PositionComponent(float x, float y) : x(x), y(y){}
 
-	int getX() { return x; }
-	int getY() { return y; }
+	float getX() { return x; }
+	float getY() { return y; }
 
 
-	void setX(int x) { this->x = x; }
+	void setX(float x) { this->x = x; }
 	void setY(int y) { this->y = y; }
+
+	float getVelX() { return vel->x; }
+	float getVelY() { return vel->y; }
+
+
+	void setVelX(float x) { 
+		vel->x = x; 
+	}
+	void setVelY(float y) { vel->y = y; }
 
 	std::string m_tag = "POSITION";
 
 	std::string getType() { return m_tag; }
 
+	v2 *vel = new v2(0, 0);
+
 private:
-	int x;
-	int y;
+	float x;
+	float y;
 
 };
 #endif // !POSITIONCOMPONENT_H

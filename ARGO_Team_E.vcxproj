@@ -70,12 +70,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SDL_SDK)\include;$(SDL_IMAGE)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SDL_SDK)\lib\x86;$(SDL_IMAGE)\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SDL_SDK)\include;$(SDL_IMAGE)\include;$(SDL_MIXER)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SDL_SDK)\lib\x86;$(SDL_IMAGE)\lib\x86;$(SDL_MIXER)\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SDL_SDK)\include;$(SDL_IMAGE)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SDL_SDK)\lib\x86;$(SDL_IMAGE\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SDL_SDK)\lib\x86;$(SDL_IMAGE)\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -83,7 +83,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDL_IMAGE)\include;$(SDL_SDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDL_IMAGE)\include;$(SDL_SDK)\include;$(SDL_MIXER)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -100,6 +100,8 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SDL_SDK)\lib\x86;$(SDL_IMAGE)\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -131,28 +133,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="src\AI.cpp" />
+    <ClCompile Include="src\Components\SpriteComponent.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Menus\CreditScreen.cpp" />
     <ClCompile Include="src\Menus\MenuScreen.cpp" />
     <ClCompile Include="src\Menus\OptionScreen.cpp" />
     <ClCompile Include="src\Menus\SplashScreen.cpp" />
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Systems\AISystem.cpp" />
     <ClCompile Include="src\Systems\ControlSystem.cpp" />
+    <ClCompile Include="src\Systems\GunSystem.cpp" />
     <ClCompile Include="src\Systems\HealthSystem.cpp" />
+    <ClCompile Include="src\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="src\Systems\RenderSystem.cpp" />
+    <ClCompile Include="src\Systems\SoundSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cute_c2.h" />
-    <ClInclude Include="cute_math2d.h" />
+    <ClInclude Include="src\AI.h" />
     <ClInclude Include="src\Components\AIComponent.h" />
-    <ClInclude Include="src\Components\Components.h" />
+    <ClInclude Include="src\Components\Component.h" />
     <ClInclude Include="src\Components\ControlComponent.h" />
     <ClInclude Include="src\Components\DisplayComponent.h" />
+    <ClInclude Include="src\Components\GunComponent.h" />
+    <ClInclude Include="src\Components\SoundComponent.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\Components\HealthComponents.h" />
     <ClInclude Include="src\Components\PositionComponent.h" />
+    <ClInclude Include="src\cute_c2.h" />
+    <ClInclude Include="src\cute_math2d.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GUI\GUI.h" />
@@ -160,10 +170,14 @@
     <ClInclude Include="src\Menus\MenuScreen.h" />
     <ClInclude Include="src\Menus\OptionScreen.h" />
     <ClInclude Include="src\Menus\SplashScreen.h" />
+    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Systems\AISystem.h" />
     <ClInclude Include="src\Systems\ControlSystem.h" />
+    <ClInclude Include="src\Systems\GunSystem.h" />
     <ClInclude Include="src\Systems\HealthSystem.h" />
+    <ClInclude Include="src\Systems\PhysicsSystem.h" />
     <ClInclude Include="src\Systems\RenderSystem.h" />
+    <ClInclude Include="src\Systems\SoundSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

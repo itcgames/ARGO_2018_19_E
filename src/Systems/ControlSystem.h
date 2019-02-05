@@ -7,11 +7,21 @@
 
 class ControlSystem
 {
-	std::vector<Entity *> m_entities;
-
 public:
 	ControlSystem();
+	void init();
 	void addEntity(Entity * e);
-	void update(SDL_Event & e);
+	void update(SDL_Event e);
+
+	void setButtons(ControlComponent & cc);
+
+	std::vector<Entity *> m_entities;
+	SDL_GameController* gGameController = NULL;
+	const int JOYSTICK_DEAD_ZONE = 8000;
+
+	int aIndex = 0;
+	int xIndex = 0;
+
+	double joystickAngle = 0;
 };
 #endif // !CONTROLSYSTEM_H

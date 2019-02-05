@@ -1,7 +1,7 @@
 #ifndef DISPLAYCOMPONENT_H
 #define DISPLAYCOMPONENT_H
 
-#include "Components.h"
+#include "Component.h"
 #include <SDL.h>
 #include <iostream>
 

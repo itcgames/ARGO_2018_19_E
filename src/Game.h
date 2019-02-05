@@ -11,6 +11,12 @@
 #include "Menus/MenuScreen.h"
 #include "Menus/OptionScreen.h"
 
+#include "Player.h"
+#include "AI.h"
+
+#include "./Systems/PhysicsSystem.h"
+
+
 using namespace std;
 
 enum class GameState
@@ -52,11 +58,17 @@ private:
 	Entity* m_alien;
 	Entity* m_dog;
 
+	Player* p;
+	AI *ai;
+
+	Entity* m_pistol;
+
 	HealthSystem m_hs;
 	ControlSystem m_cs;
 	RenderSystem m_rs;
 	AISystem m_as;
-
+	PhysicsSystem m_ps;
+	AISystem m_ais;
 
 	SDL_Rect m_screenSize;
 

@@ -1,141 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Source Files\Systems">
-      <UniqueIdentifier>{3e836d01-35f8-4307-8c52-e7d0bcdc37c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Components">
-      <UniqueIdentifier>{c9c3ca12-c82f-4a05-82ba-4cb11c8c5f06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Systems">
-      <UniqueIdentifier>{d0efd3b0-f672-487a-b680-793ece8c373b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\cuteheaders">
-      <UniqueIdentifier>{4d1f33ca-f3bd-41c2-b1ea-660c94a1c682}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Components">
-      <UniqueIdentifier>{d9a1b874-f8a4-46ea-b677-5899e4848075}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Menus">
-      <UniqueIdentifier>{4cf5f0f6-9a4f-4d88-94a7-15706396ea3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Menus">
-      <UniqueIdentifier>{7dc82358-ac11-4031-b12b-74811a687d71}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GUI">
-      <UniqueIdentifier>{6a74c785-7c6c-4c71-a632-83687b87fee1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GUI">
-      <UniqueIdentifier>{03ed25bc-3e90-445d-b74a-d49e192b40e7}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="src\Components\SpriteComponent.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Menus\CreditScreen.cpp" />
+    <ClCompile Include="src\Menus\MenuScreen.cpp" />
+    <ClCompile Include="src\Menus\OptionScreen.cpp" />
+    <ClCompile Include="src\Menus\SplashScreen.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Systems\AISystem.cpp" />
+    <ClCompile Include="src\Systems\ControlSystem.cpp" />
+    <ClCompile Include="src\Systems\GunSystem.cpp" />
+    <ClCompile Include="src\Systems\HealthSystem.cpp" />
+    <ClCompile Include="src\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="src\Systems\RenderSystem.cpp" />
+    <ClCompile Include="src\Systems\SoundSystem.cpp" />
+    <ClCompile Include="src\AI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Systems\AISystem.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Systems\ControlSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Systems\HealthSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Systems\RenderSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Menus\SplashScreen.cpp">
-      <Filter>Source Files\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Menus\OptionScreen.cpp">
-      <Filter>Source Files\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Menus\MenuScreen.cpp">
-      <Filter>Source Files\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Menus\CreditScreen.cpp">
-      <Filter>Source Files\Menus</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\AIComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\Components.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\ControlComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\HealthComponents.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\PositionComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Systems\AISystem.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Systems\ControlSystem.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Systems\HealthSystem.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Systems\RenderSystem.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\SpriteComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="cute_c2.h">
-      <Filter>Header Files\cuteheaders</Filter>
-    </ClInclude>
-    <ClInclude Include="cute_math2d.h">
-      <Filter>Header Files\cuteheaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\DisplayComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Menus\CreditScreen.h">
-      <Filter>Header Files\Menus</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Menus\MenuScreen.h">
-      <Filter>Header Files\Menus</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Menus\OptionScreen.h">
-      <Filter>Header Files\Menus</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Menus\SplashScreen.h">
-      <Filter>Header Files\Menus</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GUI\GUI.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
+    <ClInclude Include="src\Components\AIComponent.h" />
+    <ClInclude Include="src\Components\Component.h" />
+    <ClInclude Include="src\Components\ControlComponent.h" />
+    <ClInclude Include="src\Components\DisplayComponent.h" />
+    <ClInclude Include="src\Components\GunComponent.h" />
+    <ClInclude Include="src\Components\SoundComponent.h" />
+    <ClInclude Include="src\Components\SpriteComponent.h" />
+    <ClInclude Include="src\Components\HealthComponents.h" />
+    <ClInclude Include="src\Components\PositionComponent.h" />
+    <ClInclude Include="src\cute_c2.h" />
+    <ClInclude Include="src\cute_math2d.h" />
+    <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\GUI\GUI.h" />
+    <ClInclude Include="src\Menus\CreditScreen.h" />
+    <ClInclude Include="src\Menus\MenuScreen.h" />
+    <ClInclude Include="src\Menus\OptionScreen.h" />
+    <ClInclude Include="src\Menus\SplashScreen.h" />
+    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\Systems\AISystem.h" />
+    <ClInclude Include="src\Systems\ControlSystem.h" />
+    <ClInclude Include="src\Systems\GunSystem.h" />
+    <ClInclude Include="src\Systems\HealthSystem.h" />
+    <ClInclude Include="src\Systems\PhysicsSystem.h" />
+    <ClInclude Include="src\Systems\RenderSystem.h" />
+    <ClInclude Include="src\Systems\SoundSystem.h" />
+    <ClInclude Include="src\AI.h" />
   </ItemGroup>
 </Project>

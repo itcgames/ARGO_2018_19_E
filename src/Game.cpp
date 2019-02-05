@@ -11,15 +11,18 @@ Game::Game()
 	{
 		cout << "Error: " << IMG_GetError() << endl;
 	}
-	m_currentGameState = (GameState::Splash);
+	m_currentGameState = (GameState::Game);
 	
 	m_splash = new SplashScreen();
 	m_menu = new MenuScreen();
 	m_options = new OptionScreen();
 	m_credits = new CreditScreen();
-
-	m_player = new Entity();
 	m_screenSize = { 0,0,1200,700 };
+	m_pistol = new Entity();
+
+	p = new Player(m_renderer);
+	ai = new AI(m_renderer);
+
 	initialise();
 }
 
@@ -71,6 +74,7 @@ void Game::update() {
 		m_as.update();
 		SDL_PollEvent(&event);
 		m_cs.update(event);
+	
 		break;
 	case GameState::Credits:
 		break;
@@ -79,6 +83,11 @@ void Game::update() {
 	}
 
 	
+	m_hs.update();
+	m_as.update();
+	SDL_PollEvent(&event);
+	m_cs.update(event);
+	m_ps.update();
 }
 
 void Game::render() {
@@ -122,33 +131,24 @@ void Game::setGameState(GameState gameState)
 
 void Game::initialise()
 {
-	m_player->addComponent(new HealthComponent(10));
-	m_player->addComponent(new PositionComponent(300, 100));
-	m_player->addComponent(new ControlComponent());
-	m_player->addComponent(new SpriteComponent(*loadTexture("human.png"), 200, 200));
-	m_player->addComponent(new DisplayComponent(m_screenSize));
 
-	m_hs.addEntity(m_player);
-	m_cs.addEntity(m_player);
-	m_rs.addEntity(m_player);
+	SpriteComponent* spriteComponent = new SpriteComponent(0, 0, 257, 259);
+	spriteComponent->loadFromFile("human.png", m_renderer);
+	spriteComponent->setPosition(v2(300, 100));
+	spriteComponent->setScale(v2(0.5f, 0.5f));
+
+	m_pistol->addComponent(spriteComponent);
+	m_pistol->addComponent(new PositionComponent(600, 100));
+
+	m_hs.addEntity((Entity*)p);
+	m_cs.addEntity((Entity*)p);
+
+	m_rs.addEntity((Entity*)p);
+
+	m_rs.addEntity(m_pistol);
+	m_ps.addEntity((Entity*)p);
+
+	m_ais.addEntity((Entity*)ai);
+	//m_ps.addEntity((Entity*)ai);
 }
 
-SDL_Texture* Game::loadTexture(std::string file)
-{
-	SDL_Texture* newTexture = NULL;
-
-	SDL_Surface* loadedSurface = IMG_Load(file.c_str());
-
-	if (loadedSurface == NULL) {
-		printf("Unable to load image &s! SDL_image Error: %s\n", file.c_str(), IMG_GetError());
-	}
-	else {
-		newTexture = SDL_CreateTextureFromSurface(m_renderer, loadedSurface);
-		if (newTexture == NULL)
-		{
-			printf("Unable to create texture from &s! SDL_Error: %s\n", file.c_str(), SDL_GetError());
-		}
-		SDL_FreeSurface(loadedSurface);
-	}
-	return newTexture;
-}
