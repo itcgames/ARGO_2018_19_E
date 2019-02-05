@@ -59,13 +59,12 @@ private:
 	Player* p;
 	AI *ai;
 	Gun* pistol;
-
+	Entity m_ent;
 
 	HealthSystem m_hs;
 	ControlSystem m_cs;
 	RenderSystem m_rs;
 	GunSystem m_guns;
-	AISystem m_as;
 	PhysicsSystem m_ps;
 	AISystem m_ais;
 

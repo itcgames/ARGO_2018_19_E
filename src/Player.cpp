@@ -5,6 +5,8 @@ Player::Player()
 }
 
 
+
+
 Player::Player(SDL_Renderer* renderer)
 {
 	//Set up Sprite component and add to entity component vector

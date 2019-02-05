@@ -21,10 +21,12 @@ Game::Game()
 
 	p = new Player(m_renderer);
 	ai = new AI(m_renderer);
-
+	
 
 	p = new Player(m_renderer);
 	pistol = new Gun(m_renderer);
+
+	m_ent.addEntity((Entity*)p);
 
 	initialise();
 }
@@ -74,10 +76,12 @@ void Game::update() {
 		break;
 	case GameState::Game:
 		m_hs.update();
-		m_as.update();
+		m_ais.update();
+		m_ais.receive((Entity*)p);
 		SDL_PollEvent(&event);
 		m_cs.update(event);
-	
+		m_guns.update();
+		m_ps.update();
 		break;
 	case GameState::Credits:
 		break;
@@ -85,13 +89,7 @@ void Game::update() {
 		break;
 	}
 
-	
-	m_hs.update();
-	m_as.update();
-	m_guns.update();
-	SDL_PollEvent(&event);
-	m_cs.update(event);
-	m_ps.update();
+
 }
 
 void Game::render() {
@@ -143,12 +141,14 @@ void Game::initialise()
 
 	m_rs.addEntity((Entity*)p);
 	m_rs.addEntity((Entity*)pistol);
+	
+	m_rs.addEntity((Entity*)ai);
 
 	m_ps.addEntity((Entity*)p);
 
 	m_ais.addEntity((Entity*)ai);
-	m_ps.addEntity((Entity*)pistol);
 
+	m_ps.addEntity((Entity*)pistol);
 	m_guns.addEntity((Entity*)pistol);
 }
 

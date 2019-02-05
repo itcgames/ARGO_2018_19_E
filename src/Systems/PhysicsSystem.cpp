@@ -31,7 +31,6 @@ void PhysicsSystem::update() {
 				pc->setY(playerPositionY);
 			}
 		}
-		//std::cout << cc->getAngle() << std::endl;
 
 		if (tc->getTag() == "Gun")
 		{
@@ -70,8 +69,12 @@ void PhysicsSystem::update() {
 			}
 		}
 
+		if (tc->getTag() == "Ai")
+		{
+			
+		}
 
-		
+
 
 		pc->setVelX(pc->getVelX() * Friction->x);
 
