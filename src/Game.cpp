@@ -14,6 +14,10 @@ Game::Game()
 	
 	m_player = new Entity();
 
+	m_pistol = new Entity();
+
+	p = new Player(m_renderer);
+
 	initialise();
 }
 
@@ -53,6 +57,7 @@ void Game::update() {
 	m_as.update();
 	SDL_PollEvent(&event);
 	m_cs.update(event);
+	m_ps.update();
 }
 
 void Game::render() {
@@ -72,31 +77,21 @@ void Game::render() {
 void Game::initialise()
 {
 	m_player->addComponent(new HealthComponent(10));
-	m_player->addComponent(new PositionComponent(300, 100));
+	m_player->addComponent(new PositionComponent(300, 500));
 	m_player->addComponent(new ControlComponent());
-	m_player->addComponent(new GraphicComponent(*loadTexture("human.png"), 200, 200));
+	
+
+
+
+	m_pistol->addComponent(new PositionComponent(600, 100));
+
 
 	m_hs.addEntity(m_player);
 	m_cs.addEntity(m_player);
-	m_rs.addEntity(m_player);
+
+	m_rs.addEntity((Entity*)p);
+
+	m_rs.addEntity(m_pistol);
+	m_ps.addEntity(m_player);
 }
 
-SDL_Texture* Game::loadTexture(std::string file)
-{
-	SDL_Texture* newTexture = NULL;
-
-	SDL_Surface* loadedSurface = IMG_Load(file.c_str());
-
-	if (loadedSurface == NULL) {
-		printf("Unable to load image &s! SDL_image Error: %s\n", file.c_str(), IMG_GetError());
-	}
-	else {
-		newTexture = SDL_CreateTextureFromSurface(m_renderer, loadedSurface);
-		if (newTexture == NULL)
-		{
-			printf("Unable to create texture from &s! SDL_Error: %s\n", file.c_str(), SDL_GetError());
-		}
-		SDL_FreeSurface(loadedSurface);
-	}
-	return newTexture;
-}

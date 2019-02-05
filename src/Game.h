@@ -7,6 +7,11 @@
 #include "./Systems/RenderSystem.h"
 #include "./Systems/AISystem.h"
 
+#include "Player.h"
+
+#include "./Systems/PhysicsSystem.h"
+
+
 using namespace std;
 
 class Game {
@@ -33,10 +38,15 @@ private:
 	Entity* m_alien;
 	Entity* m_dog;
 
+	Player* p;
+
+	Entity* m_pistol;
+
 	HealthSystem m_hs;
 	ControlSystem m_cs;
 	RenderSystem m_rs;
 	AISystem m_as;
+	PhysicsSystem m_ps;
 
 };
 
