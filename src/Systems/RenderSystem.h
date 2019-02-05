@@ -16,7 +16,7 @@ class RenderSystem
 public:
 	RenderSystem();
 	void addEntity(Entity * e);
-	void update();
+	void render(SDL_Renderer* renderer);
 
 private:
 

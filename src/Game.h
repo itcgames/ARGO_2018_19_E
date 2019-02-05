@@ -16,7 +16,7 @@ public:
 	~Game();
 
 	void run();
-
+	SDL_Texture* loadTexture(std::string file);
 private:
 
 	void update();
