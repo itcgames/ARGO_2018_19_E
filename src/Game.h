@@ -6,6 +6,7 @@
 #include "./Systems/ControlSystem.h"
 #include "./Systems/RenderSystem.h"
 #include "./Systems/AISystem.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -32,6 +33,8 @@ private:
 	Entity* m_cat;
 	Entity* m_alien;
 	Entity* m_dog;
+
+	Player* p;
 
 	HealthSystem m_hs;
 	ControlSystem m_cs;

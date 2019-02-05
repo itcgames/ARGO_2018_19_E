@@ -75,6 +75,8 @@ void Game::initialise()
 	m_player->addComponent(new PositionComponent(300, 100));
 	m_player->addComponent(new ControlComponent());
 	m_player->addComponent(new SpriteComponent(0, 0, 257, 259));
+
+	p = new Player(m_renderer);
 	
 	SpriteComponent* sc = (SpriteComponent*)m_player->getCompByType("SPRITE");
 	sc->loadFromFile("human.png", m_renderer);
@@ -85,5 +87,9 @@ void Game::initialise()
 	m_hs.addEntity(m_player);
 	m_cs.addEntity(m_player);
 	m_rs.addEntity(m_player);
+
+	m_hs.addEntity((Entity*)p);
+	m_cs.addEntity((Entity*)p);
+	m_rs.addEntity((Entity*)p);
 }
 

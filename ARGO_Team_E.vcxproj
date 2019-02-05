@@ -134,6 +134,7 @@
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Systems\AISystem.cpp" />
     <ClCompile Include="src\Systems\ControlSystem.cpp" />
     <ClCompile Include="src\Systems\HealthSystem.cpp" />
@@ -142,7 +143,6 @@
   <ItemGroup>
     <ClInclude Include="cute_c2.h" />
     <ClInclude Include="cute_math2d.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="src\Components\AIComponent.h" />
     <ClInclude Include="src\Components\Component.h" />
     <ClInclude Include="src\Components\ControlComponent.h" />
@@ -151,6 +151,7 @@
     <ClInclude Include="src\Components\PositionComponent.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Systems\AISystem.h" />
     <ClInclude Include="src\Systems\ControlSystem.h" />
     <ClInclude Include="src\Systems\HealthSystem.h" />
