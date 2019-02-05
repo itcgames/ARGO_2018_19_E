@@ -41,7 +41,7 @@ void ControlSystem::update(SDL_Event & e) {
 
 			for (Entity * entity : m_entities) {
 				PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
-
+				
 			}
 		}
 	}

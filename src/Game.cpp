@@ -11,9 +11,15 @@ Game::Game()
 	{
 		cout << "Error: " << IMG_GetError() << endl;
 	}
+	m_currentGameState = (GameState::Splash);
 	
-	m_player = new Entity();
+	m_splash = new SplashScreen();
+	m_menu = new MenuScreen();
+	m_options = new OptionScreen();
+	m_credits = new CreditScreen();
 
+	m_player = new Entity();
+	m_screenSize = { 0,0,1200,700 };
 	initialise();
 }
 
@@ -49,10 +55,30 @@ void Game::run()
 }
 
 void Game::update() {
-	m_hs.update();
-	m_as.update();
-	SDL_PollEvent(&event);
-	m_cs.update(event);
+
+	switch (m_currentGameState)
+	{
+	case GameState::None:
+		break;
+	case GameState::Splash:
+		break;
+	case GameState::Menu:
+		break;
+	case GameState::Options:
+		break;
+	case GameState::Game:
+		m_hs.update();
+		m_as.update();
+		SDL_PollEvent(&event);
+		m_cs.update(event);
+		break;
+	case GameState::Credits:
+		break;
+	default:
+		break;
+	}
+
+	
 }
 
 void Game::render() {
@@ -60,12 +86,37 @@ void Game::render() {
 	{
 		SDL_Log("Could not create a renderer: %s", SDL_GetError());
 	}
-
-	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
 	SDL_RenderClear(m_renderer);
-	m_rs.render(m_renderer);
+
+	switch (m_currentGameState)
+	{
+	case GameState::None:
+		break;
+	case GameState::Splash:
+		m_splash->render(m_renderer);
+		break;
+	case GameState::Menu:
+		m_menu->render(m_renderer);
+		break;
+	case GameState::Options:
+		m_options->render(m_renderer);
+		break;
+	case GameState::Game:
+		m_rs.render(m_renderer);
+		break;
+	case GameState::Credits:
+		m_credits->render(m_renderer);
+		break;
+	default:
+		break;
+	}
 	SDL_RenderPresent(m_renderer);
 
+}
+
+void Game::setGameState(GameState gameState)
+{
+	m_currentGameState = gameState;
 }
 
 
@@ -74,7 +125,8 @@ void Game::initialise()
 	m_player->addComponent(new HealthComponent(10));
 	m_player->addComponent(new PositionComponent(300, 100));
 	m_player->addComponent(new ControlComponent());
-	m_player->addComponent(new GraphicComponent(*loadTexture("human.png"), 200, 200));
+	m_player->addComponent(new SpriteComponent(*loadTexture("human.png"), 200, 200));
+	m_player->addComponent(new DisplayComponent(m_screenSize));
 
 	m_hs.addEntity(m_player);
 	m_cs.addEntity(m_player);

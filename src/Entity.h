@@ -5,9 +5,10 @@
 #include <vector>
 #include "./Components/AIComponent.h"
 #include "./Components/ControlComponent.h"
-#include "./Components/GraphicsComponent.h"
+#include "./Components/SpriteComponent.h"
 #include "./Components/HealthComponents.h"
 #include "./Components/PositionComponent.h"
+#include "./Components/DisplayComponent.h"
 #include <SDL.h>
 
 class Entity
