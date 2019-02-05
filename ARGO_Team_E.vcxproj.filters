@@ -22,6 +22,12 @@
     <Filter Include="Header Files\Systems">
       <UniqueIdentifier>{d0efd3b0-f672-487a-b680-793ece8c373b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\cuteheaders">
+      <UniqueIdentifier>{4d1f33ca-f3bd-41c2-b1ea-660c94a1c682}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{d9a1b874-f8a4-46ea-b677-5899e4848075}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -42,6 +48,9 @@
     <ClCompile Include="src\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SpriteComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Entity.h">
@@ -54,9 +63,6 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Components\ControlComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\GraphicsComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Components\HealthComponents.h">
@@ -79,6 +85,15 @@
     </ClInclude>
     <ClInclude Include="src\Game.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\SpriteComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="cute_c2.h">
+      <Filter>Header Files\cuteheaders</Filter>
+    </ClInclude>
+    <ClInclude Include="cute_math2d.h">
+      <Filter>Header Files\cuteheaders</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

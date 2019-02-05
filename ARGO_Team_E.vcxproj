@@ -73,6 +73,10 @@
     <IncludePath>$(SDL_SDK)\include;$(SDL_IMAGE)\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SDL_SDK)\lib\x86;$(SDL_IMAGE)\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SDL_SDK)\include;$(SDL_IMAGE)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SDL_SDK)\lib\x86;$(SDL_IMAGE\lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -92,7 +96,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SDL_SDK)\include;$(SDL_IMAGE)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SDL_SDK)\lib\x86;$(SDL_IMAGE)\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -123,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Systems\AISystem.cpp" />
@@ -131,10 +140,12 @@
     <ClCompile Include="src\Systems\RenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cute_c2.h" />
+    <ClInclude Include="cute_math2d.h" />
     <ClInclude Include="src\Components\AIComponent.h" />
     <ClInclude Include="src\Components\Components.h" />
     <ClInclude Include="src\Components\ControlComponent.h" />
-    <ClInclude Include="src\Components\GraphicsComponent.h" />
+    <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\Components\HealthComponents.h" />
     <ClInclude Include="src\Components\PositionComponent.h" />
     <ClInclude Include="src\Entity.h" />

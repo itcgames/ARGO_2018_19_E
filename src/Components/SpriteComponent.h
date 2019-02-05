@@ -1,16 +1,17 @@
-#ifndef GRAPHICCOMPONENT_H
-#define GRAPHICCOMPONENT_H
+#ifndef SPRITECOMPONENT_H
+#define SPRITECOMPONENT_H
 
 #include "Components.h"
 #include <SDL_image.h>
+#include 
 #include <iostream>
 
 using namespace std;
 
-class GraphicComponent : public Component
+class SpriteComponent : public Component
 {
 public:
-	GraphicComponent(SDL_Texture & path, int w, int h) : m_path(&path), m_w(w), m_h(h) {}
+	SpriteComponent(SDL_Texture & path, int w, int h) : m_path(&path), m_w(w), m_h(h) {}
 
 	SDL_Texture * getTexturePath() { return m_path; }
 	void setHealth(SDL_Texture & path) { this->m_path = &path; }
@@ -27,17 +28,23 @@ public:
 	int * getH() { return &m_h; }
 	void setH(int h) { this->m_h = h; }
 
-	std::string m_tag = "GRAPHIC";
+	std::string m_tag = "SPRITE";
 
 	std::string getType() { return m_tag; }
 
+	
+
 private:
 	SDL_Texture * m_path;
-	SDL_Rect m_image_hitbox;
+	SDL_Rect* sRect;
+	SDL_Rect* dRect;
+
+	int m_rotationAngle;
+	
 
 	int m_x;
 	int m_y;
 	int m_w;
 	int m_h;
 };
-#endif // !GRAPHICCOMPONENT_H
+#endif // !SPRITECOMPONENT_H
