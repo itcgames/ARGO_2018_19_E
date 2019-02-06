@@ -8,34 +8,76 @@ void CollisionSystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
-int CollisionSystem::rectCollision(c2AABB A, c2AABB B)
+
+
+std::string CollisionSystem::rectCollision(c2AABB A, c2AABB B)
 {
-	int d0 = B.max.x < A.min.x;
-	int d1 = A.max.x < B.min.x;
-	int d2 = B.max.y < A.min.y;
-	int d3 = A.max.y < B.min.y;
+
+	float dx = (A.min.x + (A.max.x - A.min.x) / 2) - (B.min.x + (B.max.x - B.min.x) / 2);
+	float dy = (A.min.y + (A.max.y - A.min.y) / 2) - (B.min.y + (B.max.y - B.min.y) / 2);
+	float width = ((A.max.x - A.min.x) + (B.max.x - B.min.x)) / 2;
+	float height = ((A.max.y - A.min.y) + (B.max.y - B.min.y)) / 2;
+	float crossWidth = width * dy;
+	float crossHeight = height * dx;
+	std::string collision = "none";
+
+	if (dx < 0) {
+		dx = -dx;
+	}
+	if (dy < 0) {
+		dy = -dy;
+	}
+	//
+	if (dx <= width && dy <= height) {
+		if (crossWidth > crossHeight) {
+			collision = (crossWidth > (-crossHeight)) ? "bottom" : "left";
+		}
+		else {
+			collision = (crossWidth > (-crossHeight)) ? "right" : "top";
+		}
+	}
 	
-	return !(d0 | d1 | d2 | d3);
+	return(collision);
 }
 
-void CollisionSystem::update() {
+void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 	for (Entity * entity : m_entities) {
 		
-		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
-		CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
+		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
 
-		cc->SetCollPos(pc->getX(), pc->getY());
+		if (tag->getTag() == "Player") {
+			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
+			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
 
-		for (Entity * ent : m_entities) {
+			cc->SetCollPos(pc->getX(), pc->getY());
 
-			if (entity != ent) {
-				CollisionComponent * ccNew = (CollisionComponent*)ent->getCompByType("COLLISION");
+			for (int i = 0; i < tiles.size(); i++) {
+				for (int j = 0; j < tiles[i].size(); j++) {
+					std::string val;
+					if (tiles[i].at(j)->dRect.x > 0) {
+						val = rectCollision(cc->getCollider(), tiles[i].at(j)->collider);
+						if (val != "none" ) {
+							if (val == "top") {
+								pc->setVelY(0);
+								pc->setY(tiles[i].at(j)->dRect.y - cc->getH());
+							}
+							else if (val == "right" || val == "left") {
+								pc->setVelX(-(pc->getVelX() * 2));
+								
+							}
+							else if (val == "bottom") {
+								pc->setVelY(-pc->getVelY());
+							}
+					
+						}
+						
+					}
+					
 
-				int val = rectCollision(cc->getCollider(), ccNew->getCollider());
-				//std::cout << "Collider: " << cc->getCollider().min.x << ", " << cc->getCollider().min.y << std::endl;
-				std::cout << val << std::endl;
+					
+				}
 			}
-			
 		}
+		
 	}
 }

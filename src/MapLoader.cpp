@@ -84,6 +84,13 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 				m_tileVector[i].at(j)->dRect.h = m_tileHeight;
 				m_tileVector[i].at(j)->dRect.x = i * m_tileWidth;
 				m_tileVector[i].at(j)->dRect.y = j * m_tileHeight;
+
+				float x = m_tileVector[i].at(j)->dRect.x;
+				float y = m_tileVector[i].at(j)->dRect.y;
+				float w = m_tileVector[i].at(j)->dRect.w;
+				float h = m_tileVector[i].at(j)->dRect.h;
+
+				m_tileVector[i].at(j)->collider = c2AABB{ c2v{x,y}, c2v{x + w,y + h} };
 			}
 		}
 	}

@@ -25,6 +25,9 @@ public:
 	void setW(float w) { this->w = w; }
 	void setH(int h) { this->h = h; }
 
+	void setColliding(bool coll) { this->m_colliding = coll; }
+	bool getColliding() { return m_colliding; }
+
 	c2AABB getCollider() { return collider; }
 
 	void SetCollPos(float x, float y) {
@@ -43,6 +46,8 @@ private:
 	float y;
 	float w;
 	float h;
+
+	bool m_colliding = false;
 
 	c2AABB collider;
 
