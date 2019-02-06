@@ -4,6 +4,10 @@
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Menus\CreditScreen.cpp" />
+    <ClCompile Include="src\Menus\MenuScreen.cpp" />
+    <ClCompile Include="src\Menus\OptionScreen.cpp" />
+    <ClCompile Include="src\Menus\SplashScreen.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Systems\AISystem.cpp" />
     <ClCompile Include="src\Systems\ControlSystem.cpp" />
@@ -12,12 +16,14 @@
     <ClCompile Include="src\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="src\Systems\RenderSystem.cpp" />
     <ClCompile Include="src\Systems\SoundSystem.cpp" />
+    <ClCompile Include="src\AI.cpp" />
     <ClCompile Include="src\Gun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\AIComponent.h" />
     <ClInclude Include="src\Components\Component.h" />
     <ClInclude Include="src\Components\ControlComponent.h" />
+    <ClInclude Include="src\Components\DisplayComponent.h" />
     <ClInclude Include="src\Components\GunComponent.h" />
     <ClInclude Include="src\Components\SoundComponent.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
@@ -27,6 +33,11 @@
     <ClInclude Include="src\cute_math2d.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\GUI\GUI.h" />
+    <ClInclude Include="src\Menus\CreditScreen.h" />
+    <ClInclude Include="src\Menus\MenuScreen.h" />
+    <ClInclude Include="src\Menus\OptionScreen.h" />
+    <ClInclude Include="src\Menus\SplashScreen.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Systems\AISystem.h" />
     <ClInclude Include="src\Systems\ControlSystem.h" />
@@ -35,6 +46,7 @@
     <ClInclude Include="src\Systems\PhysicsSystem.h" />
     <ClInclude Include="src\Systems\RenderSystem.h" />
     <ClInclude Include="src\Systems\SoundSystem.h" />
+    <ClInclude Include="src\AI.h" />
     <ClInclude Include="src\Gun.h" />
     <ClInclude Include="src\Components\TagComponent.h" />
   </ItemGroup>

@@ -47,6 +47,7 @@ void ControlSystem::update(SDL_Event e) {
 
 	for (Entity * entity : m_entities) {
 
+
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 		int StickX = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_LEFTX);
 		int StickY = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_LEFTY);

@@ -1,8 +1,8 @@
 #ifndef SOUNDCOMPONENT_H
 #define SOUNDCOMPONENT_H
 
-#include "Components.h"
-#include <SDL_mixer.h>
+#include "Component.h"
+//#include <SDL_mixer.h>
 
 
 using namespace std;
