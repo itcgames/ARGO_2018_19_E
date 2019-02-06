@@ -88,7 +88,7 @@ void Game::update() {
 		m_cs.update(event);
 		m_guns.update();
 		m_ps.update();
-		m_collSys.update();
+		m_collSys.update(m_map->getTiles());
 		break;
 	case GameState::Credits:
 		break;
