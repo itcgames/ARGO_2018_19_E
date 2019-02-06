@@ -22,6 +22,9 @@ Game::Game()
 	p = new Player(m_renderer);
 	ai = new AI(m_renderer);
 	
+	m_map = new MapLoader();
+
+	m_map->load("testlevel.tmx", m_renderer);
 
 	p = new Player(m_renderer);
 	pistol = new Gun(m_renderer);
@@ -118,6 +121,7 @@ void Game::render() {
 		break;
 	case GameState::Game:
 		m_rs.render(m_renderer);
+		m_map->draw(m_renderer);
 		break;
 	case GameState::Credits:
 		m_credits->render(m_renderer);

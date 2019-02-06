@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "AI.h"
 #include "Gun.h"
+#include "MapLoader.h"
 
 
 using namespace std;
@@ -55,6 +56,7 @@ private:
 	SDL_Event event;
 	bool exit;
 
+	MapLoader* m_map;
 
 	Player* p;
 	AI *ai;

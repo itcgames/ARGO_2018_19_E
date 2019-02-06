@@ -77,6 +77,8 @@ public:
 
 	SDL_RendererFlip m_flipValue;
 
+	SDL_Texture* getTexture();
+
 private:
 	SDL_Texture* m_texture;
 	SDL_Rect* m_sRect;

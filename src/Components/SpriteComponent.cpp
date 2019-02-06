@@ -165,3 +165,8 @@ int SpriteComponent::getHeight()
 	m_scaledHeight = m_height * m_scale.y;
 	return m_scaledHeight;
 }
+
+SDL_Texture* SpriteComponent::getTexture()
+{
+	return m_texture;
+}
