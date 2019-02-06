@@ -45,7 +45,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 		
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
 
-		if (tag->getTag() == "Player") {
+		if (tag->getTag() == "Player" || tag->getTag() == "AI_TAG") {
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
 
