@@ -60,7 +60,8 @@ void PhysicsSystem::update() {
 				gotGun = true;
 			}
 
-			if (aiPositionX >= pc->getX() - 100 && aiPositionX <= pc->getX() + 100)
+			if (aiPositionX >= pc->getX() - 100 && aiPositionX <= pc->getX() + 100
+				&& aiPositionY >= pc->getY() && aiPositionY <= pc->getY() + 100)
 			{
 				pc->setX(aiPositionX);
 				pc->setY(aiPositionY);

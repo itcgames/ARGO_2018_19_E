@@ -85,7 +85,7 @@ void Game::update() {
 		m_hs.update();
 		m_ais.receive(m_ents);
 		m_ps.update();
-		m_ais.update();		
+		//m_ais.update();		
 		SDL_PollEvent(&event);
 		m_cs.update(event);
 		m_guns.update();
