@@ -19,5 +19,7 @@ public:
 	void update();
 	double playerPositionX = 0;
 	double playerPositionY = 0;
+
+	double angle = 0;
 };
 #endif // !PHYSICSSYSTEM_H

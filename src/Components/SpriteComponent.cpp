@@ -23,9 +23,6 @@ SpriteComponent::SpriteComponent(int x, int y, int textureWidth, int textureHeig
 	m_sRect->y = y;
 	m_sRect->w = textureWidth;
 	m_sRect->h = textureHeight;
-
-	m_centre.x = NULL;
-	m_centre.y = NULL;
 }
 
 SpriteComponent::~SpriteComponent()
@@ -83,8 +80,8 @@ void SpriteComponent::render(SDL_Renderer* gRenderer)
 	m_dRect->w = m_scaledWidth;
 	m_dRect->h = m_scaledHeight;
 
-
-	SDL_RenderCopyEx(gRenderer, m_texture, m_sRect, m_dRect, m_rotationAngle, &m_centre, m_flipValue);
+	//std::cout << "X= " << m_centre.x << "Y= " << m_centre.y << std::endl;
+	SDL_RenderCopyEx(gRenderer, m_texture, m_sRect, m_dRect, m_rotationAngle, NULL, m_flipValue);
 }
 void SpriteComponent::setCentreX(double x)
 {

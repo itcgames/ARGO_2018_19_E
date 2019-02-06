@@ -27,15 +27,31 @@ void PhysicsSystem::update() {
 		{
 			if (playerPositionX >= pc->getX() - 300 && playerPositionX <= pc->getX() + 300)
 			{
-				pc->setX(playerPositionX + 32.125);
-				pc->setY(playerPositionY + 64.75);
-				sc->setCentreX(32.125);
-				sc->setCentreY(-32.375);
-				//sc->setCentreX(playerPositionX);
-				//sc->setCentreY(playerPositionY);
+		
+				
+
+				// Ensures angle reaches angleTo when the difference is very small
+				//if (Math.abs(angleDifference) < 1) {
+				//	angle = angleTo;
+				//}
+
+				//x = RCos(Angle)
+				//y = RSin(Angle)
+				double angleTo = cc->getAngle() + 90;
+				//double angleDifference = (angleTo - angle + 180) % (360) - 180;
+				double angleDifference = angleTo - angle;
+				double ease = 0.15;
+				angle += angleDifference * ease;
+
+				double radAng = angle * 3.14159265359 / 180;
+				double xOffset = 90 * (cos(radAng));
+				double yOffset = 90 * (sin(radAng));
+
+				pc->setX(playerPositionX + 50 - xOffset);
+				pc->setY(playerPositionY + 40 + yOffset);
+				
 			}
 		}
-		//std::cout << cc->getAngle() << std::endl;
 
 		if (tc->getTag() == "Gun")
 		{
