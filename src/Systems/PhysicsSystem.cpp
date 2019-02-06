@@ -94,12 +94,11 @@ void PhysicsSystem::update() {
 			aiPositionY = pc->getY();
 
 			if (ac->getJump() && pc->getY() >= 500) {
+				ac->setJump(false);
 				pc->setVelY(pc->getVelY() - 20);
 				pc->setY(500);
-				ac->setJump(false);
+				
 			}
-
-
 		}
 
 

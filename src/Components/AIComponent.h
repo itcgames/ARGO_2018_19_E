@@ -35,6 +35,8 @@ public:
 	bool getFire() { return m_fire; }
 	void setFire(bool fire) { m_fire = fire; }
 
+	bool checkGun() { return m_gun; }
+	void setGun(bool has) { m_gun = has; }
 
 	double distance(c2v v1, float x, float y);
 	
@@ -51,6 +53,8 @@ private:
 	float m_gunAngle = 0.0f;
 
 	float m_speed;
+
+	bool m_gun = false;
 
 };
 #endif // !CONTROLCOMPONENT_H
