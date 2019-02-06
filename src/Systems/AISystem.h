@@ -4,7 +4,8 @@
 #include <iostream>
 #include <vector>
 #include "../Entity.h"
-#include "../cute_math2d.h"
+#include "../cute_c2.h"
+#include <algorithm>
 
 
 class AISystem
@@ -17,11 +18,14 @@ public:
 	AISystem();
 	void addEntity(Entity * e);
 	void update();
+	c2v checkClosest(std::vector<std::pair<double, c2v>> distances);
 	void receive(std::vector<Entity*> ents);
 private:
-	const v2 *Friction = new v2(0.90, 0.98);
-	v2 closestEnemy;
+	c2v closestEnemy;
 
-	std::vector<double> m_distances;
+	std::vector<std::pair<double, c2v>> m_distances;
+	std::pair<double, c2v> m_realDist;
+
+	c2v curPosition;
 };
 #endif // !AISYSTEM_H

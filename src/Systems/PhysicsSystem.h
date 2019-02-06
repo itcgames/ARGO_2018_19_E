@@ -20,5 +20,8 @@ public:
 	void receive(Entity * e);
 	double playerPositionX = 0;
 	double playerPositionY = 0;
+
+	double aiPositionX = 0;
+	double aiPositionY = 0;
 };
 #endif // !PHYSICSSYSTEM_H

@@ -31,6 +31,12 @@ void PhysicsSystem::update() {
 				pc->setX(playerPositionX);
 				pc->setY(playerPositionY);
 			}
+
+			if (aiPositionX >= pc->getX() - 100 && aiPositionX <= pc->getX() + 100)
+			{
+				pc->setX(aiPositionX);
+				pc->setY(aiPositionY);
+			}
 		}
 
 		if (tc->getTag() == "Gun")
@@ -69,6 +75,7 @@ void PhysicsSystem::update() {
 			}
 			if (cc->getJump() && pc->getY() >= 500) {
 				pc->setVelY(pc->getVelY() - 20);
+				pc->setY(500);
 				cc->setJump(false);
 			}
 
@@ -81,9 +88,18 @@ void PhysicsSystem::update() {
 			}
 		}
 
-		if (tc->getTag() == "Ai")
+		if (tc->getTag() == "AI_TAG")
 		{
-			
+			aiPositionX = pc->getX();
+			aiPositionY = pc->getY();
+
+			if (ac->getJump() && pc->getY() >= 500) {
+				pc->setVelY(pc->getVelY() - 20);
+				pc->setY(500);
+				ac->setJump(false);
+			}
+
+
 		}
 
 

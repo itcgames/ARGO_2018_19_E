@@ -36,7 +36,7 @@ public:
 	void setFire(bool fire) { m_fire = fire; }
 
 
-	double distance(c2v v1, c2v v2);
+	double distance(c2v v1, float x, float y);
 	
 private:
 
