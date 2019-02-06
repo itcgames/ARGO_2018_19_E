@@ -8,11 +8,20 @@ void AISystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
-void AISystem::receive(Entity * e)
+void AISystem::receive(std::vector<Entity*> ents)
 {
-	PositionComponent  * j = (PositionComponent*)e->getCompByType("POSITION");
-	playerPos.x = (float)j->getX();
-	playerPos.y = (float)j->getX();
+	
+	
+	for (auto e = ents.begin(); e != ents.end(); ++e)
+	{
+		m_distances.assign(ents.size(), 0.0);
+		PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
+		ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
+		//if (pos->getX() != )
+	}
+
+	
+	
 }
 
 void AISystem::update() {
@@ -27,19 +36,10 @@ void AISystem::update() {
 		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 		
-		pc->setVelX(pc->getVelX() + 1.5);
 	
-		if (ac->getJump() && pc->getY() >= 500) {
-			pc->setVelY(pc->getVelY() - 20);
-			ac->setJump(false);
-		}
-
-		std::cout << playerPos.x << ", " << playerPos.y << std::endl;
 		
-		pc->setVelX(pc->getVelX() * Friction->x);
 
-		pc->setX(pc->getX() + pc->getVelX());
-		pc->setY(pc->getY() + pc->getVelY());
+		
 	}
 
 }

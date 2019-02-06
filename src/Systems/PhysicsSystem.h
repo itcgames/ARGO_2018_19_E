@@ -17,6 +17,7 @@ public:
 	PhysicsSystem();
 	void addEntity(Entity * e);
 	void update();
+	void receive(Entity * e);
 	double playerPositionX = 0;
 	double playerPositionY = 0;
 };

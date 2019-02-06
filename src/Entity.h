@@ -29,6 +29,11 @@ public:
 		m_entities.push_back(ent);
 	}
 
+	std::vector<Entity*> getEntities(Entity * ent)
+	{
+		m_entities.push_back(ent);
+	}
+
 	void updatePosition()
 	{
 

@@ -2,6 +2,7 @@
 #define AICOMPONENT_H
 
 #include "Component.h"
+#include "../cute_c2.h"
 
 class AIComponent : public Component
 {
@@ -34,6 +35,9 @@ public:
 	bool getFire() { return m_fire; }
 	void setFire(bool fire) { m_fire = fire; }
 
+
+	double distance(c2v v1, c2v v2);
+	
 private:
 
 	bool m_left = false;

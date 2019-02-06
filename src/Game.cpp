@@ -26,9 +26,12 @@ Game::Game()
 	p = new Player(m_renderer);
 	pistol = new Gun(m_renderer);
 
-	m_ent.addEntity((Entity*)p);
+	
 
 	initialise();
+
+	m_ents.push_back((Entity*)p);
+	m_ents.push_back((Entity*)ai);
 }
 
 Game::~Game()
@@ -77,7 +80,7 @@ void Game::update() {
 	case GameState::Game:
 		m_hs.update();
 		m_ais.update();
-		m_ais.receive((Entity*)p);
+		m_ais.receive(m_ents);
 		SDL_PollEvent(&event);
 		m_cs.update(event);
 		m_guns.update();
@@ -145,6 +148,7 @@ void Game::initialise()
 	m_rs.addEntity((Entity*)ai);
 
 	m_ps.addEntity((Entity*)p);
+	m_ps.addEntity((Entity*)ai);
 
 	m_ais.addEntity((Entity*)ai);
 

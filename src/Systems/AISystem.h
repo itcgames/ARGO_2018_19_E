@@ -17,9 +17,11 @@ public:
 	AISystem();
 	void addEntity(Entity * e);
 	void update();
-	void receive(Entity * e);
+	void receive(std::vector<Entity*> ents);
 private:
 	const v2 *Friction = new v2(0.90, 0.98);
-	v2 playerPos;
+	v2 closestEnemy;
+
+	std::vector<double> m_distances;
 };
 #endif // !AISYSTEM_H

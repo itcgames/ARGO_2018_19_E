@@ -80,7 +80,6 @@ void ControlSystem::update(SDL_Event e) {
 			joystickAngle = 0.0;
 		}
 		cc->setAngle(joystickAngle);
-		std::cout << joystickAngle << std::endl;
 	}
 }
 

@@ -18,7 +18,6 @@ void GunSystem::update() {
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 
-		std::cout << cc->getAngle() << std::endl;
 
 		//if (tc->getTag() == "Gun")
 		//{

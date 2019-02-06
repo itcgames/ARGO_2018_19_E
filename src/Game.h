@@ -59,7 +59,7 @@ private:
 	Player* p;
 	AI *ai;
 	Gun* pistol;
-	Entity m_ent;
+	std::vector<Entity*> m_ents;
 
 	HealthSystem m_hs;
 	ControlSystem m_cs;
