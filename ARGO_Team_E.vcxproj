@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SDL_SDK)\include;$(SDL_IMAGE)\include;$(SDL_MIXER)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SDL_SDK)\lib\x86;$(SDL_IMAGE)\lib\x86;$(SDL_MIXER)\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SDL_SDK)\include;$(SDL_IMAGE)\include;$(SDL_MIXER)\include;C:\Users\gameuser\Desktop\ARGO_2018_19_E\tmxlite\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SDL_SDK)\lib\x86;$(SDL_IMAGE)\lib\x86;$(SDL_MIXER)\lib\x86;C:\Users\gameuser\Desktop\ARGO_2018_19_E\tmxlite\bin\DebugStatic;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SDL_SDK)\include;$(SDL_IMAGE)\include;$(IncludePath)</IncludePath>
@@ -83,11 +83,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDL_IMAGE)\include;$(SDL_SDK)\include;$(SDL_MIXER)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDL_IMAGE)\include;$(SDL_SDK)\include;$(SDL_MIXER)\include;C:\Users\gameuser\Desktop\ARGO_2018_19_E\tmxlite\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;libtmxlite-s-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>C:\Users\gameuser\Desktop\ARGO_2018_19_E\tmxlite\DebugStatic;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -138,13 +139,16 @@
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Gun.cpp" />
+    <ClCompile Include="src\Hand.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MapLoader.cpp" />
     <ClCompile Include="src\Menus\CreditScreen.cpp" />
     <ClCompile Include="src\Menus\MenuScreen.cpp" />
     <ClCompile Include="src\Menus\OptionScreen.cpp" />
     <ClCompile Include="src\Menus\SplashScreen.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Systems\AISystem.cpp" />
+    <ClCompile Include="src\Systems\CollisionSystem.cpp" />
     <ClCompile Include="src\Systems\ControlSystem.cpp" />
     <ClCompile Include="src\Systems\GunSystem.cpp" />
     <ClCompile Include="src\Systems\HealthSystem.cpp" />
@@ -155,6 +159,7 @@
   <ItemGroup>
     <ClInclude Include="src\AI.h" />
     <ClInclude Include="src\Components\AIComponent.h" />
+    <ClInclude Include="src\Components\CollisionComponent.h" />
     <ClInclude Include="src\Components\Component.h" />
     <ClInclude Include="src\Components\ControlComponent.h" />
     <ClInclude Include="src\Components\DisplayComponent.h" />
@@ -169,6 +174,8 @@
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GUI\GUI.h" />
+    <ClInclude Include="src\Hand.h" />
+    <ClInclude Include="src\MapLoader.h" />
     <ClInclude Include="src\Menus\CreditScreen.h" />
     <ClInclude Include="src\Menus\MenuScreen.h" />
     <ClInclude Include="src\Menus\OptionScreen.h" />
@@ -176,6 +183,7 @@
     <ClInclude Include="src\Gun.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Systems\AISystem.h" />
+    <ClInclude Include="src\Systems\CollisionSystem.h" />
     <ClInclude Include="src\Systems\ControlSystem.h" />
     <ClInclude Include="src\Systems\GunSystem.h" />
     <ClInclude Include="src\Systems\HealthSystem.h" />

@@ -18,7 +18,10 @@
     <ClCompile Include="src\Systems\SoundSystem.cpp" />
     <ClCompile Include="src\AI.cpp" />
     <ClCompile Include="src\Gun.cpp" />
+    <ClCompile Include="src\Hand.cpp" />
     <ClCompile Include="src\Components\AIComponent.cpp" />
+    <ClCompile Include="src\Systems\CollisionSystem.cpp" />
+    <ClCompile Include="src\MapLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\AIComponent.h" />
@@ -50,5 +53,9 @@
     <ClInclude Include="src\AI.h" />
     <ClInclude Include="src\Gun.h" />
     <ClInclude Include="src\Components\TagComponent.h" />
+    <ClInclude Include="src\Hand.h" />
+    <ClInclude Include="src\Systems\CollisionSystem.h" />
+    <ClInclude Include="src\Components\CollisionComponent.h" />
+    <ClInclude Include="src\MapLoader.h" />
   </ItemGroup>
 </Project>

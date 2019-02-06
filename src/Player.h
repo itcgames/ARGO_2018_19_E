@@ -14,4 +14,5 @@ public:
 private:
 	std::vector<Component*> m_components;
 	SpriteComponent* m_spriteComponent;
+	SpriteComponent* m_spriteComponent2;
 };

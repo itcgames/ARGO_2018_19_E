@@ -19,6 +19,8 @@ void GunSystem::update() {
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 
 
+		//std::cout << cc->getAngle() << std::endl;
+
 		//if (tc->getTag() == "Gun")
 		//{
 			//gc->setRotation((cc->getAngle())*-1);

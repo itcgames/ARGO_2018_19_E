@@ -6,17 +6,19 @@
 #include "./Systems/ControlSystem.h"
 #include "./Systems/RenderSystem.h"
 #include "./Systems/AISystem.h"
+#include "./Systems/PhysicsSystem.h"
+#include "./Systems/GunSystem.h"
+#include "./Systems/CollisionSystem.h"
 #include "Menus/SplashScreen.h"
 #include "Menus/CreditScreen.h"
 #include "Menus/MenuScreen.h"
 #include "Menus/OptionScreen.h"
 
 #include "Player.h"
+#include "Hand.h"
 #include "AI.h"
 #include "Gun.h"
-
-#include "./Systems/PhysicsSystem.h"
-#include "./Systems/GunSystem.h"
+#include "MapLoader.h"
 
 
 using namespace std;
@@ -55,8 +57,10 @@ private:
 	SDL_Event event;
 	bool exit;
 
+	MapLoader* m_map;
 
 	Player* p;
+	Hand* h;
 	AI *ai;
 	Gun* pistol;
 	std::vector<Entity*> m_ents;
@@ -67,6 +71,7 @@ private:
 	GunSystem m_guns;
 	PhysicsSystem m_ps;
 	AISystem m_ais;
+	CollisionSystem m_collSys;
 
 	SDL_Rect m_screenSize;
 
