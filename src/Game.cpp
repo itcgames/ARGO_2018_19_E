@@ -11,13 +11,31 @@ Game::Game()
 	{
 		cout << "Error: " << IMG_GetError() << endl;
 	}
+	m_currentGameState = (GameState::Game);
 	
+	m_splash = new SplashScreen();
+	m_menu = new MenuScreen();
+	m_options = new OptionScreen();
+	m_credits = new CreditScreen();
+	m_screenSize = { 0,0,1200,700 };
 
+	p = new Player(m_renderer);
+	h = new Hand(m_renderer);
+	ai = new AI(m_renderer);
+	
+	m_map = new MapLoader();
+
+	m_map->load("testlevel.tmx", m_renderer);
 
 	p = new Player(m_renderer);
 	pistol = new Gun(m_renderer);
 
+	
+
 	initialise();
+
+	m_ents.push_back((Entity*)p);
+	m_ents.push_back((Entity*)ai);
 }
 
 Game::~Game()
@@ -52,12 +70,34 @@ void Game::run()
 }
 
 void Game::update() {
-	m_hs.update();
-	m_as.update();
-	m_guns.update();
-	SDL_PollEvent(&event);
-	m_cs.update(event);
-	m_ps.update();
+
+	switch (m_currentGameState)
+	{
+	case GameState::None:
+		break;
+	case GameState::Splash:
+		break;
+	case GameState::Menu:
+		break;
+	case GameState::Options:
+		break;
+	case GameState::Game:
+		m_hs.update();
+		m_ais.update();
+		m_ais.receive(m_ents);
+		SDL_PollEvent(&event);
+		m_cs.update(event);
+		m_guns.update();
+		m_ps.update();
+		m_collSys.update(m_map->getTiles());
+		break;
+	case GameState::Credits:
+		break;
+	default:
+		break;
+	}
+
+
 }
 
 void Game::render() {
@@ -65,37 +105,68 @@ void Game::render() {
 	{
 		SDL_Log("Could not create a renderer: %s", SDL_GetError());
 	}
-
-	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
 	SDL_RenderClear(m_renderer);
-	m_rs.render(m_renderer);
+
+	switch (m_currentGameState)
+	{
+	case GameState::None:
+		break;
+	case GameState::Splash:
+		m_splash->render(m_renderer);
+		break;
+	case GameState::Menu:
+		m_menu->render(m_renderer);
+		break;
+	case GameState::Options:
+		m_options->render(m_renderer);
+		break;
+	case GameState::Game:
+		m_rs.render(m_renderer);
+		m_map->draw(m_renderer);
+		break;
+	case GameState::Credits:
+		m_credits->render(m_renderer);
+		break;
+	default:
+		break;
+	}
 	SDL_RenderPresent(m_renderer);
 
+}
+
+void Game::setGameState(GameState gameState)
+{
+	m_currentGameState = gameState;
 }
 
 
 void Game::initialise()
 {
 
-	//SpriteComponent* spriteComponent = new SpriteComponent(0, 0, 257, 259);
-	//spriteComponent->loadFromFile("human.png", m_renderer);
-	//spriteComponent->setPosition(v2(300, 100));
-	//spriteComponent->setScale(v2(0.5f, 0.5f));
-
-
-	//m_guns.addEntity((Entity*)pistol);
-
 	m_hs.addEntity((Entity*)p);
 	m_cs.addEntity((Entity*)p);
 
 	m_cs.addEntity((Entity*)pistol);
+	m_cs.addEntity((Entity*)h);
 
 	m_rs.addEntity((Entity*)p);
 	m_rs.addEntity((Entity*)pistol);
+	m_rs.addEntity((Entity*)h);
+	
+	m_rs.addEntity((Entity*)ai);
 
 	m_ps.addEntity((Entity*)p);
-	m_ps.addEntity((Entity*)pistol);
+	m_ps.addEntity((Entity*)ai);
 
+	m_ais.addEntity((Entity*)ai);
+
+	m_ps.addEntity((Entity*)pistol);
+	m_ps.addEntity((Entity*)h);
+
+	m_ps.addEntity((Entity*)pistol);
 	m_guns.addEntity((Entity*)pistol);
+
+	m_collSys.addEntity((Entity*)p);
+	m_collSys.addEntity((Entity*)ai);
 }
 

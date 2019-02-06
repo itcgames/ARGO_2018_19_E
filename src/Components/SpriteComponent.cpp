@@ -11,8 +11,10 @@ SpriteComponent::SpriteComponent(int x, int y, int textureWidth, int textureHeig
 	m_texture = NULL;
 	m_sRect = new SDL_Rect;
 	m_dRect = new SDL_Rect;
-	m_scale = v2(1.0f, 1.0f);
-	m_position = v2(0.0f, 0.0f);
+	m_scale.x = 1.0f; 
+	m_scale.y = 1.0f;
+	m_position.x = 0.0f; 
+	m_position.y = 1.0f;
 	m_rotationAngle = 0.0f;
 	m_scaledWidth = 0;
 	m_scaledHeight = 0;
@@ -80,9 +82,17 @@ void SpriteComponent::render(SDL_Renderer* gRenderer)
 	m_dRect->w = m_scaledWidth;
 	m_dRect->h = m_scaledHeight;
 
+	//std::cout << "X= " << m_centre.x << "Y= " << m_centre.y << std::endl;
 	SDL_RenderCopyEx(gRenderer, m_texture, m_sRect, m_dRect, m_rotationAngle, NULL, m_flipValue);
 }
-
+void SpriteComponent::setCentreX(double x)
+{
+	m_centre.x = x;
+}
+void SpriteComponent::setCentreY(double y)
+{
+	m_centre.y = y;
+}
 void SpriteComponent::freeTexture()
 {
 	//Free texture if it exists
@@ -110,19 +120,19 @@ void SpriteComponent::setAlpha(Uint8 alpha)
 	SDL_SetTextureAlphaMod(m_texture, alpha);
 }
 
-void SpriteComponent::setPosition(v2 position)
+void SpriteComponent::setPosition(c2v position)
 {
 	m_dRect->x = position.x;
 	m_dRect->y = position.y;
 }
 
-void SpriteComponent::move(v2 offset)
+void SpriteComponent::move(c2v offset)
 {
 	m_dRect->x += offset.x;
 	m_dRect->y += offset.y;
 }
 
-void SpriteComponent::setScale(v2 scalar)
+void SpriteComponent::setScale(c2v scalar)
 {
 	m_scale = scalar;
 }
@@ -137,12 +147,12 @@ void SpriteComponent::rotate(int rotationAmount)
 	m_rotationAngle += rotationAmount;
 }
 
-v2 SpriteComponent::getPosition()
+c2v SpriteComponent::getPosition()
 {
 	return m_position;
 }
 
-v2 SpriteComponent::getScale()
+c2v SpriteComponent::getScale()
 {
 	return m_scale;
 }
@@ -154,10 +164,17 @@ int SpriteComponent::getRotation()
 
 int SpriteComponent::getWidth()
 {
+	m_scaledWidth = m_width * m_scale.x;
 	return m_scaledWidth;
 }
 
 int SpriteComponent::getHeight()
 {
+	m_scaledHeight = m_height * m_scale.y;
 	return m_scaledHeight;
+}
+
+SDL_Texture* SpriteComponent::getTexture()
+{
+	return m_texture;
 }

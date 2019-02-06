@@ -8,7 +8,9 @@
 #include "./Components/SpriteComponent.h"
 #include "./Components/HealthComponents.h"
 #include "./Components/PositionComponent.h"
+#include "./Components/DisplayComponent.h"
 #include "./Components/TagComponent.h"
+#include "./Components/CollisionComponent.h"
 #include <SDL.h>
 
 class Entity
@@ -23,6 +25,22 @@ public:
 
 	}
 
+	void addEntity(Entity * ent)
+	{
+		m_entities.push_back(ent);
+	}
+
+	std::vector<Entity*> getEntities(Entity * ent)
+	{
+		m_entities.push_back(ent);
+	}
+
+	void updatePosition()
+	{
+
+	}
+
+
 	std::vector<Component*> getComponents() {
 		return m_components;
 	}
@@ -36,5 +54,8 @@ public:
 	}
 private:
 	std::vector<Component*> m_components;
+	std::vector<Entity*> m_entities;
 };
+
+
 #endif // !ENTITY_H
