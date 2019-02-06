@@ -11,8 +11,8 @@ Hand::Hand(SDL_Renderer* renderer)
 
 	m_spriteComponent = new SpriteComponent(0, 0, 257, 259);
 	m_spriteComponent->loadFromFile("assets/Hand.png", renderer);
-	m_spriteComponent->setPosition(v2(300, 100));
-	m_spriteComponent->setScale(v2(0.5f, 0.5f));
+	m_spriteComponent->setPosition(c2v{300, 100});
+	m_spriteComponent->setScale(c2v{ 0.5f, 0.5f });
 	this->addComponent(m_spriteComponent);
 
 	this->addComponent(new HealthComponent(10));

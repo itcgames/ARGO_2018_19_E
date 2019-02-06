@@ -22,12 +22,20 @@ Game::Game()
 	p = new Player(m_renderer);
 	h = new Hand(m_renderer);
 	ai = new AI(m_renderer);
+	
+	m_map = new MapLoader();
 
+	m_map->load("testlevel.tmx", m_renderer);
 
 	p = new Player(m_renderer);
 	pistol = new Gun(m_renderer);
 
+	
+
 	initialise();
+
+	m_ents.push_back((Entity*)p);
+	m_ents.push_back((Entity*)ai);
 }
 
 Game::~Game()
@@ -75,10 +83,13 @@ void Game::update() {
 		break;
 	case GameState::Game:
 		m_hs.update();
-		m_as.update();
+		m_ais.update();
+		m_ais.receive(m_ents);
 		SDL_PollEvent(&event);
 		m_cs.update(event);
-	
+		m_guns.update();
+		m_ps.update();
+		m_collSys.update(m_map->getTiles());
 		break;
 	case GameState::Credits:
 		break;
@@ -86,13 +97,7 @@ void Game::update() {
 		break;
 	}
 
-	
-	m_hs.update();
-	m_as.update();
-	m_guns.update();
-	SDL_PollEvent(&event);
-	m_cs.update(event);
-	m_ps.update();
+
 }
 
 void Game::render() {
@@ -117,6 +122,7 @@ void Game::render() {
 		break;
 	case GameState::Game:
 		m_rs.render(m_renderer);
+		m_map->draw(m_renderer);
 		break;
 	case GameState::Credits:
 		m_credits->render(m_renderer);
@@ -146,13 +152,21 @@ void Game::initialise()
 	m_rs.addEntity((Entity*)p);
 	m_rs.addEntity((Entity*)pistol);
 	m_rs.addEntity((Entity*)h);
+	
+	m_rs.addEntity((Entity*)ai);
 
 	m_ps.addEntity((Entity*)p);
+	m_ps.addEntity((Entity*)ai);
 
 	m_ais.addEntity((Entity*)ai);
+
 	m_ps.addEntity((Entity*)pistol);
 	m_ps.addEntity((Entity*)h);
 
+	m_ps.addEntity((Entity*)pistol);
 	m_guns.addEntity((Entity*)pistol);
+
+	m_collSys.addEntity((Entity*)p);
+	m_collSys.addEntity((Entity*)ai);
 }
 

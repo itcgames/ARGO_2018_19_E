@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "../Entity.h"
-#include "../cute_math2d.h"
+#include "../cute_c2.h"
 
 class PhysicsSystem
 {
@@ -12,11 +12,12 @@ public:
 	std::vector<Entity *> m_entities;
 
 	
-	const v2 *Friction = new v2(0.90, 0.98);
+	c2v Friction;
 
 	PhysicsSystem();
 	void addEntity(Entity * e);
 	void update();
+	void receive(Entity * e);
 	double playerPositionX = 0;
 	double playerPositionY = 0;
 

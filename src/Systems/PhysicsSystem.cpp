@@ -1,7 +1,8 @@
 #include "PhysicsSystem.h"
 
 PhysicsSystem::PhysicsSystem() {
-
+	Friction.x = 0.90;
+	Friction.y = 0.98;
 }
 
 void PhysicsSystem::addEntity(Entity * e) {
@@ -12,10 +13,11 @@ void PhysicsSystem::update() {
 
 	for (Entity * entity : m_entities) {
 
+		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
-		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
+		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 
 		// check gun player collide
 		if (tc->getTag() == "Player")
@@ -58,7 +60,7 @@ void PhysicsSystem::update() {
 				gotGun = true;
 			}
 		}
-		if (cc->getThrowWeapon() == true && gotGun == true)  // Check if x is pressed.
+		if (tc->getTag() == "Player" && cc->getThrowWeapon() == true && gotGun == true)  // Check if x is pressed.
 		{
 			cc->setThrowWeapon(false);
 			//std::cout << "GOT = " << gotGun << std::endl;
@@ -113,25 +115,47 @@ void PhysicsSystem::update() {
 			pc->setX(playerPositionX);
 			pc->setY(playerPositionY + 64);
 		}
-		if (cc->getAngle() < 0)
+		
+		if (tc->getTag() == "Hand" && cc->getAngle() < 0 || tc->getTag() == "Gun" && cc->getAngle() < 0)
 		{
 			sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+			std::cout << "flip = " << sc->m_flipValue << std::endl;
 		}
-		else {
+		else if(tc->getTag() == "Hand" || tc->getTag() == "Gun"){
 			sc->m_flipValue = SDL_FLIP_NONE;
 		}
 
-		if (tc->getTag() == "Player" || gotGun != true)  // bool to check if gun is grabbed so gun falls
+		//if (tc->getTag() == "Gun" && cc->getAngle() < 0 && gotGun == true)
+		//{
+	//		sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+	//	}
+	//	else {
+	//		sc->m_flipValue = SDL_FLIP_NONE;
+	//	}
+
+		if (tc->getTag() == "Player" || tc->getTag() == "Gun" && gotGun != true)  // bool to check if gun is grabbed so gun falls
 		{
 			if (pc->getY() <= 500) {
-				pc->setVelY(pc->getVelY() + Friction->y);
+				pc->setVelY(pc->getVelY() + Friction.y);
 			}
 			else {
 				pc->setVelY(0);
 			}
+
+			//sc->setRotation((cc->getAngle())*-1);
+
+			if (cc->getAngle() < 0)
+			{
+				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+			}
+			else {
+				sc->m_flipValue = SDL_FLIP_NONE;
+			}
 		}
+		
 		if (tc->getTag() == "Player")
 		{
+
 			if (cc->getLeft()) {
 				if (pc->getVelX() > -6.0) {
 					pc->setVelX(pc->getVelX() - 1.5);
@@ -146,12 +170,24 @@ void PhysicsSystem::update() {
 				pc->setVelY(pc->getVelY() - 20);
 				cc->setJump(false);
 			}
+
+			if (cc->getAngle() < 0)
+			{
+				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+			}
+			else {
+				sc->m_flipValue = SDL_FLIP_NONE;
+			}
+		}
+
+		if (tc->getTag() == "Ai")
+		{
+			
 		}
 
 
-		
 
-		pc->setVelX(pc->getVelX() * Friction->x);
+		pc->setVelX(pc->getVelX() * Friction.x);
 
 		pc->setX(pc->getX() + pc->getVelX());
 		pc->setY(pc->getY() + pc->getVelY());
