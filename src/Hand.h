@@ -5,13 +5,12 @@
 #include "Components/SpriteComponent.h"
 
 
-class Player : Entity
+class Hand : Entity
 {
 public:
-	Player();
-	Player(SDL_Renderer* renderer);
+	Hand();
+	Hand(SDL_Renderer* renderer);
 private:
 	std::vector<Component*> m_components;
 	SpriteComponent* m_spriteComponent;
-	SpriteComponent* m_spriteComponent2;
 };

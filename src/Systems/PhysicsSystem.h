@@ -20,6 +20,11 @@ public:
 	double playerPositionX = 0;
 	double playerPositionY = 0;
 
+	double gunPositionX = 0;
+	double gunPositionY = 0;
+
 	double angle = 0;
+
+	bool gotGun = false;
 };
 #endif // !PHYSICSSYSTEM_H

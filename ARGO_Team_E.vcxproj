@@ -137,6 +137,7 @@
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Gun.cpp" />
+    <ClCompile Include="src\Hand.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Menus\CreditScreen.cpp" />
     <ClCompile Include="src\Menus\MenuScreen.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GUI\GUI.h" />
+    <ClInclude Include="src\Hand.h" />
     <ClInclude Include="src\Menus\CreditScreen.h" />
     <ClInclude Include="src\Menus\MenuScreen.h" />
     <ClInclude Include="src\Menus\OptionScreen.h" />

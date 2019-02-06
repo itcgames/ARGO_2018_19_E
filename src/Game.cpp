@@ -20,6 +20,7 @@ Game::Game()
 	m_screenSize = { 0,0,1200,700 };
 
 	p = new Player(m_renderer);
+	h = new Hand(m_renderer);
 	ai = new AI(m_renderer);
 
 
@@ -140,14 +141,17 @@ void Game::initialise()
 	m_cs.addEntity((Entity*)p);
 
 	m_cs.addEntity((Entity*)pistol);
+	m_cs.addEntity((Entity*)h);
 
 	m_rs.addEntity((Entity*)p);
 	m_rs.addEntity((Entity*)pistol);
+	m_rs.addEntity((Entity*)h);
 
 	m_ps.addEntity((Entity*)p);
 
 	m_ais.addEntity((Entity*)ai);
 	m_ps.addEntity((Entity*)pistol);
+	m_ps.addEntity((Entity*)h);
 
 	m_guns.addEntity((Entity*)pistol);
 }

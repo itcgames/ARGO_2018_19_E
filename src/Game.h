@@ -12,6 +12,7 @@
 #include "Menus/OptionScreen.h"
 
 #include "Player.h"
+#include "Hand.h"
 #include "AI.h"
 #include "Gun.h"
 
@@ -57,6 +58,7 @@ private:
 
 
 	Player* p;
+	Hand* h;
 	AI *ai;
 	Gun* pistol;
 

@@ -17,6 +17,11 @@ public:
 
 	std::string getType() { return m_tag; }
 
+	bool grabbed = false;
+
+	bool getGrabbed() { return grabbed; }
+	void setGrabbed(bool value) { grabbed = value; }
+
 
 
 private:
