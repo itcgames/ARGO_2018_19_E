@@ -3,7 +3,7 @@
 
 #include "Component.h"
 #include <SDL.h>
-#include "../cute_math2d.h"
+#include "../cute_c2.h"
 
 class PositionComponent : public Component
 {
@@ -17,21 +17,21 @@ public:
 	void setX(float x) { this->x = x; }
 	void setY(int y) { this->y = y; }
 
-	float getVelX() { return vel->x; }
-	float getVelY() { return vel->y; }
+	float getVelX() { return vel.x; }
+	float getVelY() { return vel.y; }
 
 
 	void setVelX(float x) { 
-		vel->x = x; 
+		vel.x = x; 
 	}
-	void setVelY(float y) { vel->y = y; }
+	void setVelY(float y) { vel.y = y; }
 
 	std::string m_tag = "POSITION";
 
 	std::string getType() { return m_tag; }
 
-	v2 *vel = new v2(0, 0);
-
+	c2v vel = { 0,0 };
+	
 private:
 	float x;
 	float y;

@@ -85,6 +85,7 @@ void Game::update() {
 		m_cs.update(event);
 		m_guns.update();
 		m_ps.update();
+		m_collSys.update();
 		break;
 	case GameState::Credits:
 		break;
@@ -154,5 +155,8 @@ void Game::initialise()
 
 	m_ps.addEntity((Entity*)pistol);
 	m_guns.addEntity((Entity*)pistol);
+
+	m_collSys.addEntity((Entity*)p);
+	m_collSys.addEntity((Entity*)ai);
 }
 

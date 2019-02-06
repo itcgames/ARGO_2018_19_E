@@ -42,11 +42,11 @@ public:
 	
 	//Scale setting function
 	//@param scalar: cute_v2
-	void setScale(v2 scalar);
+	void setScale(c2v scalar);
 
 	//Position setting function
 	//@param position: cute_v2 new position to be set
-	void setPosition(v2 position);
+	void setPosition(c2v position);
 
 	//Texture blending function
 	//@param blending: SDL_BlendMode of the blend type you want to apply
@@ -58,7 +58,7 @@ public:
 
 	//Persistent move method
 	//@param offset: cute_v2 of the amount in each axis to move by on method call
-	void move(v2 offset);
+	void move(c2v offset);
 
 	//Rotation set method
 	//@param angle: angle in degrees
@@ -69,8 +69,8 @@ public:
 	void rotate(int rotationAmount);
 
 	//Functions for getting properties of a sprite after transformations have been applied
-	v2 getPosition();
-	v2 getScale();
+	c2v getPosition();
+	c2v getScale();
 	int getRotation();
 	int getWidth();
 	int getHeight();
@@ -82,8 +82,8 @@ private:
 	SDL_Rect* m_sRect;
 	SDL_Rect* m_dRect;
 
-	v2 m_scale;
-	v2 m_position;
+	c2v m_scale;
+	c2v m_position;
 
 	std::string m_path;
 	

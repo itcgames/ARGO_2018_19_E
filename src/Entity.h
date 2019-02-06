@@ -10,6 +10,7 @@
 #include "./Components/PositionComponent.h"
 #include "./Components/DisplayComponent.h"
 #include "./Components/TagComponent.h"
+#include "./Components/CollisionComponent.h"
 #include <SDL.h>
 
 class Entity
