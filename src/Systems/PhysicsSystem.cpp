@@ -25,7 +25,8 @@ void PhysicsSystem::update() {
 		}
 		if (tc->getTag() == "Gun")
 		{
-			if (tc->getGrabbed() == true)
+	
+			if (tc->getGrabbed() == true)  // Set the gun to be grabbed
 			{
 				//x = RCos(Angle)
 				//y = RSin(Angle)
@@ -36,8 +37,8 @@ void PhysicsSystem::update() {
 				angle += angleDifference * ease;
 
 				double radAng = angle * 3.14159265359 / 180;
-				double xOffset = 90 * (cos(radAng));
-				double yOffset = 90 * (sin(radAng));
+				xOffset = 90 * (cos(radAng));
+				yOffset = 90 * (sin(radAng));
 
 				pc->setX(playerPositionX + 50 - xOffset);  // set gun position + offset for player centre - offset for angle
 				pc->setY(playerPositionY + 40 + yOffset);
@@ -46,27 +47,61 @@ void PhysicsSystem::update() {
 				gunPositionX = pc->getX();
 				gunPositionY = pc->getY();
 			}
-			else if (playerPositionX >= pc->getX() - 100 && playerPositionX <= pc->getX() + 100)
+			// Check if player collides with gun and if they dont already have a gun
+			else if (playerPositionX >= pc->getX() - 100 && playerPositionX <= pc->getX() + 100 
+				&& playerPositionY >= pc->getY() - 100 && playerPositionY <= pc->getY() + 100 
+				&& gotGun == false && tc->getGrabable() == true)
 			{
 				tc->setGrabbed(true);
+				pc->setVelX(0);
+				pc->setVelY(0);
 				gotGun = true;
 			}
 		}
+		if (cc->getThrowWeapon() == true && gotGun == true)  // Check if x is pressed.
+		{
+			cc->setThrowWeapon(false);
+			//std::cout << "GOT = " << gotGun << std::endl;
+			throwGun = true;
+		}
+		
+		if (tc->getTag() == "Gun" && throwGun == true)  // Check if a weapon wants to be thrown
+		{
+			std::cout << "X = " << -xOffset <<  "Y = " << yOffset << std::endl;
+			pc->setVelX(-xOffset / 2);
+			pc->setVelY(yOffset / 2);
+			
+			tc->setGrabbed(false);
+			tc->setGrabable(false); // Start count to make gun grabable again.
+			gotGun = false;
+			throwGun = false;
+		}
 
-		if (tc->getTag() == "Gun")
+		// Increase grabable count to allow thrown gun to be picked up again.
+		if (tc->getGrabable() == false)
+		{
+			if (tc->getGrabableCount() > 30)
+			{
+				tc->setGrabable(true);
+				tc->setGrabableCount(0);
+			}
+			else
+			{
+				tc->setGrabableCount(tc->getGrabableCount() + 1);
+			}
+		}
+		
+		if (tc->getTag() == "Gun" && tc->getGrabbed() == true)
 		{
 			sc->setRotation((cc->getAngle())*-1); //rotate gun
 		}
 		if (tc->getTag() == "Hand" && gotGun == true) // Set hand on gun
 		{
-			double radAng = angle * 3.14159265359 / 180;
-			double xOffset = 10 * (cos(radAng));  // Offset to make hand be on gun handle while rotating
-			double yOffset = 10 * (sin(radAng));
+			
 			double handAngle = angle - 90;
 			
 			sc->setRotation((cc->getAngle())*-1); //rotate hand
 			pc->setX(gunPositionX);
-			std::cout << "Angle = " << handAngle << std::endl;
 			if (handAngle < 0)
 			{
 				handAngle = handAngle * -1;

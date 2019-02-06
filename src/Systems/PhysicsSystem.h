@@ -26,5 +26,10 @@ public:
 	double angle = 0;
 
 	bool gotGun = false;
+
+	double xOffset = 0;
+	double yOffset = 0;
+
+	bool throwGun = false;
 };
 #endif // !PHYSICSSYSTEM_H

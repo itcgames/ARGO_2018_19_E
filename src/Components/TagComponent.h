@@ -18,9 +18,16 @@ public:
 	std::string getType() { return m_tag; }
 
 	bool grabbed = false;
+	bool grabable = true;
+
+	double grabableCount = 0;
 
 	bool getGrabbed() { return grabbed; }
+	bool getGrabable() { return grabable; }
 	void setGrabbed(bool value) { grabbed = value; }
+	void setGrabable(bool value) { grabable = value; }
+	void setGrabableCount(double value) { grabableCount = value; }
+	double getGrabableCount() { return grabableCount; }
 
 
 
