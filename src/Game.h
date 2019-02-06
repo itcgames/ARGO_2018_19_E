@@ -6,6 +6,9 @@
 #include "./Systems/ControlSystem.h"
 #include "./Systems/RenderSystem.h"
 #include "./Systems/AISystem.h"
+#include "./Systems/PhysicsSystem.h"
+#include "./Systems/GunSystem.h"
+#include "./Systems/CollisionSystem.h"
 #include "Menus/SplashScreen.h"
 #include "Menus/CreditScreen.h"
 #include "Menus/MenuScreen.h"
@@ -14,9 +17,6 @@
 #include "Player.h"
 #include "AI.h"
 #include "Gun.h"
-
-#include "./Systems/PhysicsSystem.h"
-#include "./Systems/GunSystem.h"
 
 
 using namespace std;
@@ -67,6 +67,7 @@ private:
 	GunSystem m_guns;
 	PhysicsSystem m_ps;
 	AISystem m_ais;
+	CollisionSystem m_collSys;
 
 	SDL_Rect m_screenSize;
 

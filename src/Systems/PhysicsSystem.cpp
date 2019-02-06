@@ -1,7 +1,8 @@
 #include "PhysicsSystem.h"
 
 PhysicsSystem::PhysicsSystem() {
-
+	Friction.x = 0.90;
+	Friction.y = 0.98;
 }
 
 void PhysicsSystem::addEntity(Entity * e) {
@@ -48,7 +49,7 @@ void PhysicsSystem::update() {
 		
 
 		if (pc->getY() <= 500) {
-			pc->setVelY(pc->getVelY() + Friction->y);
+			pc->setVelY(pc->getVelY() + Friction.y);
 		}
 		else {
 			pc->setVelY(0);
@@ -88,7 +89,7 @@ void PhysicsSystem::update() {
 
 
 
-		pc->setVelX(pc->getVelX() * Friction->x);
+		pc->setVelX(pc->getVelX() * Friction.x);
 
 		pc->setX(pc->getX() + pc->getVelX());
 		pc->setY(pc->getY() + pc->getVelY());

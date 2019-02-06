@@ -19,8 +19,8 @@ public:
 	void update();
 	void receive(std::vector<Entity*> ents);
 private:
-	const v2 *Friction = new v2(0.90, 0.98);
-	v2 closestEnemy;
+	const c2v *Friction = new c2v{ 0.90f, 0.98f };
+	c2v closestEnemy;
 
 	std::vector<double> m_distances;
 };
