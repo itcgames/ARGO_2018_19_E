@@ -15,6 +15,8 @@ public:
 	void update(std::vector<std::vector<Tile*>> tiles);
 	std::string rectCollision(c2AABB A, c2AABB B);
 
+	void checkBullets(PositionComponent * gun);
+
 
 	std::vector<Entity *> m_entities;
 
