@@ -135,12 +135,8 @@ void PhysicsSystem::update() {
 
 		if (tc->getTag() == "Player" || tc->getTag() == "Gun" && gotGun != true)  // bool to check if gun is grabbed so gun falls
 		{
-			if (pc->getY() <= 500) {
-				pc->setVelY(pc->getVelY() + Friction.y);
-			}
-			else {
-				pc->setVelY(0);
-			}
+			pc->setVelY(pc->getVelY() + Friction.y);
+		
 
 			//sc->setRotation((cc->getAngle())*-1);
 
@@ -157,18 +153,19 @@ void PhysicsSystem::update() {
 		{
 
 			if (cc->getLeft()) {
-				if (pc->getVelX() > -6.0) {
+				if (pc->getVelX() > -8.0) {
 					pc->setVelX(pc->getVelX() - 1.5);
 				}
 			}
 			if (cc->getRight()) {
-				if (pc->getVelX() < 6.0) {
+				if (pc->getVelX() < 8.0) {
 					pc->setVelX(pc->getVelX() + 1.5);
 				}
 			}
-			if (cc->getJump()) {
+			if (cc->getJump() && pc->m_allowedJump) {
 				pc->setVelY(pc->getVelY() - 20);
 				cc->setJump(false);
+				pc->m_allowedJump = false;
 			}
 
 			if (cc->getAngle() < 0)

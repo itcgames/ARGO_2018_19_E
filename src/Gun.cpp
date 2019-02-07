@@ -18,4 +18,6 @@ Gun::Gun(SDL_Renderer* renderer)
 	this->addComponent(new PositionComponent(200, 100));
 	this->addComponent(new ControlComponent());
 	this->addComponent(new TagComponent("Gun"));
+	this->addComponent(new CollisionComponent(200, 100, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
+
 }

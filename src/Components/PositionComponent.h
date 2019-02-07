@@ -31,6 +31,8 @@ public:
 	std::string getType() { return m_tag; }
 
 	c2v vel = { 0,0 };
+
+	bool m_allowedJump = true;
 	
 private:
 	float x;
