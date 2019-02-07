@@ -11,8 +11,12 @@ public:
 	Player();
 	Player(SDL_Renderer* renderer);
 
+	void render(SDL_Renderer* renderer);
+
 private:
 	std::vector<Component*> m_components;
+	PositionComponent* positionComp;
 	SpriteComponent* m_spriteComponent;
-	SpriteComponent* m_spriteComponent2;
+	SpriteComponent* m_spriteComponentHead;
+
 };

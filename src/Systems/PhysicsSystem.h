@@ -41,6 +41,9 @@ public:
 	bool fired = false;
 	int firedCount = 0;
 
+	bool left = false;
+	bool right = false;
+
 	std::vector<Bullet*> bullets;
 
 };

@@ -125,6 +125,7 @@ void Game::render() {
 		m_rs.render(m_renderer);
 		m_map->draw(m_renderer);
 		m_ps.bulletRender(m_renderer);
+		p->render(m_renderer);
 		break;
 	case GameState::Credits:
 		m_credits->render(m_renderer);

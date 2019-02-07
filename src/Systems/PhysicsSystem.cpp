@@ -19,6 +19,50 @@ void PhysicsSystem::update() {
 		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 
+
+		// Flip Player and hands while no gun equiped.
+		if (tc->getTag() == "Player")
+		{
+			if (gotGun == false)
+			{
+				if (pc->getVelX() >= 0)
+				{
+					sc->m_flipValue = SDL_FLIP_NONE;
+					right = true;  // bools used to flip hands properly while no gun grabbed.
+					left = false;
+				}
+				else {
+					sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+					left = true;
+					right = false;
+				}
+			}
+			else{
+				if (cc->getAngle() < 0)
+				{
+					sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+					left = false;
+					right = false;
+				}
+				else {
+					sc->m_flipValue = SDL_FLIP_NONE;
+					left = false;
+					right = false;
+				}
+			}
+		}
+		if (tc->getTag() == "Hand")
+		{
+			if (left == true)
+			{
+				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+			}
+			else if (right == true)
+			{
+				sc->m_flipValue = SDL_FLIP_NONE;
+			}
+		}
+
 		// check gun player collide
 		if (tc->getTag() == "Player")
 		{
@@ -35,7 +79,7 @@ void PhysicsSystem::update() {
 
 				double angleTo = cc->getAngle() + 90;
 				double angleDifference = angleTo - angle;
-				double ease = 0.15;
+				double ease = 0.1;
 				angle += angleDifference * ease;
 
 				double radAng = angle * 3.14159265359 / 180;
@@ -44,21 +88,21 @@ void PhysicsSystem::update() {
 
 				if (fired == false)
 				{
-					pc->setX(playerPositionX + 50 - xOffset);  // set gun position + offset for player centre - offset for angle
-					pc->setY(playerPositionY + 40 + yOffset);
+					pc->setX(playerPositionX - xOffset);  // set gun position + offset for player centre - offset for angle
+					pc->setY(playerPositionY + yOffset);
 				}
 				else
 				{
 					if (sc->m_flipValue == SDL_FLIP_NONE)
 					{
-						pc->setX(playerPositionX + 50 - xOffset - (firedCount));  // set gun position + offset for player centre - offset for angle
+						pc->setX(playerPositionX - xOffset - (firedCount));  // set gun position + offset for player centre - offset for angle
 						sc->rotate(firedCount);
 					}
 					else
 					{
-						pc->setX(playerPositionX + 50 - xOffset + (firedCount));
+						pc->setX(playerPositionX - xOffset + (firedCount));
 					}
-					pc->setY(playerPositionY + 40 + yOffset);
+					pc->setY(playerPositionY + yOffset);
 				}
 
 				// Get positions for hands to get on gun.
@@ -146,15 +190,15 @@ void PhysicsSystem::update() {
 		else if (tc->getTag() == "Hand") // Set hand to body
 		{
 			pc->setX(playerPositionX);
-			pc->setY(playerPositionY + 64);
+			pc->setY(playerPositionY + 6);
 		}
 		
-		if (tc->getTag() == "Hand" && cc->getAngle() < 0 || tc->getTag() == "Gun" && cc->getAngle() < 0)
+		if (tc->getTag() == "Hand" && cc->getAngle() < 0 && gotGun == true|| tc->getTag() == "Gun" && cc->getAngle() < 0 && gotGun == true)
 		{
 			sc->m_flipValue = SDL_FLIP_HORIZONTAL;
 			//std::cout << "flip = " << sc->m_flipValue << std::endl;
 		}
-		else if(tc->getTag() == "Hand" || tc->getTag() == "Gun"){
+		else if(tc->getTag() == "Hand" && gotGun == true || tc->getTag() == "Gun" && gotGun == true){
 			sc->m_flipValue = SDL_FLIP_NONE;
 		}
 
@@ -166,13 +210,6 @@ void PhysicsSystem::update() {
 
 			//sc->setRotation((cc->getAngle())*-1);
 
-			if (cc->getAngle() < 0)
-			{
-				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
-			}
-			else {
-				sc->m_flipValue = SDL_FLIP_NONE;
-			}
 		}
 		
 		if (tc->getTag() == "Player")
@@ -194,13 +231,7 @@ void PhysicsSystem::update() {
 				pc->m_allowedJump = false;
 			}
 
-			if (cc->getAngle() < 0)
-			{
-				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
-			}
-			else {
-				sc->m_flipValue = SDL_FLIP_NONE;
-			}
+			
 		}
 
 		if (tc->getTag() == "AI_TAG")
@@ -261,8 +292,9 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 				if (fired == false)
 				{
 					fired = true;
-					pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
-					bullets = pc->bullets;
+					//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
+					std::cout << "ANGLE = " << angle << std::endl;
+					bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), - (angle - 90), -xOffset, yOffset));
 				}
 
 			}
