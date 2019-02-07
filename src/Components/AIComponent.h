@@ -44,6 +44,8 @@ public:
 	void setGun(bool has) { m_gun = has; }
 
 	double distance(c2v v1, float x, float y);
+
+	bool m_alive = true;
 	
 	void setCurrent(State* s);
 	void setPrevious(State* s);
