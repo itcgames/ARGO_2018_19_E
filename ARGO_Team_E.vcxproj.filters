@@ -22,6 +22,7 @@
     <ClCompile Include="src\Components\AIComponent.cpp" />
     <ClCompile Include="src\Systems\CollisionSystem.cpp" />
     <ClCompile Include="src\MapLoader.cpp" />
+    <ClCompile Include="src\Bullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\AIComponent.h" />
@@ -57,5 +58,8 @@
     <ClInclude Include="src\Systems\CollisionSystem.h" />
     <ClInclude Include="src\Components\CollisionComponent.h" />
     <ClInclude Include="src\MapLoader.h" />
+    <ClInclude Include="Factory.h" />
+    <ClInclude Include="src\Components\FactoryComponent.h" />
+    <ClInclude Include="src\Factory.h" />
   </ItemGroup>
 </Project>

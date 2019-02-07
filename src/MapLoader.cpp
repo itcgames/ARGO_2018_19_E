@@ -28,7 +28,7 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 	//Set up tile vector.
 	m_tileVector.reserve(m_cols);
 	m_tileVector.resize(m_cols);
-
+	
 	for (int i = 0; i < m_cols; i++)
 	{
 		for (int j = 0; j < m_rows; j++)

@@ -17,6 +17,8 @@ public:
 	PhysicsSystem();
 	void addEntity(Entity * e);
 	void update();
+	void bulletUpdate(SDL_Renderer* renderer);
+	void bulletRender(SDL_Renderer* renderer);
 	void receive(Entity * e);
 	double playerPositionX = 0;
 	double playerPositionY = 0;
@@ -35,5 +37,10 @@ public:
 	double yOffset = 0;
 
 	bool throwGun = false;
+
+	bool fired = false;
+	int firedCount = 0;
+
+	std::vector<Bullet*> bullets;
 };
 #endif // !PHYSICSSYSTEM_H

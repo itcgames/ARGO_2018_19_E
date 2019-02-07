@@ -42,8 +42,23 @@ void PhysicsSystem::update() {
 				xOffset = 90 * (cos(radAng));
 				yOffset = 90 * (sin(radAng));
 
-				pc->setX(playerPositionX + 50 - xOffset);  // set gun position + offset for player centre - offset for angle
-				pc->setY(playerPositionY + 40 + yOffset);
+				if (fired == false)
+				{
+					pc->setX(playerPositionX + 50 - xOffset);  // set gun position + offset for player centre - offset for angle
+					pc->setY(playerPositionY + 40 + yOffset);
+				}
+				else
+				{
+					if (sc->m_flipValue == SDL_FLIP_NONE)
+					{
+						pc->setX(playerPositionX + 50 - xOffset - (firedCount));  // set gun position + offset for player centre - offset for angle
+					}
+					else
+					{
+						pc->setX(playerPositionX + 50 - xOffset + (firedCount));
+					}
+					pc->setY(playerPositionY + 40 + yOffset);
+				}
 
 				// Get positions for hands to get on gun.
 				gunPositionX = pc->getX();
@@ -135,12 +150,8 @@ void PhysicsSystem::update() {
 
 		if (tc->getTag() == "Player" || tc->getTag() == "Gun" && gotGun != true)  // bool to check if gun is grabbed so gun falls
 		{
-			if (pc->getY() <= 500) {
-				pc->setVelY(pc->getVelY() + Friction.y);
-			}
-			else {
-				pc->setVelY(0);
-			}
+			pc->setVelY(pc->getVelY() + Friction.y);
+		
 
 			//sc->setRotation((cc->getAngle())*-1);
 
@@ -157,18 +168,19 @@ void PhysicsSystem::update() {
 		{
 
 			if (cc->getLeft()) {
-				if (pc->getVelX() > -6.0) {
+				if (pc->getVelX() > -8.0) {
 					pc->setVelX(pc->getVelX() - 1.5);
 				}
 			}
 			if (cc->getRight()) {
-				if (pc->getVelX() < 6.0) {
+				if (pc->getVelX() < 8.0) {
 					pc->setVelX(pc->getVelX() + 1.5);
 				}
 			}
-			if (cc->getJump()) {
+			if (cc->getJump() && pc->m_allowedJump) {
 				pc->setVelY(pc->getVelY() - 20);
 				cc->setJump(false);
+				pc->m_allowedJump = false;
 			}
 
 			if (cc->getAngle() < 0)
@@ -203,9 +215,54 @@ void PhysicsSystem::update() {
 
 
 		pc->setVelX(pc->getVelX() * Friction.x);
+		
+		if (tc->getTag() == "Player" || tc->getTag() == "AI_TAG")
+		{
+			pc->setX(pc->getX() + pc->getVelX());
+			pc->setY(pc->getY() + pc->getVelY());
+		}
+		
+	}
+}
 
-		pc->setX(pc->getX() + pc->getVelX());
-		pc->setY(pc->getY() + pc->getVelY());
+void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
+	if (fired == true)
+	{
+		if (firedCount < 10)
+		{
+			firedCount = firedCount + 1;
+		}
+		else {
+			fired = false;
+			firedCount = 0;
+		}
+	}
+	for (Entity * entity : m_entities) {
+		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
+		if (tc->getTag() == "Gun")
+		{
+			FactoryComponent * fc = (FactoryComponent*)entity->getCompByType("FACTORY");
+			ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
+			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
+
+			if (cc->getFire())
+			{
+				if (fired == false)
+				{
+					fired = true;
+					bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
+				}
+
+			}
+
+		}
+	}
+}
+void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
+		
+	for (int i = 0; i < bullets.size(); i++)
+	{
+		bullets[i]->render(renderer);
 	}
 }
 
