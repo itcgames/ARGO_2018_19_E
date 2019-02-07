@@ -82,9 +82,9 @@ void Game::update() {
 	case GameState::Options:
 		break;
 	case GameState::Game:
-		m_hs.update();
-		m_ais.receive(m_ents);
+		m_hs.update();		
 		m_ais.update();		
+		m_ais.receive(m_ents);
 		m_collSys.update(m_map->getTiles());
 		SDL_PollEvent(&event);
 		m_cs.update(event);
@@ -125,6 +125,7 @@ void Game::render() {
 		m_rs.render(m_renderer);
 		m_map->draw(m_renderer);
 		m_ps.bulletRender(m_renderer);
+		p->render(m_renderer);
 		break;
 	case GameState::Credits:
 		m_credits->render(m_renderer);

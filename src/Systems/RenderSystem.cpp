@@ -13,6 +13,11 @@ void RenderSystem::render(SDL_Renderer* renderer) {
 	for (Entity * entity : m_entities) {
 
 		PositionComponent* pc = (PositionComponent*)entity->getCompByType("POSITION");
+		TagComponent* tc = (TagComponent*)entity->getCompByType("TAG");
+		if (tc->getTag() == "Player")
+		{
+
+		}
 		c2v newPos;
 		newPos.x = pc->getX();
 		newPos.y = pc->getY();

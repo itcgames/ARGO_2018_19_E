@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "../Entity.h"
+extern SDL_Haptic * haptic;
 
 class ControlSystem
 {
@@ -17,8 +18,9 @@ public:
 
 	std::vector<Entity *> m_entities;
 	SDL_GameController* gGameController = NULL;
+	
 	const int JOYSTICK_DEAD_ZONE = 8000;
-
+	
 	int aIndex = 0;
 	int xIndex = 0;
 

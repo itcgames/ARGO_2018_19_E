@@ -1,5 +1,7 @@
 #include "ControlSystem.h"
 
+SDL_Haptic * haptic = NULL;
+
 ControlSystem::ControlSystem() {
 	init();
 }
@@ -9,7 +11,7 @@ void ControlSystem::init() {
 	bool success = true;
 
 	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC) < 0)
 	{
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 		success = false;
@@ -29,10 +31,26 @@ void ControlSystem::init() {
 	else
 	{
 		//Load joystick
+		
 		gGameController = SDL_GameControllerOpen(0);
+		SDL_Joystick *j = SDL_GameControllerGetJoystick(gGameController);
+		haptic = SDL_HapticOpenFromJoystick(j);
 		if (gGameController == NULL)
 		{
 			printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
+		}
+
+		if (haptic == NULL)
+		{
+			printf("Warning: Controller does not support haptics! SDL Error: %s\n", SDL_GetError());
+		}
+		else
+		{
+			//Get initialize rumble
+			if (SDL_HapticRumbleInit(haptic) < 0)
+			{
+				printf("Warning: Unable to initialize rumble! SDL Error: %s\n", SDL_GetError());
+			}
 		}
 	}
 }
@@ -76,9 +94,7 @@ void ControlSystem::update(SDL_Event e) {
 			leftY > JOYSTICK_DEAD_ZONE || leftY < -JOYSTICK_DEAD_ZONE) {
 			joystickAngle = atan2((double)leftX, (double)leftY) * (180.0 / M_PI);
 		}
-		else {
-			joystickAngle = 0.0;
-		}
+		
 		cc->setAngle(joystickAngle);
 
 		//std::cout << joystickAngle << std::endl;
@@ -95,6 +111,10 @@ void ControlSystem::setButtons(ControlComponent & cc) {
 	
 	if (RT > 5000) {
 		cc.setFire(true);
+		if (SDL_HapticRumblePlay(haptic, 0.5, 100) != 0)
+		{
+			printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+		}
 	}
 	else {
 		cc.setFire(false);
@@ -103,6 +123,7 @@ void ControlSystem::setButtons(ControlComponent & cc) {
 	if (AButton) {
 		if (aIndex == 0)
 			cc.setJump(AButton);
+		
 		aIndex++;
 	}
 	else {

@@ -148,6 +148,7 @@
     <ClCompile Include="src\Menus\OptionScreen.cpp" />
     <ClCompile Include="src\Menus\SplashScreen.cpp" />
     <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\State.cpp" />
     <ClCompile Include="src\Systems\AISystem.cpp" />
     <ClCompile Include="src\Systems\CollisionSystem.cpp" />
     <ClCompile Include="src\Systems\ControlSystem.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\Components\HealthComponents.h" />
     <ClInclude Include="src\Components\PositionComponent.h" />
+    <ClInclude Include="src\Components\StateComponent.h" />
     <ClInclude Include="src\Components\TagComponent.h" />
     <ClInclude Include="src\cute_c2.h" />
     <ClInclude Include="src\cute_math2d.h" />
@@ -186,6 +188,7 @@
     <ClInclude Include="src\Menus\SplashScreen.h" />
     <ClInclude Include="src\Gun.h" />
     <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\State.h" />
     <ClInclude Include="src\Systems\AISystem.h" />
     <ClInclude Include="src\Systems\CollisionSystem.h" />
     <ClInclude Include="src\Systems\ControlSystem.h" />
