@@ -261,7 +261,8 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 				if (fired == false)
 				{
 					fired = true;
-					bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
+					pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
+					bullets = pc->bullets;
 				}
 
 			}
