@@ -128,7 +128,7 @@ void CollisionSystem::checkBullets(PositionComponent * pc) {
 	for (Entity * entity : m_entities) {
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
 
-		if (tag->getTag() == "Player" || tag->getTag() == "AI_TAG") {
+		if (tag->getTag() == "AI_TAG") {
 			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
@@ -136,15 +136,22 @@ void CollisionSystem::checkBullets(PositionComponent * pc) {
 				std::string val = rectCollision(cc->getCollider(), bullets->at(i)->collider);
 				if (val != "none") {
 					bullets->erase(bullets->begin() + i);
+					if (val == "right") {
+						pc->setVelX(40);
+						pc->setVelY(-10);
+						sc->setRotation(90);
+					}
+					if (val == "left") {
+						pc->setVelX(-40);
+						pc->setVelY(-10);
+						sc->setRotation(-90);
+					}
+					if (tag->getTag() == "AI_TAG") {
+						AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
+						ai->m_alive = false;
+					}
 				}
-				if (val == "right") {
-					pc->setVelX(10);
-					sc->setRotation(90);
-				}
-				if (val == "left") {
-					pc->setVelX(-10);
-					sc->setRotation(-90);
-				}
+				
 
 			}
 		}

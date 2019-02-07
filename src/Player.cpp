@@ -26,7 +26,8 @@ Player::Player(SDL_Renderer* renderer)
 
 	this->addComponent(new HealthComponent(10));
 	this->addComponent(new TagComponent("Player"));
-	positionComp = new PositionComponent(600, 200);
+
+	positionComp = new PositionComponent(100, 100);
 	this->addComponent(positionComp);
 	this->addComponent(new ControlComponent());
 	this->addComponent(new CollisionComponent(300, 500, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
