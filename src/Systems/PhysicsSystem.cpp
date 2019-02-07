@@ -44,14 +44,15 @@ void PhysicsSystem::update() {
 
 				if (fired == false)
 				{
-					pc->setX(playerPositionX + 50 - xOffset);  // Set gun position + offset for player centre - offset for angle.
+					pc->setX(playerPositionX + 50 - xOffset);  // set gun position + offset for player centre - offset for angle
 					pc->setY(playerPositionY + 40 + yOffset);
 				}
 				else
 				{
-					if (sc->m_flipValue == SDL_FLIP_NONE)  // Change the recoil side.
+					if (sc->m_flipValue == SDL_FLIP_NONE)
 					{
-						pc->setX(playerPositionX + 50 - xOffset - (firedCount));  // Set gun position with recoil.
+						pc->setX(playerPositionX + 50 - xOffset - (firedCount));  // set gun position + offset for player centre - offset for angle
+						sc->rotate(firedCount);
 					}
 					else
 					{
@@ -73,10 +74,6 @@ void PhysicsSystem::update() {
 				pc->setVelX(0);
 				pc->setVelY(0);
 				gotGun = true;
-			}
-			else {
-				pc->setX(pc->getX() + pc->getVelX());  // Set the guns position so physics work
-				pc->setY(pc->getY() + pc->getVelY());
 			}
 
 			if (aiPositionX >= pc->getX() - 100 && aiPositionX <= pc->getX() + 100
@@ -119,9 +116,19 @@ void PhysicsSystem::update() {
 			}
 		}
 		
-		if (tc->getTag() == "Gun" && tc->getGrabbed() == true)
+		if (tc->getTag() == "Gun" && tc->getGrabbed() == true && fired == false)
 		{
 			sc->setRotation((cc->getAngle())*-1); //rotate gun
+		}
+		else if (tc->getTag() == "Gun" && tc->getGrabbed() == true && fired == true) // Pistol recoil rotate
+		{
+			if (sc->m_flipValue == SDL_FLIP_NONE)
+			{
+				sc->setRotation((cc->getAngle())*-1 - firedCount); //rotate gun
+			}
+			else {
+				sc->setRotation((cc->getAngle())*-1 + firedCount); //rotate gun
+			}
 		}
 		if (tc->getTag() == "Hand" && gotGun == true) // Set hand on gun
 		{
