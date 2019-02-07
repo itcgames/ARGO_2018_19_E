@@ -9,7 +9,7 @@ Hand::Hand(SDL_Renderer* renderer)
 {
 	//Set up Sprite component and add to entity component vector
 
-	m_spriteComponent = new SpriteComponent(0, 0, 257, 259);
+	m_spriteComponent = new SpriteComponent(0, 0, 61, 58);
 	m_spriteComponent->loadFromFile("assets/Hand.png", renderer);
 	m_spriteComponent->setPosition(c2v{300, 100});
 	m_spriteComponent->setScale(c2v{ 0.5f, 0.5f });

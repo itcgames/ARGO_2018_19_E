@@ -83,14 +83,14 @@ void AISystem::update() {
 
 		}
 
-		std::cout << "Ypos " << pc->getY() << std::endl;
+		//std::cout << "Ypos " << pc->getY() << std::endl;
 
 		if (curPosition.y > closestEnemy.y)
 		{
 			ac->setJump(true);
 		}
 		//std::cout << ac->getJump() << std::endl;
-		std::cout << closestEnemy.x << ", " << closestEnemy.y << std::endl;
+		//std::cout << closestEnemy.x << ", " << closestEnemy.y << std::endl;
 	}
 
 }

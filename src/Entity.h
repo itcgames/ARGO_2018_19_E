@@ -11,12 +11,14 @@
 #include "./Components/DisplayComponent.h"
 #include "./Components/TagComponent.h"
 #include "./Components/CollisionComponent.h"
+#include "./Components/FactoryComponent.h"
 #include <SDL.h>
 
 class Entity
 {
 public:
 	Entity() {}
+	virtual ~Entity() {};
 	void addComponent(Component * newComp) {
 		m_components.push_back(newComp);
 	}

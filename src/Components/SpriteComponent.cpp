@@ -122,6 +122,8 @@ void SpriteComponent::setAlpha(Uint8 alpha)
 
 void SpriteComponent::setPosition(c2v position)
 {
+	m_position.x = position.x;
+	m_position.y = position.y;
 	m_dRect->x = position.x;
 	m_dRect->y = position.y;
 }

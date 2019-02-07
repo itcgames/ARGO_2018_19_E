@@ -90,6 +90,7 @@ void Game::update() {
 		m_cs.update(event);
 		m_ps.update();
 		m_guns.update();
+		m_ps.bulletUpdate(m_renderer);
 		break;
 	case GameState::Credits:
 		break;
@@ -123,6 +124,7 @@ void Game::render() {
 	case GameState::Game:
 		m_rs.render(m_renderer);
 		m_map->draw(m_renderer);
+		m_ps.bulletRender(m_renderer);
 		break;
 	case GameState::Credits:
 		m_credits->render(m_renderer);
