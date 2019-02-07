@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AI.cpp" />
+    <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Bullet.cpp" />
     <ClCompile Include="src\Components\AIComponent.cpp" />
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
@@ -148,7 +149,11 @@
     <ClCompile Include="src\Menus\OptionScreen.cpp" />
     <ClCompile Include="src\Menus\SplashScreen.cpp" />
     <ClCompile Include="src\Player.cpp" />
-    <ClCompile Include="src\State.cpp" />
+    <ClCompile Include="src\States\Attack.cpp" />
+    <ClCompile Include="src\States\Dead.cpp" />
+    <ClCompile Include="src\States\Idle.cpp" />
+    <ClCompile Include="src\States\SearchEntity.cpp" />
+    <ClCompile Include="src\States\SearchGun.cpp" />
     <ClCompile Include="src\Systems\AISystem.cpp" />
     <ClCompile Include="src\Systems\CollisionSystem.cpp" />
     <ClCompile Include="src\Systems\ControlSystem.cpp" />
@@ -161,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="Factory.h" />
     <ClInclude Include="src\AI.h" />
+    <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Components\AIComponent.h" />
     <ClInclude Include="src\Components\CollisionComponent.h" />
     <ClInclude Include="src\Components\Component.h" />
@@ -188,7 +194,11 @@
     <ClInclude Include="src\Menus\SplashScreen.h" />
     <ClInclude Include="src\Gun.h" />
     <ClInclude Include="src\Player.h" />
-    <ClInclude Include="src\State.h" />
+    <ClInclude Include="src\States\Attack.h" />
+    <ClInclude Include="src\States\Dead.h" />
+    <ClInclude Include="src\States\Idle.h" />
+    <ClInclude Include="src\States\SearchEntity.h" />
+    <ClInclude Include="src\States\SearchGun.h" />
     <ClInclude Include="src\Systems\AISystem.h" />
     <ClInclude Include="src\Systems\CollisionSystem.h" />
     <ClInclude Include="src\Systems\ControlSystem.h" />
