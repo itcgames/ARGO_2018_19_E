@@ -293,8 +293,9 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 				{
 					fired = true;
 					//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
-					std::cout << "ANGLE = " << angle << std::endl;
-					bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), - (angle - 90), -xOffset, yOffset));
+					
+					pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), - (angle - 90), -xOffset, yOffset));
+					bullets = pc->bullets;
 				}
 
 			}
