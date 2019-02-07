@@ -3,9 +3,14 @@
 
 #include "Component.h"
 #include "../cute_c2.h"
+#include "StateComponent.h"
 
 class AIComponent : public Component
 {
+
+	class State* current;
+	class State* previous;
+
 public:
 
 	AIComponent(int speed) : m_speed(speed) {}
@@ -40,6 +45,16 @@ public:
 
 	double distance(c2v v1, float x, float y);
 	
+	void setCurrent(State* s);
+	void setPrevious(State* s);
+	State* getCurrent();
+	State* getPrevious();
+	void idle();
+	void searchGun();
+	void searchEntity();
+	void attack();
+	void dead();
+
 private:
 
 	bool m_left = false;
