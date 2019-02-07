@@ -11,17 +11,16 @@ Bullet::Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, dou
 	m_spriteComponent->setRotation(angle);
 	xVel = xOffset;
 	yVel = yOffset;
-	std::cout << "Angle = " << angle << std::endl;
 
-
-	//this->addComponent(new HealthComponent(10));
-	//this->addComponent(new TagComponent("Bullet"));
-	//this->addComponent(new PositionComponent(600, 200));
-	//this->addComponent(new ControlComponent());
-	//this->addComponent(new CollisionComponent(300, 500, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
+	collider.min = c2v{ xPos, yPos };
+	collider.max = c2v{ xPos + m_spriteComponent->getWidth(), yPos + m_spriteComponent->getHeight() };
 }
-void Bullet::render(SDL_Renderer* renderer)
-{
+
+void Bullet::render(SDL_Renderer* renderer) {
+
 	m_spriteComponent->setPosition(c2v{ m_spriteComponent->getPosition().x + xVel / 5, m_spriteComponent->getPosition().y + yVel /5});
 	m_spriteComponent->render(renderer);
+
+	collider.min = c2v{ m_spriteComponent->getPosition().x, m_spriteComponent->getPosition().y };
+	collider.max = c2v{ m_spriteComponent->getPosition().x + m_spriteComponent->getWidth(), m_spriteComponent->getPosition().y + m_spriteComponent->getHeight() };
 }

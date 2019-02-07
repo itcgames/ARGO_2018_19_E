@@ -42,5 +42,6 @@ public:
 	int firedCount = 0;
 
 	std::vector<Bullet*> bullets;
+
 };
 #endif // !PHYSICSSYSTEM_H
