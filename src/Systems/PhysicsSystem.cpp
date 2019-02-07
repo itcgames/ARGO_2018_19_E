@@ -44,14 +44,14 @@ void PhysicsSystem::update() {
 
 				if (fired == false)
 				{
-					pc->setX(playerPositionX + 50 - xOffset);  // set gun position + offset for player centre - offset for angle
+					pc->setX(playerPositionX + 50 - xOffset);  // Set gun position + offset for player centre - offset for angle.
 					pc->setY(playerPositionY + 40 + yOffset);
 				}
 				else
 				{
-					if (sc->m_flipValue == SDL_FLIP_NONE)
+					if (sc->m_flipValue == SDL_FLIP_NONE)  // Change the recoil side.
 					{
-						pc->setX(playerPositionX + 50 - xOffset - (firedCount));  // set gun position + offset for player centre - offset for angle
+						pc->setX(playerPositionX + 50 - xOffset - (firedCount));  // Set gun position with recoil.
 					}
 					else
 					{
@@ -73,6 +73,10 @@ void PhysicsSystem::update() {
 				pc->setVelX(0);
 				pc->setVelY(0);
 				gotGun = true;
+			}
+			else {
+				pc->setX(pc->getX() + pc->getVelX());  // Set the guns position so physics work
+				pc->setY(pc->getY() + pc->getVelY());
 			}
 
 			if (aiPositionX >= pc->getX() - 100 && aiPositionX <= pc->getX() + 100
