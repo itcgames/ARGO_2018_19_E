@@ -170,5 +170,6 @@ void Game::initialise()
 
 	m_collSys.addEntity((Entity*)p);
 	m_collSys.addEntity((Entity*)ai);
+	m_collSys.addEntity((Entity*)pistol);
 }
 
