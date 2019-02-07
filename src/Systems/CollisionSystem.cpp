@@ -45,7 +45,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 		
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
 
-		if (tag->getTag() == "Player") { // || tag->getTag() == "AI_TAG") {
+		if (tag->getTag() == "Player" || tag->getTag() == "AI_TAG") {
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
 
@@ -58,14 +58,17 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 						val = rectCollision(cc->getCollider(), tiles[i].at(j)->collider);
 						if (val != "none" ) {
 							if (val == "top") {
+								pc->m_allowedJump = true;
 								pc->setVelY(0);
 								pc->setY(tiles[i].at(j)->dRect.y - cc->getH());
+								
 							}
 							else if (val == "bottom") {
 								pc->setVelY(5);
 							}
 							else if (val == "right" || val == "left") {
 								pc->setVelX(-(pc->getVelX() * 2));
+								pc->m_allowedJump = true;
 							}
 							
 					
@@ -75,6 +78,40 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 					
 
 					
+				}
+			}
+		}
+		else if (tag->getTag() == "Gun") {
+			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
+			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
+
+			cc->SetCollPos(pc->getX(), pc->getY());
+
+			for (int i = 0; i < tiles.size(); i++) {
+				for (int j = 0; j < tiles[i].size(); j++) {
+					std::string val;
+					if (tiles[i].at(j)->dRect.x > 0) {
+						val = rectCollision(cc->getCollider(), tiles[i].at(j)->collider);
+						if (val != "none") {
+							if (val == "top") {
+								pc->setVelY(0);
+								pc->setY(tiles[i].at(j)->dRect.y - cc->getH());
+
+							}
+							else if (val == "bottom") {
+								pc->setVelY(5);
+							}
+							else if (val == "right" || val == "left") {
+								pc->setVelX(-(pc->getVelX() * 2));
+							}
+
+
+						}
+
+					}
+
+
+
 				}
 			}
 		}

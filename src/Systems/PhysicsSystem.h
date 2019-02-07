@@ -35,5 +35,6 @@ public:
 	double yOffset = 0;
 
 	bool throwGun = false;
+
 };
 #endif // !PHYSICSSYSTEM_H
