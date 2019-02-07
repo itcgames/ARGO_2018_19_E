@@ -20,7 +20,7 @@ Player::Player(SDL_Renderer* renderer)
 
 	this->addComponent(new HealthComponent(10));
 	this->addComponent(new TagComponent("Player"));
-	this->addComponent(new PositionComponent(600, 200));
+	this->addComponent(new PositionComponent(100, 100));
 	this->addComponent(new ControlComponent());
 	this->addComponent(new CollisionComponent(300, 500, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }
