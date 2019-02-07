@@ -4,6 +4,7 @@
 #include "Component.h"
 #include <SDL.h>
 #include "../cute_c2.h"
+#include "../Factory.h"
 
 class PositionComponent : public Component
 {
@@ -33,6 +34,8 @@ public:
 	c2v vel = { 0,0 };
 
 	bool m_allowedJump = true;
+
+	std::vector<Bullet*> bullets;
 	
 private:
 	float x;

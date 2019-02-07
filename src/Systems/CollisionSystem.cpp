@@ -114,7 +114,39 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 
 				}
 			}
+
+			checkBullets(pc);
+
 		}
 		
+	}
+}
+
+void CollisionSystem::checkBullets(PositionComponent * pc) {
+	 
+	std::vector<Bullet *> * bullets = &pc->bullets;
+	for (Entity * entity : m_entities) {
+		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
+
+		if (tag->getTag() == "Player" || tag->getTag() == "AI_TAG") {
+			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
+			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
+			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
+			for (int i = 0; i < bullets->size(); i++) {
+				std::string val = rectCollision(cc->getCollider(), bullets->at(i)->collider);
+				if (val != "none") {
+					bullets->erase(bullets->begin() + i);
+				}
+				if (val == "right") {
+					pc->setVelX(10);
+					sc->setRotation(90);
+				}
+				if (val == "left") {
+					pc->setVelX(-10);
+					sc->setRotation(-90);
+				}
+
+			}
+		}
 	}
 }
