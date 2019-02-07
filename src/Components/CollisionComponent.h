@@ -49,6 +49,7 @@ private:
 
 	bool m_colliding = false;
 
+
 	c2AABB collider;
 
 };

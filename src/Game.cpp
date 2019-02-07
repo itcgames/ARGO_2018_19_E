@@ -84,12 +84,12 @@ void Game::update() {
 	case GameState::Game:
 		m_hs.update();
 		m_ais.receive(m_ents);
-		m_ps.update();
 		m_ais.update();		
+		m_collSys.update(m_map->getTiles());
 		SDL_PollEvent(&event);
 		m_cs.update(event);
+		m_ps.update();
 		m_guns.update();
-		m_collSys.update(m_map->getTiles());
 		break;
 	case GameState::Credits:
 		break;

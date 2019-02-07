@@ -166,9 +166,8 @@ void PhysicsSystem::update() {
 					pc->setVelX(pc->getVelX() + 1.5);
 				}
 			}
-			if (cc->getJump() && pc->getY() >= 500) {
+			if (cc->getJump()) {
 				pc->setVelY(pc->getVelY() - 20);
-				pc->setY(500);
 				cc->setJump(false);
 			}
 
