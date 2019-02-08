@@ -11,10 +11,27 @@ Game::Game()
 	{
 		cout << "Error: " << IMG_GetError() << endl;
 	}
-	m_currentGameState = (GameState::Game);
+	m_currentGameState = new GameState;
+	*m_currentGameState = (GameState::Splash);
+
+	if (TTF_Init() == -1) {
+		printf("TTF_Init: %s\n", TTF_GetError());
+	}
+
+	TTF_Font* Font = TTF_OpenFont("arial.ttf", 300);
+	if (!Font) {
+		printf("TTF_OpenFont: %s\n", TTF_GetError());
+		// handle error
+	}
+
+	TTF_Font* menuFont = TTF_OpenFont("arial.ttf", 30);
+	if (!menuFont) {
+		printf("TTF_OpenFont: %s\n", TTF_GetError());
+		// handle error
+	}
 	
-	m_splash = new SplashScreen();
-	m_menu = new MenuScreen();
+	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
+	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont);
 	m_options = new OptionScreen();
 	m_credits = new CreditScreen();
 	m_screenSize = { 0,0,1200,700 };
@@ -22,6 +39,11 @@ Game::Game()
 	p = new Player(m_renderer);
 	h = new Hand(m_renderer);
 	ai = new AI(m_renderer);
+
+	m_backgroundSprite = new SpriteComponent(0, 0, 498, 750);
+	m_backgroundSprite->loadFromFile("assets/purplebg.png", m_renderer);
+	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
+	m_backgroundSprite->setScale(c2v{ 3.5f, 1.6f });
 	
 	m_map = new MapLoader();
 
@@ -70,14 +92,18 @@ void Game::run()
 }
 
 void Game::update() {
+	SDL_PollEvent(&event);
 
-	switch (m_currentGameState)
+
+	switch (*m_currentGameState)
 	{
 	case GameState::None:
 		break;
 	case GameState::Splash:
+		m_splash->update();
 		break;
 	case GameState::Menu:
+		m_menu->update(m_window);
 		break;
 	case GameState::Options:
 		break;
@@ -86,10 +112,12 @@ void Game::update() {
 		m_ais.update();		
 		m_ais.receive(m_ents);
 		m_collSys.update(m_map->getTiles());
-		SDL_PollEvent(&event);
+		
 		m_cs.update(event);
 		m_ps.update();
 		m_guns.update();
+
+		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
 		break;
 	case GameState::Credits:
@@ -107,8 +135,9 @@ void Game::render() {
 		SDL_Log("Could not create a renderer: %s", SDL_GetError());
 	}
 	SDL_RenderClear(m_renderer);
+	SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
 
-	switch (m_currentGameState)
+	switch (*m_currentGameState)
 	{
 	case GameState::None:
 		break;
@@ -122,6 +151,7 @@ void Game::render() {
 		m_options->render(m_renderer);
 		break;
 	case GameState::Game:
+		m_backgroundSprite->render(m_renderer);
 		m_rs.render(m_renderer);
 		m_map->draw(m_renderer);
 		m_ps.bulletRender(m_renderer);
@@ -139,7 +169,7 @@ void Game::render() {
 
 void Game::setGameState(GameState gameState)
 {
-	m_currentGameState = gameState;
+	*m_currentGameState = gameState;
 }
 
 

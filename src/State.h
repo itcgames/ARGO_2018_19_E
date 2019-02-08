@@ -2,7 +2,7 @@
 
 #include "Components/StateComponent.h"
 
-class SearchGun : public State
+class SearchGun : public FState
 {
 public:
 	SearchGun();
@@ -12,7 +12,7 @@ public:
 	void dead();
 };
 
-class SearchEntity : public State
+class SearchEntity : public FState
 {
 public:
 	SearchEntity();
@@ -21,7 +21,7 @@ public:
 	void attack();
 };
 
-class Dead : public State
+class Dead : public FState
 {
 public:
 
@@ -31,7 +31,7 @@ public:
 
 };
 
-class Attack : public State
+class Attack : public FState
 {
 public:
 
