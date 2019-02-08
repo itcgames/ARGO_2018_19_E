@@ -11,6 +11,7 @@ class AIComponent : public Component
 	class FState* current;
 	class FState* previous;
 
+
 public:
 
 	AIComponent(int speed) : m_speed(speed) {}
@@ -47,15 +48,6 @@ public:
 
 	bool m_alive = true;
 	
-	void setCurrent(FState* s);
-	void setPrevious(FState* s);
-	FState* getCurrent();
-	FState* getPrevious();
-	void idle();
-	void searchGun();
-	void searchEntity();
-	void attack();
-	void dead();
 
 private:
 

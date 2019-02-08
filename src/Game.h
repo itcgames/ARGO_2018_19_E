@@ -13,6 +13,7 @@
 #include "Menus/CreditScreen.h"
 #include "Menus/MenuScreen.h"
 #include "Menus/OptionScreen.h"
+#include "Components/SpriteComponent.h"
 
 #include "Player.h"
 #include "Hand.h"
@@ -55,6 +56,8 @@ private:
 	AI *ai;
 	Gun* pistol;
 	std::vector<Entity*> m_ents;
+
+	SpriteComponent* m_backgroundSprite;
 
 	HealthSystem m_hs;
 	ControlSystem m_cs;

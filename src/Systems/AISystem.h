@@ -6,6 +6,7 @@
 #include "../Entity.h"
 #include "../cute_c2.h"
 #include <algorithm>
+#include "../Animation.h"
 
 
 class AISystem
@@ -27,5 +28,7 @@ private:
 	std::pair<double, c2v> m_realDist;
 
 	c2v curPosition;
+
+	Animation *fsm;
 };
 #endif // !AISYSTEM_H

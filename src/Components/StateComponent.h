@@ -2,36 +2,41 @@
 
 #include "SDL.h"
 #include "Component.h"
-#include "AIComponent.h"
+#include "../Animation.h"
 #include  <iostream>
 
-class AIComponent;
+
 
 class FState : public Component
 {
 public:
 
-	std::string m_tag = "State";
+
+	FState() { ; }
+	
+	
+	std::string m_tag = "STATE";
 
 	std::string getType() { return m_tag; }
 
-	virtual void idle(AIComponent * comp)
+	
+	virtual void idle(Animation * comp)
 	{
 		std::cout << "idle" << std::endl;
 	}
-	virtual void searchGun(AIComponent * comp)
+	virtual void searchGun(Animation * comp)
 	{
 		std::cout << "Searching for gun" << std::endl;
 	}
-	virtual void searchEntity(AIComponent * comp)
+	virtual void searchEnemy(Animation * comp)
 	{
-		std::cout << "Searching for Entity" << std::endl;
+		std::cout << "Searching for Enemy" << std::endl;
 	}
-	virtual void attack(AIComponent * comp)
+	virtual void attack(Animation * comp)
 	{
 		std::cout << "Attacking Entity" << std::endl;
 	}
-	virtual void dead(AIComponent * comp)
+	virtual void dead(Animation * comp)
 	{
 		std::cout << "Dead" << std::endl;
 	}

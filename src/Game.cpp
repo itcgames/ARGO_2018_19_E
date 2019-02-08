@@ -39,6 +39,11 @@ Game::Game()
 	p = new Player(m_renderer);
 	h = new Hand(m_renderer);
 	ai = new AI(m_renderer);
+
+	m_backgroundSprite = new SpriteComponent(0, 0, 498, 750);
+	m_backgroundSprite->loadFromFile("assets/purplebg.png", m_renderer);
+	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
+	m_backgroundSprite->setScale(c2v{ 3.5f, 1.6f });
 	
 	m_map = new MapLoader();
 
@@ -111,6 +116,8 @@ void Game::update() {
 		m_cs.update(event);
 		m_ps.update();
 		m_guns.update();
+
+		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
 		break;
 	case GameState::Credits:
@@ -144,6 +151,7 @@ void Game::render() {
 		m_options->render(m_renderer);
 		break;
 	case GameState::Game:
+		m_backgroundSprite->render(m_renderer);
 		m_rs.render(m_renderer);
 		m_map->draw(m_renderer);
 		m_ps.bulletRender(m_renderer);

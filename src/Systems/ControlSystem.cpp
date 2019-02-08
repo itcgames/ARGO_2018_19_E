@@ -111,10 +111,7 @@ void ControlSystem::setButtons(ControlComponent & cc) {
 	
 	if (RT > 5000) {
 		cc.setFire(true);
-		if (SDL_HapticRumblePlay(haptic, 0.5, 100) != 0)
-		{
-			printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
-		}
+		
 	}
 	else {
 		cc.setFire(false);
