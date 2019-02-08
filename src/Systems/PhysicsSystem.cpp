@@ -203,14 +203,6 @@ void PhysicsSystem::update() {
 		}
 
 
-		if (tc->getTag() == "Player" || tc->getTag() == "Gun" && gotGun != true)  // bool to check if gun is grabbed so gun falls
-		{
-			pc->setVelY(pc->getVelY() + Friction.y);
-		
-
-			//sc->setRotation((cc->getAngle())*-1);
-
-		}
 		
 		if (tc->getTag() == "Player")
 		{
@@ -263,6 +255,21 @@ void PhysicsSystem::update() {
 			pc->setX(pc->getX() + pc->getVelX());
 			pc->setY(pc->getY() + pc->getVelY());
 		}
+		if (tc->getTag() == "Player" || tc->getTag() == "Gun" && gotGun != true)  // bool to check if gun is grabbed so gun falls
+		{
+			if (tc->getTag() == "Gun")
+			{
+				std::cout << "Gun = " << pc->getVelY() << std::endl;
+				pc->setY(pc->getY() + pc->getVelY());
+				pc->setX(pc->getX() + pc->getVelX());
+			}
+			pc->setVelY(pc->getVelY() + Friction.y);
+
+		
+
+			//sc->setRotation((cc->getAngle())*-1);
+
+		}
 		
 	}
 }
@@ -286,18 +293,20 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 			FactoryComponent * fc = (FactoryComponent*)entity->getCompByType("FACTORY");
 			ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
-
-			if (cc->getFire())
+			if (tc->getGrabbed() == true)
 			{
-				if (fired == false)
+				if (cc->getFire())
 				{
-					fired = true;
-					//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
-					
-					pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), - (angle - 90), -xOffset, yOffset));
-					bullets = pc->bullets;
-				}
+					if (fired == false)
+					{
+						fired = true;
+						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
 
+						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
+						bullets = pc->bullets;
+					}
+
+				}
 			}
 
 		}
