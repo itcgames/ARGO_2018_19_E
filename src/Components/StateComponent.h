@@ -7,7 +7,7 @@
 
 class AIComponent;
 
-class State : public Component
+class FState : public Component
 {
 public:
 

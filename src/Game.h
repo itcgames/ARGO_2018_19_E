@@ -23,16 +23,7 @@
 
 using namespace std;
 
-enum class GameState
-{
-	None,
-	Splash,
-	Menu,
-	Options,
-	Game,
-	Credits,
-	End
-};
+
 class Game {
 
 public:
@@ -42,7 +33,7 @@ public:
 	void run();
 	SDL_Texture* loadTexture(std::string file);
 
-	GameState m_currentGameState;
+	GameState * m_currentGameState;
 	GameState m_previousGameState;
 	void setGameState(GameState gameState);
 

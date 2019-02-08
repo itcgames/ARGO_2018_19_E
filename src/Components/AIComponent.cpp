@@ -7,20 +7,20 @@ double AIComponent::distance(c2v  vecOne, float x, float y)
 }
 
 
-void AIComponent::setCurrent(State* s)
+void AIComponent::setCurrent(FState* s)
 {
 	current = s;
 }
-State* AIComponent::getCurrent()
+FState* AIComponent::getCurrent()
 {
 	return current;
 }
-void AIComponent::setPrevious(State* s)
+void AIComponent::setPrevious(FState* s)
 {
 	previous = s;
 }
 
-State* AIComponent::getPrevious()
+FState* AIComponent::getPrevious()
 {
 	return previous;
 }

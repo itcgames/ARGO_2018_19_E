@@ -64,5 +64,6 @@
     <ClInclude Include="src\Factory.h" />
     <ClInclude Include="src\Components\StateComponent.h" />
     <ClInclude Include="src\State.h" />
+    <ClInclude Include="src\Menus\State.h" />
   </ItemGroup>
 </Project>
