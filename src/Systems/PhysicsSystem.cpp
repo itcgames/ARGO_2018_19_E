@@ -1,8 +1,13 @@
 #include "PhysicsSystem.h"
-
-PhysicsSystem::PhysicsSystem() {
+PhysicsSystem::PhysicsSystem()
+{
 	Friction.x = 0.90;
 	Friction.y = 0.98;
+
+	p = new ParticleExample();
+
+	
+	
 }
 
 void PhysicsSystem::addEntity(Entity * e) {
@@ -19,7 +24,7 @@ void PhysicsSystem::update() {
 		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 
-
+		
 		// Flip Player and hands while no gun equiped.
 		if (tc->getTag() == "Player")
 		{
@@ -162,6 +167,8 @@ void PhysicsSystem::update() {
 		
 		if (tc->getTag() == "Gun" && tc->getGrabbed() == true && fired == false)
 		{
+			//m_emitter->draw();
+			//m_emitter->update();
 			sc->setRotation((cc->getAngle())*-1); //rotate gun
 		}
 		else if (tc->getTag() == "Gun" && tc->getGrabbed() == true && fired == true) // Pistol recoil rotate
@@ -293,27 +300,47 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 					{
 
 						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
-					fired = true;
-					//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
-					if (SDL_HapticRumblePlay(haptic, 0.5, 100) != 0)
-					{
-						printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+						fired = true;
+						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
+						if (SDL_HapticRumblePlay(haptic, 0.5, 100) != 0)
+						{
+							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+						}
+						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
+						bullets = pc->bullets;
 					}
-					pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), - (angle - 90), -xOffset, yOffset));
-					bullets = pc->bullets;
-					}
-					}
-
 				}
 			}
-
 		}
 	}
+}
+
 void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
 		
 	for (int i = 0; i < bullets.size(); i++)
 	{
 		bullets[i]->render(renderer);
+		      // create a new particle system pointer
+		
+		animateExplosion(renderer);
+		
+		
 	}
+}
+
+void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
+{
+	p->setRenderer(renderer);
+	p->setStyle(ParticleExample::SMOKE);    // set the example effects
+	p->setStartSpin(0);
+	p->setStartSpinVar(90);
+	p->setEndSpin(90);
+	p->setDuration(.1);
+	p->setStartSpinVar(90);// set the renderer
+	p->setPosition(playerPositionX - xOffset, playerPositionY);              // set the position
+	p->setStyle(ParticleExample::PatticleStyle(9));
+	p->draw();
+
+	
 }
 

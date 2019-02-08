@@ -37,6 +37,22 @@ public:
 	GameState * m_currentGameState;
 	GameState m_previousGameState;
 	void setGameState(GameState gameState);
+	
+	
+
+	SDL_Renderer * getScreen() const { return m_renderer; }
+
+	static Game* Instance()
+	{
+		if (s_pInstance == 0)
+		{
+			s_pInstance = new Game();
+			return s_pInstance;
+		}
+		return s_pInstance;
+	}
+
+	static Game* s_pInstance;
 
 private:
 
@@ -63,6 +79,8 @@ private:
 	ControlSystem m_cs;
 	RenderSystem m_rs;
 	GunSystem m_guns;
+	
+	
 	PhysicsSystem m_ps;
 	AISystem m_ais;
 	CollisionSystem m_collSys;
@@ -74,6 +92,13 @@ private:
 	MenuScreen * m_menu;
 	OptionScreen * m_options;
 	CreditScreen * m_credits;
+
+	
+
+
+	
+	SDL_Surface* m_screen;
+
 };
 
 

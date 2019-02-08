@@ -15,7 +15,7 @@ public:
 	void update(SDL_Window *window);
 	void render(SDL_Renderer* renderer);
 
-	bool loadFromFile(std::string path, SDL_Renderer* gRenderer);
+	SDL_Texture* loadFromFile(std::string path, SDL_Renderer* gRenderer);
 	void freeTexture();
 
 	SDL_Texture* init(TTF_Font* Font, std::string & text, SDL_Texture* texture, SDL_Rect & quad, int x, int y);
@@ -45,6 +45,8 @@ private:
 	SDL_Rect titleRenderQuad;
 
 	SDL_Texture* m_texture;
+	SDL_Texture* m_texture2;
+	SDL_Texture* m_drawTexture;
 	int m_width;
 	int m_height;
 	SDL_Rect* m_sRect;

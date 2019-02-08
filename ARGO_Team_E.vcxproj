@@ -139,9 +139,7 @@
     <ClCompile Include="src\Bullet.cpp" />
     <ClCompile Include="src\Components\AIComponent.cpp" />
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
-    <ClCompile Include="src\Element.cpp" />
     <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\GuiObject.cpp" />
     <ClCompile Include="src\Gun.cpp" />
     <ClCompile Include="src\Hand.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -150,6 +148,7 @@
     <ClCompile Include="src\Menus\MenuScreen.cpp" />
     <ClCompile Include="src\Menus\OptionScreen.cpp" />
     <ClCompile Include="src\Menus\SplashScreen.cpp" />
+    <ClCompile Include="src\ParticleExample.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\States\Attack.cpp" />
@@ -185,11 +184,9 @@
     <ClInclude Include="src\Components\TagComponent.h" />
     <ClInclude Include="src\cute_c2.h" />
     <ClInclude Include="src\cute_math2d.h" />
-    <ClInclude Include="src\Element.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Factory.h" />
     <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\GuiObject.h" />
     <ClInclude Include="src\GUI\GUI.h" />
     <ClInclude Include="src\Hand.h" />
     <ClInclude Include="src\MapLoader.h" />
@@ -198,6 +195,7 @@
     <ClInclude Include="src\Menus\OptionScreen.h" />
     <ClInclude Include="src\Menus\SplashScreen.h" />
     <ClInclude Include="src\Gun.h" />
+    <ClInclude Include="src\ParticleExample.h" />
     <ClInclude Include="src\Menus\State.h" />
     <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\Player.h" />
