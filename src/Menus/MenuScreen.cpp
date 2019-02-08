@@ -26,7 +26,7 @@ MenuScreen::MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Fon
 	m_dRect = new SDL_Rect;
 	m_sRect->x = 0;
 	m_sRect->y = 0;
-	m_sRect->w = 940;
+	m_sRect->w = 0;
 	m_sRect->h = 198;
 	m_dRect->x = 0;
 	m_dRect->y = 300;
@@ -138,6 +138,10 @@ void MenuScreen::update(SDL_Window *window)
 	}
 	else if (BButton) {
 		SDL_DestroyWindow(window);
+	}
+
+	if (m_sRect->w < 940) {
+		m_sRect->w += 10;
 	}
 }
 
