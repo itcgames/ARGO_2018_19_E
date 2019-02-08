@@ -110,8 +110,8 @@ void PhysicsSystem::update() {
 				gunPositionY = pc->getY();
 			}
 			// Check if player collides with gun and if they dont already have a gun
-			else if (playerPositionX >= pc->getX() - 100 && playerPositionX <= pc->getX() + 100 
-				&& playerPositionY >= pc->getY() - 100 && playerPositionY <= pc->getY() + 100 
+			else if (playerPositionX >= pc->getX() - 50 && playerPositionX <= pc->getX() + 50 
+				&& playerPositionY >= pc->getY() - 50 && playerPositionY <= pc->getY() + 50 
 				&& gotGun == false && tc->getGrabable() == true)
 			{
 				tc->setGrabbed(true);
