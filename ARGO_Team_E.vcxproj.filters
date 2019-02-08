@@ -29,9 +29,8 @@
     <ClCompile Include="src\States\Idle.cpp" />
     <ClCompile Include="src\States\SearchEntity.cpp" />
     <ClCompile Include="src\States\SearchGun.cpp" />
+    <ClCompile Include="src\ParticleExample.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />
-    <ClCompile Include="src\Element.cpp" />
-    <ClCompile Include="src\GuiObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\AIComponent.h" />
@@ -77,8 +76,7 @@
     <ClInclude Include="src\States\Idle.h" />
     <ClInclude Include="src\States\SearchEntity.h" />
     <ClInclude Include="src\States\SearchGun.h" />
+    <ClInclude Include="src\ParticleExample.h" />
     <ClInclude Include="src\ParticleSystem.h" />
-    <ClInclude Include="src\Element.h" />
-    <ClInclude Include="src\GuiObject.h" />
   </ItemGroup>
 </Project>

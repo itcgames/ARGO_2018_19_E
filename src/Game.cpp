@@ -1,9 +1,16 @@
 #include "Game.h"
 
+Game* Game::s_pInstance = 0;
+
 Game::Game()
 {
 	m_window = SDL_CreateWindow("Entity Component Systems", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1200, 700, SDL_WINDOW_OPENGL);
 	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	m_screen = SDL_CreateRGBSurface(0, 1200, 700, 32,
+		0,
+		0,
+		0,
+		0);;
 
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
 
@@ -12,6 +19,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = (GameState::Game);
+	
 	
 	m_splash = new SplashScreen();
 	m_menu = new MenuScreen();
@@ -33,9 +41,12 @@ Game::Game()
 
 	initialise();
 
+	
 	m_ents.push_back((Entity*)p);
 	m_ents.push_back((Entity*)ai);
 	//m_ents.push_back((Entity*)pistol);
+
+
 }
 
 Game::~Game()
@@ -90,7 +101,6 @@ void Game::update() {
 		m_cs.update(event);
 		m_ps.update();
 		m_guns.update();
-
 		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
 		break;
@@ -128,6 +138,7 @@ void Game::render() {
 		m_map->draw(m_renderer);
 		m_ps.bulletRender(m_renderer);
 		p->render(m_renderer);
+		//m_emitter->update();
 		break;
 	case GameState::Credits:
 		m_credits->render(m_renderer);
