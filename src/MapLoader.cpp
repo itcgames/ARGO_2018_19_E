@@ -67,7 +67,7 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 					continue;
 				}
 
-				std::cout << currentGID << std::endl;
+				//std::cout << currentGID << std::endl;
 
 				auto tileSetWidth = 0;
 				auto tileSetHeight = 0;

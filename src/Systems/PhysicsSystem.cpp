@@ -253,7 +253,9 @@ void PhysicsSystem::update() {
 				pc->setY(pc->getY() + pc->getVelY());
 				pc->setX(pc->getX() + pc->getVelX());
 			}
+	
 			pc->setVelY(pc->getVelY() + Friction.y);
+			
 
 		
 
