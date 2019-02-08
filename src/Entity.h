@@ -12,6 +12,7 @@
 #include "./Components/TagComponent.h"
 #include "./Components/CollisionComponent.h"
 #include "./Components/FactoryComponent.h"
+#include "./Components/StateComponent.h"
 #include <SDL.h>
 
 class Entity

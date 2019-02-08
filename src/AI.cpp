@@ -19,5 +19,6 @@ AI::AI(SDL_Renderer* renderer)
 	this->addComponent(new PositionComponent(600, 200));
 	this->addComponent(new TagComponent("AI_TAG"));
 	this->addComponent(new AIComponent(10));
+	this->addComponent(new StateComponent());
 	this->addComponent(new CollisionComponent(800, 500, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }

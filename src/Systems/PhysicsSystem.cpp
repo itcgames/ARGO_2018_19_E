@@ -231,19 +231,10 @@ void PhysicsSystem::update() {
 			aiPositionX = pc->getX();
 			aiPositionY = pc->getY();
 		
-			if (ac->getJump() && pc->getY() >= 500) {
-				pc->setVelY(pc->getVelY() - 20);
-				pc->setY(500);
-				ac->setJump(false);
-				
-			}
-			if (pc->getY() <= 500) {
-				pc->setVelY(pc->getVelY() + Friction.y);
-			}
-			else {
-				pc->setVelY(0);
-
-			}
+		
+			
+			pc->setVelY(pc->getVelY() + Friction.y);
+			
 		}
 
 
@@ -298,11 +289,17 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 				{
 					if (fired == false)
 					{
-						fired = true;
-						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
 
-						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
-						bullets = pc->bullets;
+						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
+					fired = true;
+					//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
+					if (SDL_HapticRumblePlay(haptic, 0.5, 100) != 0)
+					{
+						printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+					}
+					pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), - (angle - 90), -xOffset, yOffset));
+					bullets = pc->bullets;
+					}
 					}
 
 				}
@@ -310,7 +307,6 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 
 		}
 	}
-}
 void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
 		
 	for (int i = 0; i < bullets.size(); i++)

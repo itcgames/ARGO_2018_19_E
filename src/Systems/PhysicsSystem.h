@@ -5,6 +5,7 @@
 #include <vector>
 #include "../Entity.h"
 #include "../cute_c2.h"
+#include "ControlSystem.h"
 
 class PhysicsSystem
 {

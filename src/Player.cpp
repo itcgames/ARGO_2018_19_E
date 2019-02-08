@@ -15,12 +15,14 @@ Player::Player(SDL_Renderer* renderer)
 	m_spriteComponent->loadFromFile("assets/bodyTall.png", renderer);
 	m_spriteComponent->setPosition(c2v{ 600, 200 });
 	m_spriteComponent->setScale(c2v{0.5f, 0.5f});
+	m_spriteComponent->setColor(255, 255, 0);
 	this->addComponent(m_spriteComponent);
 
 	m_spriteComponentHead = new SpriteComponent(0, 0, 107, 91);
 	m_spriteComponentHead->loadFromFile("assets/Head2.png", renderer);
 	m_spriteComponentHead->setPosition(c2v{ 600, 200 });
 	m_spriteComponentHead->setScale(c2v{ 0.5f, 0.5f });
+
 
 	m_spriteComponentLeftFoot = new SpriteComponent(0, 0, 107, 91);
 	m_spriteComponentLeftFoot->loadFromFile("assets/Foot.png", renderer);
@@ -31,6 +33,10 @@ Player::Player(SDL_Renderer* renderer)
 	m_spriteComponentRightFoot->loadFromFile("assets/Foot.png", renderer);
 	m_spriteComponentRightFoot->setPosition(c2v{ 600, 200 });
 	m_spriteComponentRightFoot->setScale(c2v{ 0.5f, 0.5f });
+
+	m_spriteComponentHead->setColor(255, 255, 255);
+
+
 
 
 	this->addComponent(new HealthComponent(10));
