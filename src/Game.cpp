@@ -90,6 +90,8 @@ void Game::update() {
 		m_cs.update(event);
 		m_ps.update();
 		m_guns.update();
+
+		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
 		break;
 	case GameState::Credits:

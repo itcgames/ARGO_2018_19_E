@@ -3,7 +3,6 @@
 #include "Dead.h"
 
 
-
 void Idle::searchGun(Animation * a)
 {
 	a->setCurrent(new SearchGun());

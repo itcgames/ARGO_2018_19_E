@@ -15,12 +15,14 @@ Player::Player(SDL_Renderer* renderer)
 	m_spriteComponent->loadFromFile("assets/body.png", renderer);
 	m_spriteComponent->setPosition(c2v{ 600, 200 });
 	m_spriteComponent->setScale(c2v{0.5f, 0.5f});
+	m_spriteComponent->setColor(255, 255, 0);
 	this->addComponent(m_spriteComponent);
 
 	m_spriteComponentHead = new SpriteComponent(0, 0, 107, 91);
 	m_spriteComponentHead->loadFromFile("assets/Head2.png", renderer);
 	m_spriteComponentHead->setPosition(c2v{ 600, 200 });
 	m_spriteComponentHead->setScale(c2v{ 0.5f, 0.5f });
+	m_spriteComponentHead->setColor(255, 255, 255);
 	m_spriteComponentHead->render(renderer);
 
 
