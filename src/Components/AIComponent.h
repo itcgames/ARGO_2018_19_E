@@ -3,13 +3,10 @@
 
 #include "Component.h"
 #include "../cute_c2.h"
-#include "StateComponent.h"
 
 class AIComponent : public Component
 {
 
-	class State* current;
-	class State* previous;
 
 public:
 
@@ -47,15 +44,6 @@ public:
 
 	bool m_alive = true;
 	
-	void setCurrent(State* s);
-	void setPrevious(State* s);
-	State* getCurrent();
-	State* getPrevious();
-	void idle();
-	void searchGun();
-	void searchEntity();
-	void attack();
-	void dead();
 
 private:
 

@@ -1,7 +1,7 @@
 #include "AISystem.h"
 
 AISystem::AISystem() {
-
+	fsm = new Animation();
 }
 
 void AISystem::addEntity(Entity * e) {
@@ -20,6 +20,7 @@ void AISystem::receive(std::vector<Entity*> ents)
 		ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
 		AIComponent * ac = (AIComponent*)(*e)->getCompByType("AI");
 		
+		
 		m_distances[count].first = ac->distance(curPosition, pos->getX(), pos->getY());
 			
 		vec.x = pos->getX();
@@ -33,11 +34,17 @@ void AISystem::receive(std::vector<Entity*> ents)
 
 c2v AISystem::checkClosest(std::vector<std::pair<double, c2v>> distances)
 {
+
+	double smallest = 10000;
+
 	for (auto it = distances.begin(); it != distances.end(); it++)
 	{
 		if (it->first != 0)
 		{
-			m_realDist = (*it);
+			if (it->first < smallest) {
+				smallest = it->first;
+				m_realDist = (*it);
+			}
 		}
 	}
 	
@@ -57,6 +64,7 @@ void AISystem::update() {
 		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
+		StateComponent *state = (StateComponent*)entity->getCompByType("STATE");
 
 		if (ac->m_alive) {
 			curPosition.x = pc->getX();
@@ -91,8 +99,10 @@ void AISystem::update() {
 			{
 				ac->setJump(true);
 			}
+
+			
 			//std::cout << ac->getJump() << std::endl;
-			//std::cout << closestEnemy.x << ", " << closestEnemy.y << std::endl;
+			std::cout << closestEnemy.x << ", " << closestEnemy.y << std::endl;
 		}
 		
 		
