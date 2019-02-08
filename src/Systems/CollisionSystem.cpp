@@ -140,11 +140,13 @@ void CollisionSystem::checkBullets(PositionComponent * pc) {
 						pc->setVelX(40);
 						pc->setVelY(-10);
 						sc->setRotation(90);
+						sc->setColor(255, 40, 40);
 					}
 					if (val == "left") {
 						pc->setVelX(-40);
 						pc->setVelY(-10);
 						sc->setRotation(-90);
+						sc->setColor(255, 40, 40);
 					}
 					if (tag->getTag() == "AI_TAG") {
 						AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
