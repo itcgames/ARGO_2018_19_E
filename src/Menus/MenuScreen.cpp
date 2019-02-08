@@ -18,9 +18,12 @@ MenuScreen::MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Fon
 	
 	titletexture = init(menuFont, title_text, titletexture, titleRenderQuad, 200, 50);
 
-	if (!loadFromFile("banner.png", m_renderer)) {
-		printf("Error loading image");
-	}
+	m_texture = loadFromFile("banner.png", m_renderer);
+
+	m_texture2 = loadFromFile("banner2.png", m_renderer);
+	
+
+	m_drawTexture = m_texture;
 
 	m_sRect = new SDL_Rect;
 	m_dRect = new SDL_Rect;
@@ -64,10 +67,7 @@ void MenuScreen::freeTexture() {
 	}
 }
 
-bool MenuScreen::loadFromFile(std::string path, SDL_Renderer* gRenderer) {
-	//Free our texture first
-
-	freeTexture();
+SDL_Texture* MenuScreen::loadFromFile(std::string path, SDL_Renderer* gRenderer) {
 
 	//The final texture
 	SDL_Texture* newTexture = NULL;
@@ -100,25 +100,8 @@ bool MenuScreen::loadFromFile(std::string path, SDL_Renderer* gRenderer) {
 		SDL_FreeSurface(loadedSurface);
 	}
 
-	//Return success
-	m_texture = newTexture;
-	return m_texture != NULL;
-
-	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC) < 0)
-	{
-		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-	}
-
-	//Set texture filtering to linear
-	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
-	{
-		printf("Warning: Linear texture filtering not enabled!");
-	}
-
 	
-		
-	
+	return newTexture;
 }
 
 
@@ -140,8 +123,25 @@ void MenuScreen::update(SDL_Window *window)
 		SDL_DestroyWindow(window);
 	}
 
-	if (m_sRect->w < 940) {
-		m_sRect->w += 10;
+	if (m_drawTexture == m_texture) {
+		
+		if (m_sRect->w < 940) {
+			m_sRect->w += 3;
+		}
+		else {
+			m_sRect->x = 940;
+			m_drawTexture = m_texture2;
+		}
+	}
+	else {
+		
+		if (m_sRect->x > 0) {
+			m_sRect->x -= 3;
+		}
+		else {
+			m_sRect->w = 0;
+			m_drawTexture = m_texture;
+		}
 	}
 }
 
@@ -159,6 +159,6 @@ void MenuScreen::render(SDL_Renderer * renderer)
 	m_dRect->h = m_height;
 
 	//std::cout << "X= " << m_centre.x << "Y= " << m_centre.y << std::endl;
-	SDL_RenderCopyEx(renderer, m_texture, m_sRect, m_dRect, 0, NULL, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(renderer,   m_drawTexture, m_sRect, m_dRect, 0, NULL, SDL_FLIP_NONE);
 
 }
