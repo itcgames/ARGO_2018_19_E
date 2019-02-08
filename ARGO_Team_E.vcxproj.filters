@@ -70,6 +70,8 @@
     <ClInclude Include="src\Components\FactoryComponent.h" />
     <ClInclude Include="src\Factory.h" />
     <ClInclude Include="src\Components\StateComponent.h" />
+    <ClInclude Include="src\State.h" />
+    <ClInclude Include="src\Menus\State.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\States\Attack.h" />
     <ClInclude Include="src\States\Dead.h" />

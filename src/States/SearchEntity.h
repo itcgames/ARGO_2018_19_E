@@ -2,7 +2,7 @@
 
 #include "../Components/StateComponent.h"
 
-class SearchEntity : public StateComponent
+class SearchEntity : public FState
 {
 public:
 	SearchEntity() { ; }

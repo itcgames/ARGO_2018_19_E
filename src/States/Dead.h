@@ -3,7 +3,7 @@
 #include "../Components/StateComponent.h"
 
 
-class Dead : public StateComponent
+class Dead : public FState
 {
 public:
 

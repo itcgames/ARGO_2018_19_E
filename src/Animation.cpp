@@ -7,22 +7,22 @@ Animation::Animation()
 	current = new Idle();
 }
 
-void Animation::setCurrent(StateComponent* s)
+void Animation::setCurrent(FState* s)
 {
 	current = s;
 }
 
-StateComponent* Animation::getCurrent()
+FState* Animation::getCurrent()
 {
 	return current;
 }
 
-void Animation::setPrevious(StateComponent* s)
+void Animation::setPrevious(FState* s)
 {
 	previous = s;
 }
 
-StateComponent* Animation::getPrevious()
+FState* Animation::getPrevious()
 {
 	return previous;
 }

@@ -13,6 +13,7 @@
 #include "Menus/CreditScreen.h"
 #include "Menus/MenuScreen.h"
 #include "Menus/OptionScreen.h"
+#include "Components/SpriteComponent.h"
 
 #include "Player.h"
 #include "Hand.h"
@@ -23,16 +24,7 @@
 
 using namespace std;
 
-enum class GameState
-{
-	None,
-	Splash,
-	Menu,
-	Options,
-	Game,
-	Credits,
-	End
-};
+
 class Game {
 
 public:
@@ -42,7 +34,7 @@ public:
 	void run();
 	SDL_Texture* loadTexture(std::string file);
 
-	GameState m_currentGameState;
+	GameState * m_currentGameState;
 	GameState m_previousGameState;
 	void setGameState(GameState gameState);
 	
@@ -80,6 +72,8 @@ private:
 	AI *ai;
 	Gun* pistol;
 	std::vector<Entity*> m_ents;
+
+	SpriteComponent* m_backgroundSprite;
 
 	HealthSystem m_hs;
 	ControlSystem m_cs;

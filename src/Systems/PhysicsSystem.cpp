@@ -115,8 +115,8 @@ void PhysicsSystem::update() {
 				gunPositionY = pc->getY();
 			}
 			// Check if player collides with gun and if they dont already have a gun
-			else if (playerPositionX >= pc->getX() - 100 && playerPositionX <= pc->getX() + 100 
-				&& playerPositionY >= pc->getY() - 100 && playerPositionY <= pc->getY() + 100 
+			else if (playerPositionX >= pc->getX() - 50 && playerPositionX <= pc->getX() + 50 
+				&& playerPositionY >= pc->getY() - 50 && playerPositionY <= pc->getY() + 50 
 				&& gotGun == false && tc->getGrabable() == true)
 			{
 				tc->setGrabbed(true);
@@ -210,14 +210,6 @@ void PhysicsSystem::update() {
 		}
 
 
-		if (tc->getTag() == "Player" || tc->getTag() == "Gun" && gotGun != true)  // bool to check if gun is grabbed so gun falls
-		{
-			pc->setVelY(pc->getVelY() + Friction.y);
-		
-
-			//sc->setRotation((cc->getAngle())*-1);
-
-		}
 		
 		if (tc->getTag() == "Player")
 		{
@@ -261,6 +253,20 @@ void PhysicsSystem::update() {
 			pc->setX(pc->getX() + pc->getVelX());
 			pc->setY(pc->getY() + pc->getVelY());
 		}
+		if (tc->getTag() == "Player" || tc->getTag() == "Gun" && gotGun != true)  // bool to check if gun is grabbed so gun falls
+		{
+			if (tc->getTag() == "Gun")
+			{
+				pc->setY(pc->getY() + pc->getVelY());
+				pc->setX(pc->getX() + pc->getVelX());
+			}
+			pc->setVelY(pc->getVelY() + Friction.y);
+
+		
+
+			//sc->setRotation((cc->getAngle())*-1);
+
+		}
 		
 	}
 }
@@ -284,28 +290,29 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 			FactoryComponent * fc = (FactoryComponent*)entity->getCompByType("FACTORY");
 			ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
-
-			if (cc->getFire())
+			if (tc->getGrabbed() == true)  // Ensure gun is grabbed before shooting
 			{
-				if (fired == false)
+				if (cc->getFire())
 				{
-					fired = true;
-					//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
-					if (SDL_HapticRumblePlay(haptic, 0.5, 100) != 0)
+					if (fired == false)
 					{
-						printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+
+						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
+						fired = true;
+						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
+						if (SDL_HapticRumblePlay(haptic, 0.5, 100) != 0)
+						{
+							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+						}
+						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
+						bullets = pc->bullets;
 					}
-					pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), - (angle - 90), -xOffset, yOffset));
-					bullets = pc->bullets;
-
-				
 				}
-
 			}
-
 		}
 	}
 }
+
 void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
 		
 	for (int i = 0; i < bullets.size(); i++)
