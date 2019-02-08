@@ -259,7 +259,6 @@ void PhysicsSystem::update() {
 		{
 			if (tc->getTag() == "Gun")
 			{
-				std::cout << "Gun = " << pc->getVelY() << std::endl;
 				pc->setY(pc->getY() + pc->getVelY());
 				pc->setX(pc->getX() + pc->getVelX());
 			}
@@ -293,7 +292,7 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 			FactoryComponent * fc = (FactoryComponent*)entity->getCompByType("FACTORY");
 			ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
-			if (tc->getGrabbed() == true)
+			if (tc->getGrabbed() == true)  // Ensure gun is grabbed before shooting
 			{
 				if (cc->getFire())
 				{

@@ -18,5 +18,10 @@ private:
 	PositionComponent* positionComp;
 	SpriteComponent* m_spriteComponent;
 	SpriteComponent* m_spriteComponentHead;
+	SpriteComponent* m_spriteComponentLeftFoot;
+	SpriteComponent* m_spriteComponentRightFoot;
+
+	int runCount = 0;
+	bool animationBool = true;
 
 };
