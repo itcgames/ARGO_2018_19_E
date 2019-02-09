@@ -302,7 +302,7 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
 						fired = true;
 						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
-						if (SDL_HapticRumblePlay(haptic, 0.5, 100) != 0)
+						if (SDL_HapticRumblePlay(haptic, 1, 100) != 0)
 						{
 							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 						}
