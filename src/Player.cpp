@@ -10,7 +10,7 @@ Player::Player()
 Player::Player(SDL_Renderer* renderer)
 {
 	//Set up Sprite component and add to entity component vector
-
+	oldY = 0;
 	m_spriteComponent = new SpriteComponent(0, 0, 67, 150);
 	m_spriteComponent->loadFromFile("assets/bodyTall.png", renderer);
 	m_spriteComponent->setPosition(c2v{ 600, 200 });
@@ -44,10 +44,39 @@ Player::Player(SDL_Renderer* renderer)
 
 	positionComp = new PositionComponent(100, 100);
 	this->addComponent(positionComp);
-	this->addComponent(new ControlComponent());
+	controlComp = new ControlComponent();
+	this->addComponent(controlComp);
 	this->addComponent(new CollisionComponent(300, 500, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }
 void Player::render(SDL_Renderer* renderer) {
+	if (controlComp->getJump())
+	{
+		rumbleCount = 0;
+	}
+	newY = positionComp->getVelY();
+	if (newY != oldY)
+	{
+		falling = true;
+		oldY = newY;
+		if (rumbleCount < .99) {
+			rumbleCount += 0.01;
+			std::cout << "Rumble " << rumbleCount << std::endl;
+		}
+	}
+	else {
+		if (falling)
+		{
+			if (SDL_HapticRumblePlay(haptic, rumbleCount, 75) != 0)
+			{
+				printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+			}
+			
+			rumbleCount = 0;
+		}
+		falling = false;
+
+		
+	}
 	m_spriteComponentHead->m_flipValue = m_spriteComponent->m_flipValue;
 	m_spriteComponentLeftFoot->m_flipValue = m_spriteComponent->m_flipValue;
 	m_spriteComponentRightFoot->m_flipValue = m_spriteComponent->m_flipValue;
@@ -66,17 +95,48 @@ void Player::render(SDL_Renderer* renderer) {
 		m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - 20 - runCount,positionComp->getY() + 52});
 		m_spriteComponentRightFoot->setRotation(runCount);
 	}
-	m_spriteComponentHead->render(renderer);
-	m_spriteComponentLeftFoot->render(renderer);
-	m_spriteComponentRightFoot->render(renderer);
+	
+	// Checks if guy is moving on y but not x
+	//if (positionComp->getVelY() >= 1
+		//|| positionComp->getVelY() <= -1 ) 
+	if(falling == true){
+		if (fallCount > 20)
+		{
+			fallingBool = false;
+		}
+		else if (fallCount < -20)
+		{
+			fallingBool = true;
+		}
+		if (fallingBool == true)
+		{		
+			fallCount = fallCount + 3;
+		}
+		else if (fallingBool == false)
+		{
+			fallCount = fallCount - 3;
 
-	if (positionComp->getVelX() >= 0.1 || positionComp->getVelX() <= -0.1)
+		}
+		if (m_spriteComponentHead->m_flipValue == SDL_FLIP_NONE)
+		{
+			m_spriteComponentLeftFoot->setRotation(45 + fallCount);
+			m_spriteComponentRightFoot->setRotation(45 - fallCount);
+		}
+		else {
+			m_spriteComponentLeftFoot->setRotation(-45 + fallCount);
+			m_spriteComponentRightFoot->setRotation(-45 - fallCount);
+		}
+	}
+	// If checks if guy is moving on x but not y
+	else if (positionComp->getVelX() >= 0.1 && positionComp->getVelY() <= 1 &&  positionComp->getVelY() >= -1
+		|| positionComp->getVelX() <= -0.1 && positionComp->getVelY() <= 1 &&  positionComp->getVelY() >= -1)
 	{
+		// Controls what direction the feet move
 		if (runCount > 30)
 		{
 			animationBool = false;
 		}
-		if (runCount < -30)
+		else if (runCount < -30)
 		{
 			animationBool = true;
 		}
@@ -99,10 +159,21 @@ void Player::render(SDL_Renderer* renderer) {
 				speed = speed * -1;  // make sure is possitive so dont rip legs apart :).
 			}
 			runCount = runCount - speed;
+
 		}
+		//std::cout << "RUN = " << runCount << std::endl;
+		m_spriteComponentLeftFoot->setRotation(-runCount);
+		m_spriteComponentRightFoot->setRotation(runCount);
 	}
+	// Guy is not moving at all.
 	else {
 		runCount = 0;
 	}
+
+	
+	//std::cout << "Y = "<< positionComp->getVelY() << std::endl;
+	m_spriteComponentHead->render(renderer);
+	m_spriteComponentLeftFoot->render(renderer);
+	m_spriteComponentRightFoot->render(renderer);
 
 }

@@ -67,7 +67,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 							else if (val == "bottom") {
 								pc->setVelY(5);
 								m_count = 0;
-								if (SDL_HapticRumblePlay(haptic, 0.6, 75) != 0)
+								if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0)
 								{
 									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 								}
@@ -76,7 +76,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 								pc->setVelX(-(pc->getVelX() * 2));
 								pc->m_allowedJump = true;
 								m_count = 0;
-								if (SDL_HapticRumblePlay(haptic, 0.6, 75) != 0)
+								if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0)
 								{
 									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 								}
@@ -154,13 +154,14 @@ void CollisionSystem::checkBullets(PositionComponent * pc) {
 						pc->setVelY(-10);
 						sc->setRotation(90);
 						sc->setColor(255, 40, 40);
-
+						sc->setBlendMode(SDL_BLENDMODE_ADD);
 					}
 					if (val == "left") {
 						pc->setVelX(-40);
 						pc->setVelY(-10);
 						sc->setRotation(-90);
 						sc->setColor(255, 40, 40);
+						sc->setBlendMode(SDL_BLENDMODE_ADD);
 					}
 					if (tag->getTag() == "AI_TAG") {
 						AIComponent * ai = (AIComponent*)entity->getCompByType("AI");

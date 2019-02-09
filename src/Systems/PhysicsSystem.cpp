@@ -262,7 +262,9 @@ void PhysicsSystem::update() {
 				pc->setY(pc->getY() + pc->getVelY());
 				pc->setX(pc->getX() + pc->getVelX());
 			}
+	
 			pc->setVelY(pc->getVelY() + Friction.y);
+			
 
 		
 
@@ -301,7 +303,9 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 
 						fired = true;
 						m_startAnimating = true;
-						if (SDL_HapticRumblePlay(haptic, 0.5, 100) != 0)
+
+						if (SDL_HapticRumblePlay(haptic, .5, 100) != 0)
+
 						{
 							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 						}
