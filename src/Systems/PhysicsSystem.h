@@ -47,10 +47,17 @@ public:
 
 	bool left = false;
 	bool right = false;
+	SDL_RendererFlip flipval;
 
 	std::vector<Bullet*> bullets;
 	void animateExplosion(SDL_Renderer * renderer);
 	
 	ParticleExample * p;
+
+
+	void setRenderer(SDL_Renderer * renderer);
+	SDL_Renderer * m_renderer;
+	int m_count = 0;
+	bool m_startAnimating = false;
 };
 #endif // !PHYSICSSYSTEM_H

@@ -67,7 +67,7 @@ Game::Game()
 	m_ents.push_back((Entity*)ai);
 	//m_ents.push_back((Entity*)pistol);
 
-
+	m_ps.setRenderer(m_renderer);
 }
 
 Game::~Game()

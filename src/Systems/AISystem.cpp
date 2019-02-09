@@ -102,7 +102,7 @@ void AISystem::update() {
 
 			
 			//std::cout << ac->getJump() << std::endl;
-			std::cout << closestEnemy.x << ", " << closestEnemy.y << std::endl;
+			//std::cout << closestEnemy.x << ", " << closestEnemy.y << std::endl;
 		}
 		
 		
