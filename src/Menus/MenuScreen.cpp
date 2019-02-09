@@ -2,9 +2,10 @@
 
 
 
-MenuScreen::MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Font){
+MenuScreen::MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Font, SDL_GameController* controller){
 	SDL_Color textColor = { 0, 0, 0, 255 };
 	SDL_Surface * textSurface = new SDL_Surface;
+	gGameController = controller;
 
 	m_currentGameState = state;
 	m_renderer = renderer;
@@ -33,12 +34,6 @@ MenuScreen::MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Fon
 	m_sRect->h = 198;
 	m_dRect->x = 0;
 	m_dRect->y = 300;
-
-	gGameController = SDL_GameControllerOpen(0);
-	if (gGameController == NULL)
-	{
-		printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
-	}
 }
 
 SDL_Texture* MenuScreen::init(TTF_Font* Font, std::string & text, SDL_Texture* texture, SDL_Rect & quad, int x, int y) {
@@ -115,13 +110,26 @@ void MenuScreen::update(SDL_Window *window)
 {
 	bool AButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_A);
 	bool BButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_B);
+	bool XButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_X);
 
-	if (AButton) {
+	if (AButton && !firstTime) {
+		firstTime = true;
+		buttonTimer = 0;
 		*m_currentGameState = GameState::Game;
 	}
-	else if (BButton) {
+	else if (XButton && !firstTime) {
+		firstTime = true;
+		buttonTimer = 0;
+		*m_currentGameState = GameState::Online;
+	}
+	else if (BButton && !firstTime) {
 		SDL_DestroyWindow(window);
 	}
+
+	buttonTimer++;
+
+	if(buttonTimer > setSecondTime)
+		firstTime = false;
 
 	if (m_drawTexture == m_texture) {
 		

@@ -19,7 +19,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Game);
+	*m_currentGameState = (GameState::Splash);
 
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -37,8 +37,10 @@ Game::Game()
 		// handle error
 	}
 	
+	setUpController();
 	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
-	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont);
+	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont, gGameController);
+	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController);
 	m_options = new OptionScreen();
 	m_credits = new CreditScreen();
 	m_screenSize = { 0,0,1200,700 };
@@ -115,6 +117,9 @@ void Game::update() {
 	case GameState::Menu:
 		m_menu->update(m_window);
 		break;
+	case GameState::Online:
+		m_onlineScreen->update();
+		break;
 	case GameState::Options:
 		break;
 	case GameState::Game:
@@ -156,6 +161,10 @@ void Game::render() {
 	case GameState::Menu:
 		m_menu->render(m_renderer);
 		break;
+	case GameState::Online:
+		m_onlineScreen->render(m_renderer);
+		break;
+
 	case GameState::Options:
 		m_options->render(m_renderer);
 		break;
@@ -174,6 +183,15 @@ void Game::render() {
 		break;
 	}
 	SDL_RenderPresent(m_renderer);
+
+}
+
+void Game::setUpController() {
+	gGameController = SDL_GameControllerOpen(0);
+	if (gGameController == NULL)
+	{
+		printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
+	}
 
 }
 
