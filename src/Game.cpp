@@ -1,9 +1,16 @@
 #include "Game.h"
 
+Game* Game::s_pInstance = 0;
+
 Game::Game()
 {
 	m_window = SDL_CreateWindow("Entity Component Systems", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1200, 700, SDL_WINDOW_OPENGL);
 	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	m_screen = SDL_CreateRGBSurface(0, 1200, 700, 32,
+		0,
+		0,
+		0,
+		0);;
 
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
 
@@ -11,10 +18,27 @@ Game::Game()
 	{
 		cout << "Error: " << IMG_GetError() << endl;
 	}
-	m_currentGameState = (GameState::Game);
+	m_currentGameState = new GameState;
+	*m_currentGameState = (GameState::Game);
+
+	if (TTF_Init() == -1) {
+		printf("TTF_Init: %s\n", TTF_GetError());
+	}
+
+	TTF_Font* Font = TTF_OpenFont("arial.ttf", 300);
+	if (!Font) {
+		printf("TTF_OpenFont: %s\n", TTF_GetError());
+		// handle error
+	}
+
+	TTF_Font* menuFont = TTF_OpenFont("arial.ttf", 30);
+	if (!menuFont) {
+		printf("TTF_OpenFont: %s\n", TTF_GetError());
+		// handle error
+	}
 	
-	m_splash = new SplashScreen();
-	m_menu = new MenuScreen();
+	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
+	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont);
 	m_options = new OptionScreen();
 	m_credits = new CreditScreen();
 	m_screenSize = { 0,0,1200,700 };
@@ -38,9 +62,12 @@ Game::Game()
 
 	initialise();
 
+	
 	m_ents.push_back((Entity*)p);
 	m_ents.push_back((Entity*)ai);
 	//m_ents.push_back((Entity*)pistol);
+
+	m_ps.setRenderer(m_renderer);
 }
 
 Game::~Game()
@@ -75,14 +102,18 @@ void Game::run()
 }
 
 void Game::update() {
+	SDL_PollEvent(&event);
 
-	switch (m_currentGameState)
+
+	switch (*m_currentGameState)
 	{
 	case GameState::None:
 		break;
 	case GameState::Splash:
+		m_splash->update();
 		break;
 	case GameState::Menu:
+		m_menu->update(m_window);
 		break;
 	case GameState::Options:
 		break;
@@ -91,11 +122,10 @@ void Game::update() {
 		m_ais.update();		
 		m_ais.receive(m_ents);
 		m_collSys.update(m_map->getTiles());
-		SDL_PollEvent(&event);
+		
 		m_cs.update(event);
 		m_ps.update();
 		m_guns.update();
-
 		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
 		break;
@@ -114,8 +144,9 @@ void Game::render() {
 		SDL_Log("Could not create a renderer: %s", SDL_GetError());
 	}
 	SDL_RenderClear(m_renderer);
+	SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
 
-	switch (m_currentGameState)
+	switch (*m_currentGameState)
 	{
 	case GameState::None:
 		break;
@@ -134,6 +165,7 @@ void Game::render() {
 		m_map->draw(m_renderer);
 		m_ps.bulletRender(m_renderer);
 		p->render(m_renderer);
+		//m_emitter->update();
 		break;
 	case GameState::Credits:
 		m_credits->render(m_renderer);
@@ -147,7 +179,7 @@ void Game::render() {
 
 void Game::setGameState(GameState gameState)
 {
-	m_currentGameState = gameState;
+	*m_currentGameState = gameState;
 }
 
 

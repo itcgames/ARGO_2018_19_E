@@ -2,7 +2,7 @@
 
 #include "../Components/StateComponent.h"
 
-class Idle : public StateComponent
+class Idle : public FState
 {
 public:
 	Idle() { ; }

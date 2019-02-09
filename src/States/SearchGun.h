@@ -1,7 +1,7 @@
 #pragma once
 #include "../Components/StateComponent.h"
 
-class SearchGun : public StateComponent
+class SearchGun : public FState
 {
 public:
 	SearchGun() { ; }

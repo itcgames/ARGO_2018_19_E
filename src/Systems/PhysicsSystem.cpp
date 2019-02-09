@@ -1,8 +1,13 @@
 #include "PhysicsSystem.h"
-
-PhysicsSystem::PhysicsSystem() {
+PhysicsSystem::PhysicsSystem()
+{
 	Friction.x = 0.90;
 	Friction.y = 0.98;
+
+	
+
+	
+	
 }
 
 void PhysicsSystem::addEntity(Entity * e) {
@@ -19,7 +24,7 @@ void PhysicsSystem::update() {
 		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 
-
+		
 		// Flip Player and hands while no gun equiped.
 		if (tc->getTag() == "Player")
 		{
@@ -162,6 +167,8 @@ void PhysicsSystem::update() {
 		
 		if (tc->getTag() == "Gun" && tc->getGrabbed() == true && fired == false)
 		{
+			//m_emitter->draw();
+			//m_emitter->update();
 			sc->setRotation((cc->getAngle())*-1); //rotate gun
 		}
 		else if (tc->getTag() == "Gun" && tc->getGrabbed() == true && fired == true) // Pistol recoil rotate
@@ -196,10 +203,12 @@ void PhysicsSystem::update() {
 		if (tc->getTag() == "Hand" && cc->getAngle() < 0 && gotGun == true|| tc->getTag() == "Gun" && cc->getAngle() < 0 && gotGun == true)
 		{
 			sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+			flipval = sc->m_flipValue;
 			//std::cout << "flip = " << sc->m_flipValue << std::endl;
 		}
 		else if(tc->getTag() == "Hand" && gotGun == true || tc->getTag() == "Gun" && gotGun == true){
 			sc->m_flipValue = SDL_FLIP_NONE;
+			flipval = sc->m_flipValue;
 		}
 
 
@@ -253,7 +262,9 @@ void PhysicsSystem::update() {
 				pc->setY(pc->getY() + pc->getVelY());
 				pc->setX(pc->getX() + pc->getVelX());
 			}
+	
 			pc->setVelY(pc->getVelY() + Friction.y);
+			
 
 		
 
@@ -291,27 +302,68 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 					{
 
 						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
-					fired = true;
-					//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
-					if (SDL_HapticRumblePlay(haptic, 0.5, 100) != 0)
-					{
-						printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+						fired = true;
+						m_startAnimating = true;
+						//init = true;
+						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
+						if (SDL_HapticRumblePlay(haptic, 1, 100) != 0)
+						{
+							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+						}
+						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
+						bullets = pc->bullets;
 					}
-					pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), - (angle - 90), -xOffset, yOffset));
-					bullets = pc->bullets;
-					}
-					}
-
 				}
 			}
-
 		}
 	}
+}
+
 void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
 		
 	for (int i = 0; i < bullets.size(); i++)
 	{
 		bullets[i]->render(renderer);
+		      // create a new particle system pointer
+		
+		
 	}
+	if (m_startAnimating) {
+		animateExplosion(renderer);
+	}
+	
+}
+
+void PhysicsSystem::setRenderer(SDL_Renderer * renderer)
+{
+	m_renderer = renderer;
+	p = new ParticleExample();
+	p->setRenderer(m_renderer);
+	p->setStyle(ParticleExample::SMOKE);
+}
+
+void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
+{
+	m_count++;
+	p->setStartSpin(0);
+    p->setStartSpinVar(90);
+	p->setEndSpin(90);
+	//p->setAngle(angle);
+    p->setDuration(.1);
+	p->setStartSize(30);
+	p->setStartSpinVar(90);// set the renderer
+	p->setPosition(gunPositionX, gunPositionY); 
+
+	p->update();
+	p->draw();
+	
+
+	if (m_count > 10)
+	{
+		m_count = 0;
+		p->resetSystem();
+		m_startAnimating = false;
+	}
+	std::cout << m_count << std::endl;
 }
 

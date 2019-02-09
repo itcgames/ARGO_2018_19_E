@@ -22,6 +22,11 @@ private:
 	SpriteComponent* m_spriteComponentRightFoot;
 
 	int runCount = 0;
+	int fallCount = 0;
 	bool animationBool = true;
+	bool fallingBool = true;
+	float oldY = 0;
+	float newY = 0;
+	bool falling = false;
 
 };

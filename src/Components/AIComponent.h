@@ -3,9 +3,13 @@
 
 #include "Component.h"
 #include "../cute_c2.h"
+#include "StateComponent.h"
 
 class AIComponent : public Component
 {
+
+	class FState* current;
+	class FState* previous;
 
 
 public:

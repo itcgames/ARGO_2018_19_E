@@ -3,7 +3,7 @@
 #include "../Components/StateComponent.h"
 
 
-class Attack : public StateComponent
+class Attack : public FState
 {
 public:
 

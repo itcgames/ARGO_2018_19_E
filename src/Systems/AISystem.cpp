@@ -64,7 +64,7 @@ void AISystem::update() {
 		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
-		StateComponent *state = (StateComponent*)entity->getCompByType("STATE");
+		FState *state = (FState*)entity->getCompByType("STATE");
 
 		if (ac->m_alive) {
 			curPosition.x = pc->getX();
@@ -102,7 +102,7 @@ void AISystem::update() {
 
 			
 			//std::cout << ac->getJump() << std::endl;
-			std::cout << closestEnemy.x << ", " << closestEnemy.y << std::endl;
+			//std::cout << closestEnemy.x << ", " << closestEnemy.y << std::endl;
 		}
 		
 		

@@ -3,15 +3,15 @@
 
 class Animation
 {
-	class StateComponent* current;
-	class StateComponent* previous;
+	class FState* current;
+	class FState* previous;
 public:
 	Animation();
 	
-	void setCurrent(StateComponent* s);
-	void setPrevious(StateComponent* s);
-	StateComponent* getCurrent();
-	StateComponent* getPrevious();
+	void setCurrent(FState* s);
+	void setPrevious(FState* s);
+	FState* getCurrent();
+	FState* getPrevious();
 	void idle();
 	void searchGun();
 	void searchEnemy();

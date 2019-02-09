@@ -7,6 +7,9 @@
 #include "../cute_c2.h"
 #include "ControlSystem.h"
 
+#include "../ParticleExample.h"
+
+
 class PhysicsSystem
 {
 public:
@@ -14,8 +17,8 @@ public:
 
 	
 	c2v Friction;
-
 	PhysicsSystem();
+	//PhysicsSystem(SDL_Surface* screen);
 	void addEntity(Entity * e);
 	void update();
 	void bulletUpdate(SDL_Renderer* renderer);
@@ -44,8 +47,17 @@ public:
 
 	bool left = false;
 	bool right = false;
+	SDL_RendererFlip flipval;
 
 	std::vector<Bullet*> bullets;
+	void animateExplosion(SDL_Renderer * renderer);
+	
+	ParticleExample * p;
 
+
+	void setRenderer(SDL_Renderer * renderer);
+	SDL_Renderer * m_renderer;
+	int m_count = 0;
+	bool m_startAnimating = false;
 };
 #endif // !PHYSICSSYSTEM_H

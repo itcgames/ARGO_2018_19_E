@@ -6,12 +6,13 @@
 #include  <iostream>
 
 
-class StateComponent : public Component
+
+class FState : public Component
 {
 public:
 
 
-	StateComponent() { ; }
+	FState() { ; }
 	
 	
 	std::string m_tag = "STATE";
