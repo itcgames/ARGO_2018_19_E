@@ -10,7 +10,7 @@ Player::Player()
 Player::Player(SDL_Renderer* renderer)
 {
 	//Set up Sprite component and add to entity component vector
-
+	oldY = 0;
 	m_spriteComponent = new SpriteComponent(0, 0, 67, 150);
 	m_spriteComponent->loadFromFile("assets/bodyTall.png", renderer);
 	m_spriteComponent->setPosition(c2v{ 600, 200 });
@@ -48,6 +48,15 @@ Player::Player(SDL_Renderer* renderer)
 	this->addComponent(new CollisionComponent(300, 500, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }
 void Player::render(SDL_Renderer* renderer) {
+	newY = positionComp->getVelY();
+	if (newY != oldY)
+	{
+		falling = true;
+		oldY = newY;
+	}
+	else {
+		falling = false;
+	}
 	m_spriteComponentHead->m_flipValue = m_spriteComponent->m_flipValue;
 	m_spriteComponentLeftFoot->m_flipValue = m_spriteComponent->m_flipValue;
 	m_spriteComponentRightFoot->m_flipValue = m_spriteComponent->m_flipValue;
@@ -68,8 +77,9 @@ void Player::render(SDL_Renderer* renderer) {
 	}
 	
 	// Checks if guy is moving on y but not x
-	if (positionComp->getVelY() >= 1
-		|| positionComp->getVelY() <= -1 ) {
+	//if (positionComp->getVelY() >= 1
+		//|| positionComp->getVelY() <= -1 ) 
+	if(falling == true){
 		if (fallCount > 20)
 		{
 			fallingBool = false;
