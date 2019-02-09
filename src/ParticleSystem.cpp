@@ -286,10 +286,13 @@ void ParticleSystem::resetSystem()
 {
     _isActive = true;
     _elapsed = 0;
-    for (int i = 0; i < _particleCount; ++i)
+
+	for (int i = 0; i < _particleCount; ++i)
     {
-        particle_data_[i].timeToLive = 0.0f;
+		particle_data_[i].timeToLive = 0.0f;
+		//particle_data_[i].
     }
+	
 }
 
 bool ParticleSystem::isFull()
@@ -301,6 +304,9 @@ bool ParticleSystem::isFull()
 void ParticleSystem::update()
 {
     float dt = 1.0 / 25;
+
+	//std::cout << _particleCount << std::endl;
+
     if (_isActive && _emissionRate)
     {
         float rate = 1.0f / _emissionRate;
@@ -330,7 +336,8 @@ void ParticleSystem::update()
             this->stopSystem();
         }
     }
-
+	
+	//std::cout << "Elapsed " <<  _elapsed << std::endl;
     for (int i = 0; i < _particleCount; ++i)
     {
         particle_data_[i].timeToLive -= dt;
@@ -413,7 +420,10 @@ void ParticleSystem::update()
         particle_data_[i].size += (particle_data_[i].deltaSize * dt);
         particle_data_[i].size = (std::max)(0.0f, particle_data_[i].size);
         particle_data_[i].rotation += particle_data_[i].deltaRotation * dt;
+
     }
+
+	
 }
 
 // ParticleSystem - Texture protocol
@@ -428,7 +438,7 @@ void ParticleSystem::setTexture(SDL_Texture* var)
 void ParticleSystem::draw()
 {
 
-	update();
+	//update();
 
     if (_texture == nullptr)
     {
@@ -441,6 +451,9 @@ void ParticleSystem::draw()
         {
             continue;
         }
+
+		
+
         SDL_Rect r = { int(p.posx + p.startPosX - p.size / 2), int(p.posy + p.startPosY - p.size / 2), int(p.size), int(p.size) };
         SDL_Color c = { Uint8(p.colorR * 255), Uint8(p.colorG * 255), Uint8(p.colorB * 255), Uint8(p.colorA * 255) };
         SDL_SetTextureColorMod(_texture, c.r, c.g, c.b);
@@ -448,7 +461,9 @@ void ParticleSystem::draw()
         SDL_SetTextureBlendMode(_texture, SDL_BLENDMODE_BLEND);
         SDL_RenderCopyEx(_renderer, _texture, nullptr, &r, p.rotation, nullptr, SDL_FLIP_NONE);
     }
-    
+   
+
+	
 }
 
 SDL_Texture* ParticleSystem::getTexture()

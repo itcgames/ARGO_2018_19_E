@@ -4,7 +4,7 @@ PhysicsSystem::PhysicsSystem()
 	Friction.x = 0.90;
 	Friction.y = 0.98;
 
-	p = new ParticleExample();
+	
 
 	
 	
@@ -203,10 +203,12 @@ void PhysicsSystem::update() {
 		if (tc->getTag() == "Hand" && cc->getAngle() < 0 && gotGun == true|| tc->getTag() == "Gun" && cc->getAngle() < 0 && gotGun == true)
 		{
 			sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+			flipval = sc->m_flipValue;
 			//std::cout << "flip = " << sc->m_flipValue << std::endl;
 		}
 		else if(tc->getTag() == "Hand" && gotGun == true || tc->getTag() == "Gun" && gotGun == true){
 			sc->m_flipValue = SDL_FLIP_NONE;
+			flipval = sc->m_flipValue;
 		}
 
 
@@ -301,6 +303,8 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 
 						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
 						fired = true;
+						m_startAnimating = true;
+						//init = true;
 						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
 						if (SDL_HapticRumblePlay(haptic, 1, 100) != 0)
 						{
@@ -322,25 +326,44 @@ void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
 		bullets[i]->render(renderer);
 		      // create a new particle system pointer
 		
-		animateExplosion(renderer);
-		
 		
 	}
+	if (m_startAnimating) {
+		animateExplosion(renderer);
+	}
+	
+}
+
+void PhysicsSystem::setRenderer(SDL_Renderer * renderer)
+{
+	m_renderer = renderer;
+	p = new ParticleExample();
+	p->setRenderer(m_renderer);
+	p->setStyle(ParticleExample::SMOKE);
 }
 
 void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 {
-	p->setRenderer(renderer);
-	p->setStyle(ParticleExample::SMOKE);    // set the example effects
+	m_count++;
 	p->setStartSpin(0);
-	p->setStartSpinVar(90);
+    p->setStartSpinVar(90);
 	p->setEndSpin(90);
-	p->setDuration(.1);
+	//p->setAngle(angle);
+    p->setDuration(.1);
+	p->setStartSize(30);
 	p->setStartSpinVar(90);// set the renderer
-	p->setPosition(playerPositionX - xOffset, playerPositionY);              // set the position
-	p->setStyle(ParticleExample::PatticleStyle(9));
-	p->draw();
+	p->setPosition(gunPositionX, gunPositionY); 
 
+	p->update();
+	p->draw();
 	
+
+	if (m_count > 10)
+	{
+		m_count = 0;
+		p->resetSystem();
+		m_startAnimating = false;
+	}
+	std::cout << m_count << std::endl;
 }
 
