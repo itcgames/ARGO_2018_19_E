@@ -128,14 +128,14 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 				}
 			}
 
-			checkBullets(pc);
+			checkBullets(pc, tiles);
 
 		}
 		
 	}
 }
 
-void CollisionSystem::checkBullets(PositionComponent * pc) {
+void CollisionSystem::checkBullets(PositionComponent * pc, std::vector<std::vector<Tile*>> tiles) {
 	 
 	std::vector<Bullet *> * bullets = &pc->bullets;
 	for (Entity * entity : m_entities) {
@@ -172,5 +172,6 @@ void CollisionSystem::checkBullets(PositionComponent * pc) {
 
 			}
 		}
+
 	}
 }

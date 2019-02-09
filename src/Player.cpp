@@ -91,7 +91,6 @@ void Player::render(SDL_Renderer* renderer) {
 		oldY = newY;
 		if (rumbleCount < .99) {
 			rumbleCount += 0.01;
-			std::cout << "Rumble " << rumbleCount << std::endl;
 		}
 	}
 	else {
