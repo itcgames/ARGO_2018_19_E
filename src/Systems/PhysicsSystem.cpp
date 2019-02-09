@@ -299,11 +299,8 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 					if (fired == false)
 					{
 
-						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
 						fired = true;
 						m_startAnimating = true;
-						//init = true;
-						//bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), (cc->getAngle())*-1, -xOffset, yOffset));
 						if (SDL_HapticRumblePlay(haptic, 0.5, 100) != 0)
 						{
 							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
@@ -346,22 +343,26 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 	p->setStartSpin(0);
     p->setStartSpinVar(90);
 	p->setEndSpin(90);
-	//p->setAngle(angle);
     p->setDuration(.1);
 	p->setStartSize(30);
 	p->setStartSpinVar(90);// set the renderer
-	p->setPosition(gunPositionX, gunPositionY); 
-
+	if (flipval == SDL_FLIP_HORIZONTAL)
+	{
+		p->setPosition(gunPositionX - 15, gunPositionY);
+	}
+	else
+	{
+		p->setPosition(gunPositionX + 60, gunPositionY);
+	}
+	
 	p->update();
 	p->draw();
 	
-
-	if (m_count > 10)
+	if (m_count > 15)
 	{
 		m_count = 0;
 		p->resetSystem();
 		m_startAnimating = false;
 	}
-	std::cout << m_count << std::endl;
 }
 

@@ -5,6 +5,7 @@
 #include <vector>
 #include "../Entity.h"
 #include "../MapLoader.h"
+#include "ControlSystem.h"
 
 class CollisionSystem
 {
@@ -19,6 +20,9 @@ public:
 
 
 	std::vector<Entity *> m_entities;
+
+	int m_count = 0;
+	
 
 };
 #endif // !COLLISIONSYSTEM_H

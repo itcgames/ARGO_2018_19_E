@@ -62,13 +62,24 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 								pc->setVelY(0);
 								pc->setY(tiles[i].at(j)->dRect.y - cc->getH());
 								
+								
 							}
 							else if (val == "bottom") {
 								pc->setVelY(5);
+								m_count = 0;
+								if (SDL_HapticRumblePlay(haptic, 0.6, 75) != 0)
+								{
+									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+								}
 							}
 							else if (val == "right" || val == "left") {
 								pc->setVelX(-(pc->getVelX() * 2));
 								pc->m_allowedJump = true;
+								m_count = 0;
+								if (SDL_HapticRumblePlay(haptic, 0.6, 75) != 0)
+								{
+									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+								}
 							}
 							
 					
@@ -96,10 +107,12 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 							if (val == "top") {
 								pc->setVelY(0);
 								pc->setY(tiles[i].at(j)->dRect.y - cc->getH());
+								
 
 							}
 							else if (val == "bottom") {
 								pc->setVelY(5);
+								
 							}
 							else if (val == "right" || val == "left") {
 								pc->setVelX(-(pc->getVelX() * 2));
@@ -141,6 +154,7 @@ void CollisionSystem::checkBullets(PositionComponent * pc) {
 						pc->setVelY(-10);
 						sc->setRotation(90);
 						sc->setColor(255, 40, 40);
+
 					}
 					if (val == "left") {
 						pc->setVelX(-40);
