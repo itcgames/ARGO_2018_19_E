@@ -353,10 +353,12 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 	if (flipval == SDL_FLIP_HORIZONTAL)
 	{
 		p->setPosition(gunPositionX - 15, gunPositionY);
+		//p->setAngle(-angle);
 	}
 	else
 	{
-		p->setPosition(gunPositionX + 60, gunPositionY);
+		p->setPosition(gunPositionX + 60, gunPositionY + 10);
+		//p->setAngle(angle);
 	}
 	
 	p->update();
