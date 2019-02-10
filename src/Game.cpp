@@ -14,12 +14,14 @@ Game::Game()
 
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
 
+	m_client = new Client("192.168.192.32", 54000);
+
 	if (IMG_Init(imgFlags) != imgFlags)
 	{
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Splash);
+	*m_currentGameState = (GameState::Online);
 
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -40,7 +42,7 @@ Game::Game()
 	setUpController();
 	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
 	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont, gGameController);
-	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController);
+	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client);
 	m_options = new OptionScreen();
 	m_credits = new CreditScreen();
 	m_screenSize = { 0,0,1200,700 };

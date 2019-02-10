@@ -102,6 +102,8 @@ private:
 	
 	SDL_Surface* m_screen;
 	SDL_GameController* gGameController = NULL;
+
+	Client * m_client;
 };
 
 

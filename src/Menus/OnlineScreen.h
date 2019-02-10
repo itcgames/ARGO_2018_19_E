@@ -5,11 +5,14 @@
 #include "State.h"
 #include <iostream>
 #include <SDL_ttf.h>
+#include "../Client/Client.h"
+
+#include <vector>
 
 class OnlineScreen : State
 {
 public:
-	OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Font, SDL_GameController* controller);
+	OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Font, SDL_GameController* controller, Client * client);
 	~OnlineScreen();
 
 	void update();
@@ -17,11 +20,9 @@ public:
 
 	SDL_Texture* init(TTF_Font* Font, std::string & text, SDL_Texture* texture, SDL_Rect & quad, int x, int y);
 
+	Client * m_client;
 private: 
 	GameState * m_currentGameState;
-
-	std::string title_text = "Lobby";
-	std::string exit_text = "(B) Exit";
 
 	SDL_Renderer *m_renderer;
 
@@ -32,5 +33,13 @@ private:
 	SDL_Rect titleRenderQuad;
 
 	SDL_GameController* gGameController = NULL;
+
+	std::vector<std::string> m_strings;
+	std::vector<SDL_Texture*> m_textures;
+	std::vector<SDL_Rect> m_quads;
+
+	TTF_Font * m_font;
+
+	bool m_joined = false;
 };
 

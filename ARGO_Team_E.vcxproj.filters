@@ -32,6 +32,7 @@
     <ClCompile Include="src\ParticleExample.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\Menus\OnlineScreen.cpp" />
+    <ClCompile Include="src\Client\Client.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\AIComponent.h" />
@@ -81,5 +82,6 @@
     <ClInclude Include="src\ParticleExample.h" />
     <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\Menus\OnlineScreen.h" />
+    <ClInclude Include="src\Client\Client.h" />
   </ItemGroup>
 </Project>
