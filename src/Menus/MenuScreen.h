@@ -9,7 +9,7 @@
 class MenuScreen : State
 {
 public:
-	MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Font);
+	MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Font, SDL_GameController* controller);
 	~MenuScreen();
 
 	void update(SDL_Window *window);
@@ -53,5 +53,10 @@ private:
 	SDL_Rect* m_dRect;
 
 	SDL_GameController* gGameController = NULL;
+
+	bool firstTime = true;
+
+	int buttonTimer = 0;
+	int setSecondTime = 60;
 };
 

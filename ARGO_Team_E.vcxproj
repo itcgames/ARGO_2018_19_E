@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{9DE0A50F-46BF-44BC-8D51-2E9C98C169DE}</ProjectGuid>
     <RootNamespace>ARGOTeamE</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -83,12 +83,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDL_IMAGE)\include;$(SDL_SDK)\include;$(SDL_MIXER)\include;C:\Users\gameuser\Desktop\ARGO_2018_19_E\tmxlite\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDL_IMAGE)\include;$(SDL_SDK)\include;$(SDL_MIXER)\include;C:\Users\peter\Desktop\ARGO_2018_19_E\tmxlite\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;libtmxlite-s-d.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>C:\Users\gameuser\Desktop\ARGO_2018_19_E\tmxlite\DebugStatic;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\peter\Desktop\ARGO_2018_19_E\tmxlite\bin\DebugStatic;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -137,6 +137,7 @@
     <ClCompile Include="src\AI.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Bullet.cpp" />
+    <ClCompile Include="src\Client\Client.cpp" />
     <ClCompile Include="src\Components\AIComponent.cpp" />
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
     <ClCompile Include="src\Game.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="src\MapLoader.cpp" />
     <ClCompile Include="src\Menus\CreditScreen.cpp" />
     <ClCompile Include="src\Menus\MenuScreen.cpp" />
+    <ClCompile Include="src\Menus\OnlineScreen.cpp" />
     <ClCompile Include="src\Menus\OptionScreen.cpp" />
     <ClCompile Include="src\Menus\SplashScreen.cpp" />
     <ClCompile Include="src\ParticleExample.cpp" />
@@ -169,6 +171,7 @@
     <ClInclude Include="Factory.h" />
     <ClInclude Include="src\AI.h" />
     <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\Client\Client.h" />
     <ClInclude Include="src\Components\AIComponent.h" />
     <ClInclude Include="src\Components\CollisionComponent.h" />
     <ClInclude Include="src\Components\Component.h" />
@@ -192,6 +195,7 @@
     <ClInclude Include="src\MapLoader.h" />
     <ClInclude Include="src\Menus\CreditScreen.h" />
     <ClInclude Include="src\Menus\MenuScreen.h" />
+    <ClInclude Include="src\Menus\OnlineScreen.h" />
     <ClInclude Include="src\Menus\OptionScreen.h" />
     <ClInclude Include="src\Menus\SplashScreen.h" />
     <ClInclude Include="src\Gun.h" />
