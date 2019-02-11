@@ -181,8 +181,8 @@ void AISystem::update(std::vector<c2v*> points) {
 			//	ac->setJump(true);
 			//}
 
-			std::cout << "Point = " << closestPoint.x << ", " << closestPoint.y << std::endl;
-			std::cout << "Position = " << curPosition.x << std::endl;
+			//std::cout << "Point = " << closestPoint.x << ", " << closestPoint.y << std::endl;
+			//std::cout << "Position = " << curPosition.x << std::endl;
 		}
 		
 		

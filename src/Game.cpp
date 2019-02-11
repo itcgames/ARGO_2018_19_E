@@ -14,7 +14,6 @@ Game::Game()
 
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
 
-	
 
 	if (IMG_Init(imgFlags) != imgFlags)
 	{
@@ -55,15 +54,16 @@ Game::Game()
 	m_backgroundSprite->loadFromFile("assets/purplebg.png", m_renderer);
 	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
 	m_backgroundSprite->setScale(c2v{ 3.5f, 1.6f });
-	
+
 	m_map = new MapLoader();
 
 	m_map->load("testlevel.tmx", m_renderer);
 
-	
-	pistol = new Gun(m_renderer);
+	pistol = new Gun(m_renderer,1,200,100);
+	shotgun = new Gun(m_renderer,2, 1000,100);
 
-	
+	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
+	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
 
 	initialise();
 
@@ -129,8 +129,8 @@ void Game::update() {
 		m_hs.update();		
 		m_ais.update(m_map->getPoints());		
 		m_ais.receive(m_ents);
-		m_collSys.update(m_map->getTiles());
 		
+		m_collSys.update(m_map->getTiles());
 		m_cs.update(event);
 		m_ps.update();
 		m_guns.update();
@@ -173,10 +173,10 @@ void Game::render() {
 		break;
 	case GameState::Game:
 		m_backgroundSprite->render(m_renderer);
+		p->render(m_renderer);
 		m_rs.render(m_renderer);
 		m_map->draw(m_renderer);
 		m_ps.bulletRender(m_renderer);
-		p->render(m_renderer);
 		//m_emitter->update();
 		break;
 	case GameState::Credits:
@@ -187,6 +187,28 @@ void Game::render() {
 	}
 	SDL_RenderPresent(m_renderer);
 
+}
+
+SDL_Rect* Game::getCamera()
+{
+	return m_camera;
+}
+
+c2v* Game::getCameraCentre()
+{
+	return m_cameraCentre;
+}
+
+void Game::setCameraPosition(int x, int y)
+{
+	m_camera->x = x;
+	m_camera->y = y;
+}
+
+void Game::setCameraCentre(float x, float y)
+{
+	m_cameraCentre->x = x;
+	m_cameraCentre->y = y;
 }
 
 void Game::setUpController() {
@@ -211,10 +233,12 @@ void Game::initialise()
 	m_cs.addEntity((Entity*)p);
 
 	m_cs.addEntity((Entity*)pistol);
+	m_cs.addEntity((Entity*)shotgun);
 	m_cs.addEntity((Entity*)h);
 
 	m_rs.addEntity((Entity*)p);
 	m_rs.addEntity((Entity*)pistol);
+	m_rs.addEntity((Entity*)shotgun);
 	m_rs.addEntity((Entity*)h);
 	
 	m_rs.addEntity((Entity*)ai);
@@ -225,13 +249,18 @@ void Game::initialise()
 	m_ais.addEntity((Entity*)ai);
 
 	m_ps.addEntity((Entity*)pistol);
+	m_ps.addEntity((Entity*)shotgun);
 	m_ps.addEntity((Entity*)h);
 
 	m_ps.addEntity((Entity*)pistol);
 	m_guns.addEntity((Entity*)pistol);
 
+	m_ps.addEntity((Entity*)shotgun);
+	m_guns.addEntity((Entity*)shotgun);
+
 	m_collSys.addEntity((Entity*)p);
 	m_collSys.addEntity((Entity*)ai);
 	m_collSys.addEntity((Entity*)pistol);
+	m_collSys.addEntity((Entity*)shotgun);
 }
 
