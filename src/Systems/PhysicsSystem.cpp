@@ -435,12 +435,12 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							float shotgunRadAng = angle * 3.14159265359 / 180;
 							//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 							//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
-							shotgunTipX = 103.6 * (cos(shotgunRadAng));
-							shotgunTipY = 103.6 * (sin(shotgunRadAng));
+							float shotgunTipX = 103.6 * (cos(shotgunRadAng));
+							float shotgunTipY = 103.6 * (sin(shotgunRadAng));
 							for (int i = 0; i < 7; i++)
 							{
 								float random = rand() % 40 - 20;
-								float radAng = (angle+random) * 3.14159265359 / 180;
+								float radAng = (angle + random) * 3.14159265359 / 180;
 								float radius = 90;
 								if (tc->getSubTag() == "pistol")
 								{
@@ -459,16 +459,16 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 								float unitY = shotgunYOffset / mag;
 								if (sc->m_flipValue == SDL_FLIP_NONE)
 								{
-									pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - shotgunTipX, pc->getY() + shotgunTipY + 70, -(angle - 90), unitX * 80, unitY * 80));
+									pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - shotgunTipX, pc->getY() + shotgunTipY + 70, -(angle - 90), unitX * 80, unitY * 80, 50));
 								}
 								else {
-									pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70, -(angle - 90), unitX * 80, unitY * 80));
+									pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70, -(angle - 90), unitX * 80, unitY * 80, 50));
 								}
 							}
-					
+
 						}
 						else if (tc->getSubTag() == "pistol" && gunGot == "pistol")
-						{		
+						{
 							fired = true;
 							m_startAnimating = true;
 
@@ -477,25 +477,37 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							{
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 							}
-							pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
-						
+							pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset, 1000));
+
+
 						}
 					}
 				}
-			}
-			if (tc->getSubTag() == "shotgun")
-			{
-				shotgunBullets = pc->bullets;
-			}
-			else if (tc->getSubTag() == "pistol")
-			{
-				pistolBullets = pc->bullets;
+				if (tc->getSubTag() == "shotgun")
+				{
+					shotgunBullets = pc->bullets;
+
+					
+				}
+				else if (tc->getSubTag() == "pistol")
+				{
+					pistolBullets = pc->bullets;
+
+				}
+				for (int i = 0; i < pc->bullets.size(); i++) {
+					pc->bullets.at(i)->m_ttl--;
+					if (pc->bullets.at(i)->m_ttl < 0) {
+						pc->bullets.erase(pc->bullets.begin() + i);
+					}
+				}
 			}
 		}
 	}
 }
 
+
 void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
+
 	if (m_startAnimating) {
 		animateExplosion(renderer);
 	}
