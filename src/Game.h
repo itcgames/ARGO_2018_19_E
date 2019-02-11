@@ -38,8 +38,6 @@ public:
 	GameState * m_currentGameState;
 	GameState m_previousGameState;
 	void setGameState(GameState gameState);
-	
-	
 
 	SDL_Renderer * getScreen() const { return m_renderer; }
 
@@ -56,6 +54,11 @@ public:
 	static Game* s_pInstance;
 
 	void setUpController();
+
+	SDL_Rect* getCamera();
+	c2v* getCameraCentre();
+	void setCameraCentre(float x, float y);
+	void setCameraPosition(int x, int y);
 
 private:
 
@@ -89,6 +92,9 @@ private:
 	CollisionSystem m_collSys;
 
 	SDL_Rect m_screenSize;
+
+	SDL_Rect* m_camera;
+	c2v* m_cameraCentre;
 
 
 	SplashScreen * m_splash;
