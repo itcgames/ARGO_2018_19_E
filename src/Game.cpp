@@ -14,7 +14,7 @@ Game::Game()
 
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
 
-	m_client = new Client("192.168.192.32", 54000);
+	m_client = new Client("149.153.106.155", 54000);
 
 	if (IMG_Init(imgFlags) != imgFlags)
 	{
@@ -55,7 +55,7 @@ Game::Game()
 	m_backgroundSprite->loadFromFile("assets/purplebg.png", m_renderer);
 	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
 	m_backgroundSprite->setScale(c2v{ 3.5f, 1.6f });
-	
+
 	m_map = new MapLoader();
 
 	m_map->load("testlevel.tmx", m_renderer);

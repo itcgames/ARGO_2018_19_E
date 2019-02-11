@@ -38,8 +38,6 @@ public:
 	GameState * m_currentGameState;
 	GameState m_previousGameState;
 	void setGameState(GameState gameState);
-	
-	
 
 	SDL_Renderer * getScreen() const { return m_renderer; }
 
