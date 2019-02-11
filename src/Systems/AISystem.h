@@ -18,8 +18,9 @@ class AISystem
 public:
 	AISystem();
 	void addEntity(Entity * e);
-	void update();
+	void update(std::vector<c2v*> points);
 	c2v checkClosest(std::vector<std::pair<double, c2v>> distances);
+	c2v checkPoints(std::vector<c2v*> points);
 	void receive(std::vector<Entity*> ents);
 private:
 	c2v closestEnemy;

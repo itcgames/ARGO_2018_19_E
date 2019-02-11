@@ -29,6 +29,7 @@ public:
 	void draw(SDL_Renderer* renderer);
 
 	std::vector<std::vector<Tile*>> getTiles() { return m_tileVector; }
+	std::vector<c2v*> getPoints() { return m_pointVector; }
 
 private:
 
@@ -41,6 +42,7 @@ private:
 	int m_tileHeight;
 	
 	std::vector<std::vector<Tile*>> m_tileVector;
+	std::vector<c2v*> m_pointVector;
 
 	SpriteComponent* m_sprite;
 

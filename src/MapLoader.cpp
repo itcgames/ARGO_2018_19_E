@@ -41,12 +41,28 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 	for (auto& layer : map_layers)
 	{
 
+		//points
+		if (layer->getType() == tmx::Layer::Type::Object)
+		{
+			auto & objects = layer->getLayerAs<tmx::ObjectGroup>().getObjects();
+
+			for (const auto & object : objects) {
+
+				c2v position = c2v{ object.getPosition().x, object.getPosition().y };
+				m_pointVector.push_back(&position);
+			}
+		}
+
+		//std::cout << m_pointVector.size();
+
 		// We're only looking to render the tiles on the map, so if
 		// this layer isn't a tile layer, we'll move on.
 		if (layer->getType() != tmx::Layer::Type::Tile)
 		{
 			continue;
 		}
+
+		
 
 		auto* tile_layer = dynamic_cast<const tmx::TileLayer*>(layer.get());
 

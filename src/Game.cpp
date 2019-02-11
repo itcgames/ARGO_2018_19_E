@@ -56,6 +56,8 @@ Game::Game()
 
 	m_map->load("testlevel.tmx", m_renderer);
 
+	
+	//std::cout << m_map->getPoints().size() << std::endl;
 	pistol = new Gun(m_renderer);
 
 	
@@ -63,9 +65,9 @@ Game::Game()
 	initialise();
 
 	
-	m_ents.push_back((Entity*)p);
-	m_ents.push_back((Entity*)ai);
-	//m_ents.push_back((Entity*)pistol);
+	//m_ents.push_back((Entity*)p);
+	//m_ents.push_back((Entity*)ai);
+	m_ents.push_back((Entity*)pistol);
 
 	m_ps.setRenderer(m_renderer);
 }
@@ -119,7 +121,7 @@ void Game::update() {
 		break;
 	case GameState::Game:
 		m_hs.update();		
-		m_ais.update();		
+		m_ais.update(m_map->getPoints());		
 		m_ais.receive(m_ents);
 		m_collSys.update(m_map->getTiles());
 		

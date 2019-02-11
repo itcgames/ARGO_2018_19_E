@@ -52,7 +52,19 @@ c2v AISystem::checkClosest(std::vector<std::pair<double, c2v>> distances)
 	return m_realDist.second;
 }
 
-void AISystem::update() {
+c2v AISystem::checkPoints(std::vector<c2v*> points)
+{
+
+	//double smallest = 10000;
+
+	for (auto it = points.begin(); it != points.end(); it++)
+	{
+		
+	}
+	return c2v();
+}
+
+void AISystem::update(std::vector<c2v*> points) {
 	
 	
 	int speed = 0;
@@ -83,26 +95,26 @@ void AISystem::update() {
 
 			}
 
-			if (curPosition.x > closestEnemy.x + 400)
-			{
-				pc->setVelX(pc->getVelX() - 1.5);
-			}
-			if (curPosition.x < closestEnemy.x - 400)
-			{
-				pc->setVelX(pc->getVelX() + 1.5);
+			//if (curPosition.x > closestEnemy.x + 400)
+			//{
+			//	pc->setVelX(pc->getVelX() - 1.5);
+			//}
+			//if (curPosition.x < closestEnemy.x - 400)
+			//{
+			//	pc->setVelX(pc->getVelX() + 1.5);
 
-			}
+			//}
 
-			//std::cout << "Ypos " << pc->getY() << std::endl;
+			////std::cout << "Ypos " << pc->getY() << std::endl;
 
-			if (curPosition.y > closestEnemy.y)
-			{
-				ac->setJump(true);
-			}
+			//if (curPosition.y > closestEnemy.y)
+			//{
+			//	ac->setJump(true);
+			//}
 
 			
 			//std::cout << ac->getJump() << std::endl;
-			//std::cout << closestEnemy.x << ", " << closestEnemy.y << std::endl;
+			std::cout << closestEnemy.x << ", " << closestEnemy.y << std::endl;
 		}
 		
 		
