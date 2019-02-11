@@ -13,6 +13,7 @@
 #include "Menus/CreditScreen.h"
 #include "Menus/MenuScreen.h"
 #include "Menus/OptionScreen.h"
+#include "Menus/OnlineScreen.h"
 #include "Components/SpriteComponent.h"
 
 #include "Player.h"
@@ -54,6 +55,8 @@ public:
 
 	static Game* s_pInstance;
 
+	void setUpController();
+
 private:
 
 	void update();
@@ -92,13 +95,15 @@ private:
 	MenuScreen * m_menu;
 	OptionScreen * m_options;
 	CreditScreen * m_credits;
-
+	OnlineScreen * m_onlineScreen;
 	
 
 
 	
 	SDL_Surface* m_screen;
+	SDL_GameController* gGameController = NULL;
 
+	Client * m_client;
 };
 
 
