@@ -55,6 +55,11 @@ public:
 
 	void setUpController();
 
+	SDL_Rect* getCamera();
+	c2v* getCameraCentre();
+	void setCameraCentre(float x, float y);
+	void setCameraPosition(int x, int y);
+
 private:
 
 	void update();
@@ -87,6 +92,9 @@ private:
 	CollisionSystem m_collSys;
 
 	SDL_Rect m_screenSize;
+
+	SDL_Rect* m_camera;
+	c2v* m_cameraCentre;
 
 
 	SplashScreen * m_splash;

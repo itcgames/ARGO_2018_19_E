@@ -27,6 +27,9 @@ public:
 
 	int number = 0;
 
+	std::vector<int> m_joiners;
+	std::vector<int> m_leavers;
+
 private:
 	
 };
