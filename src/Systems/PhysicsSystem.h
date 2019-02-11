@@ -77,5 +77,12 @@ public:
 	SDL_Renderer * m_renderer;
 	int m_count = 0;
 	bool m_startAnimating = false;
+
+	float shotgunTipX;
+	float shotgunTipY;
+
+	// variables for shotgun animation
+	int shotgunCount = 0;
+	int shotgunRotationCount = 0;
 };
 #endif // !PHYSICSSYSTEM_H

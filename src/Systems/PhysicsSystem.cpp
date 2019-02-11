@@ -49,25 +49,53 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 			{
 				pc->setY(playerPositionY - 60 + yOffset);
 			}
+			if (tc->getGrabbed() == true) {
+				sc->setRotation((cc->getAngle())*-1); //rotate gun
+			}
 		}
+		// Animations for gun recoil
 		else
 		{
-			if (sc->m_flipValue == SDL_FLIP_NONE)
-			{
-				pc->setX(playerPositionX - xOffset - (firedCount));  // set gun position + offset for player centre - offset for angle
-				sc->rotate(firedCount);
-			}
-			else
-			{
-				pc->setX(playerPositionX - xOffset + (firedCount));
-			}
 			if (tc->getSubTag() == "pistol")
 			{
 				pc->setY(playerPositionY + yOffset);
+				if (sc->m_flipValue == SDL_FLIP_NONE)
+				{
+					pc->setX(playerPositionX - xOffset - (firedCount));  // set gun position + offset for player centre - offset for angle
+					sc->rotate(firedCount);
+					sc->setRotation((cc->getAngle())*-1 - firedCount); //rotate gun with recoil
+				}
+				else {
+					sc->setRotation((cc->getAngle())*-1 + firedCount); //rotate gun with recoil
+					pc->setX(playerPositionX - xOffset + (firedCount));
+				}
 			}
 			else if (tc->getSubTag() == "shotgun")
 			{
 				pc->setY(playerPositionY -60 + yOffset);
+				if (shotgunCount < 6)
+				{
+					shotgunRotationCount = shotgunRotationCount + 3;
+				}
+				else if (shotgunCount < 20)
+				{
+					shotgunRotationCount = shotgunRotationCount - 3;
+					if (shotgunRotationCount < 0)
+					{
+						shotgunRotationCount = 0;
+					}
+				}
+		
+				if (sc->m_flipValue == SDL_FLIP_NONE)
+				{
+					pc->setX(playerPositionX - xOffset - (shotgunRotationCount * 1.5));  // set gun position + offset for player centre - offset for angle
+					//sc->rotate(firedCount);
+					sc->setRotation((cc->getAngle())*-1 - shotgunRotationCount); //rotate gun with recoil
+				}
+				else {
+					pc->setX(playerPositionX - xOffset + (shotgunRotationCount * 1.5));
+					sc->setRotation((cc->getAngle())*-1 + shotgunRotationCount); //rotate gun with recoil
+				}
 			}
 		}
 
@@ -152,8 +180,16 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 
 void PhysicsSystem::launchGun(PositionComponent * pc,TagComponent * tc) {
 	//std::cout << "X = " << -xOffset <<  "Y = " << yOffset << std::endl;
-	pc->setVelX(-xOffset / 2);
-	pc->setVelY(yOffset / 2);
+	if (tc->getSubTag() == "pistol")
+	{
+		pc->setVelX(-xOffset / 2);
+		pc->setVelY(yOffset / 2);
+	}
+	else if (tc->getSubTag() == "shotgun")
+	{
+		pc->setVelX(-xOffset * 2);
+		pc->setVelY(yOffset * 2);
+	}
 
 	tc->setGrabbed(false);
 	tc->setGrabable(false); // Start count to make gun grabable again.
@@ -254,20 +290,11 @@ void PhysicsSystem::update() {
 		{
 			setGun(tc,cc,pc,sc);
 			pickUpAgain(tc);
-			if (throwGun == true)  // Check if a weapon wants to be thrown
+			if (tc->getSubTag() == gunGot)
 			{
-				launchGun(pc,tc);
-			}
-			if (tc->getGrabbed() == true && fired == false) {
-				sc->setRotation((cc->getAngle())*-1); //rotate gun
-			}
-			else if (tc->getGrabbed() == true && fired == true) {
-				if (sc->m_flipValue == SDL_FLIP_NONE)
+				if (throwGun == true)  // Check if a weapon wants to be thrown
 				{
-					sc->setRotation((cc->getAngle())*-1 - firedCount); //rotate gun with recoil
-				}
-				else {
-					sc->setRotation((cc->getAngle())*-1 + firedCount); //rotate gun with recoil
+					launchGun(pc, tc);
 				}
 			}
 			if (cc->getAngle() < 0 && gotGun == true) {
@@ -347,13 +374,29 @@ void PhysicsSystem::update() {
 void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 	if (fired == true)
 	{
-		if (firedCount < 10)
+		if (gunGot == "pistol")
 		{
-			firedCount = firedCount + 1;
+			if (firedCount < 10)
+			{
+				firedCount = firedCount + 1;
+			}
+			else {
+				fired = false;
+				firedCount = 0;
+			}
 		}
-		else {
-			fired = false;
-			firedCount = 0;
+		if (gunGot == "shotgun")
+		{
+			if (firedCount < 60)
+			{
+				firedCount = firedCount + 1;
+				shotgunCount = shotgunCount + 1;
+			}
+			else {
+				fired = false;
+				firedCount = 0;
+				shotgunCount = 0;
+			}
 		}
 	}
 	for (Entity * entity : m_entities) {
@@ -363,13 +406,13 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 			FactoryComponent * fc = (FactoryComponent*)entity->getCompByType("FACTORY");
 			ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
+			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 			if (tc->getGrabbed() == true)  // Ensure gun is grabbed before shooting
 			{
 				if (cc->getFire())
 				{
 					if (fired == false)
 					{
-
 						fired = true;
 						m_startAnimating = true;
 
@@ -380,19 +423,43 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 						}
 						if (tc->getSubTag() == "shotgun")
 						{
-							c2v vector = { -xOffset,yOffset};							
-							float mag = c2Len(vector);
-							float unitX = -xOffset / mag;
-							float unitY = yOffset / mag;
-							std::cout << "X = " << unitX << "Y = " << unitY << std::endl;
+							float shotgunRadAng = angle * 3.14159265359 / 180;
+							//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
+							//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
+							shotgunTipX = 103.6 * (cos(shotgunRadAng));
+							shotgunTipY = 103.6 * (sin(shotgunRadAng));
 							for (int i = 0; i < 7; i++)
 							{
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), unitX, unitY));
+								float random = rand() % 40 - 20;
+								float radAng = (angle+random) * 3.14159265359 / 180;
+								float radius = 90;
+								if (tc->getSubTag() == "pistol")
+								{
+									radius = 90;
+								}
+								else if (tc->getSubTag() == "shotgun")
+								{
+									radius = 10;
+								}
+								float shotgunXOffset = radius * (cos(radAng));
+								float shotgunYOffset = radius * (sin(radAng));
+
+								c2v vector = { -shotgunXOffset,shotgunYOffset };
+								float mag = c2Len(vector);
+								float unitX = -shotgunXOffset / mag;
+								float unitY = shotgunYOffset / mag;
+								if (sc->m_flipValue == SDL_FLIP_NONE)
+								{
+									pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - shotgunTipX, pc->getY() + shotgunTipY + 70, -(angle - 90), unitX * 80, unitY * 80));
+								}
+								else {
+									pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70, -(angle - 90), unitX * 80, unitY * 80));
+								}
 							}
 						}
 						else if (tc->getSubTag() == "pistol")
-						{
-							pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
+						{						
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
 						}
 						bullets = pc->bullets;
 					}
@@ -434,15 +501,31 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
     p->setDuration(.1);
 	p->setStartSize(30);
 	p->setStartSpinVar(90);// set the renderer
-	if (flipval == SDL_FLIP_HORIZONTAL)
+	if (gunGot == "pistol")
 	{
-		p->setPosition(gunPositionX - 15, gunPositionY);
-		//p->setAngle(-angle);
+		if (flipval == SDL_FLIP_HORIZONTAL)
+		{
+			p->setPosition(gunPositionX - 15, gunPositionY);
+			//p->setAngle(-angle);
+		}
+		else
+		{
+			p->setPosition(gunPositionX + 60, gunPositionY + 10);
+			//p->setAngle(angle);
+		}
 	}
-	else
+	else if (gunGot == "shotgun")
 	{
-		p->setPosition(gunPositionX + 60, gunPositionY + 10);
-		//p->setAngle(angle);
+		if (flipval == SDL_FLIP_HORIZONTAL)
+		{
+			p->setPosition(gunPositionX - shotgunTipX + 20, gunPositionY + shotgunTipY + 70);
+			//p->setAngle(-angle);
+		}
+		else
+		{
+			p->setPosition(gunPositionX - shotgunTipX, gunPositionY + shotgunTipY + 70);
+			//p->setAngle(angle);
+		}
 	}
 	
 	p->update();
