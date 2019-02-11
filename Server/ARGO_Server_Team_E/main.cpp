@@ -130,6 +130,10 @@ void main()
 						// Unknown command
 						continue;
 					}
+					if (buf[0] == 'L')
+					{
+						master.fd_count--;
+					}
 
 					// Send message to other clients, and definiately NOT the listening socket
 
