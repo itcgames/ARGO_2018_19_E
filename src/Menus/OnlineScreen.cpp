@@ -99,8 +99,16 @@ void OnlineScreen::removeMember() {
 				break;
 			}
 		}
-
 	}
+	else if (m_client->m_leavers[0] > m_client->number) {
+		for (int j = m_client->number; j < (m_strings.size() + 1); j++) {
+			int temp = j - 1;
+			m_strings.at(temp) = "Player: " + std::to_string(j);
+			SDL_Color textColor = { 200, 200, 200, 255 };
+			m_textures.at(temp) = init(m_font, m_strings.at(temp), m_textures.at(temp), m_quads.at(temp), 200, 150 + (100 * (j)), textColor);
+		}
+	}
+
 	m_client->m_leavers.pop_back();
 }
 
