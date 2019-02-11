@@ -8,7 +8,7 @@
 class Bullet
 {
 public:
-	Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset);
+	Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl);
 	~Bullet() { 
 		delete m_spriteComponent; 
 		delete this; 
@@ -20,6 +20,8 @@ public:
 
 	c2AABB collider;
 
+	int m_ttl = 0;
+
 private:
 	//std::vector<Component*> m_components;
 	//SpriteComponent* m_spriteComponent;
@@ -28,13 +30,13 @@ private:
 
 class Factory {
 public:
-	virtual Bullet* CreateBullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset) = 0;
+	virtual Bullet* CreateBullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl) = 0;
 };
 
 class BulletFactory : public Factory {
 public:
 	BulletFactory() {}
-	Bullet * CreateBullet(SDL_Renderer* renderer, float xPos, float yPos,double angle, double xOffset, double yOffset) {
-		return new Bullet(renderer,xPos,yPos,angle,xOffset,yOffset);
+	Bullet * CreateBullet(SDL_Renderer* renderer, float xPos, float yPos,double angle, double xOffset, double yOffset, int ttl) {
+		return new Bullet(renderer,xPos,yPos,angle,xOffset,yOffset,ttl);
 	}
 };
