@@ -131,27 +131,41 @@ void main()
 						// Unknown command
 						continue;
 					}
-					if (buf[0] == 'L')
+					else if (buf[0] == 'L')
 					{
 						int val = (int)buf[6];
 						master.fd_array[val] = NULL;
 						playerNum--;
-					}
-
-					// Send message to other clients, and definiately NOT the listening socket
-
-					for (int i = 0; i < master.fd_count; i++)
-					{
-						SOCKET outSock = master.fd_array[i];
-						if (outSock != listening && outSock != sock)
+						for (int i = 0; i < master.fd_count; i++)
 						{
-							ostringstream ss;
-							ss << buf;
-							string strOut = ss.str();
+							SOCKET outSock = master.fd_array[i];
+							if (outSock != listening && outSock != sock)
+							{
+								ostringstream ss;
+								ss << buf;
+								string strOut = ss.str();
 
-							send(outSock, strOut.c_str(), strOut.size() + 1, 0);
+								send(outSock, strOut.c_str(), strOut.size() + 1, 0);
+							}
 						}
 					}
+					else {
+						// Send message to other clients, and definiately NOT the listening socket
+
+						for (int i = 0; i < master.fd_count; i++)
+						{
+							SOCKET outSock = master.fd_array[i];
+							if (outSock != listening && outSock != sock)
+							{
+								ostringstream ss;
+								ss << buf;
+								string strOut = ss.str();
+
+								send(outSock, strOut.c_str(), strOut.size() + 1, 0);
+							}
+						}
+					}
+					
 				}
 			}
 		}

@@ -39,7 +39,6 @@ void OnlineScreen::update() {
 		m_client = new Client("149.153.106.155", 54000);
 
 		if (m_client->run()) {
-			m_client->sendMessage("Join, Hello,");
 		}
 		
 		while (m_client->number == 0) {
