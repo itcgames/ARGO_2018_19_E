@@ -47,14 +47,10 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 		{
 			auto & objects = layer->getLayerAs<tmx::ObjectGroup>().getObjects();
 
-			//m_pointVector.reserve(objects.size());
-			//m_pointVector.resize(objects.size());
-
 			
-			for (const auto & object : objects) {
+			for (auto & object : objects) {
 
-				//const auto& properties = c2v{ object.getPosition().x, object.getPosition.y };
-				//m_pointVector.push_back(properties);
+				m_pointVector.push_back(new c2v{ object.getPosition().x, object.getPosition().y });
 			}
 		}
 	

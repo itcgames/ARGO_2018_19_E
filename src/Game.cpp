@@ -61,7 +61,6 @@ Game::Game()
 	m_map->load("testlevel.tmx", m_renderer);
 
 	
-	//std::cout << m_map->getPoints().size() << std::endl;
 	pistol = new Gun(m_renderer);
 
 	

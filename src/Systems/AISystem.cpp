@@ -95,7 +95,7 @@ void AISystem::update(std::vector<c2v*> points) {
 
 			//closestEnemy = checkClosest(m_distances);
 
-			//closestPoint = checkPoints(points, pc);
+			closestPoint = checkPoints(points, pc);
 
 			if (curPosition.x > closestEnemy.x)
 			{
@@ -126,7 +126,7 @@ void AISystem::update(std::vector<c2v*> points) {
 
 			
 			//std::cout << ac->getJump() << std::endl;
-			std::cout << closestPoint.x << ", " << closestPoint.y << std::endl;
+			//std::cout << closestPoint.x << ", " << closestPoint.y << std::endl;
 		}
 		
 		
