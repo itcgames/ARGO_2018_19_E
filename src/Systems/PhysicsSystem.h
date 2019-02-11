@@ -51,7 +51,22 @@ public:
 
 	std::vector<Bullet*> bullets;
 	void animateExplosion(SDL_Renderer * renderer);
-	
+
+
+	void setGun(TagComponent *tc,ControlComponent *cc,PositionComponent *pc,SpriteComponent *sc);
+	void pickUpAgain(TagComponent *tc);
+	void setPlayerPosition(PositionComponent *pc);
+	void throwGunFun(ControlComponent * cc);
+	void playerFlip(PositionComponent *pc, SpriteComponent *sc, ControlComponent *cc);
+	void launchGun(PositionComponent *pc, TagComponent *tc);
+	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
+	void setHandNormal(SpriteComponent * sc, PositionComponent *pc);
+	void movePlayer(ControlComponent * cc, PositionComponent *pc);
+	void setPosition(PositionComponent * pc);
+	void flipNone(SpriteComponent * sc);
+	void flipHorizontal(SpriteComponent * sc);
+
+
 	ParticleExample * p;
 
 
