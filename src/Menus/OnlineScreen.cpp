@@ -12,20 +12,16 @@ OnlineScreen::OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font 
 
 	m_font = Font;
 
-	m_strings.push_back("Lobby");
-	m_strings.push_back("(B) Exit");
+	std::string LString = "Lobby";
+	std::string EString = "(B) Exit";
 
-	m_textures.push_back(titletexture);
-	m_textures.push_back(exittexture);
 
-	m_quads.push_back(titleRenderQuad);
-	m_quads.push_back(exitRenderQuad);
 
-	m_textures[1] = init(Font, m_strings[1], m_textures[1], m_quads[1], 1055, 600, menuColor);
+	exittexture = init(Font, EString, exittexture, exitRenderQuad, 1055, 600, menuColor);
 
 	TTF_Font* menuFont = TTF_OpenFont("arial.ttf", 150);
 
-	m_textures[0] = init(menuFont, m_strings[0], m_textures[0], m_quads[0], 350, 50, menuColor);
+	titletexture = init(menuFont, LString, titletexture, titleRenderQuad, 350, 50, menuColor);
 
 	m_client = client;
 	
@@ -88,10 +84,24 @@ void OnlineScreen::update() {
 void OnlineScreen::removeMember() {
 	int i = 0;
 	for (; i < m_index.size() && i != m_client->m_leavers[0]; i++) {}
+	i--;
 	m_index.erase(m_index.begin() + i);
 	m_textures.erase(m_textures.begin() + i);
 	m_strings.erase(m_strings.begin() + i);
 	m_quads.erase(m_quads.begin() + i);
+
+	if (m_client->m_leavers[0] < m_client->number) {
+		for (int j = 0; j < m_strings.size(); j++) {
+			if (m_strings.at(j) == "Player: " + std::to_string(m_client->number)) {
+				m_client->number--;
+				m_strings.at(j) = "Player: " + std::to_string(m_client->number);
+				SDL_Color textColor = { 200, 200, 200, 255 };
+				m_textures.at(j) = init(m_font, m_strings.at(j), m_textures.at(j), m_quads.at(j), 200, 150 + (100 * m_client->number), textColor);
+				break;
+			}
+		}
+
+	}
 	m_client->m_leavers.pop_back();
 }
 
@@ -111,6 +121,7 @@ void OnlineScreen::addMember() {
 
 void OnlineScreen::fillLobby() {
 	int tempVal = m_client->number;
+	tempVal--;
 	while (tempVal != 0) {
 		SDL_Texture* playertexture;
 		SDL_Rect playerRenderQuad;
@@ -130,6 +141,8 @@ void OnlineScreen::render(SDL_Renderer * renderer) {
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderFillRect(renderer, &m_BGRect);
+	SDL_RenderCopy(renderer, exittexture, NULL, &exitRenderQuad);
+	SDL_RenderCopy(renderer, titletexture, NULL, &titleRenderQuad);
 	for (int i = 0; i < m_textures.size(); i++) {
 		SDL_RenderCopy(renderer, m_textures[i], NULL, &m_quads[i]);
 	}
