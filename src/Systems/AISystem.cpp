@@ -52,16 +52,27 @@ c2v AISystem::checkClosest(std::vector<std::pair<double, c2v>> distances)
 	return m_realDist.second;
 }
 
-c2v AISystem::checkPoints(std::vector<c2v*> points)
+c2v AISystem::checkPoints(std::vector<c2v*> points, PositionComponent* pc)
 {
 
-	//double smallest = 10000;
+	double smallest = 10000;
+
+	c2v myPos = { pc->getX(), pc->getY() };
+	c2v closestPosition;
 
 	for (auto it = points.begin(); it != points.end(); it++)
 	{
-		
+		std::cout << (*it)->x << std::endl;
+		auto pos = c2v{ (*it)->x, (*it)->y };
+		double dist = distance(myPos, pos);
+
+		if (dist < smallest)
+		{
+			smallest = dist;
+			closestPosition = pos;
+		}
 	}
-	return c2v();
+	return closestPosition;
 }
 
 void AISystem::update(std::vector<c2v*> points) {
@@ -82,8 +93,9 @@ void AISystem::update(std::vector<c2v*> points) {
 			curPosition.x = pc->getX();
 			curPosition.y = pc->getY();
 
-			closestEnemy = checkClosest(m_distances);
+			//closestEnemy = checkClosest(m_distances);
 
+			//closestPoint = checkPoints(points, pc);
 
 			if (curPosition.x > closestEnemy.x)
 			{
@@ -114,11 +126,18 @@ void AISystem::update(std::vector<c2v*> points) {
 
 			
 			//std::cout << ac->getJump() << std::endl;
-			std::cout << closestEnemy.x << ", " << closestEnemy.y << std::endl;
+			std::cout << closestPoint.x << ", " << closestPoint.y << std::endl;
 		}
 		
 		
 	}
 
 }
+
+
+double AISystem::distance(c2v  vecOne, c2v vecTwo)
+{
+	return std::sqrt((vecOne.x - vecTwo.x) * (vecOne.x - vecTwo.x) + (vecOne.y - vecTwo.y) * (vecOne.y - vecTwo.y));
+}
+
 

@@ -20,11 +20,12 @@ public:
 	void addEntity(Entity * e);
 	void update(std::vector<c2v*> points);
 	c2v checkClosest(std::vector<std::pair<double, c2v>> distances);
-	c2v checkPoints(std::vector<c2v*> points);
+	double distance(c2v  vecOne, c2v vecTwo);
+	c2v checkPoints(std::vector<c2v*> points, PositionComponent* pc);
 	void receive(std::vector<Entity*> ents);
 private:
 	c2v closestEnemy;
-
+	c2v closestPoint;
 	std::vector<std::pair<double, c2v>> m_distances;
 	std::pair<double, c2v> m_realDist;
 

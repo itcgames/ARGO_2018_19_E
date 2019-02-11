@@ -28,6 +28,7 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 	//Set up tile vector.
 	m_tileVector.reserve(m_cols);
 	m_tileVector.resize(m_cols);
+	//m_pointVector
 	
 	for (int i = 0; i < m_cols; i++)
 	{
@@ -46,13 +47,17 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 		{
 			auto & objects = layer->getLayerAs<tmx::ObjectGroup>().getObjects();
 
+			//m_pointVector.reserve(objects.size());
+			//m_pointVector.resize(objects.size());
+
+			
 			for (const auto & object : objects) {
 
-				c2v position = c2v{ object.getPosition().x, object.getPosition().y };
-				m_pointVector.push_back(&position);
+				//const auto& properties = c2v{ object.getPosition().x, object.getPosition.y };
+				//m_pointVector.push_back(properties);
 			}
 		}
-
+	
 		//std::cout << m_pointVector.size();
 
 		// We're only looking to render the tiles on the map, so if
