@@ -413,16 +413,17 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 				{
 					if (fired == false)
 					{
-						fired = true;
-						m_startAnimating = true;
-
-						if (SDL_HapticRumblePlay(haptic, .5, 100) != 0)
-
+						if (tc->getSubTag() == "shotgun" && gunGot == "shotgun")
 						{
-							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
-						}
-						if (tc->getSubTag() == "shotgun")
-						{
+							fired = true;
+							m_startAnimating = true;
+
+							if (SDL_HapticRumblePlay(haptic, .5, 100) != 0)
+
+							{
+								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+							}
+
 							float shotgunRadAng = angle * 3.14159265359 / 180;
 							//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 							//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
@@ -456,27 +457,51 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 									pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70, -(angle - 90), unitX * 80, unitY * 80));
 								}
 							}
+					
 						}
-						else if (tc->getSubTag() == "pistol")
-						{						
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
+						else if (tc->getSubTag() == "pistol" && gunGot == "pistol")
+						{		
+							fired = true;
+							m_startAnimating = true;
+
+							if (SDL_HapticRumblePlay(haptic, .5, 100) != 0)
+
+							{
+								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+							}
+							pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
+						
 						}
 					}
 				}
 			}
-			bullets = pc->bullets;
+			if (tc->getSubTag() == "shotgun")
+			{
+				shotgunBullets = pc->bullets;
+			}
+			else if (tc->getSubTag() == "pistol")
+			{
+				pistolBullets = pc->bullets;
+			}
 		}
 	}
 }
 
 void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
 	
-	for (int i = 0; i < bullets.size(); i++)
+	for (int i = 0; i < shotgunBullets.size(); i++)
 	{
-		bullets[i]->render(renderer);
+		shotgunBullets[i]->render(renderer);
 		      // create a new particle system pointer
 		
 		
+	}
+	for (int i = 0; i < pistolBullets.size(); i++)
+	{
+		pistolBullets[i]->render(renderer);
+		// create a new particle system pointer
+
+
 	}
 	if (m_startAnimating) {
 		animateExplosion(renderer);

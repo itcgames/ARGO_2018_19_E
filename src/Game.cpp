@@ -130,12 +130,12 @@ void Game::update() {
 		m_ais.update();		
 		m_ais.receive(m_ents);
 		
+		m_collSys.update(m_map->getTiles());
 		m_cs.update(event);
 		m_ps.update();
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
-		m_collSys.update(m_map->getTiles());
 		break;
 	case GameState::Credits:
 		break;

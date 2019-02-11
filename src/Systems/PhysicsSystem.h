@@ -49,7 +49,8 @@ public:
 	bool right = false;
 	SDL_RendererFlip flipval;
 
-	std::vector<Bullet*> bullets;
+	std::vector<Bullet*> pistolBullets;
+	std::vector<Bullet*> shotgunBullets;
 	void animateExplosion(SDL_Renderer * renderer);
 
 
