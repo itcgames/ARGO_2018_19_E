@@ -49,6 +49,37 @@ Player::Player(SDL_Renderer* renderer)
 	this->addComponent(new CollisionComponent(300, 500, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }
 void Player::render(SDL_Renderer* renderer) {
+
+	// Animation loop for head when hitting ground
+	if (animateHead == true)
+	{
+		if (totalHeadTime < 20)
+		{
+			totalHeadTime = totalHeadTime + 1;
+			if (headCount > 10)
+			{
+				animateHeadUp = false;
+			}
+			else if (headCount < -10)
+			{
+				animateHeadUp = true;
+			}
+			if (animateHeadUp == true)
+			{
+				headCount = headCount + 1;
+			}
+			else if (animateHeadUp == false)
+			{
+				headCount = headCount - 1;
+
+			}
+		}
+		else {
+			headCount = 0;
+			animateHead = false;
+			animateHeadUp = true;
+		}
+	}
 	if (controlComp->getJump())
 	{
 		rumbleCount = 0;
@@ -69,7 +100,8 @@ void Player::render(SDL_Renderer* renderer) {
 			{
 				printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 			}
-			
+			animateHead = true;
+			totalHeadTime = 0;
 			rumbleCount = 0;
 		}
 		falling = false;
@@ -81,18 +113,38 @@ void Player::render(SDL_Renderer* renderer) {
 	m_spriteComponentRightFoot->m_flipValue = m_spriteComponent->m_flipValue;
 	if (m_spriteComponentHead->m_flipValue == SDL_FLIP_NONE)
 	{
-		m_spriteComponentHead->setPosition(c2v{ positionComp->getX(),positionComp->getY() - 50 });
+		m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2,positionComp->getY() - 50 + headCount });
+		m_spriteComponentHead->setRotation(-headCount);
+
 		m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount,positionComp->getY() + 52});
 		m_spriteComponentLeftFoot->setRotation(-runCount);
+
 		m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount,positionComp->getY() + 52});
 		m_spriteComponentRightFoot->setRotation(runCount);
 	}
 	else {
-		m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 20,positionComp->getY() - 50 });
+		m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 20 - headCount / 2,positionComp->getY() - 50 + headCount });
+		m_spriteComponentHead->setRotation(headCount);
+
 		m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() - 20 + runCount,positionComp->getY() + 52});  // (Position - player offset + animationCount)
 		m_spriteComponentLeftFoot->setRotation(-runCount);
+
 		m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - 20 - runCount,positionComp->getY() + 52});
 		m_spriteComponentRightFoot->setRotation(runCount);
+	}
+
+	// Garbage make head go red.
+	if (controlComp->getFire())
+	{
+		m_spriteComponentHead->setColor(255, 255 - firingCount, 255 - firingCount);
+		if (firingCount < 255)
+		{
+			firingCount = firingCount + 1;
+		}
+	}
+	else {
+		m_spriteComponentHead->setColor(255, 255, 255);
+		firingCount = 0;
 	}
 	
 	// Checks if guy is moving on y but not x

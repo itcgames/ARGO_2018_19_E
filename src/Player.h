@@ -25,11 +25,20 @@ private:
 
 	int runCount = 0;
 	int fallCount = 0;
+	int headCount = 0;
+	int totalHeadTime = 0;
+
+	bool animateHead = false;
+	bool animateHeadUp = true;
+
+	int firingCount = 0;
+
 	bool animationBool = true;
 	bool fallingBool = true;
 	float oldY = 0;
 	float newY = 0;
 	bool falling = false;
+	
 
 
 	float rumbleCount = 0;

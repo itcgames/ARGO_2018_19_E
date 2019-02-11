@@ -9,6 +9,7 @@ enum class GameState
 	Splash,
 	Menu,
 	Options,
+	Online,
 	Game,
 	Credits,
 	End
