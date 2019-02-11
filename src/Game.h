@@ -77,6 +77,7 @@ private:
 	Hand* h;
 	AI *ai;
 	Gun* pistol;
+	Gun* shotgun;
 	std::vector<Entity*> m_ents;
 
 	SpriteComponent* m_backgroundSprite;

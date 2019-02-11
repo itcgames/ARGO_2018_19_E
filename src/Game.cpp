@@ -59,7 +59,8 @@ Game::Game()
 
 	m_map->load("testlevel.tmx", m_renderer);
 
-	pistol = new Gun(m_renderer);
+	pistol = new Gun(m_renderer,1,200,100);
+	shotgun = new Gun(m_renderer,2, 1000,100);
 
 	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
 	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
@@ -67,9 +68,9 @@ Game::Game()
 	initialise();
 
 	
-	m_ents.push_back((Entity*)p);
-	m_ents.push_back((Entity*)ai);
-	//m_ents.push_back((Entity*)pistol);
+	//m_ents.push_back((Entity*)p);
+	//m_ents.push_back((Entity*)ai);
+	m_ents.push_back((Entity*)pistol);
 
 	m_ps.setRenderer(m_renderer);
 }
@@ -126,15 +127,15 @@ void Game::update() {
 		break;
 	case GameState::Game:
 		m_hs.update();		
-		m_ais.update();		
+		m_ais.update(m_map->getPoints());		
 		m_ais.receive(m_ents);
 		
+		m_collSys.update(m_map->getTiles());
 		m_cs.update(event);
 		m_ps.update();
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
-		m_collSys.update(m_map->getTiles());
 		break;
 	case GameState::Credits:
 		break;
@@ -172,10 +173,10 @@ void Game::render() {
 		break;
 	case GameState::Game:
 		m_backgroundSprite->render(m_renderer);
+		p->render(m_renderer);
 		m_rs.render(m_renderer);
 		m_map->draw(m_renderer);
 		m_ps.bulletRender(m_renderer);
-		p->render(m_renderer);
 		//m_emitter->update();
 		break;
 	case GameState::Credits:
@@ -232,10 +233,12 @@ void Game::initialise()
 	m_cs.addEntity((Entity*)p);
 
 	m_cs.addEntity((Entity*)pistol);
+	m_cs.addEntity((Entity*)shotgun);
 	m_cs.addEntity((Entity*)h);
 
 	m_rs.addEntity((Entity*)p);
 	m_rs.addEntity((Entity*)pistol);
+	m_rs.addEntity((Entity*)shotgun);
 	m_rs.addEntity((Entity*)h);
 	
 	m_rs.addEntity((Entity*)ai);
@@ -246,13 +249,18 @@ void Game::initialise()
 	m_ais.addEntity((Entity*)ai);
 
 	m_ps.addEntity((Entity*)pistol);
+	m_ps.addEntity((Entity*)shotgun);
 	m_ps.addEntity((Entity*)h);
 
 	m_ps.addEntity((Entity*)pistol);
 	m_guns.addEntity((Entity*)pistol);
 
+	m_ps.addEntity((Entity*)shotgun);
+	m_guns.addEntity((Entity*)shotgun);
+
 	m_collSys.addEntity((Entity*)p);
 	m_collSys.addEntity((Entity*)ai);
 	m_collSys.addEntity((Entity*)pistol);
+	m_collSys.addEntity((Entity*)shotgun);
 }
 

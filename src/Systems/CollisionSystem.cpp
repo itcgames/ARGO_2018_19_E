@@ -67,19 +67,20 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 							else if (val == "bottom") {
 								pc->setVelY(5);
 								m_count = 0;
-								if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0)
+							/*	if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0 && tag->getTag() == "Player")
 								{
 									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
-								}
+								}*/
 							}
 							else if (val == "right" || val == "left") {
 								pc->setVelX(-(pc->getVelX() * 2));
 								pc->m_allowedJump = true;
+								pc->m_hitSide = true;
 								m_count = 0;
-								if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0)
+							/*	if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0 && tag->getTag() == "Player")
 								{
 									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
-								}
+								}*/
 							}
 							
 					
@@ -135,9 +136,9 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 	}
 }
 
-void CollisionSystem::checkBullets(PositionComponent * pc, std::vector<std::vector<Tile*>> tiles) {
+void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vector<Tile*>> tiles) {
 
-	std::vector<Bullet *> * bullets = &pc->bullets;
+	std::vector<Bullet *> * bullets = &poc->bullets;
 	for (Entity * entity : m_entities) {
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
 

@@ -21,7 +21,7 @@ public:
 	float getVelX() { return vel.x; }
 	float getVelY() { return vel.y; }
 
-
+	
 	void setVelX(float x) { 
 		vel.x = x; 
 	}
@@ -34,6 +34,7 @@ public:
 	c2v vel = { 0,0 };
 
 	bool m_allowedJump = true;
+	bool m_hitSide = false;
 
 	std::vector<Bullet*> bullets;
 	

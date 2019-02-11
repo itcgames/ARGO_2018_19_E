@@ -12,6 +12,9 @@ public:
 	TagComponent(std::string name) : tag(name){}
 
 	std::string getTag() { return tag; }
+	std::string getSubTag() { return subTag; }
+
+	void setSubTag(std::string subName){subTag = subName; }
 
 	std::string m_tag = "TAG";
 
@@ -32,6 +35,7 @@ public:
 
 
 private:
+	std::string subTag = "None";
 	std::string tag;
 };
 #endif // !TAGCOMPONENT_H
