@@ -310,16 +310,16 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 						}
 						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
-						bullets = pc->bullets;
 					}
 				}
 			}
+			bullets = pc->bullets;
 		}
 	}
 }
 
 void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
-		
+	
 	for (int i = 0; i < bullets.size(); i++)
 	{
 		bullets[i]->render(renderer);
