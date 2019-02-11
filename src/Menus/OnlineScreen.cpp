@@ -39,7 +39,6 @@ void OnlineScreen::update() {
 		m_client = new Client("149.153.106.155", 54000);
 
 		if (m_client->run()) {
-			m_client->sendMessage("Join, Hello,");
 		}
 		
 		while (m_client->number == 0) {
@@ -89,6 +88,19 @@ void OnlineScreen::removeMember() {
 	m_textures.erase(m_textures.begin() + i);
 	m_strings.erase(m_strings.begin() + i);
 	m_quads.erase(m_quads.begin() + i);
+
+	if (m_client->m_leavers[0] < m_client->number) {
+		for (int j = 0; j < m_strings.size(); j++) {
+			if (m_strings.at(j) == "Player: " + std::to_string(m_client->number)) {
+				m_client->number--;
+				m_strings.at(j) = "Player: " + std::to_string(m_client->number);
+				SDL_Color textColor = { 200, 200, 200, 255 };
+				m_textures.at(j) = init(m_font, m_strings.at(j), m_textures.at(j), m_quads.at(j), 200, 150 + (100 * m_client->number), textColor);
+				break;
+			}
+		}
+
+	}
 	m_client->m_leavers.pop_back();
 }
 
@@ -108,6 +120,7 @@ void OnlineScreen::addMember() {
 
 void OnlineScreen::fillLobby() {
 	int tempVal = m_client->number;
+	tempVal--;
 	while (tempVal != 0) {
 		SDL_Texture* playertexture;
 		SDL_Rect playerRenderQuad;

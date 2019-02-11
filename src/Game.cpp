@@ -14,7 +14,6 @@ Game::Game()
 
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
 
-	
 
 	if (IMG_Init(imgFlags) != imgFlags)
 	{
@@ -55,7 +54,7 @@ Game::Game()
 	m_backgroundSprite->loadFromFile("assets/purplebg.png", m_renderer);
 	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
 	m_backgroundSprite->setScale(c2v{ 3.5f, 1.6f });
-	
+
 	m_map = new MapLoader();
 
 	m_map->load("testlevel.tmx", m_renderer);
@@ -63,7 +62,8 @@ Game::Game()
 	pistol = new Gun(m_renderer,1,200,100);
 	shotgun = new Gun(m_renderer,2, 1000,100);
 
-	
+	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
+	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
 
 	initialise();
 
@@ -187,6 +187,28 @@ void Game::render() {
 	}
 	SDL_RenderPresent(m_renderer);
 
+}
+
+SDL_Rect* Game::getCamera()
+{
+	return m_camera;
+}
+
+c2v* Game::getCameraCentre()
+{
+	return m_cameraCentre;
+}
+
+void Game::setCameraPosition(int x, int y)
+{
+	m_camera->x = x;
+	m_camera->y = y;
+}
+
+void Game::setCameraCentre(float x, float y)
+{
+	m_cameraCentre->x = x;
+	m_cameraCentre->y = y;
 }
 
 void Game::setUpController() {

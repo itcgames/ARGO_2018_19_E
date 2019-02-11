@@ -12,6 +12,7 @@ void main()
 	// Initialze winsock
 	WSADATA wsData;
 	WORD ver = MAKEWORD(2, 2);
+	int playerNum = 0;
 
 	int wsOk = WSAStartup(ver, &wsData);
 	if (wsOk != 0)
@@ -85,9 +86,9 @@ void main()
 				// Add the new connection to the list of connected clients
 				FD_SET(client, &master);
 				// Send a welcome message to the connected client
-				int playerNumber = master.fd_count - 1;
-				string welcomeMsg = "number," + to_string(playerNumber) + ",";
-				std::cout << playerNumber << std::endl;
+				playerNum++;
+				string welcomeMsg = "number," + to_string(playerNum) + ",";
+				std::cout << playerNum << std::endl;
 				send(client, welcomeMsg.c_str(), welcomeMsg.size() + 1, 0);
 
 				for (int i = 0; i < master.fd_count; i++)
@@ -95,7 +96,7 @@ void main()
 					SOCKET outSock = master.fd_array[i];
 					if (outSock != client)
 					{
-						string joinMsg = "Join," + to_string(playerNumber) + ",";
+						string joinMsg = "Join," + to_string(playerNum) + ",";
 
 						send(outSock, joinMsg.c_str(), joinMsg.size() + 1, 0);
 					}
@@ -130,25 +131,41 @@ void main()
 						// Unknown command
 						continue;
 					}
-					if (buf[0] == 'L')
+					else if (buf[0] == 'L')
 					{
-						master.fd_count--;
-					}
-
-					// Send message to other clients, and definiately NOT the listening socket
-
-					for (int i = 0; i < master.fd_count; i++)
-					{
-						SOCKET outSock = master.fd_array[i];
-						if (outSock != listening && outSock != sock)
+						int val = (int)buf[6];
+						master.fd_array[val] = NULL;
+						playerNum--;
+						for (int i = 0; i < master.fd_count; i++)
 						{
-							ostringstream ss;
-							ss << buf;
-							string strOut = ss.str();
+							SOCKET outSock = master.fd_array[i];
+							if (outSock != listening && outSock != sock)
+							{
+								ostringstream ss;
+								ss << buf;
+								string strOut = ss.str();
 
-							send(outSock, strOut.c_str(), strOut.size() + 1, 0);
+								send(outSock, strOut.c_str(), strOut.size() + 1, 0);
+							}
 						}
 					}
+					else {
+						// Send message to other clients, and definiately NOT the listening socket
+
+						for (int i = 0; i < master.fd_count; i++)
+						{
+							SOCKET outSock = master.fd_array[i];
+							if (outSock != listening && outSock != sock)
+							{
+								ostringstream ss;
+								ss << buf;
+								string strOut = ss.str();
+
+								send(outSock, strOut.c_str(), strOut.size() + 1, 0);
+							}
+						}
+					}
+					
 				}
 			}
 		}
