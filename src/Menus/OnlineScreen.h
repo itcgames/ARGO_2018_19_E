@@ -1,5 +1,5 @@
 #pragma once
-#include "c:\Users\peter\Desktop\ARGO_2018_19_E\src\Menus\State.h"
+#include "State.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include "State.h"
