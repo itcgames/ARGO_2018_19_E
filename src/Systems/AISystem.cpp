@@ -62,7 +62,7 @@ c2v AISystem::checkPoints(std::vector<c2v*> points, PositionComponent* pc)
 
 	for (auto it = points.begin(); it != points.end(); it++)
 	{
-		std::cout << (*it)->x << std::endl;
+		//std::cout << (*it)->x << std::endl;
 		auto pos = c2v{ (*it)->x, (*it)->y };
 		double dist = distance(myPos, pos);
 
@@ -88,32 +88,89 @@ void AISystem::update(std::vector<c2v*> points) {
 		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 		FState *state = (FState*)entity->getCompByType("STATE");
+		//CollisionComponent *coll = (CollisionComponent*)entity->getCompByType("COLLISION");
 
 		if (ac->m_alive) {
 			curPosition.x = pc->getX();
 			curPosition.y = pc->getY();
 
+
+			if (pc->getVelY() > 0.9 && pc->getVelY() < 1.0)
+			{
+				m_landed = true;
+				
+			}
 			//closestEnemy = checkClosest(m_distances);
-
-			closestPoint = checkPoints(points, pc);
-
+			if (m_landed) {
+				closestPoint = checkPoints(points, pc);
+			}
 			if (curPosition.x > closestEnemy.x)
 			{
-				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+				//sc->m_flipValue = SDL_FLIP_HORIZONTAL;
 			}
 			if (curPosition.x < closestEnemy.x)
 			{
-				sc->m_flipValue = SDL_FLIP_NONE;
+				//sc->m_flipValue = SDL_FLIP_NONE;
 
 			}
+			if (closestPoint.x > pc->getX())
+			{
+				facingRight = true;
+				facingleft = false;
+			}
+			else
+			{
+				facingleft = true;
+				facingRight = false;
+			}
 
-			//if (curPosition.x > closestEnemy.x + 400)
-			//{
-			//	pc->setVelX(pc->getVelX() - 1.5);
-			//}
-			//if (curPosition.x < closestEnemy.x - 400)
-			//{
-			//	pc->setVelX(pc->getVelX() + 1.5);
+			
+			if (facingleft && m_landed) {
+				/*if (curPosition.x > closestPoint.x)
+				{*/
+				pc->setVelX(pc->getVelX() - 1.5);
+
+				/*}*/
+				if (curPosition.x < closestPoint.x  + 100/* && curPosition.x > closestPoint.x - 25*/ && m_landed)
+				{
+					pc->setVelX(pc->getVelX() - 4.0);
+					ac->setJump(true);
+					m_landed = false;
+
+				}
+
+			/*	if (pc->m_hitSide)
+				{
+					ac->setJump(true);
+					pc->setVelX(pc->getVelX() - 8.0);
+					pc->m_hitSide = false;
+				}*/
+			}
+
+			if (facingRight && m_landed) {
+				pc->setVelX(pc->getVelX() + 1.5);
+
+				if (curPosition.x > closestPoint.x - 100/* && curPosition.x > closestPoint.x - 25*/ && m_landed)
+				{
+					pc->setVelX(pc->getVelX() + 4.0);
+					ac->setJump(true);
+					m_landed = false;
+
+				}
+
+				/*if (pc->m_hitSide)
+				{
+					ac->setJump(true);
+					pc->setVelX(pc->getVelX() + 4.0);
+					pc->m_hitSide = false;
+				}*/
+			}
+			
+			
+			if (curPosition.x < closestPoint.x)
+			{
+				pc->setVelX(pc->getVelX() + 1.5);
+			}
 
 			//}
 
@@ -124,9 +181,8 @@ void AISystem::update(std::vector<c2v*> points) {
 			//	ac->setJump(true);
 			//}
 
-			
-			//std::cout << ac->getJump() << std::endl;
-			//std::cout << closestPoint.x << ", " << closestPoint.y << std::endl;
+			std::cout << "Point = " << closestPoint.x << ", " << closestPoint.y << std::endl;
+			std::cout << "Position = " << curPosition.x << std::endl;
 		}
 		
 		

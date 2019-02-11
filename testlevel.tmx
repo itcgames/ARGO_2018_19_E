@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="25" height="20" tilewidth="70" tileheight="70" infinite="0" nextlayerid="5" nextobjectid="17">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="25" height="20" tilewidth="70" tileheight="70" infinite="0" nextlayerid="5" nextobjectid="18">
  <tileset firstgid="1" name="purpleSheet" tilewidth="70" tileheight="70" tilecount="49" columns="7">
   <image source="purpleSheet.png" width="512" height="512"/>
  </tileset>
@@ -8,16 +8,16 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-47,47,47,47,47,39,0,0,0,0,0,0,0,0,0,0,0,0,0,46,47,47,47,47,47,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+47,47,47,47,47,39,0,0,0,0,0,0,0,0,0,0,0,0,0,46,47,47,47,47,47,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,46,47,47,47,47,47,47,47,39,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,46,47,39,0,0,0,0,0,0,0,0,0,0,0,46,47,39,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 46,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,39,
@@ -27,41 +27,35 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup color="#ff0000" id="4" name="Points" locked="1">
-  <object id="5" x="313" y="747">
+ <objectgroup color="#ff0000" id="4" name="Points">
+  <object id="6" x="442" y="819">
    <point/>
   </object>
-  <object id="6" x="453" y="746">
+  <object id="7" x="206" y="1030">
    <point/>
   </object>
-  <object id="7" x="176" y="1026">
+  <object id="8" x="489" y="1030">
    <point/>
   </object>
-  <object id="8" x="588" y="1027">
+  <object id="9" x="1189" y="1030">
    <point/>
   </object>
-  <object id="9" x="1153" y="1025">
+  <object id="10" x="1536" y="1029">
    <point/>
   </object>
-  <object id="10" x="1578" y="1031">
+  <object id="11" x="1294" y="815">
    <point/>
   </object>
-  <object id="11" x="1297" y="745">
+  <object id="13" x="1086" y="604">
    <point/>
   </object>
-  <object id="12" x="1430" y="743">
+  <object id="14" x="662" y="606">
    <point/>
   </object>
-  <object id="13" x="1148" y="463">
+  <object id="15" x="314" y="389">
    <point/>
   </object>
-  <object id="14" x="588" y="463">
-   <point/>
-  </object>
-  <object id="15" x="385" y="186">
-   <point/>
-  </object>
-  <object id="16" x="1362" y="189">
+  <object id="16" x="1433" y="396">
    <point/>
   </object>
  </objectgroup>

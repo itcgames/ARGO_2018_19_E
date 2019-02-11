@@ -30,7 +30,10 @@ private:
 	std::pair<double, c2v> m_realDist;
 
 	c2v curPosition;
-
+	bool m_landed;
 	Animation *fsm;
+
+	bool facingleft = false;
+	bool facingRight = false;
 };
 #endif // !AISYSTEM_H
