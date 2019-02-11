@@ -18,7 +18,11 @@ public:
 	void update();
 	void render(SDL_Renderer* renderer);
 
-	SDL_Texture* init(TTF_Font* Font, std::string & text, SDL_Texture* texture, SDL_Rect & quad, int x, int y);
+	void fillLobby();
+	void addMember();
+	void removeMember();
+
+	SDL_Texture* init(TTF_Font* Font, std::string & text, SDL_Texture* texture, SDL_Rect & quad, int x, int y, SDL_Color color);
 
 	Client * m_client;
 private: 
@@ -37,8 +41,12 @@ private:
 	std::vector<std::string> m_strings;
 	std::vector<SDL_Texture*> m_textures;
 	std::vector<SDL_Rect> m_quads;
+	std::vector<int> m_index;
 
 	TTF_Font * m_font;
+
+	SDL_Rect m_BGRect;
+
 
 	bool m_joined = false;
 };

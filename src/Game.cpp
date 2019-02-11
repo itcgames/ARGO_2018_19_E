@@ -14,7 +14,7 @@ Game::Game()
 
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
 
-	m_client = new Client("192.168.192.32", 54000);
+	
 
 	if (IMG_Init(imgFlags) != imgFlags)
 	{

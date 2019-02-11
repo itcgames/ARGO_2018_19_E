@@ -89,6 +89,17 @@ void main()
 				string welcomeMsg = "number," + to_string(playerNumber) + ",";
 				std::cout << playerNumber << std::endl;
 				send(client, welcomeMsg.c_str(), welcomeMsg.size() + 1, 0);
+
+				for (int i = 0; i < master.fd_count; i++)
+				{
+					SOCKET outSock = master.fd_array[i];
+					if (outSock != client)
+					{
+						string joinMsg = "Join," + to_string(playerNumber) + ",";
+
+						send(outSock, joinMsg.c_str(), joinMsg.size() + 1, 0);
+					}
+				}
 			}
 			else // It's an inbound message
 			{

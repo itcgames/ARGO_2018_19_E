@@ -52,7 +52,14 @@ void Client::receive() {
 		if (token == "Join") {
 			while ((pos = newPos.find(delimiter)) != std::string::npos) {
 				token = newPos.substr(0, pos);
-				//enemyJoin = true;
+				m_joiners.push_back(atoi(token.c_str()));
+				newPos.erase(0, pos + delimiter.length());
+			}
+		}
+		if (token == "Leave") {
+			while ((pos = newPos.find(delimiter)) != std::string::npos) {
+				token = newPos.substr(0, pos);
+				m_leavers.push_back(atoi(token.c_str()));
 				newPos.erase(0, pos + delimiter.length());
 			}
 		}
