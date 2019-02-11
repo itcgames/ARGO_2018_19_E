@@ -26,13 +26,29 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 		angle += angleDifference * ease;
 
 		double radAng = angle * 3.14159265359 / 180;
-		xOffset = 90 * (cos(radAng));
-		yOffset = 90 * (sin(radAng));
+		double radius = 90;
+		if (tc->getSubTag() == "pistol")
+		{
+			radius = 90;
+		}
+		else if (tc->getSubTag() == "shotgun")
+		{
+			radius = 10;
+		}
+		xOffset = radius * (cos(radAng));
+		yOffset = radius * (sin(radAng));
 
 		if (fired == false)
 		{
 			pc->setX(playerPositionX - xOffset);  // set gun position + offset for player centre - offset for angle
-			pc->setY(playerPositionY + yOffset);
+			if (tc->getSubTag() == "pistol")
+			{
+				pc->setY(playerPositionY + yOffset);
+			}
+			else if (tc->getSubTag() == "shotgun")
+			{
+				pc->setY(playerPositionY - 60 + yOffset);
+			}
 		}
 		else
 		{
@@ -45,7 +61,14 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 			{
 				pc->setX(playerPositionX - xOffset + (firedCount));
 			}
-			pc->setY(playerPositionY + yOffset);
+			if (tc->getSubTag() == "pistol")
+			{
+				pc->setY(playerPositionY + yOffset);
+			}
+			else if (tc->getSubTag() == "shotgun")
+			{
+				pc->setY(playerPositionY -60 + yOffset);
+			}
 		}
 
 		// Get positions for hands to get on gun.
@@ -138,7 +161,7 @@ void PhysicsSystem::launchGun(PositionComponent * pc,TagComponent * tc) {
 	throwGun = false;
 }
 
-void PhysicsSystem::setHandOnGun(SpriteComponent * sc,PositionComponent *pc,ControlComponent * cc)
+void PhysicsSystem::setHandOnPistol(SpriteComponent * sc,PositionComponent *pc,ControlComponent * cc)
 {
 	double handAngle = angle - 90;
 
@@ -149,6 +172,19 @@ void PhysicsSystem::setHandOnGun(SpriteComponent * sc,PositionComponent *pc,Cont
 		handAngle = handAngle * -1;
 	}
 	pc->setY(gunPositionY + (handAngle / 5));
+}
+void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc)
+{
+	double handAngle = angle - 90;
+
+	sc->setRotation((cc->getAngle())*-1); //rotate hand
+	pc->setX(gunPositionX);
+	if (handAngle < 0)
+	{
+		handAngle = handAngle * -1;
+	}
+	//pc->setY(gunPositionY + (handAngle));
+	pc->setY(gunPositionY + 60);
 }
 void PhysicsSystem::setHandNormal(SpriteComponent * sc, PositionComponent *pc)
 {
@@ -245,6 +281,10 @@ void PhysicsSystem::update() {
 				pc->setVelY(pc->getVelY() + Friction.y);  // Friction so gun falls when not grabbed
 				setPosition(pc);
 			}
+			if (tc->getGrabbed() == true)
+			{
+				gunGot = tc->getSubTag();
+			}
 
 		}
 		
@@ -259,7 +299,14 @@ void PhysicsSystem::update() {
 			}
 			if (gotGun == true)
 			{
-				setHandOnGun(sc, pc, cc); // Set hand on gun
+				if (gunGot == "pistol")
+				{
+					setHandOnPistol(sc, pc, cc); // Set hand on gun
+				}
+				else if (gunGot == "shotgun")
+				{
+					setHandOnShotgun(sc, pc, cc); // Set hand on gun
+				}
 			}
 			else {
 				setHandNormal(sc, pc); // Set hand to body
@@ -331,7 +378,22 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 						{
 							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 						}
-						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
+						if (tc->getSubTag() == "shotgun")
+						{
+							c2v vector = { -xOffset,yOffset};							
+							float mag = c2Len(vector);
+							float unitX = -xOffset / mag;
+							float unitY = yOffset / mag;
+							std::cout << "X = " << unitX << "Y = " << unitY << std::endl;
+							for (int i = 0; i < 7; i++)
+							{
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), unitX, unitY));
+							}
+						}
+						else if (tc->getSubTag() == "pistol")
+						{
+							pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
+						}
 						bullets = pc->bullets;
 					}
 				}

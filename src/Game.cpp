@@ -21,7 +21,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Online);
+	*m_currentGameState = (GameState::Game);
 
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -60,7 +60,8 @@ Game::Game()
 
 	m_map->load("testlevel.tmx", m_renderer);
 
-	pistol = new Gun(m_renderer);
+	pistol = new Gun(m_renderer,1,200,100);
+	shotgun = new Gun(m_renderer,2, 1000,100);
 
 	
 
@@ -172,10 +173,10 @@ void Game::render() {
 		break;
 	case GameState::Game:
 		m_backgroundSprite->render(m_renderer);
+		p->render(m_renderer);
 		m_rs.render(m_renderer);
 		m_map->draw(m_renderer);
 		m_ps.bulletRender(m_renderer);
-		p->render(m_renderer);
 		//m_emitter->update();
 		break;
 	case GameState::Credits:
@@ -210,10 +211,12 @@ void Game::initialise()
 	m_cs.addEntity((Entity*)p);
 
 	m_cs.addEntity((Entity*)pistol);
+	m_cs.addEntity((Entity*)shotgun);
 	m_cs.addEntity((Entity*)h);
 
 	m_rs.addEntity((Entity*)p);
 	m_rs.addEntity((Entity*)pistol);
+	m_rs.addEntity((Entity*)shotgun);
 	m_rs.addEntity((Entity*)h);
 	
 	m_rs.addEntity((Entity*)ai);
@@ -224,13 +227,18 @@ void Game::initialise()
 	m_ais.addEntity((Entity*)ai);
 
 	m_ps.addEntity((Entity*)pistol);
+	m_ps.addEntity((Entity*)shotgun);
 	m_ps.addEntity((Entity*)h);
 
 	m_ps.addEntity((Entity*)pistol);
 	m_guns.addEntity((Entity*)pistol);
 
+	m_ps.addEntity((Entity*)shotgun);
+	m_guns.addEntity((Entity*)shotgun);
+
 	m_collSys.addEntity((Entity*)p);
 	m_collSys.addEntity((Entity*)ai);
 	m_collSys.addEntity((Entity*)pistol);
+	m_collSys.addEntity((Entity*)shotgun);
 }
 

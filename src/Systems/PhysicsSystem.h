@@ -60,12 +60,15 @@ public:
 	void playerFlip(PositionComponent *pc, SpriteComponent *sc, ControlComponent *cc);
 	void launchGun(PositionComponent *pc, TagComponent *tc);
 	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
+	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
+	void setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
 	void setHandNormal(SpriteComponent * sc, PositionComponent *pc);
 	void movePlayer(ControlComponent * cc, PositionComponent *pc);
 	void setPosition(PositionComponent * pc);
 	void flipNone(SpriteComponent * sc);
 	void flipHorizontal(SpriteComponent * sc);
 
+	std::string gunGot;
 
 	ParticleExample * p;
 
