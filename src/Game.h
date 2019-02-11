@@ -13,6 +13,7 @@
 #include "Menus/CreditScreen.h"
 #include "Menus/MenuScreen.h"
 #include "Menus/OptionScreen.h"
+#include "Menus/OnlineScreen.h"
 #include "Components/SpriteComponent.h"
 
 #include "Player.h"
@@ -37,8 +38,6 @@ public:
 	GameState * m_currentGameState;
 	GameState m_previousGameState;
 	void setGameState(GameState gameState);
-	
-	
 
 	SDL_Renderer * getScreen() const { return m_renderer; }
 
@@ -53,6 +52,13 @@ public:
 	}
 
 	static Game* s_pInstance;
+
+	void setUpController();
+
+	SDL_Rect* getCamera();
+	c2v* getCameraCentre();
+	void setCameraCentre(float x, float y);
+	void setCameraPosition(int x, int y);
 
 private:
 
@@ -71,6 +77,7 @@ private:
 	Hand* h;
 	AI *ai;
 	Gun* pistol;
+	Gun* shotgun;
 	std::vector<Entity*> m_ents;
 
 	SpriteComponent* m_backgroundSprite;
@@ -87,18 +94,23 @@ private:
 
 	SDL_Rect m_screenSize;
 
+	SDL_Rect* m_camera;
+	c2v* m_cameraCentre;
+
 
 	SplashScreen * m_splash;
 	MenuScreen * m_menu;
 	OptionScreen * m_options;
 	CreditScreen * m_credits;
-
+	OnlineScreen * m_onlineScreen;
 	
 
 
 	
 	SDL_Surface* m_screen;
+	SDL_GameController* gGameController = NULL;
 
+	Client * m_client;
 };
 
 

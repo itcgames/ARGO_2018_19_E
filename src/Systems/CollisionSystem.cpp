@@ -135,9 +135,9 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 	}
 }
 
-void CollisionSystem::checkBullets(PositionComponent * pc, std::vector<std::vector<Tile*>> tiles) {
-	 
-	std::vector<Bullet *> * bullets = &pc->bullets;
+void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vector<Tile*>> tiles) {
+
+	std::vector<Bullet *> * bullets = &poc->bullets;
 	for (Entity * entity : m_entities) {
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
 
@@ -147,6 +147,10 @@ void CollisionSystem::checkBullets(PositionComponent * pc, std::vector<std::vect
 			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 			for (int i = 0; i < bullets->size(); i++) {
 				std::string val = rectCollision(cc->getCollider(), bullets->at(i)->collider);
+				c2v bPos = bullets->at(i)->m_spriteComponent->getPosition();
+				if (bPos.x > 2000 || bPos.x < -200 || bPos.y < -200 || bPos.y > 1400) {
+					bullets->erase(bullets->begin() + i);
+				}
 				if (val != "none") {
 					bullets->erase(bullets->begin() + i);
 					if (val == "right") {
@@ -168,10 +172,31 @@ void CollisionSystem::checkBullets(PositionComponent * pc, std::vector<std::vect
 						ai->m_alive = false;
 					}
 				}
-				
+
 
 			}
 		}
 
 	}
+
+	
+	for (int j = 0; j < tiles.size(); j++) {
+		for (int k = 0; k < tiles[j].size(); k++) {
+			std::string val;
+			if (tiles[j].at(k)->dRect.x > 0) {
+				for (int i = 0; i < bullets->size(); i++) {
+					val = rectCollision(bullets->at(i)->collider, tiles[j].at(k)->collider);
+					if (val != "none") {
+						bullets->erase(bullets->begin() + i);
+						std::cout << "Delete" << std::endl;
+					}
+				}
+
+			}
+
+
+
+		}
+	}
+	
 }

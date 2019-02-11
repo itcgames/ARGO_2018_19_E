@@ -5,20 +5,35 @@ Gun::Gun()
 }
 
 
-Gun::Gun(SDL_Renderer* renderer)
+Gun::Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos)
 {
+	m_tagComponent = new TagComponent("Gun");
 	//Set up Sprite component and add to entity component vector
-	m_spriteComponent = new SpriteComponent(0, 0, 210, 295);
-	m_spriteComponent->loadFromFile("assets/pistol.png", renderer);
-	m_spriteComponent->setPosition(c2v{ 200, 100 });
-	m_spriteComponent->setScale(c2v{ 0.2f, 0.2f });
-	this->addComponent(m_spriteComponent);
-
+	if (gunValue == 1)
+	{
+		m_spriteComponent = new SpriteComponent(0, 0, 210, 295);
+		m_spriteComponent->setPosition(c2v{ xPos, yPos });
+		m_spriteComponent->setScale(c2v{ 0.2f, 0.2f });
+		this->addComponent(m_spriteComponent);
+		m_spriteComponent->loadFromFile("assets/pistol.png", renderer);
+		m_tagComponent->setSubTag("pistol");
+		this->addComponent(new CollisionComponent(xPos, yPos, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
+		
+	}
+	else if(gunValue == 2)
+	{
+		m_spriteComponent = new SpriteComponent(0, 0, 210, 1036);
+		m_spriteComponent->setPosition(c2v{ xPos, yPos });
+		m_spriteComponent->setScale(c2v{ 0.2f, 0.2f });
+		this->addComponent(m_spriteComponent);
+		m_spriteComponent->loadFromFile("assets/shotgun.png", renderer);
+		m_tagComponent->setSubTag("shotgun");
+		this->addComponent(new CollisionComponent(xPos, yPos, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
+	}
 	//this->addComponent(new HealthComponent(10));
-	this->addComponent(new PositionComponent(200, 100));
+	this->addComponent(new PositionComponent(xPos, yPos));
 	this->addComponent(new ControlComponent());
-	this->addComponent(new TagComponent("Gun"));
+	this->addComponent(m_tagComponent);
 	this->addComponent(new FactoryComponent());
-	this->addComponent(new CollisionComponent(200, 100, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 
 }
