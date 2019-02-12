@@ -54,7 +54,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 			for (int i = 0; i < tiles.size(); i++) {
 				for (int j = 0; j < tiles[i].size(); j++) {
 					std::string val;
-					if (tiles[i].at(j)->dRect.x > 0) {
+					if (tiles[i].at(j)->dRect.x >= 0) {
 						val = rectCollision(cc->getCollider(), tiles[i].at(j)->collider);
 						if (val != "none" ) {
 							if (val == "top") {
@@ -102,7 +102,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 			for (int i = 0; i < tiles.size(); i++) {
 				for (int j = 0; j < tiles[i].size(); j++) {
 					std::string val;
-					if (tiles[i].at(j)->dRect.x > 0) {
+					if (tiles[i].at(j)->dRect.x >= 0) {
 						val = rectCollision(cc->getCollider(), tiles[i].at(j)->collider);
 						if (val != "none") {
 							if (val == "top") {
@@ -116,7 +116,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 								
 							}
 							else if (val == "right" || val == "left") {
-								pc->setVelX(-(pc->getVelX() * 2));
+								pc->setVelX(-(pc->getVelX() * 3));
 							}
 
 
@@ -184,7 +184,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 	for (int j = 0; j < tiles.size(); j++) {
 		for (int k = 0; k < tiles[j].size(); k++) {
 			std::string val;
-			if (tiles[j].at(k)->dRect.x > 0) {
+			if (tiles[j].at(k)->dRect.x >= 0) {
 				for (int i = 0; i < bullets->size(); i++) {
 					val = rectCollision(bullets->at(i)->collider, tiles[j].at(k)->collider);
 					if (val != "none") {

@@ -107,7 +107,7 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 				float w = m_tileVector[i].at(j)->dRect.w;
 				float h = m_tileVector[i].at(j)->dRect.h;
 
-				m_tileVector[i].at(j)->collider = c2AABB{ c2v{x,y}, c2v{x + w,y + h} };
+				m_tileVector[i].at(j)->collider = c2AABB{ c2v{x, y}, c2v{x + w, y + h} };
 			}
 		}
 	}

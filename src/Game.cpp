@@ -46,22 +46,23 @@ Game::Game()
 	m_credits = new CreditScreen();
 	m_screenSize = { 0,0,1200,700 };
 
-	testLight = new Light(c2v{ 0, 300 }, 255, 165, 0, m_renderer);
-	testLight->setPosition(c2v{ 400, 0 });
+	/* Light usage example */
+	testLight = new Light(c2v{ 0.0f, 300.0f }, 5, 22, 130, m_renderer);
+	testLight->setPosition(c2v{ 400.0f, 0.0f });
 	testLight->setSize(c2v{ 3.0f, 3.0f });
 
 	p = new Player(m_renderer);
 	h = new Hand(m_renderer);
 	ai = new AI(m_renderer);
 
-	m_backgroundSprite = new SpriteComponent(0, 0, 498, 750);
-	m_backgroundSprite->loadFromFile("assets/liam.png", m_renderer);
+	m_backgroundSprite = new SpriteComponent(0, 0, 1920, 1080);
+	m_backgroundSprite->loadFromFile("assets/cybercity.png", m_renderer);
 	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
-	m_backgroundSprite->setScale(c2v{ 2.0f, 2.0f });
+	m_backgroundSprite->setScale(c2v{ 1.5f, 1.6f });
 
 	m_map = new MapLoader();
 
-	m_map->load("testlevel.tmx", m_renderer);
+	m_map->load("level2.tmx", m_renderer);
 
 	pistol = new Gun(m_renderer,1,200,100);
 	shotgun = new Gun(m_renderer,2, 1000,100);
@@ -135,7 +136,7 @@ void Game::update() {
 
 		m_ps.update();
 		m_guns.update();
-		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
+		SDL_RenderSetScale(m_renderer, 0.4, 0.4);
 		m_ps.bulletUpdate(m_renderer);
 		if (!*(m_online)) {
 			m_hs.update();
