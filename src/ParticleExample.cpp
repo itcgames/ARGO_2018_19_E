@@ -487,7 +487,7 @@ void ParticleExample::setStyle(PatticleStyle style)
         _startColor.b = 0.164f;
         _startColor.a = 0.4f;
 		_startColorVar.r = 0.02f;
-		_startColorVar.g = 0.1f;
+		_startColorVar.g = 0.8f;
 		_startColorVar.b = 0.02f;
         _startColorVar.a = 0.3f;
 		_endColor.r = 0.0f;
