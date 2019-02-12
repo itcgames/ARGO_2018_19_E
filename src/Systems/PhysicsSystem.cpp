@@ -583,12 +583,12 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
-			flash->setPosition(gunPositionX - shotgunTipX + 20 , gunPositionY + shotgunTipY + 70);
+			flash->setPosition(gunPositionX - shotgunTipX - 80 , gunPositionY + shotgunTipY + 70);
 			//p->setAngle(-angle);
 		}
 		else
 		{
-			flash->setPosition(gunPositionX - shotgunTipX + 40, gunPositionY + shotgunTipY + 70);
+			flash->setPosition(gunPositionX + shotgunTipX + 100, gunPositionY + shotgunTipY + 70);
 			//p->setAngle(angle);
 		}
 		flash->update();
