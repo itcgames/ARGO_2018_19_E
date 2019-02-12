@@ -357,12 +357,23 @@ void PhysicsSystem::update() {
 			aiPositionX = pc->getX();
 			aiPositionY = pc->getY();
 			
+			
 			if (ac->getJump() && pc->m_allowedJump) {
 				pc->setVelY(pc->getVelY() - 25);
 				ac->setJump(false);
 				pc->m_allowedJump = false;
 			}
 			
+			if (ac->getLeft()) {
+				if (pc->getVelX() > -8.0) {
+					pc->setVelX(pc->getVelX() - 1.5);
+				}
+			}
+			if (ac->getRight()) {
+				if (pc->getVelX() < 8.0) {
+					pc->setVelX(pc->getVelX() + 1.5);
+				}
+			}
 			
 			pc->setVelY(pc->getVelY() + Friction.y);
 

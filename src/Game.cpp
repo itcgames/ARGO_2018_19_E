@@ -20,7 +20,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Menu);
+	*m_currentGameState = (GameState::Game);
 
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -133,9 +133,9 @@ void Game::update() {
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
-		if (!m_online) {
+		if (!(*m_online)) {
 			m_hs.update();
-			m_ais.update(m_map->getPoints());
+			m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
 			m_ais.receive(m_ents);
 		}
 		else {
