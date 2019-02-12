@@ -26,10 +26,10 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 		angle += angleDifference * ease;
 
 		double radAng = angle * 3.14159265359 / 180;
-		double radius = 90;
+		double radius = 60;
 		if (tc->getSubTag() == "pistol")
 		{
-			radius = 90;
+			radius = 60;
 		}
 		else if (tc->getSubTag() == "shotgun")
 		{
@@ -418,7 +418,7 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							fired = true;
 							m_startAnimating = true;
 
-							if (SDL_HapticRumblePlay(haptic, .5, 100) != 0)
+							if (SDL_HapticRumblePlay(haptic, 1, 300) != 0)
 
 							{
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
@@ -433,10 +433,10 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							{
 								float random = rand() % 40 - 20;
 								float radAng = (angle+random) * 3.14159265359 / 180;
-								float radius = 90;
+								float radius = 60;
 								if (tc->getSubTag() == "pistol")
 								{
-									radius = 90;
+									radius = 60;
 								}
 								else if (tc->getSubTag() == "shotgun")
 								{
