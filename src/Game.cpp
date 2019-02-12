@@ -47,15 +47,17 @@ Game::Game()
 	m_screenSize = { 0,0,1200,700 };
 
 	testLight = new Light(c2v{ 0, 300 }, 255, 165, 0, m_renderer);
+	testLight->setPosition(c2v{ 400, 0 });
+	testLight->setSize(c2v{ 3.0f, 3.0f });
 
 	p = new Player(m_renderer);
 	h = new Hand(m_renderer);
 	ai = new AI(m_renderer);
 
 	m_backgroundSprite = new SpriteComponent(0, 0, 498, 750);
-	m_backgroundSprite->loadFromFile("assets/purplebg.png", m_renderer);
+	m_backgroundSprite->loadFromFile("assets/liam.png", m_renderer);
 	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
-	m_backgroundSprite->setScale(c2v{ 3.5f, 1.6f });
+	m_backgroundSprite->setScale(c2v{ 2.0f, 2.0f });
 
 	m_map = new MapLoader();
 

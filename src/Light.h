@@ -14,6 +14,8 @@ public:
 	
 	void update();
 	void render(SDL_Renderer* renderer);
+	void setSize(c2v scale);
+	void setPosition(c2v position);
 	SpriteComponent* getSprite();
 private:
 	SpriteComponent* m_sprite;
