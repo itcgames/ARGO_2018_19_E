@@ -143,6 +143,7 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Gun.cpp" />
     <ClCompile Include="src\Hand.cpp" />
+    <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MapLoader.cpp" />
     <ClCompile Include="src\Menus\CreditScreen.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GUI\GUI.h" />
     <ClInclude Include="src\Hand.h" />
+    <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\MapLoader.h" />
     <ClInclude Include="src\Menus\CreditScreen.h" />
     <ClInclude Include="src\Menus\MenuScreen.h" />

@@ -46,6 +46,8 @@ Game::Game()
 	m_credits = new CreditScreen();
 	m_screenSize = { 0,0,1200,700 };
 
+	testLight = new Light(c2v{ 0, 300 }, 255, 165, 0, m_renderer);
+
 	p = new Player(m_renderer);
 	h = new Hand(m_renderer);
 	ai = new AI(m_renderer);
@@ -185,6 +187,7 @@ void Game::render() {
 		m_rs.render(m_renderer);
 		m_map->draw(m_renderer);
 		m_ps.bulletRender(m_renderer);
+		testLight->render(m_renderer);
 		//m_emitter->update();
 		break;
 	case GameState::Credits:

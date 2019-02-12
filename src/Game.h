@@ -21,6 +21,7 @@
 #include "AI.h"
 #include "Gun.h"
 #include "MapLoader.h"
+#include "Light.h"
 
 
 using namespace std;
@@ -79,6 +80,7 @@ private:
 	Gun* pistol;
 	Gun* shotgun;
 	std::vector<Entity*> m_ents;
+	Light* testLight;
 
 	SpriteComponent* m_backgroundSprite;
 
