@@ -78,6 +78,8 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 				auto tileIndex = i + (j * m_cols);
 				auto currentGID = layer_tiles[tileIndex].ID;
 
+				m_tileVector[i].at(j)->dead = false;
+
 				//Ignore empty tiles
 				if (currentGID == 0)
 				{
@@ -107,6 +109,8 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 				float w = m_tileVector[i].at(j)->dRect.w;
 				float h = m_tileVector[i].at(j)->dRect.h;
 
+				
+
 				m_tileVector[i].at(j)->collider = c2AABB{ c2v{x,y}, c2v{x + w,y + h} };
 			}
 		}
@@ -116,10 +120,13 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 
 void MapLoader::draw(SDL_Renderer* renderer)
 {
-	for (int i = 0; i < m_cols; i++)
+	for (int i = 0; i < m_tileVector.size(); i++)
 	{
-		for (int j = 0; j < m_rows; j++)
+		for (int j = 0; j < m_tileVector[i].size(); j++)
 		{
+			if (m_tileVector[i].at(j)->dead) {
+				m_tileVector[i].erase(m_tileVector[i].begin() + j);
+			}
 			SDL_RenderCopy(renderer, m_sprite->getTexture(), &m_tileVector[i].at(j)->sRect, &m_tileVector[i].at(j)->dRect);
 		}
 	}
