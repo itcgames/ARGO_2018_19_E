@@ -111,6 +111,8 @@ private:
 	SDL_GameController* gGameController = NULL;
 
 	Client * m_client;
+
+	bool *m_online = new bool(false);
 };
 
 
