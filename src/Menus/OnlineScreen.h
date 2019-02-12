@@ -12,7 +12,7 @@
 class OnlineScreen : State
 {
 public:
-	OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Font, SDL_GameController* controller, Client * client);
+	OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Font, SDL_GameController* controller, Client * client, bool * online);
 	~OnlineScreen();
 
 	void update();
@@ -32,9 +32,12 @@ private:
 
 	SDL_Texture* exittexture;
 	SDL_Texture* titletexture;
+	SDL_Texture* playtexture;
 
 	SDL_Rect exitRenderQuad;
 	SDL_Rect titleRenderQuad;
+	SDL_Rect playRenderQuad;
+
 
 	SDL_GameController* gGameController = NULL;
 
@@ -49,5 +52,7 @@ private:
 
 
 	bool m_joined = false;
+	bool *m_online = new bool(false);
+	bool m_ready2Play;
 };
 

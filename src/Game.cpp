@@ -20,7 +20,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Game);
+	*m_currentGameState = (GameState::Menu);
 
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -41,7 +41,7 @@ Game::Game()
 	setUpController();
 	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
 	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont, gGameController);
-	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client);
+	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client, m_online);
 	m_options = new OptionScreen();
 	m_credits = new CreditScreen();
 	m_screenSize = { 0,0,1200,700 };
@@ -126,16 +126,24 @@ void Game::update() {
 	case GameState::Options:
 		break;
 	case GameState::Game:
-		m_hs.update();		
-		m_ais.update(m_map->getPoints());		
-		m_ais.receive(m_ents);
-		
-		m_collSys.update(m_map->getTiles());
 		m_cs.update(event);
+		m_collSys.update(m_map->getTiles());
+
 		m_ps.update();
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
+		if (!m_online) {
+			m_hs.update();
+			m_ais.update(m_map->getPoints());
+			m_ais.receive(m_ents);
+		}
+		else {
+			
+		}
+		
+		
+		
 		break;
 	case GameState::Credits:
 		break;
