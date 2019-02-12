@@ -679,8 +679,8 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							float shotgunRadAng = angle * 3.14159265359 / 180;
 							//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 							//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
-							float shotgunTipX = 103.6 * (cos(shotgunRadAng));
-							float shotgunTipY = 103.6 * (sin(shotgunRadAng));
+							shotgunTipX = 103.6 * (cos(shotgunRadAng));
+							shotgunTipY = 103.6 * (sin(shotgunRadAng));
 							for (int i = 0; i < 7; i++)
 							{
 								float random = rand() % 40 - 20;
@@ -827,6 +827,7 @@ void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
 void PhysicsSystem::setRenderer(SDL_Renderer * renderer)
 {
 	m_renderer = renderer;
+	
 	p = new ParticleExample();
 	p->setRenderer(m_renderer);
 	p->setStyle(ParticleExample::SMOKE);
@@ -864,7 +865,7 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 		p->update();
 		p->draw();
 	}
-	else if (gunGot == "shotgun")
+	if (gunGot == "shotgun")
 	{
 		flash->setStartSpin(0);
 		flash->setStartSpinVar(0);
@@ -877,12 +878,13 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
-			flash->setPosition(gunPositionX - shotgunTipX - 80 , gunPositionY + shotgunTipY + 70);
+			flash->setPosition(gunPositionX - shotgunTipX + 20, gunPositionY + shotgunTipY + 70);
+			
 			//p->setAngle(-angle);
 		}
 		else
 		{
-			flash->setPosition(gunPositionX + shotgunTipX + 100, gunPositionY + shotgunTipY + 70);
+			flash->setPosition(gunPositionX - shotgunTipX, gunPositionY + shotgunTipY + 70);
 			//p->setAngle(angle);
 		}
 		flash->update();

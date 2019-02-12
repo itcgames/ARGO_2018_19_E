@@ -76,6 +76,7 @@ Game::Game()
 	m_ents.push_back((Entity*)pistol);
 
 	m_ps.setRenderer(m_renderer);
+	m_grenadeSys.setRenderer(m_renderer);
 }
 
 Game::~Game()
