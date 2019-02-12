@@ -70,10 +70,10 @@ void GrenadeSystem::animateExplosion()
 	m_count++;
 	explode->setStartSpin(90);
 	explode->setEndSpin(90);
-	explode->setDuration(.1);
+	explode->setDuration(.2);
 	explode->setStartSize(30);
 	explode->setStartSpinVar(180);// set the renderer
-	explode->setSpeed(-150);
+	explode->setSpeed(-300);
 	explode->setSpeedVar(100);
 
 	explode->setPosition(explodeX, explodeY);

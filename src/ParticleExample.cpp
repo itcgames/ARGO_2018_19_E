@@ -505,10 +505,10 @@ void ParticleExample::setStyle(PatticleStyle style)
 
 	case ParticleExample::GRENADE:
 	{
-		initWithTotalParticles(700);
+		initWithTotalParticles(1200);
 
 		// duration
-		_duration = 0.1f;
+		_duration = 0.03f;
 
 		setEmitterMode(Mode::GRAVITY);
 
@@ -516,7 +516,7 @@ void ParticleExample::setStyle(PatticleStyle style)
 		setGravity(Vec2(0, 0));
 
 		// Gravity Mode: speed of particles
-		setSpeed(-70);
+		setSpeed(-90);
 		setSpeedVar(40);
 
 		// Gravity Mode: radial
@@ -532,7 +532,7 @@ void ParticleExample::setStyle(PatticleStyle style)
 		_angleVar = 360;
 
 		// life of particles
-		_life = 5.0f;
+		_life = 3.0f;
 		_lifeVar = 2;
 
 		// size, in pixels
@@ -545,17 +545,17 @@ void ParticleExample::setStyle(PatticleStyle style)
 
 		// color of particles
 		_startColor.r = 0.960f;
-		_startColor.g = 0.972f;
+		_startColor.g = 0.6f;
 		_startColor.b = 0.125f;
-		_startColor.a = 0.6f;
+		_startColor.a = 0.1f;
 		_startColorVar.r = 0.00f;
-		_startColorVar.g = 0.00f;
+		_startColorVar.g = 1.00f;
 		_startColorVar.b = 0.00f;
-		_startColorVar.a = 0.3f;
+		_startColorVar.a = -0.6f;
 		_endColor.r = 0.960f;
 		_endColor.g = 0.972f;
 		_endColor.b = 0.125f;
-		_endColor.a = 0.6f;
+		_endColor.a = 0.01f;
 		_endColorVar.r = 0.0f;
 		_endColorVar.g = 0.0f;
 		_endColorVar.b = 0.0f;
