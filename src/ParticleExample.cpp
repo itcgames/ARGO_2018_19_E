@@ -482,21 +482,21 @@ void ParticleExample::setStyle(PatticleStyle style)
         _emissionRate = _totalParticles / _duration;
 
         // color of particles
-        _startColor.r = 0.7f;
-        _startColor.g = 0.1f;
-        _startColor.b = 0.2f;
-        _startColor.a = 1.0f;
-        _startColorVar.r = 0.5f;
-        _startColorVar.g = 0.5f;
-        _startColorVar.b = 0.5f;
-        _startColorVar.a = 0.0f;
-        _endColor.r = 0.5f;
-        _endColor.g = 0.5f;
-        _endColor.b = 0.5f;
-        _endColor.a = 0.0f;
-        _endColorVar.r = 0.5f;
-        _endColorVar.g = 0.5f;
-        _endColorVar.b = 0.5f;
+        _startColor.r = 0.937f;
+        _startColor.g = 0.825f;
+        _startColor.b = 0.164f;
+        _startColor.a = 0.4f;
+		_startColorVar.r = 0.02f;
+		_startColorVar.g = 0.8f;
+		_startColorVar.b = 0.02f;
+        _startColorVar.a = 0.3f;
+		_endColor.r = 0.0f;
+		_endColor.g = 1.0f;
+		_endColor.b = 0.0f;
+		_endColor.a = 1.0f;
+		_endColorVar.r = 0.0f;
+		_endColorVar.g = 0.0f;
+		_endColorVar.b = 0.0f;
         _endColorVar.a = 0.0f;
 
         _posVar = { 0, 0 };

@@ -9,8 +9,9 @@ class Hand : Entity
 {
 public:
 	Hand();
-	Hand(SDL_Renderer* renderer);
+	Hand(SDL_Renderer* renderer,int handValue);
 private:
 	std::vector<Component*> m_components;
 	SpriteComponent* m_spriteComponent;
+	TagComponent* m_tagComponent;
 };

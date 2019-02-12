@@ -5,7 +5,7 @@ Hand::Hand()
 }
 
 
-Hand::Hand(SDL_Renderer* renderer)
+Hand::Hand(SDL_Renderer* renderer,int handValue)
 {
 	//Set up Sprite component and add to entity component vector
 
@@ -16,7 +16,15 @@ Hand::Hand(SDL_Renderer* renderer)
 	this->addComponent(m_spriteComponent);
 
 	this->addComponent(new HealthComponent(10));
-	this->addComponent(new TagComponent("Hand"));
+	m_tagComponent = new TagComponent("Hand");
+	if (handValue == 1)
+	{
+		m_tagComponent->setSubTag("right");
+	}
+	else if (handValue == 2) {
+		m_tagComponent->setSubTag("left");
+	}
+	this->addComponent(m_tagComponent);
 	this->addComponent(new PositionComponent(300, 500));
 	this->addComponent(new ControlComponent());
 }
