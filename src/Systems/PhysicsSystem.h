@@ -17,6 +17,7 @@ public:
 
 	
 	c2v Friction;
+	c2v gunFriction;
 	PhysicsSystem();
 	//PhysicsSystem(SDL_Surface* screen);
 	void addEntity(Entity * e);
@@ -62,6 +63,7 @@ public:
 	void launchGun(PositionComponent *pc, TagComponent *tc);
 	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
 	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
+	void setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
 	void setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,TagComponent * tc);
 	void setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, TagComponent * tc);
 	void setHandNormal(SpriteComponent * sc, PositionComponent *pc);

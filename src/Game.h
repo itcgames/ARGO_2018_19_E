@@ -9,6 +9,7 @@
 #include "./Systems/PhysicsSystem.h"
 #include "./Systems/GunSystem.h"
 #include "./Systems/CollisionSystem.h"
+#include "./Systems/GrenadeSystem.h"
 #include "Menus/SplashScreen.h"
 #include "Menus/CreditScreen.h"
 #include "Menus/MenuScreen.h"
@@ -80,6 +81,7 @@ private:
 	Gun* pistol;
 	Gun* shotgun;
 	Gun* juicer;
+	Gun* grenade;
 	std::vector<Entity*> m_ents;
 
 	SpriteComponent* m_backgroundSprite;
@@ -93,6 +95,7 @@ private:
 	PhysicsSystem m_ps;
 	AISystem m_ais;
 	CollisionSystem m_collSys;
+	GrenadeSystem m_grenadeSys;
 
 	SDL_Rect m_screenSize;
 

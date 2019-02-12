@@ -161,6 +161,7 @@
     <ClCompile Include="src\Systems\AISystem.cpp" />
     <ClCompile Include="src\Systems\CollisionSystem.cpp" />
     <ClCompile Include="src\Systems\ControlSystem.cpp" />
+    <ClCompile Include="src\Systems\GrenadeSystem.cpp" />
     <ClCompile Include="src\Systems\GunSystem.cpp" />
     <ClCompile Include="src\Systems\HealthSystem.cpp" />
     <ClCompile Include="src\Systems\PhysicsSystem.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="src\Components\ControlComponent.h" />
     <ClInclude Include="src\Components\DisplayComponent.h" />
     <ClInclude Include="src\Components\FactoryComponent.h" />
+    <ClInclude Include="src\Components\GrenadeComponent.h" />
     <ClInclude Include="src\Components\GunComponent.h" />
     <ClInclude Include="src\Components\SoundComponent.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
@@ -211,6 +213,7 @@
     <ClInclude Include="src\Systems\AISystem.h" />
     <ClInclude Include="src\Systems\CollisionSystem.h" />
     <ClInclude Include="src\Systems\ControlSystem.h" />
+    <ClInclude Include="src\Systems\GrenadeSystem.h" />
     <ClInclude Include="src\Systems\GunSystem.h" />
     <ClInclude Include="src\Systems\HealthSystem.h" />
     <ClInclude Include="src\Systems\PhysicsSystem.h" />

@@ -5,7 +5,8 @@ PhysicsSystem::PhysicsSystem()
 	Friction.y = 0.98;
 
 	
-
+	gunFriction.x = 0.97;
+	gunFriction.y = 0.96;
 	
 	
 }
@@ -36,7 +37,7 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 
 		double radAng = angle * 3.14159265359 / 180;
 		double radius = 60;
-		if (tc->getSubTag() == "pistol")
+		if (tc->getSubTag() == "pistol" || tc->getSubTag() == "grenade")
 		{
 			radius = 60;
 		}
@@ -66,7 +67,12 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 			else {
 				pc->setX(playerPositionX - xOffset);
 			}
+			// Possible merge error
 			if (tc->getSubTag() == "pistol")
+			{
+				pc->setX(playerPositionX - xOffset);  // set gun position + offset for player centre - offset for angle
+			}
+			if (tc->getSubTag() == "pistol" || tc->getSubTag() == "grenade")
 			{
 				pc->setY(playerPositionY + yOffset);
 			}
@@ -112,7 +118,7 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 		// Animations for gun recoil
 		else
 		{
-			if (tc->getSubTag() == "pistol")
+			if (tc->getSubTag() == "pistol" || tc->getSubTag() == "grenade")
 			{
 				pc->setY(playerPositionY + yOffset);
 				if (sc->m_flipValue == SDL_FLIP_NONE)
@@ -264,8 +270,9 @@ void PhysicsSystem::launchGun(PositionComponent * pc,TagComponent * tc) {
 	//std::cout << "X = " << -xOffset <<  "Y = " << yOffset << std::endl;
 	if (tc->getSubTag() == "pistol")
 	{
-		pc->setVelX(-xOffset / 2);
-		pc->setVelY(yOffset / 2);
+		pc->setVelX(-xOffset / 2.5);
+		pc->setVelY(yOffset / 2.5);
+		
 	}
 	else if (tc->getSubTag() == "shotgun")
 	{
@@ -277,12 +284,28 @@ void PhysicsSystem::launchGun(PositionComponent * pc,TagComponent * tc) {
 		pc->setVelX(-xOffset * 2);
 		pc->setVelY(yOffset * 2);
 	}
-
+	else if (tc->getSubTag() == "grenade") {
+		pc->setVelX(-xOffset / 2);
+		pc->setVelY(yOffset / 2);
+	}
 	tc->setGrabbed(false);
-	tc->setGrabable(false); // Start count to make gun grabable again.
+	tc->setGrabable(false);
+	// Start count to make gun grabable again.
 	gotGun = false;
 	throwGun = false;
 	gunGot = "none";
+}
+
+void PhysicsSystem::setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc) {
+	double handAngle = angle - 90;
+
+	sc->setRotation((cc->getAngle())*-1); //rotate hand
+	pc->setX(gunPositionX);
+	if (handAngle < 0)
+	{
+		handAngle = handAngle * -1;
+	}
+	pc->setY(gunPositionY + (handAngle / 5));
 }
 
 void PhysicsSystem::setHandOnPistol(SpriteComponent * sc,PositionComponent *pc,ControlComponent * cc)
@@ -488,12 +511,24 @@ void PhysicsSystem::update() {
 			}
 			if (gotGun != true)
 			{
-				pc->setVelY(pc->getVelY() + Friction.y);  // Friction so gun falls when not grabbed
+				if (pc->getVelY() < 8) {
+					pc->setVelY(pc->getVelY() + gunFriction.y);  // Friction so gun falls when not grabbed
+
+				}
 				setPosition(pc);
 			}
 			if (tc->getGrabbed() == true)
 			{
 				gunGot = tc->getSubTag();
+			}
+			if (tc->getSubTag() == "grenade") {
+				GrenadeComponent * gc = (GrenadeComponent*)entity->getCompByType("GRENADE");
+				if (gc->getArmed()) {
+					gc->setTTL(gc->getTTL() - 1);
+					if (gc->getTTL() < 0) {
+						gc->setExplode(true);
+					}
+				}
 			}
 
 		}
@@ -520,6 +555,9 @@ void PhysicsSystem::update() {
 				else if (gunGot == "juicer")
 				{
 					setHandOnJuicer(sc, pc, cc, tc); // Set hand on gun
+				}
+				else if (gunGot == "grenade") {
+					setHandOnGrenade(sc, pc, cc); // Set hand on gun
 				}
 			}
 			else {
@@ -554,8 +592,13 @@ void PhysicsSystem::update() {
 			pc->setVelY(pc->getVelY() + Friction.y);
 
 		}
-
-		pc->setVelX(pc->getVelX() * Friction.x);  // Friction
+		if (tc->getTag() != "Gun") {
+			pc->setVelX(pc->getVelX() * Friction.x);  // Friction
+		}
+		else {
+			pc->setVelX(pc->getVelX() * gunFriction.x);  // Friction
+		}
+		
 		
 		if (tc->getTag() == "AI_TAG")
 		{
@@ -643,8 +686,14 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 								float random = rand() % 40 - 20;
 								float radAng = (angle+random) * 3.14159265359 / 180;
 								float radius = 60;
-
-							
+								if (tc->getSubTag() == "pistol" || tc->getSubTag() == "grenade")
+								{
+									radius = 60;
+								}
+								else if (tc->getSubTag() == "shotgun")
+								{
+									radius = 10;
+								}
 								float shotgunXOffset = radius * (cos(radAng));
 								float shotgunYOffset = radius * (sin(radAng));
 
@@ -682,24 +731,22 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							m_startAnimating = true;
 
 							if (SDL_HapticRumblePlay(haptic, 1, 300) != 0)
-
 							{
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 							}
-
 							float juicerRadAng = angle * 3.14159265359 / 180;
 							//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 							//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
-							
+
 							juicerTipX = 100 * (cos(juicerRadAng));
 							juicerTipY = 100 * (sin(juicerRadAng));
-							
-		
+
+
 							float random = rand() % 30 - 15;
 							float radAng = (angle + random) * 3.14159265359 / 180;
 							float radius = 60;
 
-	
+
 							float juicerXOffset = radius * (cos(radAng));
 							float juicerYOffset = radius * (sin(radAng));
 
@@ -714,8 +761,18 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							else {
 								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - juicerTipX + 60, pc->getY() + juicerTipY + 100, -(angle - 90), unitX * 100, unitY * 80, 1000));
 							}
-							
+						}
+						else if (tc->getSubTag() == "grenade" && gunGot == "grenade")
+						{
+							GrenadeComponent * gc = (GrenadeComponent*)entity->getCompByType("GRENADE");
+							throwGun = true;
+							gc->setArmed(true);
+							launchGun(pc, tc);
 
+							if (SDL_HapticRumblePlay(haptic, .5, 100) != 0)
+							{
+								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+							}	
 						}
 					}
 				}
