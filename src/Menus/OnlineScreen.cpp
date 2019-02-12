@@ -81,7 +81,7 @@ void OnlineScreen::update() {
 		removeMember();
 	}
 
-	if (m_strings.size() > 3) {
+	if (m_strings.size() > 0) {
 		m_ready2Play = true;
 		if (AButton) {
 			m_joined = false;
