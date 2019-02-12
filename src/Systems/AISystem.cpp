@@ -2,6 +2,11 @@
 
 AISystem::AISystem() {
 	fsm = new Animation();
+
+	Line* line = new Line{ 0,0,0,0 };
+	Line* line2 = new Line{ 0,0,0,0 };
+	M_LINES.push_back(line);
+	M_LINES.push_back(line2);
 }
 
 void AISystem::addEntity(Entity * e) {
@@ -132,7 +137,10 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 				m_onGroundCount++;
 			}
 			
-			std::cout << m_onGroundCount << std::endl;
+
+			M_LINES[0] = new Line{ curPosition.x, curPosition.y, curPosition.x + 1000, curPosition.y };
+			M_LINES[1] = new Line{ curPosition.x, curPosition.y, curPosition.x - 1000, curPosition.y };
+			//std::cout << m_onGroundCount << std::endl;
 			
 			/*if (pc->getVelY() > 0.9 && pc->getVelY() < 1.0)
 			{
@@ -154,8 +162,8 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 				sc->m_flipValue = SDL_FLIP_NONE;
 			}
 
-
-			//closestEnemy = checkClosest(m_distances);
+			std::cout << M_LINES.size() << std::endl;
+			closestEnemy = checkClosest(m_distances);
 			//std::cout << curPosition.y << std::endl;
 			
 			if (m_landed) {
@@ -181,62 +189,64 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 				atWalkPoint = true;
 			}
 
-
-			if (facingleft && m_landed)
-			{
-				ac->setLeft(true);
-				ac->setRight(false);
-
-				if (curPosition.x < closestWalkPoint.x + 10)
+			if (!m_gunInSight) {
+				if (facingleft && m_landed)
 				{
-					if (pc->getVelX() < -7.8)
+					ac->setLeft(true);
+					ac->setRight(false);
+
+					if (curPosition.x < closestWalkPoint.x + 10)
 					{
-						ac->setJump(true);
-					}
-					else
-					{
-						if (m_onGroundCount > 80)
+						if (pc->getVelX() < -7.8)
+						{
+							ac->setJump(true);
+						}
+						else
 						{
 							pc->setVelX(-8);
 							ac->setJump(true);
 						}
+
 					}
-					
 				}
-			}
-			std::cout << facingleft << std::endl;
-
-			if (facingRight && m_landed)
-			{
-				ac->setRight(true);
-				ac->setLeft(false);
-
-				if (curPosition.x > closestWalkPoint.x - 10)
+				if (facingRight && m_landed)
 				{
-					if (pc->getVelX() > 7.8)
+					ac->setRight(true);
+					ac->setLeft(false);
+
+					if (curPosition.x > closestWalkPoint.x - 10)
 					{
-						ac->setJump(true);
-					
-					}
-					else
-					{
-						if (m_onGroundCount > 80)
+						if (pc->getVelX() > 7.8)
+						{
+							ac->setJump(true);
+						}
+						else
 						{
 							pc->setVelX(8);
 							ac->setJump(true);
 						}
-						
-					}		
+					}
 				}
 			}
 			
+			if (curPosition.y > closestEnemy.y && curPosition.y < closestEnemy.y + 200 && m_landed)
+			{
+				m_gunInSight = true;
 
-			
-			//std::cout << "Vel X = " << pc->getVelX() << std::endl;
-			
+				if (closestEnemy.x < curPosition.x)
+				{
+					ac->setRight(false);
+					ac->setLeft(true);
+				}
+				if (closestEnemy.x > curPosition.x)
+				{
+					ac->setRight(true);
+					ac->setLeft(false);
+				}
 
-			//std::cout << "Point = " << closestPoint.x << ", " << closestPoint.y << std::endl;
-			//std::cout << "Position = " << curPosition.x << std::endl;
+				
+			}
+			
 		}
 		
 		
@@ -251,34 +261,41 @@ double AISystem::distance(c2v  vecOne, c2v vecTwo)
 }
 
 
-std::vector<c2v*> AISystem::checkTier(std::vector<c2v*> points)
-{
-	std::vector<c2v*> holdingVector;
-	for (auto it = points.begin(); it != points.end(); it++)
-	{
-		if (tierOne)
-		{
-			if ((*it)->y == 820)
-			{
-				holdingVector.push_back(*it);
-			}
-		}
-		if (tierTwo)
-		{
-			if ((*it)->y == 605)
-			{
-				holdingVector.push_back(*it);
-			}
-		}
-		if (tierThree)
-		{
-			if ((*it)->y == 395)
-			{
-				holdingVector.push_back(*it);
-			}
-		}
-	}
+//std::vector<c2v*> AISystem::checkTier(std::vector<c2v*> points)
+//{
+//	std::vector<c2v*> holdingVector;
+//	for (auto it = points.begin(); it != points.end(); it++)
+//	{
+//		if (tierOne)
+//		{
+//			if ((*it)->y == 820)
+//			{
+//				holdingVector.push_back(*it);
+//			}
+//		}
+//		if (tierTwo)
+//		{
+//			if ((*it)->y == 605)
+//			{
+//				holdingVector.push_back(*it);
+//			}
+//		}
+//		if (tierThree)
+//		{
+//			if ((*it)->y == 395)
+//			{
+//				holdingVector.push_back(*it);
+//			}
+//		}
+//	}
+//
+//	return holdingVector;
+//}
 
-	return holdingVector;
+
+void AISystem::renderLines(SDL_Renderer * renderer)
+{
+	SDL_RenderDrawLine(renderer, M_LINES[0]->x1, M_LINES[0]->y1, M_LINES[0]->x2, M_LINES[0]->y2);
+	SDL_RenderDrawLine(renderer, M_LINES[1]->x1, M_LINES[1]->y1, M_LINES[1]->x2, M_LINES[1]->y2);
 }
 

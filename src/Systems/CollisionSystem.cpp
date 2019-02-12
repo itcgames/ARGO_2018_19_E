@@ -73,7 +73,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 								}*/
 							}
 							else if (val == "right" || val == "left") {
-								pc->setVelX(-(pc->getVelX() * 2));
+								pc->setVelX(-(pc->getVelX()));
 								pc->m_allowedJump = true;
 								pc->m_hitSide = true;
 								m_count = 0;
@@ -116,7 +116,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 								
 							}
 							else if (val == "right" || val == "left") {
-								pc->setVelX(-(pc->getVelX() * 2));
+								pc->setVelX(-(pc->getVelX()));
 							}
 
 
@@ -189,7 +189,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 					val = rectCollision(bullets->at(i)->collider, tiles[j].at(k)->collider);
 					if (val != "none") {
 						bullets->erase(bullets->begin() + i);
-						std::cout << "Delete" << std::endl;
+						//std::cout << "Delete" << std::endl;
 					}
 				}
 

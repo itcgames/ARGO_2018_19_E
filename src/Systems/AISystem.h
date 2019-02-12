@@ -13,7 +13,13 @@ class AISystem
 {
 	std::vector<Entity *> m_entities;
 
-	
+	struct Line
+	{
+		float x1;
+		float y1;
+		float x2;
+		float y2;
+	};
 
 public:
 	AISystem();
@@ -26,6 +32,8 @@ public:
 	void receive(std::vector<Entity*> ents);
 
 	std::vector<c2v*> checkTier(std::vector<c2v*> jumppoints);
+
+	void renderLines(SDL_Renderer * renderer);
 private:
 	c2v closestEnemy;
 	c2v closestJumpPoint;
@@ -34,7 +42,7 @@ private:
 	double closestWalkPointDist;
 	std::vector<std::pair<double, c2v>> m_distances;
 	std::pair<double, c2v> m_realDist;
-
+	std::vector<Line*> M_LINES;
 	c2v curPosition;
 	bool m_landed;
 	Animation *fsm;
@@ -44,10 +52,13 @@ private:
 
 	int m_onGroundCount = 0;
 	bool atWalkPoint = false;
+
 	float oldYVel = 0;
 	float newYVel = 0;
-	bool tierOne = true;
-	bool tierTwo = false;
-	bool tierThree = false;
+
+	bool m_gunInSight = false;
 };
+
+
+
 #endif // !AISYSTEM_H
