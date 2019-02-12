@@ -189,7 +189,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 					val = rectCollision(bullets->at(i)->collider, tiles[j].at(k)->collider);
 					if (val != "none") {
 						bullets->erase(bullets->begin() + i);
-						std::cout << "Delete" << std::endl;
+						//std::cout << "Delete" << std::endl;
 					}
 				}
 

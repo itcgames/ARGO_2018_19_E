@@ -79,6 +79,7 @@ private:
 	AI *ai;
 	Gun* pistol;
 	Gun* shotgun;
+	Gun* juicer;
 	std::vector<Entity*> m_ents;
 
 	SpriteComponent* m_backgroundSprite;

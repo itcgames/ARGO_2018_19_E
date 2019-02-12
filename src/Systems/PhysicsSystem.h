@@ -63,6 +63,7 @@ public:
 	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
 	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
 	void setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,TagComponent * tc);
+	void setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, TagComponent * tc);
 	void setHandNormal(SpriteComponent * sc, PositionComponent *pc);
 	void movePlayer(ControlComponent * cc, PositionComponent *pc);
 	void setPosition(PositionComponent * pc);
@@ -87,5 +88,11 @@ public:
 	int shotgunCount = 0;
 	int shotgunRotationCount = 0;
 	int shotgunPumpCount = 0;
+
+	int juicerCount = 0;
+	int juicerRotationCount = 0;
+
+	float juicerTipX = 0;
+	float juicerTipY = 0;
 };
 #endif // !PHYSICSSYSTEM_H
