@@ -15,7 +15,7 @@ class GrenadeSystem
 public:
 	GrenadeSystem();
 	void addEntity(Entity * e);
-	void update(std::vector<std::vector<Tile*>> tiles);
+	void update(std::vector<std::vector<Tile*>> tiles, Entity * ai);
 	float dist(c2v v1, c2v v2);
 	void render();
 	void setRenderer(SDL_Renderer * renderer);

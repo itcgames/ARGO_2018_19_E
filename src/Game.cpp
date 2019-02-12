@@ -137,7 +137,7 @@ void Game::update() {
 		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
 		
-		m_grenadeSys.update(m_map->getTiles());
+		m_grenadeSys.update(m_map->getTiles(), (Entity *)ai);
 		if (!*(m_online)) {
 			m_hs.update();
 			m_ais.update(m_map->getPoints());
