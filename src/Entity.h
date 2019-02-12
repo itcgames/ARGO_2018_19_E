@@ -13,6 +13,7 @@
 #include "./Components/CollisionComponent.h"
 #include "./Components/FactoryComponent.h"
 #include "./Components/StateComponent.h"
+#include "./Components/GrenadeComponent.h"
 #include <SDL.h>
 
 class Entity
