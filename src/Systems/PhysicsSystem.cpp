@@ -26,10 +26,10 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 		angle += angleDifference * ease;
 
 		double radAng = angle * 3.14159265359 / 180;
-		double radius = 90;
+		double radius = 60;
 		if (tc->getSubTag() == "pistol")
 		{
-			radius = 90;
+			radius = 60;
 		}
 		else if (tc->getSubTag() == "shotgun")
 		{
@@ -73,6 +73,7 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 			else if (tc->getSubTag() == "shotgun")
 			{
 				pc->setY(playerPositionY -60 + yOffset);
+				// Count for recoil animation
 				if (shotgunCount < 6)
 				{
 					shotgunRotationCount = shotgunRotationCount + 3;
@@ -83,6 +84,18 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 					if (shotgunRotationCount < 0)
 					{
 						shotgunRotationCount = 0;
+					}
+				}
+				// Count for pump animation;
+				if (shotgunCount < 30)
+				{
+					shotgunPumpCount = shotgunPumpCount + 1;
+				}
+				else {
+					shotgunPumpCount = shotgunPumpCount - 1;
+					if (shotgunPumpCount < 0)
+					{
+						shotgunPumpCount = 0;
 					}
 				}
 		
@@ -209,18 +222,52 @@ void PhysicsSystem::setHandOnPistol(SpriteComponent * sc,PositionComponent *pc,C
 	}
 	pc->setY(gunPositionY + (handAngle / 5));
 }
-void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc)
+void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,TagComponent * tc)
 {
-	double handAngle = angle - 90;
-
-	sc->setRotation((cc->getAngle())*-1); //rotate hand
-	pc->setX(gunPositionX);
-	if (handAngle < 0)
+	// 386
+	if (tc->getSubTag() == "right")
 	{
-		handAngle = handAngle * -1;
+		float radiusHandle = 10;
+		float shotgunHandleRadAng = angle * 3.14159265359 / 180;
+		//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
+		//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
+		float shotgunHandleX = radiusHandle * (cos(shotgunHandleRadAng));
+		float shotgunHandleY = radiusHandle * (sin(shotgunHandleRadAng));
+
+		sc->setRotation((cc->getAngle())*-1 - shotgunRotationCount); //rotate hand
+		if (sc->m_flipValue == SDL_FLIP_NONE)
+		{
+			pc->setX(playerPositionX + shotgunHandleX - (shotgunRotationCount * 1.5));
+		}
+		else {
+			pc->setX(playerPositionX + shotgunHandleX + (shotgunRotationCount * 1.5));
+		}
+
+		//pc->setY(gunPositionY + (handAngle));
+		pc->setY(playerPositionY - shotgunHandleY + 25);
 	}
-	//pc->setY(gunPositionY + (handAngle));
-	pc->setY(gunPositionY + 60);
+	else if (tc->getSubTag() == "left")
+	{
+
+		float radiusPump = 55 - (shotgunPumpCount);
+		float shotgunPumpRadAng = angle * 3.14159265359 / 180;
+		//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
+		//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
+		float shotgunPumpX = radiusPump * (cos(shotgunPumpRadAng));
+		float shotgunPumpY = radiusPump * (sin(shotgunPumpRadAng));
+
+		sc->setRotation(((cc->getAngle())*-1 - shotgunRotationCount) - 90); //rotate hand
+		if (sc->m_flipValue == SDL_FLIP_NONE)
+		{
+			pc->setX(playerPositionX - shotgunPumpX - (shotgunRotationCount * 1.5));
+		}
+		else {
+			pc->setX(playerPositionX - shotgunPumpX + (shotgunRotationCount * 1.5));
+		}
+
+		//pc->setY(gunPositionY + (handAngle));
+		pc->setY(playerPositionY + shotgunPumpY + 25);
+	}
 }
 void PhysicsSystem::setHandNormal(SpriteComponent * sc, PositionComponent *pc)
 {
@@ -332,7 +379,7 @@ void PhysicsSystem::update() {
 				}
 				else if (gunGot == "shotgun")
 				{
-					setHandOnShotgun(sc, pc, cc); // Set hand on gun
+					setHandOnShotgun(sc, pc, cc,tc); // Set hand on gun
 				}
 			}
 			else {
@@ -356,8 +403,16 @@ void PhysicsSystem::update() {
 		{
 			aiPositionX = pc->getX();
 			aiPositionY = pc->getY();
-				
-			pc->setVelY(pc->getVelY() + Friction.y);	
+			
+			if (ac->getJump() && pc->m_allowedJump) {
+				pc->setVelY(pc->getVelY() - 25);
+				ac->setJump(false);
+				pc->m_allowedJump = false;
+			}
+			
+			
+			pc->setVelY(pc->getVelY() + Friction.y);
+
 		}
 
 		pc->setVelX(pc->getVelX() * Friction.x);  // Friction
@@ -418,7 +473,7 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							fired = true;
 							m_startAnimating = true;
 
-							if (SDL_HapticRumblePlay(haptic, .5, 100) != 0)
+							if (SDL_HapticRumblePlay(haptic, 1, 300) != 0)
 
 							{
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
@@ -427,16 +482,17 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							float shotgunRadAng = angle * 3.14159265359 / 180;
 							//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 							//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
-							shotgunTipX = 103.6 * (cos(shotgunRadAng));
-							shotgunTipY = 103.6 * (sin(shotgunRadAng));
+							float shotgunTipX = 103.6 * (cos(shotgunRadAng));
+							float shotgunTipY = 103.6 * (sin(shotgunRadAng));
 							for (int i = 0; i < 7; i++)
 							{
 								float random = rand() % 40 - 20;
 								float radAng = (angle+random) * 3.14159265359 / 180;
-								float radius = 90;
+								float radius = 60;
+
 								if (tc->getSubTag() == "pistol")
 								{
-									radius = 90;
+									radius = 60;
 								}
 								else if (tc->getSubTag() == "shotgun")
 								{
@@ -451,16 +507,16 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 								float unitY = shotgunYOffset / mag;
 								if (sc->m_flipValue == SDL_FLIP_NONE)
 								{
-									pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - shotgunTipX, pc->getY() + shotgunTipY + 70, -(angle - 90), unitX * 80, unitY * 80));
+									pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - shotgunTipX, pc->getY() + shotgunTipY + 70, -(angle - 90), unitX * 80, unitY * 80, 50));
 								}
 								else {
-									pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70, -(angle - 90), unitX * 80, unitY * 80));
+									pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70, -(angle - 90), unitX * 80, unitY * 80, 50));
 								}
 							}
-					
+
 						}
 						else if (tc->getSubTag() == "pistol" && gunGot == "pistol")
-						{		
+						{
 							fired = true;
 							m_startAnimating = true;
 
@@ -469,26 +525,41 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							{
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 							}
-							pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset));
-						
+							pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset, 1000));
+
+
 						}
 					}
 				}
-			}
-			if (tc->getSubTag() == "shotgun")
-			{
-				shotgunBullets = pc->bullets;
-			}
-			else if (tc->getSubTag() == "pistol")
-			{
-				pistolBullets = pc->bullets;
+				if (tc->getSubTag() == "shotgun")
+				{
+					shotgunBullets = pc->bullets;
+
+					
+				}
+				else if (tc->getSubTag() == "pistol")
+				{
+					pistolBullets = pc->bullets;
+
+				}
+				for (int i = 0; i < pc->bullets.size(); i++) {
+					pc->bullets.at(i)->m_ttl--;
+					if (pc->bullets.at(i)->m_ttl < 0) {
+						pc->bullets.erase(pc->bullets.begin() + i);
+					}
+				}
 			}
 		}
 	}
 }
 
+
 void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
-	
+
+	if (m_startAnimating) {
+		animateExplosion(renderer);
+	}
+
 	for (int i = 0; i < shotgunBullets.size(); i++)
 	{
 		shotgunBullets[i]->render(renderer);
@@ -503,9 +574,7 @@ void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
 
 
 	}
-	if (m_startAnimating) {
-		animateExplosion(renderer);
-	}
+	
 	
 }
 
@@ -515,19 +584,26 @@ void PhysicsSystem::setRenderer(SDL_Renderer * renderer)
 	p = new ParticleExample();
 	p->setRenderer(m_renderer);
 	p->setStyle(ParticleExample::SMOKE);
+
+	flash = new ParticleExample();
+	flash->setRenderer(m_renderer);
+	flash->setStyle(ParticleExample::EXPLOSION);
+	
 }
 
 void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 {
 	m_count++;
-	p->setStartSpin(0);
-    p->setStartSpinVar(90);
-	p->setEndSpin(90);
-    p->setDuration(.1);
-	p->setStartSize(30);
-	p->setStartSpinVar(90);// set the renderer
+	
 	if (gunGot == "pistol")
 	{
+		p->setStartSpin(0);
+		p->setStartSpinVar(90);
+		p->setEndSpin(90);
+		p->setDuration(.1);
+		p->setStartSize(30);
+		p->setStartSpinVar(90);// set the renderer
+
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
 			p->setPosition(gunPositionX - 15, gunPositionY);
@@ -538,28 +614,53 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 			p->setPosition(gunPositionX + 60, gunPositionY + 10);
 			//p->setAngle(angle);
 		}
+
+		p->update();
+		p->draw();
 	}
 	else if (gunGot == "shotgun")
 	{
+		flash->setStartSpin(0);
+		flash->setStartSpinVar(0);
+		flash->setEndSpin(90);
+		flash->setDuration(.1);
+		flash->setStartSize(10);
+		flash->setEndSize(20);
+		flash->setStartSpinVar(0);
+
+
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
-			p->setPosition(gunPositionX - shotgunTipX + 20, gunPositionY + shotgunTipY + 70);
+			flash->setPosition(gunPositionX - shotgunTipX - 80 , gunPositionY + shotgunTipY + 70);
 			//p->setAngle(-angle);
 		}
 		else
 		{
-			p->setPosition(gunPositionX - shotgunTipX, gunPositionY + shotgunTipY + 70);
+			flash->setPosition(gunPositionX + shotgunTipX + 100, gunPositionY + shotgunTipY + 70);
 			//p->setAngle(angle);
 		}
+		flash->update();
+		flash->draw();
+
+
 	}
 	
-	p->update();
-	p->draw();
 	
-	if (m_count > 15)
+
+	
+	
+	if (m_count > 15 && gunGot == "pistol")
 	{
 		m_count = 0;
 		p->resetSystem();
+		m_startAnimating = false;
+	}
+
+	else if (m_count > 5 && gunGot == "shotgun")
+	{
+		m_count = 0;
+		flash->resetSystem();
+
 		m_startAnimating = false;
 	}
 }

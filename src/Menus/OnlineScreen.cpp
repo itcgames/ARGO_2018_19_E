@@ -1,7 +1,7 @@
 #include "OnlineScreen.h"
 
 
-OnlineScreen::OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font * Font, SDL_GameController* controller, Client * client) {
+OnlineScreen::OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font * Font, SDL_GameController* controller, Client * client, bool * online) {
 
 	m_currentGameState = state;
 	gGameController = controller;
@@ -14,10 +14,11 @@ OnlineScreen::OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font 
 
 	std::string LString = "Lobby";
 	std::string EString = "(B) Exit";
-
+	std::string PString = "(A) Start";
 
 
 	exittexture = init(Font, EString, exittexture, exitRenderQuad, 1055, 600, menuColor);
+	playtexture = init(Font, PString, playtexture, playRenderQuad, 145, 600, menuColor);
 
 	TTF_Font* menuFont = TTF_OpenFont("arial.ttf", 150);
 
@@ -28,7 +29,7 @@ OnlineScreen::OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font 
 
 	m_BGRect.x = 100; m_BGRect.y = 200; m_BGRect.w = 1000; m_BGRect.h = 400;
 	
-
+	m_online = online;
 }
 
 OnlineScreen::~OnlineScreen() {}
@@ -63,6 +64,7 @@ void OnlineScreen::update() {
 		m_joined = true;
 	}
 	bool BButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_B);
+	bool AButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_A);
 
 	if (BButton) {
 		m_joined = false;
@@ -77,6 +79,20 @@ void OnlineScreen::update() {
 
 	if (m_client->m_leavers.size() > 0) {
 		removeMember();
+	}
+
+	if (m_strings.size() > 0) {
+		m_ready2Play = true;
+		if (AButton) {
+			m_joined = false;
+			m_client->sendMessage("Leave," + std::to_string(m_client->number) + ",");
+			*m_online = true;
+			m_client->sendMessage("Start,");
+			*m_currentGameState = GameState::Game;
+		}
+	}
+	else {
+		m_ready2Play = false;
 	}
 }
 
@@ -147,9 +163,16 @@ void OnlineScreen::fillLobby() {
 void OnlineScreen::render(SDL_Renderer * renderer) {
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
 	SDL_RenderFillRect(renderer, &m_BGRect);
+
 	SDL_RenderCopy(renderer, exittexture, NULL, &exitRenderQuad);
 	SDL_RenderCopy(renderer, titletexture, NULL, &titleRenderQuad);
+
+	if (m_ready2Play) {
+		SDL_RenderCopy(renderer, playtexture, NULL, &playRenderQuad);
+	}
+
 	for (int i = 0; i < m_textures.size(); i++) {
 		SDL_RenderCopy(renderer, m_textures[i], NULL, &m_quads[i]);
 	}

@@ -8,7 +8,7 @@ Gun::Gun()
 Gun::Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos)
 {
 	m_tagComponent = new TagComponent("Gun");
-	//Set up Sprite component and add to entity component vector
+
 	if (gunValue == 1)
 	{
 		m_spriteComponent = new SpriteComponent(0, 0, 210, 295);
@@ -30,10 +30,11 @@ Gun::Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos)
 		m_tagComponent->setSubTag("shotgun");
 		this->addComponent(new CollisionComponent(xPos, yPos, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 	}
-	//this->addComponent(new HealthComponent(10));
+
 	this->addComponent(new PositionComponent(xPos, yPos));
 	this->addComponent(new ControlComponent());
 	this->addComponent(m_tagComponent);
 	this->addComponent(new FactoryComponent());
+
 
 }

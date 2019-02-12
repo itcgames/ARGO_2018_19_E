@@ -41,13 +41,14 @@ Game::Game()
 	setUpController();
 	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
 	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont, gGameController);
-	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client);
+	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client, m_online);
 	m_options = new OptionScreen();
 	m_credits = new CreditScreen();
 	m_screenSize = { 0,0,1200,700 };
 
 	p = new Player(m_renderer);
-	h = new Hand(m_renderer);
+	h1 = new Hand(m_renderer,1);
+	h2 = new Hand(m_renderer,2);
 	ai = new AI(m_renderer);
 
 	m_backgroundSprite = new SpriteComponent(0, 0, 498, 750);
@@ -68,9 +69,9 @@ Game::Game()
 	initialise();
 
 	
-	m_ents.push_back((Entity*)p);
-	m_ents.push_back((Entity*)ai);
-	//m_ents.push_back((Entity*)pistol);
+	//m_ents.push_back((Entity*)p);
+	//m_ents.push_back((Entity*)ai);
+	m_ents.push_back((Entity*)pistol);
 
 	m_ps.setRenderer(m_renderer);
 }
@@ -126,16 +127,24 @@ void Game::update() {
 	case GameState::Options:
 		break;
 	case GameState::Game:
-		m_hs.update();		
-		m_ais.update();		
-		m_ais.receive(m_ents);
-		
-		m_collSys.update(m_map->getTiles());
 		m_cs.update(event);
+		m_collSys.update(m_map->getTiles());
+
 		m_ps.update();
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
+		if (!*(m_online)) {
+			m_hs.update();
+			m_ais.update(m_map->getPoints());
+			m_ais.receive(m_ents);
+		}
+		else {
+			
+		}
+		
+		
+		
 		break;
 	case GameState::Credits:
 		break;
@@ -234,12 +243,14 @@ void Game::initialise()
 
 	m_cs.addEntity((Entity*)pistol);
 	m_cs.addEntity((Entity*)shotgun);
-	m_cs.addEntity((Entity*)h);
+	m_cs.addEntity((Entity*)h1);
+	m_cs.addEntity((Entity*)h2);
 
 	m_rs.addEntity((Entity*)p);
 	m_rs.addEntity((Entity*)pistol);
 	m_rs.addEntity((Entity*)shotgun);
-	m_rs.addEntity((Entity*)h);
+	m_rs.addEntity((Entity*)h1);
+	m_rs.addEntity((Entity*)h2);
 	
 	m_rs.addEntity((Entity*)ai);
 
@@ -250,7 +261,8 @@ void Game::initialise()
 
 	m_ps.addEntity((Entity*)pistol);
 	m_ps.addEntity((Entity*)shotgun);
-	m_ps.addEntity((Entity*)h);
+	m_ps.addEntity((Entity*)h1);
+	m_ps.addEntity((Entity*)h2);
 
 	m_ps.addEntity((Entity*)pistol);
 	m_guns.addEntity((Entity*)pistol);

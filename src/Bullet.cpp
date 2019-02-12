@@ -1,7 +1,7 @@
 #include "..\src\Factory.h"
 
 
-Bullet::Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset)
+Bullet::Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl)
 {
 	//Set up Sprite component and add to entity component vector
 	m_spriteComponent = new SpriteComponent(0, 0, 210, 295);
@@ -11,6 +11,8 @@ Bullet::Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, dou
 	m_spriteComponent->setRotation(angle);
 	xVel = xOffset;
 	yVel = yOffset;
+
+	m_ttl = ttl;
 
 	collider.min = c2v{ xPos, yPos };
 	collider.max = c2v{ xPos + m_spriteComponent->getWidth(), yPos + m_spriteComponent->getHeight() };

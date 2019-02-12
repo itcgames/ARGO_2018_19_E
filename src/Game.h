@@ -27,7 +27,7 @@ using namespace std;
 
 
 class Game {
-
+	
 public:
 	Game();
 	~Game();
@@ -74,7 +74,8 @@ private:
 	MapLoader* m_map;
 
 	Player* p;
-	Hand* h;
+	Hand* h1;
+	Hand* h2;
 	AI *ai;
 	Gun* pistol;
 	Gun* shotgun;
@@ -111,6 +112,8 @@ private:
 	SDL_GameController* gGameController = NULL;
 
 	Client * m_client;
+
+	bool *m_online = new bool(false);
 };
 
 
