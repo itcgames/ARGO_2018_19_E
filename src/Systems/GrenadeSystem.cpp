@@ -24,7 +24,7 @@ void GrenadeSystem::update(std::vector<std::vector<Tile*>>  tiles) {
 					c2v v2 = { explodeX, explodeY };
 					if (dist(v1, v2) < 200.0) {
 						tiles[i].at(j)->dead = true;
-						animateExplosion();
+						
 					}
 				}
 			}
@@ -32,11 +32,19 @@ void GrenadeSystem::update(std::vector<std::vector<Tile*>>  tiles) {
 			pc->setX(-3000);
 			pc->setY(-3000);
 
-			
+			m_startAnimating = true;
 			gc->setArmed(false);
 		}
 	}
 
+}
+
+void GrenadeSystem::render()
+{
+	if (m_startAnimating)
+	{
+		animateExplosion();
+	}
 }
 
 float GrenadeSystem::dist(c2v v1, c2v v2) {
@@ -47,22 +55,31 @@ float GrenadeSystem::dist(c2v v1, c2v v2) {
 
 void GrenadeSystem::animateExplosion()
 {
-	explode->setStartSpin(0);
-	explode->setStartSpinVar(90);
+	m_count++;
+	explode->setStartSpin(90);
 	explode->setEndSpin(90);
 	explode->setDuration(.1);
 	explode->setStartSize(30);
-	explode->setStartSpinVar(90);// set the renderer
+	explode->setStartSpinVar(180);// set the renderer
+	explode->setSpeed(-150);
+	explode->setSpeedVar(100);
 
 	explode->setPosition(explodeX, explodeY);
 	//p->setAngle(angle);
 	explode->update();
 	explode->draw();
+
+
+	if (m_count > 30)
+	{
+		explode->resetSystem();
+		m_startAnimating = false;
+	}
 }
 
 void GrenadeSystem::setRenderer(SDL_Renderer * renderer)
 {
 	explode = new ParticleExample();
 	explode->setRenderer(renderer);
-	explode->setStyle(ParticleExample::EXPLOSION);
+	explode->setStyle(ParticleExample::GRENADE);
 }

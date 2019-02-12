@@ -187,6 +187,7 @@ void Game::render() {
 		p->render(m_renderer);
 		m_rs.render(m_renderer);
 		m_ps.bulletRender(m_renderer);
+		m_grenadeSys.render();
 		//m_emitter->update();
 		break;
 	case GameState::Credits:
