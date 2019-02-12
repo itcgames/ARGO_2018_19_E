@@ -182,6 +182,7 @@ void Game::render() {
 	case GameState::Game:
 		m_backgroundSprite->render(m_renderer);
 		p->render(m_renderer);
+		ai->render(m_renderer);
 		m_rs.render(m_renderer);
 		m_map->draw(m_renderer);
 		m_ps.bulletRender(m_renderer);

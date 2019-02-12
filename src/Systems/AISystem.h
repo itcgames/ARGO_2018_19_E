@@ -30,6 +30,8 @@ private:
 	c2v closestEnemy;
 	c2v closestJumpPoint;
 	c2v closestWalkPoint;
+
+	double closestWalkPointDist;
 	std::vector<std::pair<double, c2v>> m_distances;
 	std::pair<double, c2v> m_realDist;
 
@@ -40,7 +42,10 @@ private:
 	bool facingleft = false;
 	bool facingRight = false;
 
-
+	int m_onGroundCount = 0;
+	bool atWalkPoint = false;
+	float oldYVel = 0;
+	float newYVel = 0;
 	bool tierOne = true;
 	bool tierTwo = false;
 	bool tierThree = false;

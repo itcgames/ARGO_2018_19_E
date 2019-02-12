@@ -93,6 +93,7 @@ c2v AISystem::checkWalkPoints(std::vector<c2v*> points, PositionComponent* pc)
 		{
 			smallest = dist;
 			closestPosition = pos;
+			closestWalkPointDist = smallest;
 		}
 	}
 	return closestPosition;
@@ -118,28 +119,44 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 			curPosition.y = pc->getY();
 
 			
+			newYVel = pc->getVelY();
+			if (newYVel != oldYVel)
+			{
+				m_landed = false;
+				oldYVel = newYVel;
+				m_onGroundCount = 0;
+			}
+			else
+			{
+				m_landed = true;
+				m_onGroundCount++;
+			}
 			
+			std::cout << m_onGroundCount << std::endl;
 			
-			if (pc->getVelY() > 0.9 && pc->getVelY() < 1.0)
+			/*if (pc->getVelY() > 0.9 && pc->getVelY() < 1.0)
 			{
 				m_landed = true;
 				
-			}
+			}*/
 
-			if (curPosition.x > closestJumpPoint.x)
+			//std::cout << m_landed << std::endl;
+			if (curPosition.x > closestWalkPoint.x)
 			{
 				facingleft = true;
 				facingRight = false;
+				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
 			}
 			else
 			{
 				facingRight = true;
 				facingleft = false;
+				sc->m_flipValue = SDL_FLIP_NONE;
 			}
 
 
 			//closestEnemy = checkClosest(m_distances);
-			std::cout << curPosition.y << std::endl;
+			//std::cout << curPosition.y << std::endl;
 			
 			if (m_landed) {
 				closestJumpPoint = checkJumpPoints(jumppoints, pc);
@@ -156,33 +173,60 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 				//sc->m_flipValue = SDL_FLIP_NONE;
 
 			}
-
+			//std::cout << closestWalkPoint.x << ", " << closestWalkPoint.y << std::endl;
 			
+			//std::cout << facingRight << std::endl;
+			if (closestWalkPointDist <= 30)
+			{
+				atWalkPoint = true;
+			}
 
 
 			if (facingleft && m_landed)
 			{
 				ac->setLeft(true);
+				ac->setRight(false);
 
-				if (curPosition.x < closestWalkPoint.x)
+				if (curPosition.x < closestWalkPoint.x + 10)
 				{
-					ac->setJump(true);
+					if (pc->getVelX() < -7.8)
+					{
+						ac->setJump(true);
+					}
+					else
+					{
+						if (m_onGroundCount > 80)
+						{
+							pc->setVelX(-8);
+							ac->setJump(true);
+						}
+					}
 					
 				}
 			}
-			
+			std::cout << facingleft << std::endl;
 
 			if (facingRight && m_landed)
 			{
 				ac->setRight(true);
+				ac->setLeft(false);
 
-				if (curPosition.x > closestWalkPoint.x)
+				if (curPosition.x > closestWalkPoint.x - 10)
 				{
-					auto dist = closestWalkPoint.x - closestJumpPoint.x;
-					auto height = closestWalkPoint.y - closestJumpPoint.y;
-					pc->setVelX(0);
-					ac->setJump(true);
+					if (pc->getVelX() > 7.8)
+					{
+						ac->setJump(true);
 					
+					}
+					else
+					{
+						if (m_onGroundCount > 80)
+						{
+							pc->setVelX(8);
+							ac->setJump(true);
+						}
+						
+					}		
 				}
 			}
 			

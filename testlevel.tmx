@@ -42,10 +42,10 @@
   </object>
  </objectgroup>
  <objectgroup color="#aa0000" id="5" name="WalkPoints">
-  <object id="19" x="595" y="1030">
+  <object id="19" x="631" y="1030">
    <point/>
   </object>
-  <object id="22" x="172" y="1030">
+  <object id="22" x="174" y="1028">
    <point/>
   </object>
   <object id="23" x="385" y="820">

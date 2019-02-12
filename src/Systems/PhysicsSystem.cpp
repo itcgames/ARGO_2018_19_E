@@ -359,7 +359,7 @@ void PhysicsSystem::update() {
 			
 			
 			if (ac->getJump() && pc->m_allowedJump) {
-				pc->setVelY(pc->getVelY() - 25);
+				pc->setVelY(pc->getVelY() - 20);
 				ac->setJump(false);
 				pc->m_allowedJump = false;
 			}
