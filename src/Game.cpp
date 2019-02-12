@@ -134,7 +134,7 @@ void Game::update() {
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
-		if (!m_online) {
+		if (!*(m_online)) {
 			m_hs.update();
 			m_ais.update(m_map->getPoints());
 			m_ais.receive(m_ents);
