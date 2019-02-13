@@ -226,6 +226,21 @@ void PhysicsSystem::pickUpAgain(TagComponent * tc) {
 		}
 	}
 }
+void PhysicsSystem::setPlayerGunGot(std::string gun)
+{
+	for (Entity * entity : m_entities) {
+
+		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
+		if (tc->getTag() == "Player")
+		{
+			tc->setGunGot(gun);
+			if (gun == "none")
+			{
+				gotGun = false;
+			}
+		}
+	}
+}
 
 // Set the player position variable.
 void PhysicsSystem::setPlayerPosition(PositionComponent * pc) {
@@ -293,7 +308,8 @@ void PhysicsSystem::launchGun(PositionComponent * pc,TagComponent * tc) {
 	// Start count to make gun grabable again.
 	gotGun = false;
 	throwGun = false;
-	gunGot = "none";
+	// SET PLAYER GUN FUNCTION
+	setPlayerGunGot("none");
 }
 
 void PhysicsSystem::setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc) {
@@ -475,7 +491,11 @@ void PhysicsSystem::update() {
 		// check gun player collide
 		if (tc->getTag() == "Player")
 		{
-			tc->setGunGot(gunGot);
+			gunGot = tc->getGunGot();
+			if (gunGot == "none")
+			{
+				gotGun = false;
+			}
 			playerFlip(pc,sc,cc,tc);  // Flip Player sprite when angle requires it.
 			setPlayerPosition(pc);  // Set player position variable for others.
 			if (cc->getThrowWeapon() == true && gotGun == true)  // Check if x is pressed.
@@ -521,6 +541,8 @@ void PhysicsSystem::update() {
 			if (tc->getGrabbed() == true)
 			{
 				gunGot = tc->getSubTag();
+				// SET PLAYER GUN FUNCTION
+				setPlayerGunGot(gunGot);
 			}
 			if (tc->getSubTag() == "grenade") {
 				GrenadeComponent * gc = (GrenadeComponent*)entity->getCompByType("GRENADE");

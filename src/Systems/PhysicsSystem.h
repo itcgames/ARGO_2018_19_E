@@ -62,6 +62,7 @@ public:
 	void playerFlip(PositionComponent *pc, SpriteComponent *sc, ControlComponent *cc, TagComponent *tc);
 	void launchGun(PositionComponent *pc, TagComponent *tc);
 	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
+	void setPlayerGunGot(std::string gun);
 	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
 	void setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
 	void setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,TagComponent * tc);

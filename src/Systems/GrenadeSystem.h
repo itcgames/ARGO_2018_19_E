@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "../Entity.h"
+#include "../AI.h"
 #include "../cute_c2.h"
 #include "../MapLoader.h"
 #include "../ParticleExample.h"
@@ -15,7 +16,7 @@ class GrenadeSystem
 public:
 	GrenadeSystem();
 	void addEntity(Entity * e);
-	void update(std::vector<std::vector<Tile*>> tiles, Entity * ai);
+	void update(std::vector<std::vector<Tile*>> tiles, std::vector<AI *> aiChars);
 	float dist(c2v v1, c2v v2);
 	void render();
 	void setRenderer(SDL_Renderer * renderer);

@@ -34,6 +34,7 @@
     <ClCompile Include="src\Menus\OnlineScreen.cpp" />
     <ClCompile Include="src\Client\Client.cpp" />
     <ClCompile Include="src\Systems\GrenadeSystem.cpp" />
+    <ClCompile Include="src\Systems\RestartSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\AIComponent.h" />
@@ -86,5 +87,6 @@
     <ClInclude Include="src\Client\Client.h" />
     <ClInclude Include="src\Components\GrenadeComponent.h" />
     <ClInclude Include="src\Systems\GrenadeSystem.h" />
+    <ClInclude Include="src\Systems\RestartSystem.h" />
   </ItemGroup>
 </Project>
