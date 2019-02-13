@@ -4,6 +4,7 @@
 #include "Component.h"
 #include "../cute_c2.h"
 #include "StateComponent.h"
+#include <vector>
 
 class AIComponent : public Component
 {
@@ -48,11 +49,35 @@ public:
 
 	bool m_alive = true;
 	
+	bool facingleft = false;
+	bool facingRight = false;
+
+
+	c2v closestEnemy;
+	c2v closestJumpPoint;
+	c2v closestWalkPoint;
+
+	float oldYVel = 0;
+	float newYVel = 0;
+
+	bool m_gunInSight = false;
+
+	c2v curPosition = { 0,0 };
+	bool m_landed;
+
+
+	std::vector<std::pair<double, c2v>> m_distances;
+
+
+	std::pair<double, c2v> m_realDist;
 
 private:
 
 	bool m_left = false;
 	bool m_right = false;
+
+
+	
 
 	bool m_throwWeapon = false;
 	bool m_jump = false;

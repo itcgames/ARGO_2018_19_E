@@ -34,9 +34,6 @@ AI::AI(SDL_Renderer* renderer)
 
 	m_spriteComponentHead->setColor(255, 255, 255);
 
-
-
-	this->addComponent(new AIComponent(10));
 	this->addComponent(new FState());
 	this->addComponent(new HealthComponent(10));
 	this->addComponent(new TagComponent("AI_TAG"));
