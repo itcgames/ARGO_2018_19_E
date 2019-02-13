@@ -26,11 +26,12 @@ Game::Game()
 		printf("TTF_Init: %s\n", TTF_GetError());
 	}
 
-	TTF_Font* Font = TTF_OpenFont("arial.ttf", 300);
+	Font = TTF_OpenFont("arial.ttf", 300);
 	if (!Font) {
 		printf("TTF_OpenFont: %s\n", TTF_GetError());
 		// handle error
 	}
+
 
 	TTF_Font* menuFont = TTF_OpenFont("arial.ttf", 30);
 	if (!menuFont) {
@@ -66,7 +67,7 @@ Game::Game()
 
 	m_map = new MapLoader();
 
-	m_map->load("level2.tmx", m_renderer);
+	m_map->load("testlevel.tmx", m_renderer);
 
 	pistol = new Gun(m_renderer, 1, 1500, 100);
 	shotgun = new Gun(m_renderer,2, 1000,100);
@@ -145,11 +146,16 @@ void Game::update() {
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.4, 0.4);
 		m_ps.bulletUpdate(m_renderer);
+		checkRoundOver();
 		if (!(*m_online)) {
+
 		m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
-		m_hs.update();
 		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
 		m_ais.receive(m_ents);
+
+		m_hs.update();
+		//m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
+			
 		}
 		else {
 			
@@ -203,7 +209,10 @@ void Game::render() {
 
 		m_grenadeSys.render();
 		//m_emitter->update();
-		checkRoundOver();
+		if (m_drawRoundText) {
+			SDL_RenderCopy(m_renderer, text, NULL, &renderQuad);
+		}
+		
 		break;
 	case GameState::Credits:
 		m_credits->render(m_renderer);
@@ -216,6 +225,7 @@ void Game::render() {
 }
 
 void Game::checkRoundOver() {
+	bool roundEnd = false;
 	int dead = 0;
 	for (AI * ai : m_aiCharacters) {
 		Entity * ent = (Entity *)ai;
@@ -224,10 +234,52 @@ void Game::checkRoundOver() {
 			dead++;
 		}
 	}
-	if (dead >= 3) {
-		m_restartSys.reset(0);
-		m_map->load("level2.tmx", m_renderer);
+	Entity * ent = (Entity *)p;
+	ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+	if (!control->getAlive()) {
+		if (!m_drawRoundText) {
+			initialiseText("AI Wins");
+			m_drawRoundText = true;
+		}
+		roundEnd = true;
 	}
+	else if (dead >= 3) {
+		if (!m_drawRoundText) {
+			initialiseText("Player Wins");
+			m_drawRoundText = true;
+		}
+		roundEnd = true;
+	}
+	if (roundEnd) {
+		m_roundCounter++;
+
+		if (m_roundCounter > ROUND_OVER) {
+			control->setAlive(true);
+			int randNum = (rand() % 3) + 1;
+			m_restartSys.reset(randNum);
+			if (randNum == 1) {
+				m_map->load("testlevel.tmx", m_renderer);
+			}
+			else if (randNum == 2) {
+				m_map->load("level3.tmx", m_renderer);
+			}
+			else if (randNum == 3) {
+				m_map->load("level4.tmx", m_renderer);
+			}
+			m_roundCounter = 0;
+			m_drawRoundText = false;
+		}
+	}
+}
+
+void Game::initialiseText(std::string message) {
+	round_text = message;
+	textSurface = TTF_RenderText_Solid(Font, round_text.c_str(), textColor);
+	text = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+	int text_width = textSurface->w;
+	int text_height = textSurface->h;
+	SDL_FreeSurface(textSurface);
+	renderQuad = { 150, 200, text_width, text_height };
 }
 
 SDL_Rect* Game::getCamera()

@@ -86,7 +86,7 @@ c2v AISystem::checkWalkPoints(std::vector<c2v*> points, PositionComponent* pc)
 	double smallest = 10000;
 
 	c2v myPos = { pc->getX(), pc->getY() };
-	c2v closestPosition;
+	c2v closestPosition = c2v{ 0,0 };
 
 	for (auto it = points.begin(); it != points.end(); it++)
 	{
