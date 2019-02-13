@@ -30,6 +30,9 @@ public:
 	bool getFire() { return m_fire; }
 	void setFire(bool fire) { m_fire = fire; }
 
+	bool getAlive() { return m_alive; }
+	void setAlive(bool alive) { m_alive = alive; }
+
 private:
 
 	bool m_left = false;
@@ -42,5 +45,6 @@ private:
 
 	float m_gunAngle = 0.0f;
 
+	bool m_alive = true;
 };
 #endif // !CONTROLCOMPONENT_H
