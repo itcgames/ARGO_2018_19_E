@@ -10,29 +10,36 @@ void AISystem::addEntity(Entity * e) {
 
 void AISystem::receive(std::vector<Entity*> ents)
 {
-	int count = 0;
-	c2v vec = { 0.0f, 0.0f };
-	m_distances.assign(ents.size(), std::make_pair(0.0, vec));
 	
-	for (auto e = ents.begin(); e != ents.end(); ++e)
-	{
-		PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
-		ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
-		AIComponent * ac = (AIComponent*)(*e)->getCompByType("AI");
-		
-		
-		m_distances[count].first = ac->distance(curPosition, pos->getX(), pos->getY());
-			
-		vec.x = pos->getX();
-		vec.y = pos->getY();
-			
-		m_distances[count].second = vec;
-		
-		count++;
-	}	
+	c2v vec = { 0.0f, 0.0f };
+	for (Entity * entity : m_entities) {
+		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
+		int count = 0;
+		ac->m_distances.assign(ents.size(), std::make_pair(0.0, vec));
+		m_dist = ac->m_distances;
+		for (auto e = ents.begin(); e != ents.end(); ++e)
+		{
+			PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
+			ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
+
+			m_position = c2v{ pos->getX(), pos->getY() };
+			//PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
+
+		//std::cout << ac->curPosition.x << ", " << ac->curPosition.y << std::endl;
+			ac->m_distances[count].first = distance(ac->curPosition, m_position);
+
+			vec.x = pos->getX();
+			vec.y = pos->getY();
+
+			ac->m_distances[count].second = vec;
+
+
+			count++;
+		}
+	}
 }
 
-c2v AISystem::checkClosest(std::vector<std::pair<double, c2v>> distances)
+c2v AISystem::checkClosest(std::vector<std::pair<double, c2v>> distances, std::pair<double, c2v > real)
 {
 
 	double smallest = 10000;
@@ -43,16 +50,15 @@ c2v AISystem::checkClosest(std::vector<std::pair<double, c2v>> distances)
 		{
 			if (it->first < smallest) {
 				smallest = it->first;
-				m_realDist = (*it);
+				real = (*it);
 			}
 		}
 	}
 	
-	//need to fix to find closest;
-	return m_realDist.second;
+	return real.second;
 }
 
-c2v AISystem::checkPoints(std::vector<c2v*> points, PositionComponent* pc)
+c2v AISystem::checkJumpPoints(std::vector<c2v*> points, PositionComponent* pc)
 {
 
 	double smallest = 10000;
@@ -62,7 +68,6 @@ c2v AISystem::checkPoints(std::vector<c2v*> points, PositionComponent* pc)
 
 	for (auto it = points.begin(); it != points.end(); it++)
 	{
-		//std::cout << (*it)->x << std::endl;
 		auto pos = c2v{ (*it)->x, (*it)->y };
 		double dist = distance(myPos, pos);
 
@@ -75,7 +80,29 @@ c2v AISystem::checkPoints(std::vector<c2v*> points, PositionComponent* pc)
 	return closestPosition;
 }
 
-void AISystem::update(std::vector<c2v*> points) {
+c2v AISystem::checkWalkPoints(std::vector<c2v*> points, PositionComponent* pc)
+{
+
+	double smallest = 10000;
+
+	c2v myPos = { pc->getX(), pc->getY() };
+	c2v closestPosition;
+
+	for (auto it = points.begin(); it != points.end(); it++)
+	{
+		auto pos = c2v{ (*it)->x, (*it)->y };
+		double dist = distance(myPos, pos);
+
+		if (dist < smallest)
+		{
+			smallest = dist;
+			closestPosition = pos;
+		}
+	}
+	return closestPosition;
+}
+
+void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints) {
 	
 	
 	int speed = 0;
@@ -90,99 +117,114 @@ void AISystem::update(std::vector<c2v*> points) {
 		FState *state = (FState*)entity->getCompByType("STATE");
 		//CollisionComponent *coll = (CollisionComponent*)entity->getCompByType("COLLISION");
 
+		ac->curPosition.x = pc->getX();
+		ac->curPosition.y = pc->getY();
+
 		if (ac->m_alive) {
-			curPosition.x = pc->getX();
-			curPosition.y = pc->getY();
+			
 
-
-			if (pc->getVelY() > 0.9 && pc->getVelY() < 1.0)
+			
+			ac->newYVel = pc->getVelY();
+			if (ac->newYVel != ac->oldYVel)
 			{
-				m_landed = true;
-				
-			}
-			//closestEnemy = checkClosest(m_distances);
-			if (m_landed) {
-				closestPoint = checkPoints(points, pc);
-			}
-			if (curPosition.x > closestEnemy.x)
-			{
-				//sc->m_flipValue = SDL_FLIP_HORIZONTAL;
-			}
-			if (curPosition.x < closestEnemy.x)
-			{
-				//sc->m_flipValue = SDL_FLIP_NONE;
-
-			}
-			if (closestPoint.x > pc->getX())
-			{
-				facingRight = true;
-				facingleft = false;
+				ac->m_landed = false;
+				ac->oldYVel = ac->newYVel;
 			}
 			else
 			{
-				facingleft = true;
-				facingRight = false;
-			}
-
-			
-			if (facingleft && m_landed) {
-				/*if (curPosition.x > closestPoint.x)
-				{*/
-				pc->setVelX(pc->getVelX() - 1.5);
-
-				/*}*/
-				if (curPosition.x < closestPoint.x  + 100/* && curPosition.x > closestPoint.x - 25*/ && m_landed)
-				{
-					pc->setVelX(pc->getVelX() - 4.0);
-					ac->setJump(true);
-					m_landed = false;
-
-				}
-
-			/*	if (pc->m_hitSide)
-				{
-					ac->setJump(true);
-					pc->setVelX(pc->getVelX() - 8.0);
-					pc->m_hitSide = false;
-				}*/
-			}
-
-			if (facingRight && m_landed) {
-				pc->setVelX(pc->getVelX() + 1.5);
-
-				if (curPosition.x > closestPoint.x - 100/* && curPosition.x > closestPoint.x - 25*/ && m_landed)
-				{
-					pc->setVelX(pc->getVelX() + 4.0);
-					ac->setJump(true);
-					m_landed = false;
-
-				}
-
-				/*if (pc->m_hitSide)
-				{
-					ac->setJump(true);
-					pc->setVelX(pc->getVelX() + 4.0);
-					pc->m_hitSide = false;
-				}*/
+				ac->m_landed = true;
 			}
 			
-			
-			if (curPosition.x < closestPoint.x)
+
+
+			if (ac->curPosition.x > ac->closestWalkPoint.x)
 			{
-				pc->setVelX(pc->getVelX() + 1.5);
+				ac->facingleft = true;
+				ac->facingRight = false;
+				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+			}
+			else
+			{
+				ac->facingRight = true;
+				ac->facingleft = false;
+
+				sc->m_flipValue = SDL_FLIP_NONE;
 			}
 
-			//}
 
-			////std::cout << "Ypos " << pc->getY() << std::endl;
+			ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
 
-			//if (curPosition.y > closestEnemy.y)
-			//{
-			//	ac->setJump(true);
-			//}
+			
+			if (ac->m_landed) {
+				//closestJumpPoint = checkJumpPoints(jumppoints, pc);
 
-			//std::cout << "Point = " << closestPoint.x << ", " << closestPoint.y << std::endl;
-			//std::cout << "Position = " << curPosition.x << std::endl;
+				ac->closestWalkPoint = checkWalkPoints(walkpoints, pc);
+
+			}
+		
+
+			if (!ac->m_gunInSight) {
+				if (ac->facingleft && ac->m_landed)
+				{
+					ac->setLeft(true);
+					ac->setRight(false);
+
+					if (ac->curPosition.x < ac->closestWalkPoint.x + 10)
+					{
+						if (pc->getVelX() < -7.8)
+						{
+							ac->setJump(true);
+						}
+						else
+						{
+							pc->setVelX(-8);
+							ac->setJump(true);
+						}
+
+					}
+				}
+				if (ac->facingRight && ac->m_landed)
+				{
+					ac->setRight(true);
+					ac->setLeft(false);
+
+					if (ac->curPosition.x > ac->closestWalkPoint.x - 10)
+					{
+						if (pc->getVelX() > 7.8)
+						{
+							ac->setJump(true);
+						}
+						else
+						{
+							pc->setVelX(8);
+							ac->setJump(true);
+						}
+					}
+				}
+			}
+			//std::cout << ac->closestEnemy.x << ", " << ac->closestEnemy.y << std::endl;
+			if (ac->curPosition.y > ac->closestEnemy.y && ac->curPosition.y < ac->closestEnemy.y + 200 && ac->m_landed)
+			{
+				ac->m_gunInSight = true;
+
+				if (ac->closestEnemy.x < ac->curPosition.x)
+				{
+					ac->setRight(false);
+					ac->setLeft(true);
+				}
+				if (ac->closestEnemy.x > ac->curPosition.x)
+				{
+					ac->setRight(true);
+					ac->setLeft(false);
+				}
+
+				
+			}
+			
+		}
+		else
+		{
+
 		}
 		
 		
@@ -195,5 +237,9 @@ double AISystem::distance(c2v  vecOne, c2v vecTwo)
 {
 	return std::sqrt((vecOne.x - vecTwo.x) * (vecOne.x - vecTwo.x) + (vecOne.y - vecTwo.y) * (vecOne.y - vecTwo.y));
 }
+
+
+
+
 
 

@@ -22,6 +22,7 @@ public:
         SMOKE,
         SNOW,
         RAIN,
+		GRENADE
     };
 
     PatticleStyle style_ = NONE;

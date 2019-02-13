@@ -20,7 +20,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Menu);
+	*m_currentGameState = (GameState::Game);
 
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -52,8 +52,12 @@ Game::Game()
 	testLight->setSize(c2v{ 3.0f, 3.0f });
 
 	p = new Player(m_renderer);
-	h = new Hand(m_renderer);
-	ai = new AI(m_renderer);
+	h1 = new Hand(m_renderer,1);
+	h2 = new Hand(m_renderer,2);
+	for (int i = 0; i < 3; i++) {
+		m_aiCharacters.push_back(new AI(m_renderer));
+	}
+	
 
 	m_backgroundSprite = new SpriteComponent(0, 0, 1920, 1080);
 	m_backgroundSprite->loadFromFile("assets/cybercity.png", m_renderer);
@@ -64,8 +68,10 @@ Game::Game()
 
 	m_map->load("level2.tmx", m_renderer);
 
-	pistol = new Gun(m_renderer,1,200,100);
+	pistol = new Gun(m_renderer, 1, 1500, 100);
 	shotgun = new Gun(m_renderer,2, 1000,100);
+	juicer = new Gun(m_renderer, 3, 200, 100);
+	grenade = new Gun(m_renderer, 4, 500, 100);
 
 	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
 	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
@@ -76,8 +82,10 @@ Game::Game()
 	//m_ents.push_back((Entity*)p);
 	//m_ents.push_back((Entity*)ai);
 	m_ents.push_back((Entity*)pistol);
+	m_ents.push_back((Entity*)shotgun);
 
 	m_ps.setRenderer(m_renderer);
+	m_grenadeSys.setRenderer(m_renderer);
 }
 
 Game::~Game()
@@ -114,7 +122,6 @@ void Game::run()
 void Game::update() {
 	SDL_PollEvent(&event);
 
-
 	switch (*m_currentGameState)
 	{
 	case GameState::None:
@@ -138,17 +145,15 @@ void Game::update() {
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.4, 0.4);
 		m_ps.bulletUpdate(m_renderer);
-		if (!*(m_online)) {
-			m_hs.update();
-			m_ais.update(m_map->getPoints());
-			m_ais.receive(m_ents);
+		if (!(*m_online)) {
+		m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
+		m_hs.update();
+		//m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
+		m_ais.receive(m_ents);
 		}
 		else {
 			
 		}
-		
-		
-		
 		break;
 	case GameState::Credits:
 		break;
@@ -186,12 +191,19 @@ void Game::render() {
 		break;
 	case GameState::Game:
 		m_backgroundSprite->render(m_renderer);
-		p->render(m_renderer);
-		m_rs.render(m_renderer);
 		m_map->draw(m_renderer);
+		p->render(m_renderer);
+		for (AI * ai : m_aiCharacters) {
+			ai->render(m_renderer);
+		}
+		m_rs.render(m_renderer);
 		m_ps.bulletRender(m_renderer);
+
 		testLight->render(m_renderer);
+
+		m_grenadeSys.render();
 		//m_emitter->update();
+		checkRoundOver();
 		break;
 	case GameState::Credits:
 		m_credits->render(m_renderer);
@@ -201,6 +213,21 @@ void Game::render() {
 	}
 	SDL_RenderPresent(m_renderer);
 
+}
+
+void Game::checkRoundOver() {
+	int dead = 0;
+	for (AI * ai : m_aiCharacters) {
+		Entity * ent = (Entity *)ai;
+		AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
+		if (!ai->m_alive) {
+			dead++;
+		}
+	}
+	if (dead >= 6) {
+		m_restartSys.reset(0);
+		m_map->load("testlevel.tmx", m_renderer);
+	}
 }
 
 SDL_Rect* Game::getCamera()
@@ -248,33 +275,60 @@ void Game::initialise()
 
 	m_cs.addEntity((Entity*)pistol);
 	m_cs.addEntity((Entity*)shotgun);
-	m_cs.addEntity((Entity*)h);
+	m_cs.addEntity((Entity*)juicer);
+	m_cs.addEntity((Entity*)grenade);
+	m_cs.addEntity((Entity*)h1);
+	m_cs.addEntity((Entity*)h2);
 
 	m_rs.addEntity((Entity*)p);
 	m_rs.addEntity((Entity*)pistol);
+	m_rs.addEntity((Entity*)grenade);
 	m_rs.addEntity((Entity*)shotgun);
-	m_rs.addEntity((Entity*)h);
-	
-	m_rs.addEntity((Entity*)ai);
+	m_rs.addEntity((Entity*)juicer);
+	m_rs.addEntity((Entity*)h1);
+	m_rs.addEntity((Entity*)h2);
 
 	m_ps.addEntity((Entity*)p);
-	m_ps.addEntity((Entity*)ai);
-
-	m_ais.addEntity((Entity*)ai);
 
 	m_ps.addEntity((Entity*)pistol);
 	m_ps.addEntity((Entity*)shotgun);
-	m_ps.addEntity((Entity*)h);
+	m_ps.addEntity((Entity*)juicer);
+	m_ps.addEntity((Entity*)grenade);
+	m_ps.addEntity((Entity*)h1);
+	m_ps.addEntity((Entity*)h2);
 
 	m_ps.addEntity((Entity*)pistol);
 	m_guns.addEntity((Entity*)pistol);
 
 	m_ps.addEntity((Entity*)shotgun);
 	m_guns.addEntity((Entity*)shotgun);
+	m_ps.addEntity((Entity*)juicer);
+	m_guns.addEntity((Entity*)juicer);
+
+	m_ps.addEntity((Entity*)grenade);
+	m_guns.addEntity((Entity*)grenade);
 
 	m_collSys.addEntity((Entity*)p);
-	m_collSys.addEntity((Entity*)ai);
+	
 	m_collSys.addEntity((Entity*)pistol);
 	m_collSys.addEntity((Entity*)shotgun);
+	m_collSys.addEntity((Entity*)juicer);
+	m_collSys.addEntity((Entity*)grenade);
+
+	m_grenadeSys.addEntity((Entity*)grenade);
+
+	for (AI * ai : m_aiCharacters) {
+		m_collSys.addEntity((Entity*)ai);
+		m_ais.addEntity((Entity*)ai);
+		m_rs.addEntity((Entity*)ai);
+		m_ps.addEntity((Entity*)ai);
+		m_restartSys.addEntity((Entity*)ai);
+	}
+
+	m_restartSys.addEntity((Entity*)p);
+	m_restartSys.addEntity((Entity*)pistol);
+	m_restartSys.addEntity((Entity*)shotgun);
+	m_restartSys.addEntity((Entity*)juicer);
+	m_restartSys.addEntity((Entity*)grenade);
 }
 

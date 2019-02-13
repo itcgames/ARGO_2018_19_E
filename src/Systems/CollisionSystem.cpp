@@ -71,11 +71,8 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 							}
 
 							else if (val == "left") {
-								
+
 								pc->setX(tiles[i].at(j)->dRect.x - cc->getW());
-								pc->m_allowedJump = true;
-								pc->m_hitSide = true;
-								m_count = 0;
 							}
 
 							else if (val == "right")
@@ -113,7 +110,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 								
 							}
 							else if (val == "right" || val == "left") {
-								pc->setVelX(-(pc->getVelX() * 3));
+								pc->setVelX(-(pc->getVelX()));
 							}
 
 
@@ -143,6 +140,11 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
+
+			if (pc->getY() > 1200) {
+				AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
+				ai->m_alive = false;
+			}
 			for (int i = 0; i < bullets->size(); i++) {
 				std::string val = rectCollision(cc->getCollider(), bullets->at(i)->collider);
 				c2v bPos = bullets->at(i)->m_spriteComponent->getPosition();
@@ -167,7 +169,9 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 					}
 					if (tag->getTag() == "AI_TAG") {
 						AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
-						ai->m_alive = false;
+						PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
+						ai->m_alive = false;			
+						//pc->setVelX(0);
 					}
 				}
 
@@ -186,7 +190,6 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 					val = rectCollision(bullets->at(i)->collider, tiles[j].at(k)->collider);
 					if (val != "none") {
 						bullets->erase(bullets->begin() + i);
-						std::cout << "Delete" << std::endl;
 					}
 				}
 

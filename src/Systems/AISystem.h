@@ -13,27 +13,35 @@ class AISystem
 {
 	std::vector<Entity *> m_entities;
 
-	
+	struct Line
+	{
+		float x1;
+		float y1;
+		float x2;
+		float y2;
+	};
 
 public:
 	AISystem();
 	void addEntity(Entity * e);
-	void update(std::vector<c2v*> points);
-	c2v checkClosest(std::vector<std::pair<double, c2v>> distances);
+	void update(std::vector<c2v*> points, std::vector<c2v*> walkpoints);
+	c2v checkClosest(std::vector<std::pair<double, c2v>> distances, std::pair<double, c2v > real);
 	double distance(c2v  vecOne, c2v vecTwo);
-	c2v checkPoints(std::vector<c2v*> points, PositionComponent* pc);
+	c2v checkJumpPoints(std::vector<c2v*> points, PositionComponent* pc);
+	c2v checkWalkPoints(std::vector<c2v*> points, PositionComponent* pc);
 	void receive(std::vector<Entity*> ents);
+	c2v getPosition(Entity * ent);
+
 private:
-	c2v closestEnemy;
-	c2v closestPoint;
-	std::vector<std::pair<double, c2v>> m_distances;
-	std::pair<double, c2v> m_realDist;
+	
+	std::vector<std::pair<double, c2v>> m_dist;
+	
+	
 
-	c2v curPosition;
-	bool m_landed;
 	Animation *fsm;
-
-	bool facingleft = false;
-	bool facingRight = false;
+	c2v m_position;
 };
+
+
+
 #endif // !AISYSTEM_H
