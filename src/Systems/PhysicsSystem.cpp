@@ -440,7 +440,7 @@ void PhysicsSystem::movePlayer(ControlComponent * cc,PositionComponent *pc) {
 		}
 	}
 	if (cc->getJump() && pc->m_allowedJump) {
-		pc->setVelY(pc->getVelY() - jumpSpeed);
+		pc->setVelY(- jumpSpeed);
 		cc->setJump(false);
 		pc->m_allowedJump = false;
 	}
@@ -583,7 +583,7 @@ void PhysicsSystem::update() {
 			aiPositionY = pc->getY();
 			
 			if (ac->getJump() && pc->m_allowedJump) {
-				pc->setVelY(pc->getVelY() - 25);
+				pc->setVelY(pc->getVelY() - 20);
 				ac->setJump(false);
 				pc->m_allowedJump = false;
 			}
@@ -679,8 +679,8 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							float shotgunRadAng = angle * 3.14159265359 / 180;
 							//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 							//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
-							float shotgunTipX = 103.6 * (cos(shotgunRadAng));
-							float shotgunTipY = 103.6 * (sin(shotgunRadAng));
+							shotgunTipX = 103.6 * (cos(shotgunRadAng));
+							shotgunTipY = 103.6 * (sin(shotgunRadAng));
 							for (int i = 0; i < 7; i++)
 							{
 								float random = rand() % 40 - 20;
@@ -756,10 +756,10 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							float unitY = juicerYOffset / mag;
 							if (sc->m_flipValue == SDL_FLIP_NONE)
 							{
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - juicerTipX + 60, pc->getY() + juicerTipY + 110, -(angle - 90), unitX * 100, unitY * 80, 1000));
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - juicerTipX + 60, pc->getY() + juicerTipY + 110, -(angle - 90), unitX * 100, unitY * 80, 200));
 							}
 							else {
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - juicerTipX + 60, pc->getY() + juicerTipY + 100, -(angle - 90), unitX * 100, unitY * 80, 1000));
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - juicerTipX + 60, pc->getY() + juicerTipY + 100, -(angle - 90), unitX * 100, unitY * 80, 200));
 							}
 						}
 						else if (tc->getSubTag() == "grenade" && gunGot == "grenade")
@@ -877,14 +877,17 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
-			flash->setPosition(gunPositionX - shotgunTipX - 80 , gunPositionY + shotgunTipY + 70);
+			flash->setPosition(gunPositionX - shotgunTipX +20, gunPositionY + shotgunTipY + 70);
+			//pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70
 			//p->setAngle(-angle);
 		}
 		else
 		{
-			flash->setPosition(gunPositionX + shotgunTipX + 100, gunPositionY + shotgunTipY + 70);
+			flash->setPosition(gunPositionX - shotgunTipX, gunPositionY + shotgunTipY + 70);
+			//pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70
 			//p->setAngle(angle);
 		}
+	
 		flash->update();
 		flash->draw();
 
