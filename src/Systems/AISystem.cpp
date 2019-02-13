@@ -136,6 +136,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 			}
 			
 
+
 			if (ac->curPosition.x > ac->closestWalkPoint.x)
 			{
 				ac->facingleft = true;
@@ -150,11 +151,15 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 				sc->m_flipValue = SDL_FLIP_NONE;
 			}
 
+
 			ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
+
 			
 			if (ac->m_landed) {
 				//closestJumpPoint = checkJumpPoints(jumppoints, pc);
+
 				ac->closestWalkPoint = checkWalkPoints(walkpoints, pc);
+
 			}
 		
 

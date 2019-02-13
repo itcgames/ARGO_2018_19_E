@@ -10,6 +10,7 @@
 #include "./Systems/GunSystem.h"
 #include "./Systems/CollisionSystem.h"
 #include "./Systems/GrenadeSystem.h"
+#include "./Systems/RestartSystem.h"
 #include "Menus/SplashScreen.h"
 #include "Menus/CreditScreen.h"
 #include "Menus/MenuScreen.h"
@@ -55,6 +56,7 @@ public:
 	static Game* s_pInstance;
 
 	void setUpController();
+	void checkRoundOver();
 
 	SDL_Rect* getCamera();
 	c2v* getCameraCentre();
@@ -96,6 +98,8 @@ private:
 	AISystem m_ais;
 	CollisionSystem m_collSys;
 	GrenadeSystem m_grenadeSys;
+
+	RestartSystem m_restartSys;
 
 	SDL_Rect m_screenSize;
 
