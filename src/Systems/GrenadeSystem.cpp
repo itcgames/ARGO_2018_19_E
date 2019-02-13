@@ -51,6 +51,8 @@ void GrenadeSystem::update(std::vector<std::vector<Tile*>>  tiles, std::vector<A
 
 			m_startAnimating = true;
 			gc->setArmed(false);
+			gc->setExplode(false);
+			gc->setTTL(300);
 		}
 	}
 
