@@ -56,7 +56,7 @@ Game::Game()
 	h1 = new Hand(m_renderer,1);
 	h2 = new Hand(m_renderer,2);
 	for (int i = 0; i < 3; i++) {
-		m_aiCharacters.push_back(new AI(m_renderer));
+		m_aiCharacters.push_back(new AI(m_renderer,i*500,100));
 	}
 	
 
@@ -144,17 +144,16 @@ void Game::update() {
 
 		m_ps.update();
 		m_guns.update();
-		SDL_RenderSetScale(m_renderer, 0.4, 0.4);
+		SDL_RenderSetScale(m_renderer, 0.7, 0.5);
 		m_ps.bulletUpdate(m_renderer);
 		checkRoundOver();
 		if (!(*m_online)) {
-
 		m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
 		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
 		m_ais.receive(m_ents);
 
 		m_hs.update();
-		//m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
+		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
 			
 		}
 		else {

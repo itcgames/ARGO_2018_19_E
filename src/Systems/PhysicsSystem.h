@@ -60,7 +60,7 @@ public:
 	void setPlayerPosition(PositionComponent *pc);
 	void throwGunFun(ControlComponent * cc);
 	void playerFlip(PositionComponent *pc, SpriteComponent *sc, ControlComponent *cc, TagComponent *tc);
-	void launchGun(PositionComponent *pc, TagComponent *tc);
+	void launchGun(PositionComponent *pc, TagComponent *tc, CollisionComponent * cc);
 	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
 	void setPlayerGunGot(std::string gun);
 	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);

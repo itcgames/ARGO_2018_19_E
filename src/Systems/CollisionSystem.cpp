@@ -73,6 +73,9 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 							else if (val == "left") {
 
 								pc->setX(tiles[i].at(j)->dRect.x - cc->getW());
+								pc->m_allowedJump = true;
+								pc->m_hitSide = true;
+								m_count = 0;
 							}
 
 							else if (val == "right")

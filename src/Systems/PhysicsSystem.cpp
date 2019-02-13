@@ -4,10 +4,8 @@ PhysicsSystem::PhysicsSystem()
 	Friction.x = 0.90;
 	Friction.y = 0.98;
 
-	
 	gunFriction.x = 0.97;
 	gunFriction.y = 0.96;
-	
 	
 }
 
@@ -67,7 +65,6 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 			else {
 				pc->setX(playerPositionX - xOffset);
 			}
-			// Possible merge error
 			if (tc->getSubTag() == "pistol")
 			{
 				pc->setX(playerPositionX - xOffset);  // set gun position + offset for player centre - offset for angle
@@ -267,7 +264,7 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 		}
 	}
 	else {
-		if (cc->getAngle() < 0)
+		if (angle < 90)
 		{
 			sc->m_flipValue = SDL_FLIP_HORIZONTAL;
 			left = false;
@@ -281,7 +278,7 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 	}
 }
 
-void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc) {
+void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc,CollisionComponent * cc) {
 	//std::cout << "X = " << -xOffset <<  "Y = " << yOffset << std::endl;
 	if (tc->getSubTag() == "pistol")
 	{
@@ -296,8 +293,13 @@ void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc) {
 	}
 	else if (tc->getSubTag() == "juicer")
 	{
-		pc->setVelX(-xOffset * 2);
-		pc->setVelY(yOffset * 2);
+		float ySpeed = yOffset;
+		if (yOffset > 0)
+		{
+			ySpeed = 0;
+		}
+		pc->setVelX(-xOffset / 5);
+		pc->setVelY(ySpeed / 5);
 	}
 	else if (tc->getSubTag() == "grenade") {
 		pc->setVelX(-xOffset / 2);
@@ -483,6 +485,7 @@ void PhysicsSystem::update() {
 
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
+		CollisionComponent * colc = (CollisionComponent*)entity->getCompByType("COLLISION");
 		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
@@ -515,16 +518,28 @@ void PhysicsSystem::update() {
 			{
 				if (throwGun == true)  // Check if a weapon wants to be thrown
 				{
-					launchGun(pc, tc);
+					launchGun(pc, tc,colc);
 				}
 			}
-			if (cc->getAngle() < 0 && gotGun == true) {
+			/*if (cc->getAngle() < 0 && gotGun == true) {
 				if (gunGot == tc->getSubTag())
 				{
 					flipHorizontal(sc);
 				}
 			}
 			else if(gotGun == true) {
+				if (gunGot == tc->getSubTag())
+				{
+					flipNone(sc);
+				}
+			}*/
+			if (angle < 90 && gotGun == true) {
+				if (gunGot == tc->getSubTag())
+				{
+					flipHorizontal(sc);
+				}
+			}
+			else if (gotGun == true) {
 				if (gunGot == tc->getSubTag())
 				{
 					flipNone(sc);
@@ -696,6 +711,7 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 		{
 			FactoryComponent * fc = (FactoryComponent*)entity->getCompByType("FACTORY");
 			ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
+			CollisionComponent * colc = (CollisionComponent*)entity->getCompByType("COLLISION");
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 			if (tc->getGrabbed() == true)  // Ensure gun is grabbed before shooting
@@ -806,7 +822,7 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							GrenadeComponent * gc = (GrenadeComponent*)entity->getCompByType("GRENADE");
 							throwGun = true;
 							gc->setArmed(true);
-							launchGun(pc, tc);
+							launchGun(pc, tc,colc);
 
 							if (SDL_HapticRumblePlay(haptic, .5, 100) != 0)
 							{
