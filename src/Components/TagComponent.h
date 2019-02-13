@@ -18,6 +18,10 @@ public:
 
 	std::string m_tag = "TAG";
 
+	std::string gunGot = "none";
+	std::string getGunGot() { return gunGot; }
+	void setGunGot(std::string string) { gunGot = string; }
+
 	std::string getType() { return m_tag; }
 
 	bool grabbed = false;

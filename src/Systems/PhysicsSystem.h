@@ -59,15 +59,16 @@ public:
 	void pickUpAgain(TagComponent *tc);
 	void setPlayerPosition(PositionComponent *pc);
 	void throwGunFun(ControlComponent * cc);
-	void playerFlip(PositionComponent *pc, SpriteComponent *sc, ControlComponent *cc);
+	void playerFlip(PositionComponent *pc, SpriteComponent *sc, ControlComponent *cc, TagComponent *tc);
 	void launchGun(PositionComponent *pc, TagComponent *tc);
 	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
+	void setPlayerGunGot(std::string gun);
 	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
 	void setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
 	void setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,TagComponent * tc);
 	void setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, TagComponent * tc);
 	void setHandNormal(SpriteComponent * sc, PositionComponent *pc);
-	void movePlayer(ControlComponent * cc, PositionComponent *pc);
+	void movePlayer(ControlComponent * cc, PositionComponent *pc, TagComponent *tc);
 	void setPosition(PositionComponent * pc);
 	void flipNone(SpriteComponent * sc);
 	void flipHorizontal(SpriteComponent * sc);
@@ -96,5 +97,7 @@ public:
 
 	float juicerTipX = 0;
 	float juicerTipY = 0;
+
+	float m_grenadeColor = 0;
 };
 #endif // !PHYSICSSYSTEM_H

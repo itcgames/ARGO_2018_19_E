@@ -143,6 +143,7 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Gun.cpp" />
     <ClCompile Include="src\Hand.cpp" />
+    <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MapLoader.cpp" />
     <ClCompile Include="src\Menus\CreditScreen.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="src\Systems\HealthSystem.cpp" />
     <ClCompile Include="src\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="src\Systems\RenderSystem.cpp" />
+    <ClCompile Include="src\Systems\RestartSystem.cpp" />
     <ClCompile Include="src\Systems\SoundSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +196,7 @@
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GUI\GUI.h" />
     <ClInclude Include="src\Hand.h" />
+    <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\MapLoader.h" />
     <ClInclude Include="src\Menus\CreditScreen.h" />
     <ClInclude Include="src\Menus\MenuScreen.h" />
@@ -218,6 +221,7 @@
     <ClInclude Include="src\Systems\HealthSystem.h" />
     <ClInclude Include="src\Systems\PhysicsSystem.h" />
     <ClInclude Include="src\Systems\RenderSystem.h" />
+    <ClInclude Include="src\Systems\RestartSystem.h" />
     <ClInclude Include="src\Systems\SoundSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
