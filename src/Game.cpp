@@ -143,7 +143,7 @@ void Game::update() {
 		if (!(*m_online)) {
 		m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
 		m_hs.update();
-		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
+		//m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
 		m_ais.receive(m_ents);
 		}
 		else {
@@ -196,6 +196,7 @@ void Game::render() {
 		m_grenadeSys.render();
 		m_ais.renderLines(m_renderer);
 		//m_emitter->update();
+		checkRoundOver();
 		break;
 	case GameState::Credits:
 		m_credits->render(m_renderer);
@@ -205,6 +206,21 @@ void Game::render() {
 	}
 	SDL_RenderPresent(m_renderer);
 
+}
+
+void Game::checkRoundOver() {
+	int dead = 0;
+	for (AI * ai : m_aiCharacters) {
+		Entity * ent = (Entity *)ai;
+		AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
+		if (!ai->m_alive) {
+			dead++;
+		}
+	}
+	if (dead >= 3) {
+		m_restartSys.reset(0);
+		m_map->load("testlevel.tmx", m_renderer);
+	}
 }
 
 SDL_Rect* Game::getCamera()
@@ -299,6 +315,13 @@ void Game::initialise()
 		m_ais.addEntity((Entity*)ai);
 		m_rs.addEntity((Entity*)ai);
 		m_ps.addEntity((Entity*)ai);
+		m_restartSys.addEntity((Entity*)ai);
 	}
+
+	m_restartSys.addEntity((Entity*)p);
+	m_restartSys.addEntity((Entity*)pistol);
+	m_restartSys.addEntity((Entity*)shotgun);
+	m_restartSys.addEntity((Entity*)juicer);
+	m_restartSys.addEntity((Entity*)grenade);
 }
 

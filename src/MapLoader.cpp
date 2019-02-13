@@ -29,6 +29,14 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 	m_tileVector.reserve(m_cols);
 	m_tileVector.resize(m_cols);
 	//m_pointVector
+	for (int i = 0; i < m_cols; i++)
+	{
+		for (int j = 0; j < m_rows; j++)
+		{
+			if(!m_tileVector[i].empty())
+				m_tileVector[i].pop_back();
+		}
+	}
 	
 	for (int i = 0; i < m_cols; i++)
 	{

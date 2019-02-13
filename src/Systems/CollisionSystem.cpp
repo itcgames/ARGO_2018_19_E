@@ -146,6 +146,11 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
+
+			if (pc->getY() > 1200) {
+				AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
+				ai->m_alive = false;
+			}
 			for (int i = 0; i < bullets->size(); i++) {
 				std::string val = rectCollision(cc->getCollider(), bullets->at(i)->collider);
 				c2v bPos = bullets->at(i)->m_spriteComponent->getPosition();
@@ -189,7 +194,6 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 					val = rectCollision(bullets->at(i)->collider, tiles[j].at(k)->collider);
 					if (val != "none") {
 						bullets->erase(bullets->begin() + i);
-						//std::cout << "Delete" << std::endl;
 					}
 				}
 

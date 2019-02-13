@@ -137,15 +137,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 
 			M_LINES[0] = new Line{ curPosition.x, curPosition.y, curPosition.x + 1000, curPosition.y };
 			M_LINES[1] = new Line{ curPosition.x, curPosition.y, curPosition.x - 1000, curPosition.y };
-			//std::cout << m_onGroundCount << std::endl;
-			
-			/*if (pc->getVelY() > 0.9 && pc->getVelY() < 1.0)
-			{
-				m_landed = true;
-				
-			}*/
-
-			//std::cout << m_landed << std::endl;
+	
 			if (curPosition.x > closestWalkPoint.x)
 			{
 				facingleft = true;
@@ -159,9 +151,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 				sc->m_flipValue = SDL_FLIP_NONE;
 			}
 
-			std::cout << M_LINES.size() << std::endl;
 			closestEnemy = checkClosest(m_distances);
-			//std::cout << curPosition.y << std::endl;
 			
 			if (m_landed) {
 				//closestJumpPoint = checkJumpPoints(jumppoints, pc);
@@ -178,9 +168,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 				//sc->m_flipValue = SDL_FLIP_NONE;
 
 			}
-			//std::cout << closestWalkPoint.x << ", " << closestWalkPoint.y << std::endl;
-			
-			//std::cout << facingRight << std::endl;
+
 			if (closestWalkPointDist <= 30)
 			{
 				atWalkPoint = true;
