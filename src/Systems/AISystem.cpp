@@ -197,7 +197,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 					}
 				}
 			}
-			std::cout << ac->closestEnemy.x << ", " << ac->closestEnemy.y << std::endl;
+
 			if (ac->curPosition.y > ac->closestEnemy.y && ac->curPosition.y < ac->closestEnemy.y + 200 && ac->m_landed)
 			{
 				ac->m_gunInSight = true;
@@ -214,6 +214,10 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 				}
 
 				
+			}
+			else
+			{
+				ac->m_gunInSight = false;
 			}
 			
 		}

@@ -81,6 +81,7 @@ Game::Game()
 
 	m_ps.setRenderer(m_renderer);
 	m_grenadeSys.setRenderer(m_renderer);
+	m_collSys.setRenderer(m_renderer);
 }
 
 Game::~Game()
@@ -194,6 +195,7 @@ void Game::render() {
 		m_rs.render(m_renderer);
 		m_ps.bulletRender(m_renderer);
 		m_grenadeSys.render();
+		m_collSys.render();
 		//m_emitter->update();
 		break;
 	case GameState::Credits:

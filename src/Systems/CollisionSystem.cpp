@@ -66,7 +66,6 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 							}
 							else if (val == "bottom") {
 								pc->setVelY(5);
-								m_count = 0;
 							/*	if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0 && tag->getTag() == "Player")
 								{
 									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
@@ -76,7 +75,6 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 								pc->setVelX(-(pc->getVelX()));
 								pc->m_allowedJump = true;
 								pc->m_hitSide = true;
-								m_count = 0;
 							/*	if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0 && tag->getTag() == "Player")
 								{
 									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
@@ -139,6 +137,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vector<Tile*>> tiles) {
 
 	std::vector<Bullet *> * bullets = &poc->bullets;
+	
 	for (Entity * entity : m_entities) {
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
 
@@ -171,8 +170,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 					if (tag->getTag() == "AI_TAG") {
 						AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
 						PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
-						ai->m_alive = false;			
-						//pc->setVelX(0);
+						ai->m_alive = false;	
 					}
 				}
 
@@ -182,7 +180,6 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 
 	}
 
-	
 	for (int j = 0; j < tiles.size(); j++) {
 		for (int k = 0; k < tiles[j].size(); k++) {
 			std::string val;
@@ -190,16 +187,69 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 				for (int i = 0; i < bullets->size(); i++) {
 					val = rectCollision(bullets->at(i)->collider, tiles[j].at(k)->collider);
 					if (val != "none") {
+						auto particle = new ParticleExample();
+						
+						particle->setRenderer(m_renderer);
+						particle->setStyle(ParticleExample::SMOKE);
+
+						//particle->setPosition((*bullets->begin() + i)->m_spriteComponent->getPosition().x, (*bullets->begin() + i)->m_spriteComponent->getPosition().y);
+						//particle->startAnimating = true;
+						//m_particles.push_back(particle);
 						bullets->erase(bullets->begin() + i);
-						//std::cout << "Delete" << std::endl;
+						
 					}
 				}
-
 			}
+		}
+	}	
+}
+
+void CollisionSystem::setRenderer(SDL_Renderer * renderer)
+{
+	m_renderer = renderer;
+}
+
+void CollisionSystem::animateExplosion()
+{
+
+	for (int i = 0; i < m_particles.size(); i++)
+	{
+		m_particles[i]->count++;
 
 
+		std::cout << m_particles[i]->count << std::endl;
+		m_particles[i]->setStartSpin(0);
+		m_particles[i]->setStartSpinVar(0);
+		m_particles[i]->setEndSpin(90);
+		m_particles[i]->setDuration(.1);
+		m_particles[i]->setStartSize(50);
+		m_particles[i]->setEndSize(50);
+		m_particles[i]->setStartSpinVar(0);
 
+
+		m_particles[i]->update();
+		m_particles[i]->draw();
+		
+		if (m_particles[i]->count > 5)
+		{
+			m_particles[i]->count = 0;
+			m_particles[i]->startAnimating = false;
+			m_particles.erase(m_particles.begin() + i);
+		}
+
+	}	
+}
+
+void CollisionSystem::render()
+{
+
+	for (int i = 0; i < m_particles.size(); i++)
+	{
+		if (m_particles[i]->startAnimating)
+		{
+			animateExplosion();
 		}
 	}
-	
+
+
 }
