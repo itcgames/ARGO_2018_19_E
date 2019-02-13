@@ -72,16 +72,25 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 								}*/
 							}
-							else if (val == "right" || val == "left") {
-								pc->setVelX(-(pc->getVelX() * 2));
+							else if (val == "left") {
+								//pc->setVelX(-(pc->getVelX() * 1.1));
+								pc->setX(tiles[i].at(j)->dRect.x - cc->getW() - 5);
 								pc->m_allowedJump = true;
 								pc->m_hitSide = true;
 								m_count = 0;
+							}
+							else if (val == "right")
+							{
+								pc->setX(tiles[i].at(j)->dRect.x + cc->getW() + 35);
+								pc->m_allowedJump = true;
+								pc->m_hitSide = true;
+								m_count = 0;
+							}
 							/*	if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0 && tag->getTag() == "Player")
 								{
 									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 								}*/
-							}
+							
 							
 					
 						}
