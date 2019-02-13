@@ -170,7 +170,9 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 					}
 					if (tag->getTag() == "AI_TAG") {
 						AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
-						ai->m_alive = false;
+						PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
+						ai->m_alive = false;			
+						//pc->setVelX(0);
 					}
 				}
 

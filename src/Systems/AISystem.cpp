@@ -245,6 +245,12 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 			}
 			
 		}
+		else
+		{
+
+			//ac->setRight(false);
+			//ac->setLeft(false);
+		}
 		
 		
 	}

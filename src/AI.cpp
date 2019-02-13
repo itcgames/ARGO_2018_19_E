@@ -42,9 +42,9 @@ AI::AI(SDL_Renderer* renderer)
 	this->addComponent(new TagComponent("AI_TAG"));
 	controlComp = new AIComponent(10);
 	this->addComponent(controlComp);
-	positionComp = new PositionComponent(800, 900);
+	positionComp = new PositionComponent(900, 900);
 	this->addComponent(positionComp);
-	this->addComponent(new CollisionComponent(800, 900, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
+	this->addComponent(new CollisionComponent(900, 900, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }
 void AI::render(SDL_Renderer* renderer) {
 
