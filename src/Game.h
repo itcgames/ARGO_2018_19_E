@@ -77,7 +77,7 @@ private:
 	Player* p;
 	Hand* h1;
 	Hand* h2;
-	AI *ai;
+	std::vector<AI *> m_aiCharacters;
 	Gun* pistol;
 	Gun* shotgun;
 	Gun* juicer;
