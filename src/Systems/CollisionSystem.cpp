@@ -56,29 +56,28 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 					std::string val;
 					if (tiles[i].at(j)->dRect.x >= 0) {
 						val = rectCollision(cc->getCollider(), tiles[i].at(j)->collider);
-						if (val != "none" ) {
+						if (val != "none") {
 							if (val == "top") {
 								pc->m_allowedJump = true;
 								pc->setVelY(0);
 								pc->setY(tiles[i].at(j)->dRect.y - cc->getH());
-								
-								
+
+
 							}
+
 							else if (val == "bottom") {
 								pc->setVelY(5);
 								m_count = 0;
-							/*	if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0 && tag->getTag() == "Player")
-								{
-									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
-								}*/
 							}
+
 							else if (val == "left") {
-								//pc->setVelX(-(pc->getVelX() * 1.1));
-								pc->setX(tiles[i].at(j)->dRect.x - cc->getW() - 5);
+								
+								pc->setX(tiles[i].at(j)->dRect.x - cc->getW());
 								pc->m_allowedJump = true;
 								pc->m_hitSide = true;
 								m_count = 0;
 							}
+
 							else if (val == "right")
 							{
 								pc->setX(tiles[i].at(j)->dRect.x + cc->getW() + 35);
@@ -86,19 +85,8 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 								pc->m_hitSide = true;
 								m_count = 0;
 							}
-							/*	if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0 && tag->getTag() == "Player")
-								{
-									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
-								}*/
-							
-							
-					
 						}
-						
-					}
-					
-
-					
+					}					
 				}
 			}
 		}
@@ -158,7 +146,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 			for (int i = 0; i < bullets->size(); i++) {
 				std::string val = rectCollision(cc->getCollider(), bullets->at(i)->collider);
 				c2v bPos = bullets->at(i)->m_spriteComponent->getPosition();
-				if (bPos.x > 2000 || bPos.x < -200 || bPos.y < -200 || bPos.y > 1400) {
+				if (bPos.x > 2000 || bPos.x < -200 || bPos.y < -200 || bPos.y > 3000) {
 					bullets->erase(bullets->begin() + i);
 				}
 				if (val != "none") {
