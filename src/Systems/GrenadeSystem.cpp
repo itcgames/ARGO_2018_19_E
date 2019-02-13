@@ -93,6 +93,7 @@ void GrenadeSystem::animateExplosion()
 	{
 		explode->resetSystem();
 		m_startAnimating = false;
+		m_count = 0;
 	}
 }
 

@@ -58,6 +58,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 						val = rectCollision(cc->getCollider(), tiles[i].at(j)->collider);
 						if (val != "none") {
 							if (val == "top") {
+								pc->jumpNum = 0;
 								pc->m_allowedJump = true;
 								pc->setVelY(0);
 								pc->setY(tiles[i].at(j)->dRect.y - cc->getH());
