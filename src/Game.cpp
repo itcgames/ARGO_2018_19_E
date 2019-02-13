@@ -224,9 +224,9 @@ void Game::checkRoundOver() {
 			dead++;
 		}
 	}
-	if (dead >= 6) {
+	if (dead >= 3) {
 		m_restartSys.reset(0);
-		m_map->load("testlevel.tmx", m_renderer);
+		m_map->load("level2.tmx", m_renderer);
 	}
 }
 

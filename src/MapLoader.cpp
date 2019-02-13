@@ -140,10 +140,11 @@ void MapLoader::draw(SDL_Renderer* renderer)
 	{
 		for (int j = 0; j < m_tileVector[i].size(); j++)
 		{
+			SDL_RenderCopy(renderer, m_sprite->getTexture(), &m_tileVector[i].at(j)->sRect, &m_tileVector[i].at(j)->dRect);
+			
 			if (m_tileVector[i].at(j)->dead) {
 				m_tileVector[i].erase(m_tileVector[i].begin() + j);
 			}
-			SDL_RenderCopy(renderer, m_sprite->getTexture(), &m_tileVector[i].at(j)->sRect, &m_tileVector[i].at(j)->dRect);
 		}
 	}
 }

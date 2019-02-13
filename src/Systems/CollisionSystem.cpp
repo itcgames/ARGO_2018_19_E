@@ -141,7 +141,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 
-			if (pc->getY() > 1200) {
+			if (pc->getY() > 3000) {
 				AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
 				ai->m_alive = false;
 			}
