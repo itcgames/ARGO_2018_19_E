@@ -8,10 +8,8 @@ void GrenadeSystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
-void GrenadeSystem::update(std::vector<std::vector<Tile*>>  tiles, Entity * ai) {
-	PositionComponent * aiPC = (PositionComponent*)ai->getCompByType("POSITION");
-	SpriteComponent * sc = (SpriteComponent*)ai->getCompByType("SPRITE");
-	AIComponent * aiC = (AIComponent*)ai->getCompByType("AI");
+void GrenadeSystem::update(std::vector<std::vector<Tile*>>  tiles, std::vector<AI *> aiChars) {
+	
 	
 	for (Entity * entity : m_entities) {
 
@@ -32,14 +30,21 @@ void GrenadeSystem::update(std::vector<std::vector<Tile*>>  tiles, Entity * ai) 
 					}
 				}
 			}
-			if (dist(c2v{aiPC->getX(), aiPC->getY()}, v2) < 300) {
-				aiPC->setVelX(2000 * (1 / (aiPC->getX() - v2.x)));
-				aiPC->setVelY(2000 * (1 / (aiPC->getY() - v2.y)));
-				sc->setRotation(90);
-				sc->setColor(255, 40, 40);
-				aiC->m_alive = false;
-				sc->setBlendMode(SDL_BLENDMODE_ADD);
+			for (AI * ai : aiChars) {
+				Entity* ent = (Entity *)ai;
+				PositionComponent * aiPC = (PositionComponent*)ent->getCompByType("POSITION");
+				SpriteComponent * sc = (SpriteComponent*)ent->getCompByType("SPRITE");
+				AIComponent * aiC = (AIComponent*)ent->getCompByType("AI");
+				if (dist(c2v{ aiPC->getX(), aiPC->getY() }, v2) < 300) {
+					aiPC->setVelX(2000 * (1 / (aiPC->getX() - v2.x)));
+					aiPC->setVelY(2000 * (1 / (aiPC->getY() - v2.y)));
+					sc->setRotation(90);
+					sc->setColor(255, 40, 40);
+					aiC->m_alive = false;
+					sc->setBlendMode(SDL_BLENDMODE_ADD);
+				}
 			}
+			
 			// James please add big boom here :)
 			pc->setX(-3000);
 			pc->setY(-3000);
