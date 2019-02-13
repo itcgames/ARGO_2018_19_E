@@ -281,7 +281,7 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 	}
 }
 
-void PhysicsSystem::launchGun(PositionComponent * pc,TagComponent * tc) {
+void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc) {
 	//std::cout << "X = " << -xOffset <<  "Y = " << yOffset << std::endl;
 	if (tc->getSubTag() == "pistol")
 	{
