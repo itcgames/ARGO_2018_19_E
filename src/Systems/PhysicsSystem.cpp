@@ -266,7 +266,7 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 	}
 }
 
-void PhysicsSystem::launchGun(PositionComponent * pc,TagComponent * tc) {
+void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc) {
 	//std::cout << "X = " << -xOffset <<  "Y = " << yOffset << std::endl;
 	if (tc->getSubTag() == "pistol")
 	{
@@ -526,7 +526,7 @@ void PhysicsSystem::update() {
 				
 				if (gc->getArmed()) {
 					m_grenadeColor += 0.05f;
-					std::cout << m_grenadeColor << std::endl;
+					//std::cout << m_grenadeColor << std::endl;
 					//sc->setColor(255, 255, 100);
 					//sc->setAlpha(100);
 					gc->setTTL(gc->getTTL() - 1);
