@@ -47,6 +47,9 @@ public:
 	double distance(c2v v1, float x, float y);
 
 	bool m_alive = true;
+
+	bool hitFromLeft = false;
+	bool hitFromRight = false;
 	
 
 private:

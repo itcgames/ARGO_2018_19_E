@@ -47,10 +47,19 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 		{
 			auto & objects = layer->getLayerAs<tmx::ObjectGroup>().getObjects();
 
-			
+		
 			for (auto & object : objects) {
 
-				m_pointVector.push_back(new c2v{ object.getPosition().x, object.getPosition().y });
+				if (layer->getName() == "JumpPoints")
+				{
+					m_jumpPointVector.push_back(new c2v{ object.getPosition().x, object.getPosition().y });
+				}
+
+				if (layer->getName() == "WalkPoints")
+				{
+					m_walkPointVector.push_back(new c2v{ object.getPosition().x, object.getPosition().y });
+				}
+				
 			}
 		}
 	

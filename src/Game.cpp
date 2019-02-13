@@ -74,8 +74,10 @@ Game::Game()
 	//m_ents.push_back((Entity*)p);
 	//m_ents.push_back((Entity*)ai);
 	m_ents.push_back((Entity*)pistol);
+	m_ents.push_back((Entity*)shotgun);
 
 	m_ps.setRenderer(m_renderer);
+	m_grenadeSys.setRenderer(m_renderer);
 }
 
 Game::~Game()
@@ -135,12 +137,11 @@ void Game::update() {
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
-		
-		m_grenadeSys.update(m_map->getTiles());
-		if (!*(m_online)) {
-			m_hs.update();
-			m_ais.update(m_map->getPoints());
-			m_ais.receive(m_ents);
+		if (!(*m_online)) {
+		m_grenadeSys.update(m_map->getTiles(), (Entity *)ai);
+		m_hs.update();
+		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
+		m_ais.receive(m_ents);
 		}
 		else {
 			
@@ -184,8 +185,11 @@ void Game::render() {
 		m_backgroundSprite->render(m_renderer);
 		m_map->draw(m_renderer);
 		p->render(m_renderer);
+		ai->render(m_renderer);
 		m_rs.render(m_renderer);
 		m_ps.bulletRender(m_renderer);
+		m_grenadeSys.render();
+		m_ais.renderLines(m_renderer);
 		//m_emitter->update();
 		break;
 	case GameState::Credits:

@@ -154,24 +154,28 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 				}
 				if (val != "none") {
 					bullets->erase(bullets->begin() + i);
-					if (val == "right") {
-						pc->setVelX(40);
-						pc->setVelY(-10);
-						sc->setRotation(90);
-						sc->setColor(255, 40, 40);
-						sc->setBlendMode(SDL_BLENDMODE_ADD);
-					}
-					if (val == "left") {
-						pc->setVelX(-40);
-						pc->setVelY(-10);
-						sc->setRotation(-90);
-						sc->setColor(255, 40, 40);
-						sc->setBlendMode(SDL_BLENDMODE_ADD);
-					}
 					if (tag->getTag() == "AI_TAG") {
 						AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
 						ai->m_alive = false;
+
+						if (val == "right") {
+							pc->setVelX(40);
+							pc->setVelY(-10);
+							sc->setRotation(90);
+							sc->setColor(255, 40, 40);
+							//sc->setBlendMode(SDL_BLENDMODE_ADD);
+							ai->hitFromRight = true;
+						}
+						if (val == "left") {
+							pc->setVelX(-40);
+							pc->setVelY(-10);
+							sc->setRotation(-90);
+							sc->setColor(255, 40, 40);
+							//sc->setBlendMode(SDL_BLENDMODE_ADD);
+							ai->hitFromLeft = true;
+						}
 					}
+					// Possible error here
 				}
 
 
