@@ -600,11 +600,6 @@ void PhysicsSystem::update() {
 				flipNone(sc);
 			}
 		}
-		
-	
-
-
-		
 
 		if (tc->getTag() == "AI_TAG")
 		{
@@ -962,10 +957,6 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 
 
 	}
-	
-	
-
-	
 	
 	if (m_count > 15 && gunGot == "pistol")
 	{

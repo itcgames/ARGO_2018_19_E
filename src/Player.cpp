@@ -7,31 +7,31 @@ Player::Player()
 
 
 
-Player::Player(SDL_Renderer* renderer)
+Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller)
 {
 	//Set up Sprite component and add to entity component vector
 	oldY = 0;
 	m_spriteComponent = new SpriteComponent(0, 0, 67, 150);
 	m_spriteComponent->loadFromFile("assets/bodyTall.png", renderer);
-	m_spriteComponent->setPosition(c2v{ 600, 200 });
+	m_spriteComponent->setPosition(c2v{ x, y });
 	m_spriteComponent->setScale(c2v{0.5f, 0.5f});
 	m_spriteComponent->setColor(255, 255, 0);
 	this->addComponent(m_spriteComponent);
 
 	m_spriteComponentHead = new SpriteComponent(0, 0, 107, 91);
 	m_spriteComponentHead->loadFromFile("assets/Head2.png", renderer);
-	m_spriteComponentHead->setPosition(c2v{ 600, 200 });
+	m_spriteComponentHead->setPosition(c2v{ x, y });
 	m_spriteComponentHead->setScale(c2v{ 0.5f, 0.5f });
 
 
 	m_spriteComponentLeftFoot = new SpriteComponent(0, 0, 107, 91);
 	m_spriteComponentLeftFoot->loadFromFile("assets/Foot.png", renderer);
-	m_spriteComponentLeftFoot->setPosition(c2v{ 600, 200 });
+	m_spriteComponentLeftFoot->setPosition(c2v{ x, y });
 	m_spriteComponentLeftFoot->setScale(c2v{ 0.5f, 0.5f });
 
 	m_spriteComponentRightFoot = new SpriteComponent(0, 0, 107, 91);
 	m_spriteComponentRightFoot->loadFromFile("assets/Foot.png", renderer);
-	m_spriteComponentRightFoot->setPosition(c2v{ 600, 200 });
+	m_spriteComponentRightFoot->setPosition(c2v{ x, y });
 	m_spriteComponentRightFoot->setScale(c2v{ 0.5f, 0.5f });
 
 	m_spriteComponentHead->setColor(255, 255, 255);
@@ -40,13 +40,15 @@ Player::Player(SDL_Renderer* renderer)
 
 
 	this->addComponent(new HealthComponent(10));
+	TagComponent * tag = new TagComponent("Player");
 	this->addComponent(new TagComponent("Player"));
 
-	positionComp = new PositionComponent(100, 100);
+	positionComp = new PositionComponent(x, y);
 	this->addComponent(positionComp);
 	controlComp = new ControlComponent();
+	controlComp->gGameController = controller;
 	this->addComponent(controlComp);
-	this->addComponent(new CollisionComponent(300, 500, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
+	this->addComponent(new CollisionComponent(x, y, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }
 void Player::render(SDL_Renderer* renderer) {
 
