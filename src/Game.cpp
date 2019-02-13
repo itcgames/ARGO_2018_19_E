@@ -49,7 +49,10 @@ Game::Game()
 	p = new Player(m_renderer);
 	h1 = new Hand(m_renderer,1);
 	h2 = new Hand(m_renderer,2);
-	ai = new AI(m_renderer);
+	for (int i = 0; i < 3; i++) {
+		m_aiCharacters.push_back(new AI(m_renderer));
+	}
+	
 
 	m_backgroundSprite = new SpriteComponent(0, 0, 498, 750);
 	m_backgroundSprite->loadFromFile("assets/purplebg.png", m_renderer);
@@ -138,7 +141,7 @@ void Game::update() {
 		SDL_RenderSetScale(m_renderer, 0.7, 0.6);
 		m_ps.bulletUpdate(m_renderer);
 		if (!(*m_online)) {
-		m_grenadeSys.update(m_map->getTiles(), (Entity *)ai);
+		m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
 		m_hs.update();
 		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
 		m_ais.receive(m_ents);
@@ -185,7 +188,9 @@ void Game::render() {
 		m_backgroundSprite->render(m_renderer);
 		m_map->draw(m_renderer);
 		p->render(m_renderer);
-		ai->render(m_renderer);
+		for (AI * ai : m_aiCharacters) {
+			ai->render(m_renderer);
+		}
 		m_rs.render(m_renderer);
 		m_ps.bulletRender(m_renderer);
 		m_grenadeSys.render();
@@ -259,13 +264,8 @@ void Game::initialise()
 	m_rs.addEntity((Entity*)juicer);
 	m_rs.addEntity((Entity*)h1);
 	m_rs.addEntity((Entity*)h2);
-	
-	m_rs.addEntity((Entity*)ai);
 
 	m_ps.addEntity((Entity*)p);
-	m_ps.addEntity((Entity*)ai);
-
-	m_ais.addEntity((Entity*)ai);
 
 	m_ps.addEntity((Entity*)pistol);
 	m_ps.addEntity((Entity*)shotgun);
@@ -286,12 +286,19 @@ void Game::initialise()
 	m_guns.addEntity((Entity*)grenade);
 
 	m_collSys.addEntity((Entity*)p);
-	m_collSys.addEntity((Entity*)ai);
+	
 	m_collSys.addEntity((Entity*)pistol);
 	m_collSys.addEntity((Entity*)shotgun);
 	m_collSys.addEntity((Entity*)juicer);
 	m_collSys.addEntity((Entity*)grenade);
 
 	m_grenadeSys.addEntity((Entity*)grenade);
+
+	for (AI * ai : m_aiCharacters) {
+		m_collSys.addEntity((Entity*)ai);
+		m_ais.addEntity((Entity*)ai);
+		m_rs.addEntity((Entity*)ai);
+		m_ps.addEntity((Entity*)ai);
+	}
 }
 
