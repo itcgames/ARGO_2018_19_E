@@ -523,7 +523,12 @@ void PhysicsSystem::update() {
 			}
 			if (tc->getSubTag() == "grenade") {
 				GrenadeComponent * gc = (GrenadeComponent*)entity->getCompByType("GRENADE");
+				
 				if (gc->getArmed()) {
+					m_grenadeColor += 0.05f;
+					std::cout << m_grenadeColor << std::endl;
+					//sc->setColor(255, 255, 100);
+					//sc->setAlpha(100);
 					gc->setTTL(gc->getTTL() - 1);
 					if (gc->getTTL() < 0) {
 						gc->setExplode(true);

@@ -53,7 +53,6 @@ c2v AISystem::checkClosest(std::vector<std::pair<double, c2v>> distances)
 		}
 	}
 	
-	//need to fix to find closest;
 	return m_realDist.second;
 }
 
@@ -64,10 +63,9 @@ c2v AISystem::checkJumpPoints(std::vector<c2v*> points, PositionComponent* pc)
 
 	c2v myPos = { pc->getX(), pc->getY() };
 	c2v closestPosition;
-	//points = checkTier(points);
+
 	for (auto it = points.begin(); it != points.end(); it++)
 	{
-		//std::cout << (*it)->x << std::endl;
 		auto pos = c2v{ (*it)->x, (*it)->y };
 		double dist = distance(myPos, pos);
 
@@ -87,10 +85,9 @@ c2v AISystem::checkWalkPoints(std::vector<c2v*> points, PositionComponent* pc)
 
 	c2v myPos = { pc->getX(), pc->getY() };
 	c2v closestPosition;
-	//points = checkTier(points);
+
 	for (auto it = points.begin(); it != points.end(); it++)
 	{
-		//std::cout << (*it)->x << std::endl;
 		auto pos = c2v{ (*it)->x, (*it)->y };
 		double dist = distance(myPos, pos);
 
@@ -167,7 +164,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 			//std::cout << curPosition.y << std::endl;
 			
 			if (m_landed) {
-				closestJumpPoint = checkJumpPoints(jumppoints, pc);
+				//closestJumpPoint = checkJumpPoints(jumppoints, pc);
 				closestWalkPoint = checkWalkPoints(walkpoints, pc);
 			}
 
@@ -294,8 +291,8 @@ double AISystem::distance(c2v  vecOne, c2v vecTwo)
 
 
 void AISystem::renderLines(SDL_Renderer * renderer)
-{
+{/*
 	SDL_RenderDrawLine(renderer, M_LINES[0]->x1, M_LINES[0]->y1, M_LINES[0]->x2, M_LINES[0]->y2);
-	SDL_RenderDrawLine(renderer, M_LINES[1]->x1, M_LINES[1]->y1, M_LINES[1]->x2, M_LINES[1]->y2);
+	SDL_RenderDrawLine(renderer, M_LINES[1]->x1, M_LINES[1]->y1, M_LINES[1]->x2, M_LINES[1]->y2);*/
 }
 

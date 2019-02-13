@@ -96,5 +96,7 @@ public:
 
 	float juicerTipX = 0;
 	float juicerTipY = 0;
+
+	float m_grenadeColor = 0;
 };
 #endif // !PHYSICSSYSTEM_H
