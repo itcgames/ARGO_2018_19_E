@@ -136,14 +136,18 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 	for (Entity * entity : m_entities) {
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
 
-		if (tag->getTag() == "AI_TAG") {
+		if (tag->getTag() == "AI_TAG" || tag->getTag() == "Player") {
 			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 
-			if (pc->getY() > 3000) {
+			if (pc->getY() > 3000 && tag->getTag() == "AI_TAG") {
 				AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
 				ai->m_alive = false;
+			}
+			else if (pc->getY() > 3000 && tag->getTag() == "Player") {
+				ControlComponent * control = (ControlComponent*)entity->getCompByType("CONTROL");
+				control->setAlive(false);
 			}
 			for (int i = 0; i < bullets->size(); i++) {
 				std::string val = rectCollision(cc->getCollider(), bullets->at(i)->collider);
@@ -172,6 +176,10 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 						PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 						ai->m_alive = false;			
 						//pc->setVelX(0);
+					}
+					if (tag->getTag() == "Player") {
+						ControlComponent * control = (ControlComponent*)entity->getCompByType("CONTROL");
+						control->setAlive(false);
 					}
 				}
 
