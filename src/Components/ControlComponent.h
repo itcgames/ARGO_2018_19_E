@@ -33,6 +33,10 @@ public:
 	bool getAlive() { return m_alive; }
 	void setAlive(bool alive) { m_alive = alive; }
 
+	SDL_GameController* gGameController = NULL;
+
+	bool m_init = false;
+
 private:
 
 	bool m_left = false;

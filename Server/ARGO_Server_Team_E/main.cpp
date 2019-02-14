@@ -2,6 +2,7 @@
 #include <WS2tcpip.h>
 #include <string>
 #include <sstream>
+#include "../../src/Client/Packet.h"
 
 #pragma comment (lib, "ws2_32.lib")
 
@@ -54,6 +55,7 @@ void main()
 
 	while (running)
 	{
+		Packet * p = new Packet();
 		// Make a copy of the master file descriptor set, this is SUPER important because
 		// the call to select() is _DESTRUCTIVE_. The copy only contains the sockets that
 		// are accepting inbound connection requests OR messages. 
@@ -87,18 +89,20 @@ void main()
 				FD_SET(client, &master);
 				// Send a welcome message to the connected client
 				playerNum++;
-				string welcomeMsg = "number," + to_string(playerNum) + ",";
+				
+				p->message = 1;
+				p->playerNum = playerNum;
 				std::cout << playerNum << std::endl;
-				send(client, welcomeMsg.c_str(), welcomeMsg.size() + 1, 0);
+				send(client, (char*)p, sizeof(struct Packet) + 1, 0);
 
 				for (int i = 0; i < master.fd_count; i++)
 				{
 					SOCKET outSock = master.fd_array[i];
 					if (outSock != client)
 					{
-						string joinMsg = "Join," + to_string(playerNum) + ",";
-
-						send(outSock, joinMsg.c_str(), joinMsg.size() + 1, 0);
+						p->message = 2;
+						p->playerNum = playerNum;
+						send(outSock, (char*)p, sizeof(struct Packet) + 1, 0);
 					}
 				}
 			}
@@ -108,7 +112,10 @@ void main()
 				ZeroMemory(buf, 4096);
 				
 				// Receive message
-				int bytesIn = recv(sock, buf, 4096, 0);
+				int bytesIn = recv(sock, (char*)p, sizeof(struct Packet) + 1, 0);
+				if (p->message == 3) {
+					playerNum--;
+				}
 				if (bytesIn <= 0)
 				{
 					// Drop the client
@@ -117,54 +124,16 @@ void main()
 				}
 				else
 				{
-					// Check to see if it's a command. \quit kills the server
-					if (buf[0] == '\\')
+					// Send message to other clients, and definiately NOT the listening socket
+					for (int i = 0; i < master.fd_count; i++)
 					{
-						// Is the command quit? 
-						string cmd = string(buf, bytesIn);
-						if (cmd == "\\quit")
+						SOCKET outSock = master.fd_array[i];
+						if (outSock != listening && outSock != sock)
 						{
-							running = false;
-							break;
-						}
-
-						// Unknown command
-						continue;
-					}
-					else if (buf[0] == 'L')
-					{
-						int val = (int)buf[6];
-						master.fd_array[val] = NULL;
-						playerNum--;
-						for (int i = 0; i < master.fd_count; i++)
-						{
-							SOCKET outSock = master.fd_array[i];
-							if (outSock != listening && outSock != sock)
-							{
-								ostringstream ss;
-								ss << buf;
-								string strOut = ss.str();
-
-								send(outSock, strOut.c_str(), strOut.size() + 1, 0);
-							}
+							send(outSock, (char*)p, sizeof(struct Packet) + 1, 0);
 						}
 					}
-					else {
-						// Send message to other clients, and definiately NOT the listening socket
-
-						for (int i = 0; i < master.fd_count; i++)
-						{
-							SOCKET outSock = master.fd_array[i];
-							if (outSock != listening && outSock != sock)
-							{
-								ostringstream ss;
-								ss << buf;
-								string strOut = ss.str();
-
-								send(outSock, strOut.c_str(), strOut.size() + 1, 0);
-							}
-						}
-					}
+					
 					
 				}
 			}

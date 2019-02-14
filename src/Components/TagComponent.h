@@ -29,6 +29,7 @@ public:
 	bool gotGunBool = false;
 
 	double grabableCount = 0;
+	bool firedBool = false;
 
 	bool getGrabbed() { return grabbed; }
 	bool getGrabable() { return grabable; }
@@ -37,6 +38,8 @@ public:
 	void setGrabableCount(double value) { grabableCount = value; }
 	void setGotGunBool(bool value) { gotGunBool = value; }
 	bool getGotGunBool() { return gotGunBool; }
+	void setFiredBool(bool value) { firedBool = value; };
+	bool getFiredBool() { return firedBool; };
 	double getGrabableCount() { return grabableCount; }
 
 

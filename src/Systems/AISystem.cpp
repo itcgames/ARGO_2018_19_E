@@ -249,7 +249,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 				}
 			}
 
-			std::cout << "GUN IN SIGHT = " << ac->m_gunInSight << std::endl;
+			//std::cout << "GUN IN SIGHT = " << ac->m_gunInSight << std::endl;
 
 			if (ac->curPosition.y > ac->closestEnemy.y && ac->curPosition.y < ac->closestEnemy.y + 200 && ac->m_landed)
 			{

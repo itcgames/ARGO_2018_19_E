@@ -72,6 +72,8 @@ public:
 	void setPosition(PositionComponent * pc);
 	void flipNone(SpriteComponent * sc);
 	void flipHorizontal(SpriteComponent * sc);
+	void updateShooting(SDL_Renderer* renderer);
+	void makeBullets(SDL_Renderer* renderer, TagComponent *tagC);
 
 	std::string gunGot;
 
@@ -99,5 +101,7 @@ public:
 	float juicerTipY = 0;
 
 	float m_grenadeColor = 0;
+
+	int index = -1;
 };
 #endif // !PHYSICSSYSTEM_H

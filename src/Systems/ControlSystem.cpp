@@ -3,56 +3,38 @@
 SDL_Haptic * haptic = NULL;
 
 ControlSystem::ControlSystem() {
-	init();
+	//init();
 }
 
-void ControlSystem::init() {
+void ControlSystem::init(SDL_GameController* controller) {
 	//Initialization flag
 	bool success = true;
 
-	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC) < 0)
+	
+	
+	
+	//Load joystick
+		
+	SDL_Joystick *j = SDL_GameControllerGetJoystick(controller);
+	haptic = SDL_HapticOpenFromJoystick(j);
+	if (controller == NULL)
 	{
-		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-		success = false;
+		printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
 	}
 
-	//Set texture filtering to linear
-	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
+	if (haptic == NULL)
 	{
-		printf("Warning: Linear texture filtering not enabled!");
-	}
-
-	//Check for joysticks
-	if (SDL_NumJoysticks() < 1)
-	{
-		printf("Warning: No joysticks connected!\n");
+		printf("Warning: Controller does not support haptics! SDL Error: %s\n", SDL_GetError());
 	}
 	else
 	{
-		//Load joystick
-		
-		gGameController = SDL_GameControllerOpen(0);
-		SDL_Joystick *j = SDL_GameControllerGetJoystick(gGameController);
-		haptic = SDL_HapticOpenFromJoystick(j);
-		if (gGameController == NULL)
+		//Get initialize rumble
+		if (SDL_HapticRumbleInit(haptic) < 0)
 		{
-			printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
-		}
-
-		if (haptic == NULL)
-		{
-			printf("Warning: Controller does not support haptics! SDL Error: %s\n", SDL_GetError());
-		}
-		else
-		{
-			//Get initialize rumble
-			if (SDL_HapticRumbleInit(haptic) < 0)
-			{
-				printf("Warning: Unable to initialize rumble! SDL Error: %s\n", SDL_GetError());
-			}
+			printf("Warning: Unable to initialize rumble! SDL Error: %s\n", SDL_GetError());
 		}
 	}
+	
 }
 
 void ControlSystem::addEntity(Entity * e) {
@@ -65,15 +47,23 @@ void ControlSystem::update(SDL_Event e) {
 
 	for (Entity * entity : m_entities) {
 
-
+		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
-		int StickX = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_LEFTX);
-		int StickY = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_LEFTY);
 
-		int leftX = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_RIGHTX);
-		int leftY = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_RIGHTY);
+		if (tc->getTag() == "Player") {
+			if (!cc->m_init) {
+				init(cc->gGameController);
+				cc->m_init = true;
+			}
+		}
+		
+		int StickX = SDL_GameControllerGetAxis(cc->gGameController, SDL_CONTROLLER_AXIS_LEFTX);
+		int StickY = SDL_GameControllerGetAxis(cc->gGameController, SDL_CONTROLLER_AXIS_LEFTY);
 
-		setButtons(*cc);
+		int leftX = SDL_GameControllerGetAxis(cc->gGameController, SDL_CONTROLLER_AXIS_RIGHTX);
+		int leftY = SDL_GameControllerGetAxis(cc->gGameController, SDL_CONTROLLER_AXIS_RIGHTY);
+
+		setButtons(cc);
 
 		if (StickX < -JOYSTICK_DEAD_ZONE) {
 			cc->setLeft(true);
@@ -101,25 +91,25 @@ void ControlSystem::update(SDL_Event e) {
 	}
 }
 
-void ControlSystem::setButtons(ControlComponent & cc) {
+void ControlSystem::setButtons(ControlComponent * cc) {
 
-	bool AButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_A);
-	bool XButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_X);
+	bool AButton = SDL_GameControllerGetButton(cc->gGameController, SDL_CONTROLLER_BUTTON_A);
+	bool XButton = SDL_GameControllerGetButton(cc->gGameController, SDL_CONTROLLER_BUTTON_X);
 	
 	//int leftX = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_RIGHTX);
-	int RT = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+	int RT = SDL_GameControllerGetAxis(SDL_GameControllerOpen(0), SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
 	
 	if (RT > 5000) {
-		cc.setFire(true);
+		cc->setFire(true);
 		
 	}
 	else {
-		cc.setFire(false);
+		cc->setFire(false);
 	}
 
 	if (AButton) {
 		if (aIndex == 0)
-			cc.setJump(AButton);
+			cc->setJump(AButton);
 		
 		aIndex++;
 	}
@@ -128,7 +118,7 @@ void ControlSystem::setButtons(ControlComponent & cc) {
 	}
 	if (XButton) {
 		if (xIndex == 0)
-			cc.setThrowWeapon(true);
+			cc->setThrowWeapon(true);
 		xIndex++;
 	}
 	else {
