@@ -51,8 +51,9 @@ public:
 	SDL_RendererFlip flipval;
 
 	std::vector<Bullet*> pistolBullets;
+	std::vector<Bullet*> juicerBullets;
 	std::vector<Bullet*> shotgunBullets;
-	void animateExplosion(SDL_Renderer * renderer);
+	void animateExplosion(SDL_Renderer * renderer, TagComponent * tc);
 
 
 	void setGun(TagComponent *tc,ControlComponent *cc,PositionComponent *pc,SpriteComponent *sc);
@@ -60,7 +61,7 @@ public:
 	void setPlayerPosition(PositionComponent *pc);
 	void throwGunFun(ControlComponent * cc);
 	void playerFlip(PositionComponent *pc, SpriteComponent *sc, ControlComponent *cc, TagComponent *tc);
-	void launchGun(PositionComponent *pc, TagComponent *tc);
+	void launchGun(PositionComponent *pc, TagComponent *tc, CollisionComponent * cc);
 	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
 	void setPlayerGunGot(std::string gun);
 	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc);
@@ -72,6 +73,8 @@ public:
 	void setPosition(PositionComponent * pc);
 	void flipNone(SpriteComponent * sc);
 	void flipHorizontal(SpriteComponent * sc);
+	void updateShooting(SDL_Renderer* renderer);
+	void makeBullets(SDL_Renderer* renderer, TagComponent *tagC);
 
 	std::string gunGot;
 
@@ -99,5 +102,7 @@ public:
 	float juicerTipY = 0;
 
 	float m_grenadeColor = 0;
+
+	int index = -1;
 };
 #endif // !PHYSICSSYSTEM_H

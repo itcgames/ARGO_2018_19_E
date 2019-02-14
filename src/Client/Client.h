@@ -5,6 +5,7 @@
 #include <string>
 #include <WS2tcpip.h>
 #include <vector>
+#include "Packet.h"
 #pragma comment(lib, "ws2_32.lib")
 
 class Client
@@ -14,7 +15,7 @@ public:
 	~Client();
 	bool run();
 	void receive();
-	void sendMessage(std::string message);
+	void sendMessage(Packet packet);
 
 	SOCKET sock;
 	sockaddr_in hint;
@@ -29,6 +30,8 @@ public:
 
 	std::vector<int> m_joiners;
 	std::vector<int> m_leavers;
+
+	Packet p;
 
 private:
 	

@@ -33,10 +33,12 @@ private:
 	SDL_Texture* exittexture;
 	SDL_Texture* titletexture;
 	SDL_Texture* playtexture;
+	SDL_Texture* noServerTexture;
 
 	SDL_Rect exitRenderQuad;
 	SDL_Rect titleRenderQuad;
 	SDL_Rect playRenderQuad;
+	SDL_Rect noServerRenderQuad;
 
 
 	SDL_GameController* gGameController = NULL;
@@ -47,6 +49,7 @@ private:
 	std::vector<int> m_index;
 
 	TTF_Font * m_font;
+	TTF_Font * m_menuFont;
 
 	SDL_Rect m_BGRect;
 
@@ -54,5 +57,7 @@ private:
 	bool m_joined = false;
 	bool *m_online = new bool(false);
 	bool m_ready2Play;
+	bool m_firstRunThrough = false;
+	Packet m_pack;
 };
 

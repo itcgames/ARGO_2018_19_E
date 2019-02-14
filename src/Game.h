@@ -78,9 +78,9 @@ private:
 
 	MapLoader* m_map;
 
-	Player* p;
 	Hand* h1;
 	Hand* h2;
+	std::vector<Player *> m_players;
 	std::vector<AI *> m_aiCharacters;
 	Gun* pistol;
 	Gun* shotgun;
