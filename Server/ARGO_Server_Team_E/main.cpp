@@ -113,6 +113,9 @@ void main()
 				
 				// Receive message
 				int bytesIn = recv(sock, (char*)p, sizeof(struct Packet) + 1, 0);
+				if (p->message == 3) {
+					playerNum--;
+				}
 				if (bytesIn <= 0)
 				{
 					// Drop the client
