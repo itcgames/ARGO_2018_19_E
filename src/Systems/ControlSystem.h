@@ -10,14 +10,13 @@ class ControlSystem
 {
 public:
 	ControlSystem();
-	void init();
+	void init(SDL_GameController* controller);
 	void addEntity(Entity * e);
 	void update(SDL_Event e);
 
-	void setButtons(ControlComponent & cc);
+	void setButtons(ControlComponent* cc);
 
 	std::vector<Entity *> m_entities;
-	SDL_GameController* gGameController = NULL;
 	
 	const int JOYSTICK_DEAD_ZONE = 8000;
 	

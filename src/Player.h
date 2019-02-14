@@ -10,7 +10,7 @@ class Player : Entity
 {
 public:
 	Player();
-	Player(SDL_Renderer* renderer);
+	Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller);
 
 	void render(SDL_Renderer* renderer);
 
