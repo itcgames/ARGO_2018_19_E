@@ -35,51 +35,32 @@ void Client::receive() {
 	// Wait for response
 	ZeroMemory(buf, 4096);
 	
-	int bytesReceived = recv(sock, buf, 4096, 0);
-	if (bytesReceived > 0 && std::string(buf, 0, bytesReceived) != "Welcome to the Awesome Chat Server!\r\n")
+	Packet * packet = new Packet();
+	int bytesReceived = recv(sock, (char*)packet, sizeof(struct Packet) + 1, 0);
+	if (packet->playerNum > 0)
 	{
 		// Echo response to console
-		std::cout << "SERVER> " << std::string(buf, 0, bytesReceived) << std::endl;
-		std::string newPos = std::string(buf, 0, bytesReceived);
-
-		std::string delimiter = ",";
-		size_t pos = 0;
-		std::string token;
-
-		pos = newPos.find(delimiter);
-		token = newPos.substr(0, pos);
-		newPos.erase(0, pos + delimiter.length());
-		if (token == "Join") {
-			while ((pos = newPos.find(delimiter)) != std::string::npos) {
-				token = newPos.substr(0, pos);
-				m_joiners.push_back(atoi(token.c_str()));
-				newPos.erase(0, pos + delimiter.length());
-			}
+		std::cout << "SERVER> " << packet->message << std::endl;
+		
+		if (packet->message == 2) {
+			m_joiners.push_back(packet->playerNum);
 		}
-		if (token == "Leave") {
-			while ((pos = newPos.find(delimiter)) != std::string::npos) {
-				token = newPos.substr(0, pos);
-				m_leavers.push_back(atoi(token.c_str()));
-				newPos.erase(0, pos + delimiter.length());
-			}
+		if (packet->message == 3) {
+			m_leavers.push_back(packet->playerNum);
 		}
-		if (token == "number") {
-			while ((pos = newPos.find(delimiter)) != std::string::npos) {
-				token = newPos.substr(0, pos);
-				number = atoi(token.c_str());
-				newPos.erase(0, pos + delimiter.length());
-			}
+		if (packet->message == 1) {
+			number = packet->playerNum;
 		}
 		
 	}
 }
 
-void Client::sendMessage(std::string message) {
+void Client::sendMessage(Packet packet) {
 	ZeroMemory(buf, 4096);
-	if (message.size() > 0)		// Make sure the user has typed in something
+	if (sizeof(packet) + 1 > 0)		// Make sure the user has typed in something
 	{
 		// Send the text
-		int sendResult = send(sock,message.c_str(), message.size() + 1, 0);
+		int sendResult = send(sock, (char*)&packet, sizeof(struct Packet) + 1, 0);
 	}
 }
 

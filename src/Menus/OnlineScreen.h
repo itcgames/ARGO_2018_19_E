@@ -54,5 +54,7 @@ private:
 	bool m_joined = false;
 	bool *m_online = new bool(false);
 	bool m_ready2Play;
+
+	Packet m_pack;
 };
 
