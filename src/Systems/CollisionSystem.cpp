@@ -213,9 +213,9 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 						particle->setRenderer(m_renderer);
 						particle->setStyle(ParticleExample::SMOKE);
 
-						//particle->setPosition((*bullets->begin() + i)->m_spriteComponent->getPosition().x, (*bullets->begin() + i)->m_spriteComponent->getPosition().y);
+						particle->setPosition((*bullets->begin())->m_spriteComponent->getPosition().x, (*bullets->begin())->m_spriteComponent->getPosition().y);
 						//particle->startAnimating = true;
-						//m_particles.push_back(particle);
+						m_particles.push_back(particle);
 						bullets->erase(bullets->begin() + i);
 
 					}
@@ -243,8 +243,8 @@ void CollisionSystem::animateExplosion()
 		m_particles[i]->setStartSpinVar(0);
 		m_particles[i]->setEndSpin(90);
 		m_particles[i]->setDuration(.1);
-		m_particles[i]->setStartSize(50);
-		m_particles[i]->setEndSize(50);
+		m_particles[i]->setStartSize(70);
+		m_particles[i]->setEndSize(70);
 		m_particles[i]->setStartSpinVar(0);
 
 
@@ -253,9 +253,8 @@ void CollisionSystem::animateExplosion()
 		
 		if (m_particles[i]->count > 5)
 		{
-			m_particles[i]->count = 0;
-			m_particles[i]->startAnimating = false;
 			m_particles.erase(m_particles.begin() + i);
+			m_particles.resize(m_particles.size());
 		}
 
 	}	
@@ -266,10 +265,7 @@ void CollisionSystem::render()
 
 	for (int i = 0; i < m_particles.size(); i++)
 	{
-		if (m_particles[i]->startAnimating)
-		{
-			animateExplosion();
-		}
+		animateExplosion();	
 	}
 
 

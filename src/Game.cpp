@@ -142,10 +142,9 @@ void Game::update() {
 	case GameState::Game:
 		m_cs.update(event);
 		m_collSys.update(m_map->getTiles());
-
-		m_ps.update();
+		m_ps.update(/*m_backgroundSprite*/);
 		m_guns.update();
-		SDL_RenderSetScale(m_renderer, 0.4, 0.4);
+		SDL_RenderSetScale(m_renderer, 0.7, 0.5);
 		m_ps.bulletUpdate(m_renderer);
 		checkRoundOver();
 		if (!(*m_online)) {
