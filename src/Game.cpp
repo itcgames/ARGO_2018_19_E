@@ -26,7 +26,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Splash);
+	*m_currentGameState = (GameState::Game);
 
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -361,15 +361,12 @@ void Game::initialise()
 	m_ps.addEntity((Entity*)h1);
 	m_ps.addEntity((Entity*)h2);
 
-	m_ps.addEntity((Entity*)pistol);
+
 	m_guns.addEntity((Entity*)pistol);
 
-	m_ps.addEntity((Entity*)shotgun);
 	m_guns.addEntity((Entity*)shotgun);
-	m_ps.addEntity((Entity*)juicer);
 	m_guns.addEntity((Entity*)juicer);
 
-	m_ps.addEntity((Entity*)grenade);
 	m_guns.addEntity((Entity*)grenade);
 
 	m_collSys.addEntity((Entity*)pistol);

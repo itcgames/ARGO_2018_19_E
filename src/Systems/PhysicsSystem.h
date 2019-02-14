@@ -51,6 +51,7 @@ public:
 	SDL_RendererFlip flipval;
 
 	std::vector<Bullet*> pistolBullets;
+	std::vector<Bullet*> juicerBullets;
 	std::vector<Bullet*> shotgunBullets;
 	void animateExplosion(SDL_Renderer * renderer, TagComponent * tc);
 
