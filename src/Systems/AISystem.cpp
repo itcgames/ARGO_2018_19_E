@@ -8,24 +8,33 @@ void AISystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
+void AISystem::recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints, int width, int height)
+{
+	m_pathPoints = walkpoints;
+	m_width = width;
+	m_height = height;
+}
+
 void AISystem::receive(std::vector<Entity*> ents)
 {
 	
 	c2v vec = { 0.0f, 0.0f };
 	for (Entity * entity : m_entities) {
+		
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
+		
 		int count = 0;
 		ac->m_distances.assign(ents.size(), std::make_pair(0.0, vec));
 		m_dist = ac->m_distances;
+		
 		for (auto e = ents.begin(); e != ents.end(); ++e)
 		{
 			PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
 			ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
-
+			
+			std::cout << "GUN = " << pos->getX() << ", " << pos->getY() << std::endl;
 			m_position = c2v{ pos->getX(), pos->getY() };
-			//PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
 
-		//std::cout << ac->curPosition.x << ", " << ac->curPosition.y << std::endl;
 			ac->m_distances[count].first = distance(ac->curPosition, m_position);
 
 			vec.x = pos->getX();
@@ -61,7 +70,7 @@ c2v AISystem::checkClosest(std::vector<std::pair<double, c2v>> distances, std::p
 c2v AISystem::checkJumpPoints(std::vector<c2v*> points, PositionComponent* pc)
 {
 
-	double smallest = 10000;
+	double smallest = 100000;
 
 	c2v myPos = { pc->getX(), pc->getY() };
 	c2v closestPosition;
@@ -83,7 +92,7 @@ c2v AISystem::checkJumpPoints(std::vector<c2v*> points, PositionComponent* pc)
 std::pair<c2v, std::string> AISystem::checkWalkPoints(std::vector<std::pair<c2v, std::string>> walkpoints, PositionComponent* pc)
 {
 
-	double smallest = 10000;
+	double smallest = 100000;
 
 	c2v myPos = { pc->getX(), pc->getY() };
 	c2v closestPosition = c2v{ 0,0 };
@@ -107,7 +116,7 @@ std::pair<c2v, std::string> AISystem::checkWalkPoints(std::vector<std::pair<c2v,
 	return std::make_pair(closestPosition, name);
 }
 
-void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, std::string>> walkpoints, int width, int height) {
+void AISystem::update(std::vector<c2v*> jumppoints) {
 	
 	
 	int speed = 0;
@@ -139,15 +148,11 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 				ac->m_landed = true;
 			}
 
-
-			/*if (ac->curPosition.x > ac->closestWalkPoint.first.x)
+			if (ac->curPosition.x >= m_width - 50)
 			{
-				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+				ac->setLeft(true);
+				ac->setRight(false);
 			}
-			else
-			{
-				sc->m_flipValue = SDL_FLIP_NONE;
-			}*/
 
 			if (!ac->set)
 			{
@@ -177,21 +182,17 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 				ac->direction = "LEFT";
 			}
 
-				
-			
-			
-			std::cout << ac->direction << std::endl;
 			
 			if (ac->m_landed) {
 
 
 				ac->curWalkPoints.clear();
 
-				for (int i = 0; i < walkpoints.size(); i++)
+				for (int i = 0; i < m_pathPoints.size(); i++)
 				{
-					if (walkpoints[i].first.y > ac->curPosition.y && walkpoints[i].first.y < ac->curPosition.y + 100)
+					if (m_pathPoints[i].first.y > ac->curPosition.y && m_pathPoints[i].first.y < ac->curPosition.y + 100)
 					{
-						ac->curWalkPoints.push_back(walkpoints[i]);
+						ac->curWalkPoints.push_back(m_pathPoints[i]);
 					}
 				}
 
@@ -206,7 +207,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 
 					if (ac->curPosition.x < ac->closestWalkPoint.first.x + 5 && ac->curPosition.x > ac->closestWalkPoint.first.x - 5)
 					{
-						if (ac->closestWalkPoint.second == "LEFT")
+						if (ac->closestWalkPoint.second == "LEFT" && ac->jumping)
 						{
 							ac->setLeft(true);
 							ac->setRight(false);
@@ -223,7 +224,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 
 						}
 
-						if (ac->closestWalkPoint.second == "RIGHT")
+						if (ac->closestWalkPoint.second == "RIGHT" && ac->jumping)
 						{
 							ac->setLeft(false);
 							ac->setRight(true);
@@ -242,9 +243,18 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 				}
 			}
 
-			std::cout << "GUN IN SIGHT = " << ac->m_gunInSight << std::endl;
 
-			if (ac->curPosition.y > ac->closestEnemy.y && ac->curPosition.y < ac->closestEnemy.y + 200 && ac->m_landed)
+			if (ac->curPosition.y + 50 < ac->closestEnemy.y + 200 && ac->m_landed)
+			{
+				ac->jumping = false;
+			}
+			else
+			{
+				ac->jumping = true;
+			}
+
+
+			if (ac->curPosition.y + 50 > ac->closestEnemy.y && ac->curPosition.y + 50 < ac->closestEnemy.y + 200 && ac->m_landed)
 			{
 				ac->m_gunInSight = true;
 
@@ -255,20 +265,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 					{
 						ac->setRight(false);
 						ac->setLeft(true);
-						
-						//if (pc->m_hitLeftSide)
-						//{
-						//	if (pc->getVelX() < -7.8)
-						//	{
-						//		ac->setJump(true);
-						//	}
-						//	else
-						//	{
-						//		pc->setVelX(-8);
-						//		ac->setJump(true);
-						//	}
-						//	//pc->m_hitLeftSide = false;
-						//}
+				
 					}
 					else
 					{
@@ -282,20 +279,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 					{
 						ac->setRight(true);
 						ac->setLeft(false);
-						
-						//if (pc->m_hitRightSide)
-						//{
-						//	if (pc->getVelX() > 7.8)
-						//	{
-						//		ac->setJump(true);
-						//	}
-						//	else
-						//	{
-						//		pc->setVelX(8);
-						//		ac->setJump(true);
-						//	}
-						//	//pc->m_hitRightSide = false;
-						//}
+					
 					}
 					else
 					{
@@ -307,7 +291,6 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 			else
 			{
 				ac->m_gunInSight = false;
-				//ac->set = false;
 			}
 		}	
 	}
