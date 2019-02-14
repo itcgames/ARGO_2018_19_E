@@ -212,7 +212,7 @@ void Player::render(SDL_Renderer* renderer) {
 				speed = speed * -1;  // make sure is possitive so dont rip legs apart :).
 			}
 			runCount = runCount - speed;
-
+                                                                                                                                                                                                                                                                                                                                                                             
 		}
 		//std::cout << "RUN = " << runCount << std::endl;
 		m_spriteComponentLeftFoot->setRotation(-runCount);

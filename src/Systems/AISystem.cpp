@@ -107,7 +107,7 @@ std::pair<c2v, std::string> AISystem::checkWalkPoints(std::vector<std::pair<c2v,
 	return std::make_pair(closestPosition, name);
 }
 
-void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, std::string>> walkpoints, int width, int height) {
+void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, std::string>> walkpoints) {
 	
 	
 	int speed = 0;
@@ -249,7 +249,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 				}
 			}
 
-			std::cout << "GUN IN SIGHT = " << ac->m_gunInSight << std::endl;
+			//std::cout << "GUN IN SIGHT = " << ac->m_gunInSight << std::endl;
 
 			if (ac->curPosition.y > ac->closestEnemy.y && ac->curPosition.y < ac->closestEnemy.y + 200 && ac->m_landed)
 			{
