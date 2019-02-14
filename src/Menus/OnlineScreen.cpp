@@ -68,7 +68,9 @@ void OnlineScreen::update() {
 
 	if (BButton) {
 		m_joined = false;
-		m_client->sendMessage("Leave," + std::to_string(m_client->number) + ",");
+		m_pack.message = 3;
+		m_pack.playerNum = m_client->number;
+		m_client->sendMessage(m_pack);
 		*m_currentGameState = GameState::Menu;
 	}
 
@@ -85,9 +87,10 @@ void OnlineScreen::update() {
 		m_ready2Play = true;
 		if (AButton) {
 			m_joined = false;
-			m_client->sendMessage("Leave," + std::to_string(m_client->number) + ",");
+			m_pack.message = 4;
+			m_pack.playerNum = m_client->number;
+			m_client->sendMessage(m_pack);
 			*m_online = true;
-			m_client->sendMessage("Start,");
 			*m_currentGameState = GameState::Game;
 		}
 	}
