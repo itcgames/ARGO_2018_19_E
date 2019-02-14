@@ -165,27 +165,25 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 				ac->set = true;
 			}
 
-			if (ac->checkGunDirection)
-			{
-				ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
-
-				if (ac->closestEnemy.x > ac->curPosition.x)
-				{
-					ac->direction = "RIGHT";
-				}
-				else
-				{
-					ac->direction = "LEFT";
-				}
-
-				ac->checkGunDirection = false;
-			}
 			
+			ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
 
+			if (ac->closestEnemy.x > ac->curPosition.x)
+			{
+				ac->direction = "RIGHT";
+			}
+			else
+			{
+				ac->direction = "LEFT";
+			}
+
+				
+			
+			
+			std::cout << ac->direction << std::endl;
 			
 			if (ac->m_landed) {
 
-				ac->checkGunDirection = true;
 
 				ac->curWalkPoints.clear();
 
@@ -198,11 +196,6 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 				}
 
 				ac->closestWalkPoint = checkWalkPoints(ac->curWalkPoints, pc);
-			}
-
-			if (ac->curPosition.y != ac->lastPosition.y)
-			{
-				
 			}
 
 			if (!ac->m_gunInSight)

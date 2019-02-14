@@ -56,6 +56,9 @@ public:
 	bool facingRight = false;
 
 	bool checkGunDirection = true;
+
+	bool jumping = false;
+
 	bool set = false;
 	c2v closestEnemy;
 	c2v closestJumpPoint;

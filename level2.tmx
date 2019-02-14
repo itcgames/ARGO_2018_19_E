@@ -32,20 +32,6 @@
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 </data>
  </layer>
- <objectgroup id="3" name="JumpPoints">
-  <object id="4" x="1017" y="1374">
-   <point/>
-  </object>
- </objectgroup>
- <objectgroup id="2" name="Points">
-  <object id="1" x="1014" y="882">
-   <point/>
-  </object>
-  <object id="2" x="734" y="886">
-   <point/>
-  </object>
-  <object id="3" x="1366" y="888">
-   <point/>
-  </object>
- </objectgroup>
+ <objectgroup id="3" name="JumpPoints"/>
+ <objectgroup id="2" name="Points"/>
 </map>
