@@ -108,21 +108,21 @@ void ControlSystem::setButtons(ControlComponent * cc) {
 	}
 
 	if (AButton) {
-		if (aIndex == 0)
+		if (cc->aIndex == 0)
 			cc->setJump(AButton);
 		
-		aIndex++;
+		cc->aIndex++;
 	}
 	else {
-		aIndex = 0;
+		cc->aIndex = 0;
 	}
 	if (XButton) {
-		if (xIndex == 0)
+		if (cc->xIndex == 0)
 			cc->setThrowWeapon(true);
-		xIndex++;
+		cc->xIndex++;
 	}
 	else {
-		xIndex = 0;
+		cc->xIndex = 0;
 	}
 }
 

@@ -37,6 +37,9 @@ public:
 
 	bool m_init = false;
 
+	int aIndex = 0;
+	int xIndex = 0;
+
 private:
 
 	bool m_left = false;
