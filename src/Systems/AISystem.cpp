@@ -80,29 +80,34 @@ c2v AISystem::checkJumpPoints(std::vector<c2v*> points, PositionComponent* pc)
 	return closestPosition;
 }
 
-c2v AISystem::checkWalkPoints(std::vector<c2v*> points, PositionComponent* pc)
+std::pair<c2v, std::string> AISystem::checkWalkPoints(std::vector<std::pair<c2v, std::string>> walkpoints, PositionComponent* pc)
 {
 
 	double smallest = 10000;
 
 	c2v myPos = { pc->getX(), pc->getY() };
 	c2v closestPosition = c2v{ 0,0 };
+	std::string name = "";
 
-	for (auto it = points.begin(); it != points.end(); it++)
-	{
-		auto pos = c2v{ (*it)->x, (*it)->y };
+
+	for (int i = 0; i < walkpoints.size(); i++)
+	{ 
+
+		c2v pos = { walkpoints[i].first.x, walkpoints[i].first.y };
 		double dist = distance(myPos, pos);
 
 		if (dist < smallest)
 		{
 			smallest = dist;
 			closestPosition = pos;
+			name = walkpoints[i].second;
 		}
 	}
-	return closestPosition;
+	
+	return std::make_pair(closestPosition, name);
 }
 
-void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints) {
+void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, std::string>> walkpoints) {
 	
 	
 	int speed = 0;
@@ -115,16 +120,15 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 		FState *state = (FState*)entity->getCompByType("STATE");
-		//CollisionComponent *coll = (CollisionComponent*)entity->getCompByType("COLLISION");
+		CollisionComponent *coll = (CollisionComponent*)entity->getCompByType("COLLISION");
 
 		ac->curPosition.x = pc->getX();
 		ac->curPosition.y = pc->getY();
 
 		if (ac->m_alive) {
-			
 
-			
 			ac->newYVel = pc->getVelY();
+			
 			if (ac->newYVel != ac->oldYVel)
 			{
 				ac->m_landed = false;
@@ -134,101 +138,186 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<c2v*> walkpoints
 			{
 				ac->m_landed = true;
 			}
-			
 
 
-			if (ac->curPosition.x > ac->closestWalkPoint.x)
+			/*if (ac->curPosition.x > ac->closestWalkPoint.first.x)
 			{
-				ac->facingleft = true;
-				ac->facingRight = false;
 				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
 			}
 			else
 			{
-				ac->facingRight = true;
-				ac->facingleft = false;
-
 				sc->m_flipValue = SDL_FLIP_NONE;
+			}*/
+
+			if (!ac->set)
+			{
+				ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
+				
+				if (ac->closestEnemy.x > ac->curPosition.x)
+				{
+					ac->setLeft(true);
+				}
+				else
+				{
+					ac->setRight(true);
+				}
+
+				ac->set = true;
 			}
 
-			ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
+			if (ac->checkGunDirection)
+			{
+				ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
+
+				if (ac->closestEnemy.x > ac->curPosition.x)
+				{
+					ac->direction = "RIGHT";
+				}
+				else
+				{
+					ac->direction = "LEFT";
+				}
+
+				ac->checkGunDirection = false;
+			}
+			
 
 			
 			if (ac->m_landed) {
-				//closestJumpPoint = checkJumpPoints(jumppoints, pc);
 
-				ac->closestWalkPoint = checkWalkPoints(walkpoints, pc);
+				ac->checkGunDirection = true;
 
-			}
-		
+				ac->curWalkPoints.clear();
 
-			if (!ac->m_gunInSight) {
-				if (ac->facingleft && ac->m_landed)
+				for (int i = 0; i < walkpoints.size(); i++)
 				{
-					ac->setLeft(true);
-					ac->setRight(false);
-
-					if (ac->curPosition.x < ac->closestWalkPoint.x + 10)
+					if (walkpoints[i].first.y > ac->curPosition.y && walkpoints[i].first.y < ac->curPosition.y + 100)
 					{
-						if (pc->getVelX() < -7.8)
-						{
-							ac->setJump(true);
-						}
-						else
-						{
-							pc->setVelX(-8);
-							ac->setJump(true);
-						}
-
+						ac->curWalkPoints.push_back(walkpoints[i]);
 					}
 				}
-				if (ac->facingRight && ac->m_landed)
-				{
-					ac->setRight(true);
-					ac->setLeft(false);
 
-					if (ac->curPosition.x > ac->closestWalkPoint.x - 10)
+				ac->closestWalkPoint = checkWalkPoints(ac->curWalkPoints, pc);
+			}
+
+			if (ac->curPosition.y != ac->lastPosition.y)
+			{
+				
+			}
+
+			if (!ac->m_gunInSight)
+			{
+				if (ac->m_landed)
+				{
+					ac->lastPosition = ac->curPosition;
+
+					if (ac->curPosition.x < ac->closestWalkPoint.first.x + 5 && ac->curPosition.x > ac->closestWalkPoint.first.x - 5)
 					{
-						if (pc->getVelX() > 7.8)
+						if (ac->closestWalkPoint.second == "LEFT")
 						{
-							ac->setJump(true);
+							ac->setLeft(true);
+							ac->setRight(false);
+
+							if (pc->getVelX() < -7.8)
+							{
+								ac->setJump(true);
+							}
+							else
+							{
+								pc->setVelX(-8);
+								ac->setJump(true);
+							}
+
 						}
-						else
+
+						if (ac->closestWalkPoint.second == "RIGHT")
 						{
-							pc->setVelX(8);
-							ac->setJump(true);
+							ac->setLeft(false);
+							ac->setRight(true);
+
+							if (pc->getVelX() > 7.8)
+							{
+								ac->setJump(true);
+							}
+							else
+							{
+								pc->setVelX(8);
+								ac->setJump(true);
+							}
 						}
 					}
 				}
 			}
-			//std::cout << ac->closestEnemy.x << ", " << ac->closestEnemy.y << std::endl;
+
+			std::cout << "GUN IN SIGHT = " << ac->m_gunInSight << std::endl;
+
 			if (ac->curPosition.y > ac->closestEnemy.y && ac->curPosition.y < ac->closestEnemy.y + 200 && ac->m_landed)
 			{
 				ac->m_gunInSight = true;
 
-				if (ac->closestEnemy.x < ac->curPosition.x)
+				if (ac->direction == "LEFT")
 				{
-					ac->setRight(false);
-					ac->setLeft(true);
+					
+					if (ac->curPosition.x > ac->closestEnemy.x)
+					{
+						ac->setRight(false);
+						ac->setLeft(true);
+						
+						//if (pc->m_hitLeftSide)
+						//{
+						//	if (pc->getVelX() < -7.8)
+						//	{
+						//		ac->setJump(true);
+						//	}
+						//	else
+						//	{
+						//		pc->setVelX(-8);
+						//		ac->setJump(true);
+						//	}
+						//	//pc->m_hitLeftSide = false;
+						//}
+					}
+					else
+					{
+						ac->setRight(false);
+						ac->setLeft(false);
+					}
 				}
-				if (ac->closestEnemy.x > ac->curPosition.x)
+				if (ac->direction == "RIGHT" && ac->curPosition.x < ac->closestEnemy.x)
 				{
-					ac->setRight(true);
-					ac->setLeft(false);
-				}
-
-				
+					if (ac->curPosition.x < ac->closestEnemy.x)
+					{
+						ac->setRight(true);
+						ac->setLeft(false);
+						
+						//if (pc->m_hitRightSide)
+						//{
+						//	if (pc->getVelX() > 7.8)
+						//	{
+						//		ac->setJump(true);
+						//	}
+						//	else
+						//	{
+						//		pc->setVelX(8);
+						//		ac->setJump(true);
+						//	}
+						//	//pc->m_hitRightSide = false;
+						//}
+					}
+					else
+					{
+						ac->setRight(false);
+						ac->setLeft(false);
+					}		
+				}				
 			}
-			
-		}
-		else
-		{
-
-		}
-		
-		
+			else
+			{
+				ac->m_gunInSight = false;
+				//ac->set = false;
+			}
+		}	
 	}
-
 }
 
 

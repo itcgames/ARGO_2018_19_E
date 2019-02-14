@@ -87,6 +87,7 @@ Game::Game()
 
 	m_ps.setRenderer(m_renderer);
 	m_grenadeSys.setRenderer(m_renderer);
+	m_collSys.setRenderer(m_renderer);
 }
 
 Game::~Game()
@@ -207,6 +208,7 @@ void Game::render() {
 		testLight->render(m_renderer);
 
 		m_grenadeSys.render();
+		m_collSys.render();
 		//m_emitter->update();
 		if (m_drawRoundText) {
 			SDL_RenderCopy(m_renderer, text, NULL, &renderQuad);
