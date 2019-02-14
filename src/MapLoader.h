@@ -30,7 +30,7 @@ public:
 	void draw(SDL_Renderer* renderer);
 
 	std::vector<std::vector<Tile*>> getTiles() { return m_tileVector; }
-	std::vector<c2v*> getJumpPoints() { return m_jumpPointVector; }
+	std::vector<std::pair<c2v, std::string>> getJumpPoints() { return m_jumpPointVector; }
 	std::vector<std::pair<c2v, std::string>> getWalkPoints() { return m_walkPointVector; }
 	int getWidth();
 	int getHeight();
@@ -46,7 +46,7 @@ private:
 	int m_tileHeight;
 	
 	std::vector<std::vector<Tile*>> m_tileVector;
-	std::vector<c2v*> m_jumpPointVector;
+	std::vector<std::pair<c2v, std::string>> m_jumpPointVector;
 	std::vector<std::pair<c2v, std::string>>  m_walkPointVector;
 
 	SpriteComponent* m_sprite;

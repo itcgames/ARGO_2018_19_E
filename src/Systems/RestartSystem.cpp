@@ -26,6 +26,7 @@ void RestartSystem::reset(int level) {
 		if (tc->getTag() == "AI_TAG") {
 			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
 			ai->m_alive = true;
+			ai->set = false;
 			sc->setColor(255, 255, 255);
 			
 		}

@@ -505,7 +505,6 @@ void PhysicsSystem::update() {
 			}
 			movePlayer(cc,pc,tc);
 			setPosition(pc);  // Set the position after movement
-			std::cout << "PLAYER = " << pc->getX() << ", " << pc->getY() << std::endl;
 			pc->setVelY(pc->getVelY() + Friction.y);  // Friction
 		}
 		if (tc->getTag() == "Gun")
@@ -578,7 +577,6 @@ void PhysicsSystem::update() {
 			{
 				if (gunGot == "pistol")
 				{
-					std::cout << "GUN = " << pc->getX() << ", " << pc->getY() << std::endl;
 
 					setHandOnPistol(sc, pc, cc); // Set hand on gun
 				}
@@ -611,11 +609,18 @@ void PhysicsSystem::update() {
 			aiPositionX = pc->getX();
 			aiPositionY = pc->getY();
 			
+			/*if (cc->getJump() && pc->jumpNum < 2) {
+				pc->setVelY(-jumpSpeed);
+				cc->setJump(false);
+				pc->m_allowedJump = false;
+				pc->jumpNum++;
+			}*/
 			
-			if (ac->getJump() && pc->m_allowedJump) {
-				pc->setVelY(pc->getVelY() - 20);
+			if (ac->getJump() && pc->jumpNum < 2) {
+				pc->setVelY(-20);
 				ac->setJump(false);
 				pc->m_allowedJump = false;
+				pc->jumpNum++;
 			}
 			
 			if (ac->getLeft()) {

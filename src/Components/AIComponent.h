@@ -61,10 +61,12 @@ public:
 
 	bool set = false;
 	c2v closestEnemy;
-	c2v closestJumpPoint;
+
 	std::pair<c2v, std::string> closestWalkPoint;
+	std::pair<c2v, std::string> closestJumpPoint;
 
 	std::vector<std::pair<c2v, std::string>> curWalkPoints;
+	std::vector<std::pair<c2v, std::string>> curJumpPoints;
 
 	float oldYVel = 0;
 	float newYVel = 0;
@@ -73,6 +75,7 @@ public:
 
 	c2v curPosition = { 0,0 };
 	c2v lastPosition = { 0,0 };
+
 	bool m_landed;
 
 
