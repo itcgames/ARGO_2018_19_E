@@ -26,7 +26,9 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Menu);
+
+	*m_currentGameState = (GameState::Game);
+
 
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -63,8 +65,9 @@ Game::Game()
 	}
 	h1 = new Hand(m_renderer,1);
 	h2 = new Hand(m_renderer,2);
+
 	for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) {
-		m_aiCharacters.push_back(new AI(m_renderer));
+		m_aiCharacters.push_back(new AI(m_renderer , 500.0 + (100.0 * i), 100.0));
 	}
 	
 
@@ -157,13 +160,12 @@ void Game::update() {
 		m_ps.bulletUpdate(m_renderer);
 		checkRoundOver();
 		if (!(*m_online)) {
-
 		m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
-		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints(), m_map->getWidth(), m_map->getHeight());
+		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
 		m_ais.receive(m_ents);
 
 		m_hs.update();
-		//m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
+		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
 			
 		}
 		else {
@@ -361,15 +363,12 @@ void Game::initialise()
 	m_ps.addEntity((Entity*)h1);
 	m_ps.addEntity((Entity*)h2);
 
-	m_ps.addEntity((Entity*)pistol);
+
 	m_guns.addEntity((Entity*)pistol);
 
-	m_ps.addEntity((Entity*)shotgun);
 	m_guns.addEntity((Entity*)shotgun);
-	m_ps.addEntity((Entity*)juicer);
 	m_guns.addEntity((Entity*)juicer);
 
-	m_ps.addEntity((Entity*)grenade);
 	m_guns.addEntity((Entity*)grenade);
 
 	m_collSys.addEntity((Entity*)pistol);
@@ -401,5 +400,7 @@ void Game::initialise()
 	m_restartSys.addEntity((Entity*)shotgun);
 	m_restartSys.addEntity((Entity*)juicer);
 	m_restartSys.addEntity((Entity*)grenade);
+	m_restartSys.addEntity((Entity*)h1);
+	m_restartSys.addEntity((Entity*)h2);
 }
 

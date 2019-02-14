@@ -97,7 +97,7 @@ void ControlSystem::setButtons(ControlComponent * cc) {
 	bool XButton = SDL_GameControllerGetButton(cc->gGameController, SDL_CONTROLLER_BUTTON_X);
 	
 	//int leftX = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_RIGHTX);
-	int RT = SDL_GameControllerGetAxis(SDL_GameControllerOpen(0), SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+	int RT = SDL_GameControllerGetAxis(cc->gGameController, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
 	
 	if (RT > 5000) {
 		cc->setFire(true);
@@ -108,21 +108,21 @@ void ControlSystem::setButtons(ControlComponent * cc) {
 	}
 
 	if (AButton) {
-		if (cc->aIndex == 0)
+		if (aIndex == 0)
 			cc->setJump(AButton);
 		
-		cc->aIndex++;
+		aIndex++;
 	}
 	else {
-		cc->aIndex = 0;
+		aIndex = 0;
 	}
 	if (XButton) {
-		if (cc->xIndex == 0)
+		if (xIndex == 0)
 			cc->setThrowWeapon(true);
-		cc->xIndex++;
+		xIndex++;
 	}
 	else {
-		cc->xIndex = 0;
+		xIndex = 0;
 	}
 }
 
