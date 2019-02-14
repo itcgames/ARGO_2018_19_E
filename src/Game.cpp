@@ -153,7 +153,7 @@ void Game::update() {
 
 		m_ps.update();
 		m_guns.update();
-		SDL_RenderSetScale(m_renderer, 0.4, 0.4);
+		SDL_RenderSetScale(m_renderer, 0.69, 0.5);
 		m_ps.bulletUpdate(m_renderer);
 		checkRoundOver();
 		if (!(*m_online)) {
