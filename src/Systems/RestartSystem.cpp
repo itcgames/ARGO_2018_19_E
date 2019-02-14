@@ -31,6 +31,7 @@ void RestartSystem::reset(int level) {
 		}
 		else if (tc->getTag() == "Player") {
 			tc->setGunGot("none");
+			tc->setGotGunBool(false);
 		}
 		else if (tc->getTag() == "Gun") {
 			tc->setGrabable(true);

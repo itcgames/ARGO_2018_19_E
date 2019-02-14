@@ -52,7 +52,7 @@ public:
 
 	std::vector<Bullet*> pistolBullets;
 	std::vector<Bullet*> shotgunBullets;
-	void animateExplosion(SDL_Renderer * renderer);
+	void animateExplosion(SDL_Renderer * renderer, TagComponent * tc);
 
 
 	void setGun(TagComponent *tc,ControlComponent *cc,PositionComponent *pc,SpriteComponent *sc);

@@ -197,7 +197,8 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 		tc->setGrabbed(true);
 		pc->setVelX(0);
 		pc->setVelY(0);
-		gotGun = true;
+		//gotGun = true;
+		setPlayerGunGot(tc->getSubTag());
 	}
 
 	if (aiPositionX >= pc->getX() - 100 && aiPositionX <= pc->getX() + 100
@@ -231,9 +232,21 @@ void PhysicsSystem::setPlayerGunGot(std::string gun)
 		if (tc->getTag() == "Player")
 		{
 			tc->setGunGot(gun);
+			tc->setGotGunBool(true);
 			if (gun == "none")
 			{
 				gotGun = false;
+				tc->setGotGunBool(false);
+			}
+		}
+		if (tc->getTag() == "Hand")
+		{
+			tc->setGunGot(gun);
+			tc->setGotGunBool(true);
+			if (gun == "none")
+			{
+				gotGun = false;
+				tc->setGotGunBool(false);
 			}
 		}
 	}
@@ -279,7 +292,6 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 }
 
 void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc,CollisionComponent * cc) {
-	//std::cout << "X = " << -xOffset <<  "Y = " << yOffset << std::endl;
 	if (tc->getSubTag() == "pistol")
 	{
 		pc->setVelX(-xOffset / 2.5);
@@ -308,7 +320,6 @@ void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc,Collisio
 	tc->setGrabbed(false);
 	tc->setGrabable(false);
 	// Start count to make gun grabable again.
-	gotGun = false;
 	throwGun = false;
 	// SET PLAYER GUN FUNCTION
 	setPlayerGunGot("none");
@@ -495,14 +506,15 @@ void PhysicsSystem::update() {
 		// check gun player collide
 		if (tc->getTag() == "Player")
 		{
+			std::cout << "Gun =" << tc->getGunGot() << std::endl;
 			gunGot = tc->getGunGot();
-			if (gunGot == "none")
+			if (tc->getGunGot() == "none")
 			{
-				gotGun = false;
+				tc->setGotGunBool(false);
 			}
 			playerFlip(pc,sc,cc,tc);  // Flip Player sprite when angle requires it.
 			setPlayerPosition(pc);  // Set player position variable for others.
-			if (cc->getThrowWeapon() == true && gotGun == true)  // Check if x is pressed.
+			if (cc->getThrowWeapon() == true && tc->getGotGunBool() == true)  // Check if x is pressed.
 			{
 				throwGunFun(cc);
 			}
@@ -515,36 +527,22 @@ void PhysicsSystem::update() {
 		{
 			setGun(tc,cc,pc,sc);
 			pickUpAgain(tc);
-			if (tc->getSubTag() == gunGot)
+			if (tc->getGrabbed() == true)
 			{
 				if (throwGun == true)  // Check if a weapon wants to be thrown
 				{
 					launchGun(pc, tc,colc);
 				}
 			}
-			/*if (cc->getAngle() < 0 && gotGun == true) {
-				if (gunGot == tc->getSubTag())
-				{
+			if (angle < 90 && tc->getGrabbed() == true) {
+
 					flipHorizontal(sc);
-				}
+				
 			}
-			else if(gotGun == true) {
-				if (gunGot == tc->getSubTag())
-				{
+			else if (tc->getGrabbed() == true) {
+
 					flipNone(sc);
-				}
-			}*/
-			if (angle < 90 && gotGun == true) {
-				if (gunGot == tc->getSubTag())
-				{
-					flipHorizontal(sc);
-				}
-			}
-			else if (gotGun == true) {
-				if (gunGot == tc->getSubTag())
-				{
-					flipNone(sc);
-				}
+				
 			}
 			if (tc->getGrabbed() != true)
 			{
@@ -586,21 +584,21 @@ void PhysicsSystem::update() {
 			{
 				sc->m_flipValue = SDL_FLIP_NONE;
 			}
-			if (gotGun == true)
+			if (tc->getGotGunBool() == true)
 			{
-				if (gunGot == "pistol")
+				if (tc->getGunGot() == "pistol")
 				{
 					setHandOnPistol(sc, pc, cc); // Set hand on gun
 				}
-				else if (gunGot == "shotgun")
+				else if (tc->getGunGot() == "shotgun")
 				{
 					setHandOnShotgun(sc, pc, cc,tc); // Set hand on gun
 				}
-				else if (gunGot == "juicer")
+				else if (tc->getGunGot() == "juicer")
 				{
 					setHandOnJuicer(sc, pc, cc, tc); // Set hand on gun
 				}
-				else if (gunGot == "grenade") {
+				else if (tc->getGunGot() == "grenade") {
 					setHandOnGrenade(sc, pc, cc); // Set hand on gun
 				}
 			}
@@ -667,42 +665,49 @@ void PhysicsSystem::update() {
 void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 	if (fired == true)
 	{
-		if (gunGot == "pistol")
-		{
-			if (firedCount < 10)
+		for (Entity * entity : m_entities) {
+
+			TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
+			if (tc->getTag() == "Player")
 			{
-				firedCount = firedCount + 1;
-			}
-			else {
-				fired = false;
-				firedCount = 0;
-			}
-		}
-		if (gunGot == "shotgun")
-		{
-			if (firedCount < 60)
-			{
-				firedCount = firedCount + 1;
-				shotgunCount = shotgunCount + 1;
-			}
-			else {
-				fired = false;
-				firedCount = 0;
-				shotgunCount = 0;
-			}
-		}
-		if (gunGot == "juicer")
-		{
-			if (firedCount < 5)
-			{
-				firedCount = firedCount + 1;
-				juicerCount = juicerCount + 1;
-			}
-			else {
-				fired = false;
-				firedCount = 0;
-				shotgunCount = 0;
-				juicerCount = 0;
+				if (tc->getGunGot() == "pistol")
+				{
+					if (firedCount < 10)
+					{
+						firedCount = firedCount + 1;
+					}
+					else {
+						fired = false;
+						firedCount = 0;
+					}
+				}
+				if (tc->getGunGot() == "shotgun")
+				{
+					if (firedCount < 60)
+					{
+						firedCount = firedCount + 1;
+						shotgunCount = shotgunCount + 1;
+					}
+					else {
+						fired = false;
+						firedCount = 0;
+						shotgunCount = 0;
+					}
+				}
+				if (tc->getGunGot() == "juicer")
+				{
+					if (firedCount < 5)
+					{
+						firedCount = firedCount + 1;
+						juicerCount = juicerCount + 1;
+					}
+					else {
+						fired = false;
+						firedCount = 0;
+						shotgunCount = 0;
+						juicerCount = 0;
+					}
+				}
 			}
 		}
 	}
@@ -721,7 +726,7 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 				{
 					if (fired == false)
 					{
-						if (tc->getSubTag() == "shotgun" && gunGot == "shotgun")
+						if (tc->getSubTag() == "shotgun" && tc->getGrabbed() == true)
 						{
 							fired = true;
 							m_startAnimating = true;
@@ -767,7 +772,7 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 							}
 
 						}
-						else if (tc->getSubTag() == "pistol" && gunGot == "pistol")
+						else if (tc->getSubTag() == "pistol" && tc->getGrabbed() == true)
 						{
 							fired = true;
 							m_startAnimating = true;
@@ -781,7 +786,7 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 
 
 						}
-						else if (tc->getSubTag() == "juicer" && gunGot == "juicer")
+						else if (tc->getSubTag() == "juicer" && tc->getGrabbed() == true)
 						{
 							fired = true;
 							m_startAnimating = true;
@@ -818,7 +823,7 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - juicerTipX + 60, pc->getY() + juicerTipY + 100, -(angle - 90), unitX * 100, unitY * 80, 200));
 							}
 						}
-						else if (tc->getSubTag() == "grenade" && gunGot == "grenade")
+						else if (tc->getSubTag() == "grenade" && tc->getGrabbed() == true)
 						{
 							GrenadeComponent * gc = (GrenadeComponent*)entity->getCompByType("GRENADE");
 							throwGun = true;
@@ -859,7 +864,13 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
 
 	if (m_startAnimating) {
-		animateExplosion(renderer);
+		for (Entity * entity : m_entities) {
+			TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
+			if (tc->getTag() == "Player")
+			{
+				animateExplosion(renderer,tc);
+			}
+		}
 	}
 
 	for (int i = 0; i < shotgunBullets.size(); i++)
@@ -894,11 +905,11 @@ void PhysicsSystem::setRenderer(SDL_Renderer * renderer)
 	
 }
 
-void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
+void PhysicsSystem::animateExplosion(SDL_Renderer * renderer,TagComponent * tc)
 {
 	m_count++;
 	
-	if (gunGot == "pistol")
+	if (tc->getGunGot() == "pistol")
 	{
 		p->setStartSpin(0);
 		p->setStartSpinVar(90);
@@ -921,7 +932,7 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 		p->update();
 		p->draw();
 	}
-	if (gunGot == "shotgun")
+	if (tc->getGunGot() == "shotgun")
 	{
 		flash->setStartSpin(0);
 		flash->setStartSpinVar(0);
@@ -951,7 +962,7 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 
 
 	}
-	else if (gunGot == "juicer")
+	else if (tc->getGunGot() == "juicer")
 	{
 		flash->setStartSpin(0);
 		flash->setStartSpinVar(0);
@@ -983,21 +994,21 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 
 	
 	
-	if (m_count > 15 && gunGot == "pistol")
+	if (m_count > 15 && tc->getGunGot() == "pistol")
 	{
 		m_count = 0;
 		p->resetSystem();
 		m_startAnimating = false;
 	}
 
-	else if (m_count > 5 && gunGot == "shotgun")
+	else if (m_count > 5 && tc->getGunGot() == "shotgun")
 	{
 		m_count = 0;
 		flash->resetSystem();
 
 		m_startAnimating = false;
 	}
-	else if (m_count > 5 && gunGot == "juicer")
+	else if (m_count > 5 && tc->getGunGot() == "juicer")
 	{
 		m_count = 0;
 		flash->resetSystem();
