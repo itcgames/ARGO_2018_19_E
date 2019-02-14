@@ -10,6 +10,7 @@
 #include "./Systems/GunSystem.h"
 #include "./Systems/CollisionSystem.h"
 #include "./Systems/GrenadeSystem.h"
+#include "./Systems/RestartSystem.h"
 #include "Menus/SplashScreen.h"
 #include "Menus/CreditScreen.h"
 #include "Menus/MenuScreen.h"
@@ -22,6 +23,7 @@
 #include "AI.h"
 #include "Gun.h"
 #include "MapLoader.h"
+#include "Light.h"
 
 
 using namespace std;
@@ -55,11 +57,13 @@ public:
 	static Game* s_pInstance;
 
 	void setUpController();
+	void checkRoundOver();
 
 	SDL_Rect* getCamera();
 	c2v* getCameraCentre();
 	void setCameraCentre(float x, float y);
 	void setCameraPosition(int x, int y);
+	void initialiseText(std::string message);
 
 private:
 
@@ -83,6 +87,7 @@ private:
 	Gun* juicer;
 	Gun* grenade;
 	std::vector<Entity*> m_ents;
+	Light* testLight;
 
 	SpriteComponent* m_backgroundSprite;
 
@@ -96,6 +101,8 @@ private:
 	AISystem m_ais;
 	CollisionSystem m_collSys;
 	GrenadeSystem m_grenadeSys;
+
+	RestartSystem m_restartSys;
 
 	SDL_Rect m_screenSize;
 
@@ -118,6 +125,18 @@ private:
 	Client * m_client;
 
 	bool *m_online = new bool(false);
+
+	TTF_Font* Font;
+
+	int m_roundCounter = 0;
+	const int ROUND_OVER = 100.0f;
+	std::string round_text;
+	SDL_Texture* text;
+	SDL_Rect renderQuad;
+	SDL_Color textColor = { 188, 110, 121, 255 };
+	SDL_Surface * textSurface = new SDL_Surface;
+
+	bool m_drawRoundText = false;
 };
 
 

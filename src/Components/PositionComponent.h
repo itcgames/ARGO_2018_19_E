@@ -9,7 +9,7 @@
 class PositionComponent : public Component
 {
 public:
-	PositionComponent(float x, float y) : x(x), y(y){}
+	PositionComponent(float x, float y) : x(x), y(y), startX(x), startY(y){}
 
 	float getX() { return x; }
 	float getY() { return y; }
@@ -34,9 +34,13 @@ public:
 	c2v vel = { 0,0 };
 
 	bool m_allowedJump = true;
-	bool m_hitSide = false;
+	bool m_hitRightSide = false;
+	bool m_hitLeftSide = false;
 
 	std::vector<Bullet*> bullets;
+
+	float startX;
+	float startY;
 	
 private:
 	float x;

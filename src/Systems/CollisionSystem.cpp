@@ -54,40 +54,36 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 			for (int i = 0; i < tiles.size(); i++) {
 				for (int j = 0; j < tiles[i].size(); j++) {
 					std::string val;
-					if (tiles[i].at(j)->dRect.x > 0) {
+					if (tiles[i].at(j)->dRect.x >= 0) {
 						val = rectCollision(cc->getCollider(), tiles[i].at(j)->collider);
-						if (val != "none" ) {
+						if (val != "none") {
 							if (val == "top") {
 								pc->m_allowedJump = true;
 								pc->setVelY(0);
 								pc->setY(tiles[i].at(j)->dRect.y - cc->getH());
-								
-								
+
+
 							}
+
 							else if (val == "bottom") {
 								pc->setVelY(5);
-							/*	if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0 && tag->getTag() == "Player")
-								{
-									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
-								}*/
 							}
-							else if (val == "right" || val == "left") {
-								pc->setVelX(-(pc->getVelX()));
-								pc->m_allowedJump = true;
-								pc->m_hitSide = true;
-							/*	if (SDL_HapticRumblePlay(haptic, 0.5, 75) != 0 && tag->getTag() == "Player")
-								{
-									printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
-								}*/
-							}
-							
-					
-						}
-						
-					}
-					
 
-					
+							else if (val == "left") {
+
+								pc->setX(tiles[i].at(j)->dRect.x - cc->getW());
+								pc->m_hitLeftSide = true;
+							}
+
+							else if (val == "right")
+							{
+								pc->setX(tiles[i].at(j)->dRect.x + cc->getW() + 35);
+								pc->m_allowedJump = true;
+								pc->m_hitRightSide = true;
+
+							}
+						}
+					}					
 				}
 			}
 		}
@@ -100,7 +96,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 			for (int i = 0; i < tiles.size(); i++) {
 				for (int j = 0; j < tiles[i].size(); j++) {
 					std::string val;
-					if (tiles[i].at(j)->dRect.x > 0) {
+					if (tiles[i].at(j)->dRect.x >= 0) {
 						val = rectCollision(cc->getCollider(), tiles[i].at(j)->collider);
 						if (val != "none") {
 							if (val == "top") {
@@ -141,36 +137,60 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 	for (Entity * entity : m_entities) {
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
 
-		if (tag->getTag() == "AI_TAG") {
+		if (tag->getTag() == "AI_TAG" || tag->getTag() == "Player") {
 			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
+
+			if (pc->getY() > 3000 && tag->getTag() == "AI_TAG") {
+				AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
+				ai->m_alive = false;
+			}
+			else if (pc->getY() > 3000 && tag->getTag() == "Player") {
+				ControlComponent * control = (ControlComponent*)entity->getCompByType("CONTROL");
+				control->setAlive(false);
+			}
 			for (int i = 0; i < bullets->size(); i++) {
 				std::string val = rectCollision(cc->getCollider(), bullets->at(i)->collider);
 				c2v bPos = bullets->at(i)->m_spriteComponent->getPosition();
-				if (bPos.x > 2000 || bPos.x < -200 || bPos.y < -200 || bPos.y > 1400) {
+				if (bPos.x > 2000 || bPos.x < -200 || bPos.y < -200 || bPos.y > 3000) {
 					bullets->erase(bullets->begin() + i);
 				}
 				if (val != "none") {
 					bullets->erase(bullets->begin() + i);
-					if (val == "right") {
-						pc->setVelX(40);
-						pc->setVelY(-10);
-						sc->setRotation(90);
-						sc->setColor(255, 40, 40);
-						sc->setBlendMode(SDL_BLENDMODE_ADD);
-					}
-					if (val == "left") {
-						pc->setVelX(-40);
-						pc->setVelY(-10);
-						sc->setRotation(-90);
-						sc->setColor(255, 40, 40);
-						sc->setBlendMode(SDL_BLENDMODE_ADD);
-					}
 					if (tag->getTag() == "AI_TAG") {
 						AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
+
+
+
+						if (val == "right") {
+							pc->setVelX(40);
+							pc->setVelY(-10);
+							sc->setRotation(90);
+							sc->setColor(255, 40, 40);
+							//sc->setBlendMode(SDL_BLENDMODE_ADD);
+							ai->hitFromRight = true;
+						}
+						if (val == "left") {
+							pc->setVelX(-40);
+							pc->setVelY(-10);
+							sc->setRotation(-90);
+							sc->setColor(255, 40, 40);
+							//sc->setBlendMode(SDL_BLENDMODE_ADD);
+							ai->hitFromLeft = true;
+						}
+
 						PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 						ai->m_alive = false;	
+
+
+					}
+
+					// Possible error here
+
+					if (tag->getTag() == "Player") {
+						ControlComponent * control = (ControlComponent*)entity->getCompByType("CONTROL");
+						control->setAlive(false);
 					}
 				}
 
@@ -183,7 +203,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 	for (int j = 0; j < tiles.size(); j++) {
 		for (int k = 0; k < tiles[j].size(); k++) {
 			std::string val;
-			if (tiles[j].at(k)->dRect.x > 0) {
+			if (tiles[j].at(k)->dRect.x >= 0) {
 				for (int i = 0; i < bullets->size(); i++) {
 					val = rectCollision(bullets->at(i)->collider, tiles[j].at(k)->collider);
 					if (val != "none") {
@@ -196,7 +216,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 						//particle->startAnimating = true;
 						//m_particles.push_back(particle);
 						bullets->erase(bullets->begin() + i);
-						
+
 					}
 				}
 			}

@@ -62,6 +62,9 @@ bool SpriteComponent::loadFromFile(std::string path, SDL_Renderer* gRenderer)
 			//Get image dimensions
 			m_width = loadedSurface->w;
 			m_height = loadedSurface->h;
+
+			m_scaledWidth = m_width * m_scale.x;
+			m_scaledHeight = m_height * m_scale.y;
 		}
 
 		//Get rid of old loaded surface
