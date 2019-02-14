@@ -41,6 +41,8 @@ public:
 
 	float startX;
 	float startY;
+
+	int jumpNum = 0;
 	
 private:
 	float x;

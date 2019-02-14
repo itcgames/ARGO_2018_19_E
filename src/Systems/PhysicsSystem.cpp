@@ -455,10 +455,11 @@ void PhysicsSystem::movePlayer(ControlComponent * cc,PositionComponent *pc, TagC
 			pc->setVelX(pc->getVelX() + speed);
 		}
 	}
-	if (cc->getJump() && pc->m_allowedJump) {
+	if (cc->getJump() && pc->jumpNum < 2) {
 		pc->setVelY(- jumpSpeed);
 		cc->setJump(false);
 		pc->m_allowedJump = false;
+		pc->jumpNum++;
 	}
 }
 
