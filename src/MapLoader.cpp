@@ -25,12 +25,32 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 
 	m_sprite->loadFromFile(m_map.getTilesets().at(0).getImagePath(), renderer);
 
+	//Remove old tiles
 	int tileVectorSize = m_tiles.size();
 	for (int i = 0; i < tileVectorSize; i++)
 	{
 		if (!m_tiles.empty())
 		{
 			m_tiles.pop_back();
+		}
+	}
+
+	//Remove old waypoints
+	int walkPointVectorSize = m_walkPointVector.size();
+	for (int i = 0; i < walkPointVectorSize; i++)
+	{
+		if (!m_walkPointVector.empty())
+		{
+			m_walkPointVector.pop_back();
+		}
+	}
+
+	int jumpPointVectorSize = m_jumpPointVector.size();
+	for (int i = 0; i < jumpPointVectorSize; i++)
+	{
+		if (!m_jumpPointVector.empty())
+		{
+			m_jumpPointVector.pop_back();
 		}
 	}
 
