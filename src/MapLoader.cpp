@@ -65,7 +65,10 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 
 				if (layer->getName() == "WalkPoints")
 				{
-					m_walkPointVector.push_back(new c2v{ object.getPosition().x, object.getPosition().y });
+					std::cout << object.getName() << std::endl;
+					c2v position = c2v{ object.getPosition().x, object.getPosition().y };
+					std::string name = object.getName();
+					m_walkPointVector.push_back(std::make_pair(position, name));
 				}
 				
 			}
@@ -147,5 +150,15 @@ void MapLoader::draw(SDL_Renderer* renderer)
 			}
 		}
 	}
+}
+
+int MapLoader::getWidth()
+{
+	return m_cols * m_tileWidth;
+}
+
+int MapLoader::getHeight()
+{
+	return m_rows * m_tileHeight;
 }
 	

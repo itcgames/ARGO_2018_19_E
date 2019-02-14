@@ -15,7 +15,7 @@ class AIComponent : public Component
 
 public:
 
-	AIComponent(int speed) : m_speed(speed) {}
+	AIComponent(int speed) : m_speed(speed) { closestWalkPoint = std::make_pair(c2v{ 0,0 }, "LEFT"); }
 
 	int getSpeed() { return m_speed; }
 	void setSpeed(int speed) { m_speed = speed; }
@@ -55,10 +55,13 @@ public:
 	bool facingleft = false;
 	bool facingRight = false;
 
-
+	bool checkGunDirection = true;
+	bool set = false;
 	c2v closestEnemy;
 	c2v closestJumpPoint;
-	c2v closestWalkPoint;
+	std::pair<c2v, std::string> closestWalkPoint;
+
+	std::vector<std::pair<c2v, std::string>> curWalkPoints;
 
 	float oldYVel = 0;
 	float newYVel = 0;
@@ -66,12 +69,13 @@ public:
 	bool m_gunInSight = false;
 
 	c2v curPosition = { 0,0 };
+	c2v lastPosition = { 0,0 };
 	bool m_landed;
 
 
 	std::vector<std::pair<double, c2v>> m_distances;
 
-
+	std::string direction = "";
 	std::pair<double, c2v> m_realDist;
 
 private:

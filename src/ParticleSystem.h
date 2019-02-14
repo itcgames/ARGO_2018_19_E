@@ -765,4 +765,7 @@ protected:
 public:
     void setRenderer(SDL_Renderer* ren) { _renderer = ren; }
     void setPosition(int x, int y) { x_ = x; y_ = y; }
+
+	bool startAnimating = false;
+	int count = 0;
 };
