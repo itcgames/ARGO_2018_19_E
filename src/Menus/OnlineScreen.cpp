@@ -40,28 +40,31 @@ void OnlineScreen::update() {
 		m_client = new Client("149.153.106.155", 54000);
 
 		if (m_client->run()) {
+			m_joined = true;
 		}
 		
-		while (m_client->number == 0) {
+		while (m_client->number == 0 && m_joined) {
 			m_client->receive();
 		}	
 
-		SDL_Texture* playertexture;
-		SDL_Rect playerRenderQuad;
-		m_textures.push_back(playertexture);
-		m_quads.push_back(playerRenderQuad);
-		int num = m_client->number;
-		m_index.push_back(m_client->number);
-		std::string text = "Player: " + std::to_string(num);
-		m_strings.push_back(text);
-		SDL_Color textColor = { 200, 200, 200, 255 };
-		m_textures.back() = init(m_font, m_strings.back(), m_textures.back(), m_quads.back(), 200, 150 + (100 * m_client->number), textColor);
+		if (m_joined) {
+			SDL_Texture* playertexture;
+			SDL_Rect playerRenderQuad;
+			m_textures.push_back(playertexture);
+			m_quads.push_back(playerRenderQuad);
+			int num = m_client->number;
+			m_index.push_back(m_client->number);
+			std::string text = "Player: " + std::to_string(num);
+			m_strings.push_back(text);
+			SDL_Color textColor = { 200, 200, 200, 255 };
+			m_textures.back() = init(m_font, m_strings.back(), m_textures.back(), m_quads.back(), 200, 150 + (100 * m_client->number), textColor);
 
+		}
+		
 
 		if (m_client->number > 1) {
 			fillLobby();
 		}
-		m_joined = true;
 	}
 	bool BButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_B);
 	bool AButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_A);
