@@ -54,7 +54,6 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 		}
 	}
 
-
 	auto& map_layers = m_map.getLayers();
 	for (auto& layer : map_layers)
 	{
@@ -104,20 +103,16 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 				auto tileIndex = i + (j * m_cols);
 				auto currentGID = layer_tiles[tileIndex].ID;
 
-				//m_tileVector[i].at(j)->dead = false;
-
 				//Ignore empty tiles
 				if (currentGID == 0)
 				{
 					continue;
 				}
 
-				//std::cout << currentGID << std::endl;
-
 				auto tileSetWidth = 0;
 				auto tileSetHeight = 0;
 
-				SDL_QueryTexture(m_sprite->getTexture(), NULL, NULL, &tileSetWidth, &tileSetHeight);
+				//SDL_QueryTexture(m_sprite->getTexture(), NULL, NULL, &tileSetWidth, &tileSetHeight);
 
 				std::shared_ptr<Tile> temp = std::make_shared<Tile>();
 
@@ -156,7 +151,7 @@ void MapLoader::draw(SDL_Renderer* renderer)
 		if (m_tiles.at(i)->dead == true)
 		{
 			m_tiles.erase(m_tiles.begin() + i);
-		}
+		}-
 	}
 }
 	
