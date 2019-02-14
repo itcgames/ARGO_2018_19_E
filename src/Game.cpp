@@ -26,7 +26,11 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
+<<<<<<< HEAD
 	*m_currentGameState = (GameState::Game);
+=======
+	*m_currentGameState = (GameState::Menu);
+>>>>>>> 37b45bcbd89bd53ab7cf235d9e8f11aa5e201374
 
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
