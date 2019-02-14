@@ -9,6 +9,7 @@
 #include "../Animation.h"
 
 
+
 class AISystem
 {
 	std::vector<Entity *> m_entities;
@@ -24,11 +25,11 @@ class AISystem
 public:
 	AISystem();
 	void addEntity(Entity * e);
-	void update(std::vector<c2v*> points, std::vector<c2v*> walkpoints);
+	void update(std::vector<c2v*> points, std::vector<std::pair<c2v, std::string>> walkpoints);
 	c2v checkClosest(std::vector<std::pair<double, c2v>> distances, std::pair<double, c2v > real);
 	double distance(c2v  vecOne, c2v vecTwo);
 	c2v checkJumpPoints(std::vector<c2v*> points, PositionComponent* pc);
-	c2v checkWalkPoints(std::vector<c2v*> points, PositionComponent* pc);
+	std::pair<c2v, std::string> checkWalkPoints(std::vector<std::pair<c2v, std::string>> walkpoints, PositionComponent* pc);
 	void receive(std::vector<Entity*> ents);
 	c2v getPosition(Entity * ent);
 

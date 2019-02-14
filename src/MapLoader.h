@@ -31,8 +31,9 @@ public:
 
 	std::vector<std::shared_ptr<Tile>> getTiles() { return m_tiles; }
 	std::vector<c2v*> getJumpPoints() { return m_jumpPointVector; }
-	std::vector<c2v*> getWalkPoints() { return m_walkPointVector; }
-
+	std::vector<std::pair<c2v, std::string>> getWalkPoints() { return m_walkPointVector; }
+	int getWidth();
+	int getHeight();
 
 private:
 
@@ -46,7 +47,7 @@ private:
 
 	std::vector<std::shared_ptr<Tile>> m_tiles;
 	std::vector<c2v*> m_jumpPointVector;
-	std::vector<c2v*> m_walkPointVector;
+	std::vector<std::pair<c2v, std::string>>  m_walkPointVector;
 
 	SpriteComponent* m_sprite;
 

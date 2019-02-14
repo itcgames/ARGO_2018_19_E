@@ -14,13 +14,21 @@ Game::Game()
 
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
 
+	//Initialize SDL
+	if (SDL_Init( SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC) < 0)
+	{
+		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+	}
+
 
 	if (IMG_Init(imgFlags) != imgFlags)
 	{
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
+
 	*m_currentGameState = (GameState::Game);
+
 
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -52,11 +60,14 @@ Game::Game()
 	testLight->setPosition(c2v{ 400.0f, 0.0f });
 	testLight->setSize(c2v{ 3.0f, 3.0f });
 
-	p = new Player(m_renderer);
+	for (int i = 0; i < SDL_NumJoysticks(); i++) {
+		m_players.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i)));
+	}
 	h1 = new Hand(m_renderer,1);
 	h2 = new Hand(m_renderer,2);
-	for (int i = 0; i < 3; i++) {
-		m_aiCharacters.push_back(new AI(m_renderer));
+
+	for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) {
+		m_aiCharacters.push_back(new AI(m_renderer , 500 + (100 * i), 100));
 	}
 	
 
@@ -87,6 +98,7 @@ Game::Game()
 
 	m_ps.setRenderer(m_renderer);
 	m_grenadeSys.setRenderer(m_renderer);
+	m_collSys.setRenderer(m_renderer);
 }
 
 Game::~Game()
@@ -144,17 +156,16 @@ void Game::update() {
 
 		m_ps.update();
 		m_guns.update();
-		SDL_RenderSetScale(m_renderer, 0.4, 0.4);
+		SDL_RenderSetScale(m_renderer, 0.7, 0.5);
 		m_ps.bulletUpdate(m_renderer);
 		checkRoundOver();
 		if (!(*m_online)) {
-
 		m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
 		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
 		m_ais.receive(m_ents);
 
 		m_hs.update();
-		//m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
+		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
 			
 		}
 		else {
@@ -198,7 +209,9 @@ void Game::render() {
 	case GameState::Game:
 		m_backgroundSprite->render(m_renderer);
 		m_map->draw(m_renderer);
-		p->render(m_renderer);
+		for (Player *p : m_players) {
+			p->render(m_renderer);
+		}
 		for (AI * ai : m_aiCharacters) {
 			ai->render(m_renderer);
 		}
@@ -208,6 +221,7 @@ void Game::render() {
 		testLight->render(m_renderer);
 
 		m_grenadeSys.render();
+		m_collSys.render();
 		//m_emitter->update();
 		if (m_drawRoundText) {
 			SDL_RenderCopy(m_renderer, text, NULL, &renderQuad);
@@ -234,16 +248,16 @@ void Game::checkRoundOver() {
 			dead++;
 		}
 	}
-	Entity * ent = (Entity *)p;
-	ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
-	if (!control->getAlive()) {
-		if (!m_drawRoundText) {
-			initialiseText("AI Wins");
-			m_drawRoundText = true;
+	for (Player * p : m_players) {
+		Entity * ent = (Entity *)p;
+		ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+		if (!control->getAlive()) {
+			dead++;
+			
 		}
-		roundEnd = true;
 	}
-	else if (dead >= 3) {
+	
+	if (dead >= 3) {
 		if (!m_drawRoundText) {
 			initialiseText("Player Wins");
 			m_drawRoundText = true;
@@ -254,7 +268,6 @@ void Game::checkRoundOver() {
 		m_roundCounter++;
 
 		if (m_roundCounter > ROUND_OVER) {
-			control->setAlive(true);
 			int randNum = (rand() % 3) + 1;
 			m_restartSys.reset(randNum);
 			if (randNum == 1) {
@@ -305,11 +318,14 @@ void Game::setCameraCentre(float x, float y)
 }
 
 void Game::setUpController() {
-	gGameController = SDL_GameControllerOpen(0);
-	if (gGameController == NULL)
-	{
-		printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
+	for (int i = 0; i < SDL_NumJoysticks(); i++) {
+		gGameController = SDL_GameControllerOpen(i);
+		if (gGameController == NULL)
+		{
+			printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
+		}
 	}
+	
 
 }
 
@@ -322,9 +338,7 @@ void Game::setGameState(GameState gameState)
 void Game::initialise()
 {
 
-	m_hs.addEntity((Entity*)p);
-	m_cs.addEntity((Entity*)p);
-
+	
 	m_cs.addEntity((Entity*)pistol);
 	m_cs.addEntity((Entity*)shotgun);
 	m_cs.addEntity((Entity*)juicer);
@@ -332,7 +346,7 @@ void Game::initialise()
 	m_cs.addEntity((Entity*)h1);
 	m_cs.addEntity((Entity*)h2);
 
-	m_rs.addEntity((Entity*)p);
+	
 	m_rs.addEntity((Entity*)pistol);
 	m_rs.addEntity((Entity*)grenade);
 	m_rs.addEntity((Entity*)shotgun);
@@ -340,7 +354,7 @@ void Game::initialise()
 	m_rs.addEntity((Entity*)h1);
 	m_rs.addEntity((Entity*)h2);
 
-	m_ps.addEntity((Entity*)p);
+	
 
 	m_ps.addEntity((Entity*)pistol);
 	m_ps.addEntity((Entity*)shotgun);
@@ -349,25 +363,29 @@ void Game::initialise()
 	m_ps.addEntity((Entity*)h1);
 	m_ps.addEntity((Entity*)h2);
 
-	m_ps.addEntity((Entity*)pistol);
+
 	m_guns.addEntity((Entity*)pistol);
 
-	m_ps.addEntity((Entity*)shotgun);
 	m_guns.addEntity((Entity*)shotgun);
-	m_ps.addEntity((Entity*)juicer);
 	m_guns.addEntity((Entity*)juicer);
 
-	m_ps.addEntity((Entity*)grenade);
 	m_guns.addEntity((Entity*)grenade);
 
-	m_collSys.addEntity((Entity*)p);
-	
 	m_collSys.addEntity((Entity*)pistol);
 	m_collSys.addEntity((Entity*)shotgun);
 	m_collSys.addEntity((Entity*)juicer);
 	m_collSys.addEntity((Entity*)grenade);
 
 	m_grenadeSys.addEntity((Entity*)grenade);
+
+	for (Player * p : m_players) {
+		m_hs.addEntity((Entity*)p);
+		m_cs.addEntity((Entity*)p);
+		m_rs.addEntity((Entity*)p);
+		m_ps.addEntity((Entity*)p);
+		m_restartSys.addEntity((Entity*)p);
+		m_collSys.addEntity((Entity*)p);
+	}
 
 	for (AI * ai : m_aiCharacters) {
 		m_collSys.addEntity((Entity*)ai);
@@ -377,10 +395,12 @@ void Game::initialise()
 		m_restartSys.addEntity((Entity*)ai);
 	}
 
-	m_restartSys.addEntity((Entity*)p);
+	
 	m_restartSys.addEntity((Entity*)pistol);
 	m_restartSys.addEntity((Entity*)shotgun);
 	m_restartSys.addEntity((Entity*)juicer);
 	m_restartSys.addEntity((Entity*)grenade);
+	m_restartSys.addEntity((Entity*)h1);
+	m_restartSys.addEntity((Entity*)h2);
 }
 

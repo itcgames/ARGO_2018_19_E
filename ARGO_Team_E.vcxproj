@@ -175,6 +175,7 @@
     <ClInclude Include="src\AI.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Client\Client.h" />
+    <ClInclude Include="src\Client\Packet.h" />
     <ClInclude Include="src\Components\AIComponent.h" />
     <ClInclude Include="src\Components\CollisionComponent.h" />
     <ClInclude Include="src\Components\Component.h" />

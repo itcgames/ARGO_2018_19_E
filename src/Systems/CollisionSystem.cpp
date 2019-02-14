@@ -68,20 +68,25 @@ void CollisionSystem::update(std::vector<std::shared_ptr<Tile>> tiles) {
 
 							else if (val == "bottom") {
 								pc->setVelY(5);
-								m_count = 0;
 							}
 
 							else if (val == "left") {
 
+
 								pc->setX(tiles.at(i)->dRect.x - cc->getW());
+
+								pc->m_allowedJump = true;
+								m_count = 0;
+
+								pc->m_hitLeftSide = true;
 							}
 
 							else if (val == "right")
 							{
 								pc->setX(tiles.at(i)->dRect.x + cc->getW() + 35);
 								pc->m_allowedJump = true;
-								pc->m_hitSide = true;
-								m_count = 0;
+								pc->m_hitRightSide = true;
+
 							}
 						}
 									
@@ -134,6 +139,7 @@ void CollisionSystem::update(std::vector<std::shared_ptr<Tile>> tiles) {
 void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::shared_ptr<Tile>> tiles) {
 
 	std::vector<Bullet *> * bullets = &poc->bullets;
+	
 	for (Entity * entity : m_entities) {
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
 
@@ -181,8 +187,8 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 						}
 
 						PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
-						ai->m_alive = false;			
-						//pc->setVelX(0);
+						ai->m_alive = false;	
+
 
 					}
 
@@ -200,22 +206,77 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 
 	}
 
+
 	
 	for (int i= 0; i < tiles.size(); i++) {
+
 			std::string val;
 			if (tiles.at(i)->dRect.x >= 0) {
 				for (int j = 0; j < bullets->size(); j++) {
 					val = rectCollision(bullets->at(j)->collider, tiles.at(i)->collider);
 					if (val != "none") {
+
 						bullets->erase(bullets->begin() + j);
+
+						auto particle = new ParticleExample();
+						
+						particle->setRenderer(m_renderer);
+						particle->setStyle(ParticleExample::SMOKE);
+
 					}
 				}
-
 			}
-
-
-
-		
 	}
-	
+}	
+
+
+void CollisionSystem::setRenderer(SDL_Renderer * renderer)
+{
+	m_renderer = renderer;
+}
+
+void CollisionSystem::animateExplosion()
+{
+
+	for (int i = 0; i < m_particles.size(); i++)
+	{
+		m_particles[i]->count++;
+
+
+		std::cout << m_particles[i]->count << std::endl;
+		m_particles[i]->setStartSpin(0);
+		m_particles[i]->setStartSpinVar(0);
+		m_particles[i]->setEndSpin(90);
+		m_particles[i]->setDuration(.1);
+		m_particles[i]->setStartSize(50);
+		m_particles[i]->setEndSize(50);
+		m_particles[i]->setStartSpinVar(0);
+
+
+		m_particles[i]->update();
+		m_particles[i]->draw();
+		
+		if (m_particles[i]->count > 5)
+		{
+			m_particles[i]->count = 0;
+			m_particles[i]->startAnimating = false;
+			m_particles.erase(m_particles.begin() + i);
+		}
+
+	}	
+}
+
+void CollisionSystem::render()
+{
+
+	for (int i = 0; i < m_particles.size(); i++)
+	{
+		if (m_particles[i]->startAnimating)
+		{
+			animateExplosion();
+		}
+
+	}
+
+
 }
