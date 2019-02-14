@@ -33,6 +33,10 @@ void RestartSystem::reset(int level) {
 			tc->setGunGot("none");
 			tc->setGotGunBool(false);
 		}
+		else if (tc->getTag() == "Hand") {
+			tc->setGunGot("none");
+			tc->setGotGunBool(false);
+		}
 		else if (tc->getTag() == "Gun") {
 			tc->setGrabable(true);
 			tc->setGrabbed(false);

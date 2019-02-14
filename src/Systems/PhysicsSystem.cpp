@@ -506,7 +506,6 @@ void PhysicsSystem::update() {
 		// check gun player collide
 		if (tc->getTag() == "Player")
 		{
-			std::cout << "Gun =" << tc->getGunGot() << std::endl;
 			gunGot = tc->getGunGot();
 			if (tc->getGunGot() == "none")
 			{
@@ -586,6 +585,7 @@ void PhysicsSystem::update() {
 			}
 			if (tc->getGotGunBool() == true)
 			{
+				std::cout << "CALLED" << std::endl;
 				if (tc->getGunGot() == "pistol")
 				{
 					setHandOnPistol(sc, pc, cc); // Set hand on gun
@@ -605,11 +605,11 @@ void PhysicsSystem::update() {
 			else {
 				setHandNormal(sc, pc); // Set hand to body
 			}
-			if (cc->getAngle() < 0 && gotGun == true)
+			if (cc->getAngle() < 0 && tc->getGotGunBool() == true)
 			{
 				flipHorizontal(sc);
 			}
-			else if(gotGun == true){
+			else if(tc->getGotGunBool() == true){
 				flipNone(sc);
 			}
 		}

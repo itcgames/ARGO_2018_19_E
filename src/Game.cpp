@@ -381,5 +381,7 @@ void Game::initialise()
 	m_restartSys.addEntity((Entity*)shotgun);
 	m_restartSys.addEntity((Entity*)juicer);
 	m_restartSys.addEntity((Entity*)grenade);
+	m_restartSys.addEntity((Entity*)h1);
+	m_restartSys.addEntity((Entity*)h2);
 }
 
