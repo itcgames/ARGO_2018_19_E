@@ -147,7 +147,7 @@ void Game::update() {
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.4, 0.4);
 		m_ps.bulletUpdate(m_renderer);
-		//checkRoundOver();
+		checkRoundOver();
 		if (!(*m_online)) {
 
 		m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);

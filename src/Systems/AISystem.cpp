@@ -185,6 +185,8 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 			
 			if (ac->m_landed) {
 
+				ac->checkGunDirection = true;
+
 				ac->curWalkPoints.clear();
 
 				for (int i = 0; i < walkpoints.size(); i++)
@@ -200,7 +202,7 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 
 			if (ac->curPosition.y != ac->lastPosition.y)
 			{
-				ac->checkGunDirection = true;
+				
 			}
 
 			if (!ac->m_gunInSight)
@@ -246,6 +248,8 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 					}
 				}
 			}
+
+			std::cout << "GUN IN SIGHT = " << ac->m_gunInSight << std::endl;
 
 			if (ac->curPosition.y > ac->closestEnemy.y && ac->curPosition.y < ac->closestEnemy.y + 200 && ac->m_landed)
 			{
@@ -306,6 +310,11 @@ void AISystem::update(std::vector<c2v*> jumppoints, std::vector<std::pair<c2v, s
 						ac->setLeft(false);
 					}		
 				}				
+			}
+			else
+			{
+				ac->m_gunInSight = false;
+				//ac->set = false;
 			}
 		}	
 	}
