@@ -42,14 +42,14 @@ void Client::receive() {
 		// Echo response to console
 		std::cout << "SERVER> " << packet->message << std::endl;
 		
+		if (packet->message == 1) {
+			number = packet->playerNum;
+		}
 		if (packet->message == 2) {
 			m_joiners.push_back(packet->playerNum);
 		}
 		if (packet->message == 3) {
 			m_leavers.push_back(packet->playerNum);
-		}
-		if (packet->message == 1) {
-			number = packet->playerNum;
 		}
 		
 	}

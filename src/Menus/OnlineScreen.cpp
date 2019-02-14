@@ -20,9 +20,9 @@ OnlineScreen::OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font 
 	exittexture = init(Font, EString, exittexture, exitRenderQuad, 1055, 600, menuColor);
 	playtexture = init(Font, PString, playtexture, playRenderQuad, 145, 600, menuColor);
 
-	TTF_Font* menuFont = TTF_OpenFont("arial.ttf", 150);
+	m_menuFont = TTF_OpenFont("arial.ttf", 150);
 
-	titletexture = init(menuFont, LString, titletexture, titleRenderQuad, 350, 50, menuColor);
+	titletexture = init(m_menuFont, LString, titletexture, titleRenderQuad, 350, 50, menuColor);
 
 	m_client = client;
 	
@@ -35,8 +35,8 @@ OnlineScreen::OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font 
 OnlineScreen::~OnlineScreen() {}
 
 void OnlineScreen::update() {
-	if (!m_joined) {
-
+	if (!m_joined && !m_firstRunThrough) {
+		m_firstRunThrough = true;
 		m_client = new Client("149.153.106.155", 54000);
 
 		if (m_client->run()) {
@@ -60,6 +60,13 @@ void OnlineScreen::update() {
 			m_textures.back() = init(m_font, m_strings.back(), m_textures.back(), m_quads.back(), 200, 150 + (100 * m_client->number), textColor);
 
 		}
+		else {
+			std::string NSString = "No server";
+			SDL_Color textColor = { 200, 200, 200, 255 };
+
+			noServerTexture = init(m_menuFont, NSString, noServerTexture, noServerRenderQuad, 240, 250, textColor);
+
+		}
 		
 
 		if (m_client->number > 1) {
@@ -75,6 +82,7 @@ void OnlineScreen::update() {
 		m_pack.playerNum = m_client->number;
 		m_client->sendMessage(m_pack);
 		*m_currentGameState = GameState::Menu;
+		m_firstRunThrough = false;
 	}
 
 	m_client->receive();
@@ -177,6 +185,10 @@ void OnlineScreen::render(SDL_Renderer * renderer) {
 
 	if (m_ready2Play) {
 		SDL_RenderCopy(renderer, playtexture, NULL, &playRenderQuad);
+	}
+
+	if (!m_joined) {
+		SDL_RenderCopy(renderer, noServerTexture, NULL, &noServerRenderQuad);
 	}
 
 	for (int i = 0; i < m_textures.size(); i++) {
