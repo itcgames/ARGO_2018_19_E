@@ -102,7 +102,7 @@ void main()
 					{
 						p->message = 2;
 						p->playerNum = playerNum;
-						send(client, (char*)p, sizeof(struct Packet) + 1, 0);
+						send(outSock, (char*)p, sizeof(struct Packet) + 1, 0);
 					}
 				}
 			}
@@ -130,7 +130,6 @@ void main()
 						SOCKET outSock = master.fd_array[i];
 						if (outSock != listening && outSock != sock)
 						{
-
 							send(outSock, (char*)p, sizeof(struct Packet) + 1, 0);
 						}
 					}
