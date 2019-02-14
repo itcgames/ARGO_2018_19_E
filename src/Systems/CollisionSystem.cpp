@@ -40,7 +40,7 @@ std::string CollisionSystem::rectCollision(c2AABB A, c2AABB B)
 	return(collision);
 }
 
-void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
+void CollisionSystem::update(std::vector<std::shared_ptr<Tile>> tiles) {
 	for (Entity * entity : m_entities) {
 		
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
@@ -52,16 +52,16 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 			cc->SetCollPos(pc->getX(), pc->getY());
 
 			for (int i = 0; i < tiles.size(); i++) {
-				for (int j = 0; j < tiles[i].size(); j++) {
+				
 					std::string val;
-					if (tiles[i].at(j)->dRect.x >= 0) {
-						val = rectCollision(cc->getCollider(), tiles[i].at(j)->collider);
+					if (tiles.at(i)->dRect.x >= 0) {
+						val = rectCollision(cc->getCollider(), tiles.at(i)->collider);
 						if (val != "none") {
 							if (val == "top") {
 								pc->jumpNum = 0;
 								pc->m_allowedJump = true;
 								pc->setVelY(0);
-								pc->setY(tiles[i].at(j)->dRect.y - cc->getH());
+								pc->setY(tiles.at(i)->dRect.y - cc->getH());
 
 
 							}
@@ -73,19 +73,19 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 
 							else if (val == "left") {
 
-								pc->setX(tiles[i].at(j)->dRect.x - cc->getW());
+								pc->setX(tiles.at(i)->dRect.x - cc->getW());
 							}
 
 							else if (val == "right")
 							{
-								pc->setX(tiles[i].at(j)->dRect.x + cc->getW() + 35);
+								pc->setX(tiles.at(i)->dRect.x + cc->getW() + 35);
 								pc->m_allowedJump = true;
 								pc->m_hitSide = true;
 								m_count = 0;
 							}
 						}
-					}					
-				}
+									
+					}
 			}
 		}
 		else if (tag->getTag() == "Gun") {
@@ -95,14 +95,14 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 			cc->SetCollPos(pc->getX(), pc->getY());
 
 			for (int i = 0; i < tiles.size(); i++) {
-				for (int j = 0; j < tiles[i].size(); j++) {
+				
 					std::string val;
-					if (tiles[i].at(j)->dRect.x >= 0) {
-						val = rectCollision(cc->getCollider(), tiles[i].at(j)->collider);
+					if (tiles.at(i)->dRect.x >= 0) {
+						val = rectCollision(cc->getCollider(), tiles.at(i)->collider);
 						if (val != "none") {
 							if (val == "top") {
 								pc->setVelY(0);
-								pc->setY(tiles[i].at(j)->dRect.y - cc->getH());
+								pc->setY(tiles.at(i)->dRect.y - cc->getH());
 								
 
 							}
@@ -121,7 +121,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 
 
 
-				}
+				
 			}
 
 			checkBullets(pc, tiles);
@@ -131,7 +131,7 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 	}
 }
 
-void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vector<Tile*>> tiles) {
+void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::shared_ptr<Tile>> tiles) {
 
 	std::vector<Bullet *> * bullets = &poc->bullets;
 	for (Entity * entity : m_entities) {
@@ -201,14 +201,13 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 	}
 
 	
-	for (int j = 0; j < tiles.size(); j++) {
-		for (int k = 0; k < tiles[j].size(); k++) {
+	for (int i= 0; i < tiles.size(); i++) {
 			std::string val;
-			if (tiles[j].at(k)->dRect.x >= 0) {
-				for (int i = 0; i < bullets->size(); i++) {
-					val = rectCollision(bullets->at(i)->collider, tiles[j].at(k)->collider);
+			if (tiles.at(i)->dRect.x >= 0) {
+				for (int j = 0; j < bullets->size(); j++) {
+					val = rectCollision(bullets->at(j)->collider, tiles.at(i)->collider);
 					if (val != "none") {
-						bullets->erase(bullets->begin() + i);
+						bullets->erase(bullets->begin() + j);
 					}
 				}
 
@@ -216,7 +215,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 
 
 
-		}
+		
 	}
 	
 }

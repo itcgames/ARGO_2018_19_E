@@ -8,7 +8,7 @@ void GrenadeSystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
-void GrenadeSystem::update(std::vector<std::vector<Tile*>>  tiles, std::vector<AI *> aiChars) {
+void GrenadeSystem::update(std::vector<std::shared_ptr<Tile>> tiles, std::vector<AI *> aiChars) {
 	
 	
 	for (Entity * entity : m_entities) {
@@ -20,15 +20,15 @@ void GrenadeSystem::update(std::vector<std::vector<Tile*>>  tiles, std::vector<A
 			explodeY = pc->getY();
 			c2v v2 = { explodeX, explodeY };
 			
-			for (int i = 0; i < tiles.size(); i++) {
-				for (int j = 0; j < tiles[i].size(); j++) {
-					c2v v1 = { tiles[i].at(j)->dRect.x + 35, tiles[i].at(j)->dRect.y + 35 };
+			for (int i = 0; i < tiles.size(); i++) 
+			{
+				c2v v1 = { tiles.at(i)->dRect.x + 35, tiles.at(i)->dRect.y + 35 };
 					
-					if (dist(v1, v2) < 250.0) {
-						tiles[i].at(j)->dead = true;
-						
-					}
+				if (dist(v1, v2) < 250.0) 
+				{
+					tiles.at(i)->dead = true;
 				}
+				
 			}
 			for (AI * ai : aiChars) {
 				Entity* ent = (Entity *)ai;
