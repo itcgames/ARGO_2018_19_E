@@ -14,12 +14,14 @@ public:
 	CollisionSystem();
 	
 	void addEntity(Entity * e);
-	void update(std::vector<std::vector<Tile*>> tiles);
+	void update(std::vector<std::shared_ptr<Tile>> tiles);
 	std::string rectCollision(c2AABB A, c2AABB B);
-	void checkBullets(PositionComponent * gun, std::vector<std::vector<Tile*>> tiles);
+
+	void checkBullets(PositionComponent * gun, std::vector<std::shared_ptr<Tile>> tiles);
 	void setRenderer(SDL_Renderer * renderer);
 	void animateExplosion();
 	void render();
+
 
 	std::vector<Entity *> m_entities;
 

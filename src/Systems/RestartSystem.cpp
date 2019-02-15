@@ -33,7 +33,12 @@ void RestartSystem::reset(int level) {
 		else if (tc->getTag() == "Player") {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 			tc->setGunGot("none");
+			tc->setGotGunBool(false);
 			control->setAlive(true);
+		}
+		else if (tc->getTag() == "Hand") {
+			tc->setGunGot("none");
+			tc->setGotGunBool(false);
 		}
 		else if (tc->getTag() == "Gun") {
 			tc->setGrabable(true);

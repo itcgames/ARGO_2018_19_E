@@ -94,7 +94,9 @@ std::pair<c2v, std::string> AISystem::checkPoints(std::vector<std::pair<c2v, std
 	return std::make_pair(closestPosition, name);
 }
 
+
 void AISystem::update() {
+
 	
 	
 	int speed = 0;
