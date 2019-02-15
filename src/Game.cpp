@@ -67,7 +67,8 @@ Game::Game()
 	h2 = new Hand(m_renderer,2);
 
 	for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) {
-		m_aiCharacters.push_back(new AI(m_renderer , 500.0 + (100.0 * i), 100.0));
+		//m_aiCharacters.push_back(new AI(m_renderer , 500.0 + (100.0 * i), 100.0));
+		m_aiCharacters.push_back(new AI(m_renderer, 800, 900));
 	}
 	
 
@@ -158,10 +159,11 @@ void Game::update() {
 		m_ps.update(/*m_backgroundSprite*/);
 		m_guns.update();
 
-		SDL_RenderSetScale(m_renderer, 0.69, 0.5);
+		//SDL_RenderSetScale(m_renderer, 0.69, 0.5);
+		SDL_RenderSetScale(m_renderer, 0.5, 0.3);
 		m_ps.bulletUpdate(m_renderer);
 		
-		checkRoundOver();
+		//checkRoundOver();
 		if (!(*m_online)) {
 		m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
 		m_ais.update();
