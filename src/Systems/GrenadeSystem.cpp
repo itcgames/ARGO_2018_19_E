@@ -50,8 +50,10 @@ void GrenadeSystem::update(std::vector<std::vector<Tile*>>  tiles, std::vector<A
 			pc->setY(-3000);
 
 			m_startAnimating = true;
+
 			gc->setArmed(false);
 			gc->setExplode(false);
+			
 			gc->setTTL(300);
 		}
 	}
@@ -88,6 +90,10 @@ void GrenadeSystem::animateExplosion()
 	explode->update();
 	explode->draw();
 
+	if (SDL_HapticRumblePlay(haptic, .5, 100) != 0)
+	{
+		printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+	}
 
 	if (m_count > 30)
 	{

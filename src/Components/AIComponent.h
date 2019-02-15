@@ -33,6 +33,9 @@ public:
 	bool getJump() { return m_jump; }
 	void setJump(bool jump) { m_jump = jump; }
 
+	bool getDoubleJump() { return m_doublejump; }
+	void setDoubleJump(bool jumper) { m_doublejump = jumper; }
+
 	float getAngle() { return m_gunAngle; }
 	void setAngle(float angle) { m_gunAngle = angle; }
 
@@ -94,6 +97,7 @@ private:
 
 	bool m_throwWeapon = false;
 	bool m_jump = false;
+	bool m_doublejump = false;
 
 	bool m_fire = false;
 

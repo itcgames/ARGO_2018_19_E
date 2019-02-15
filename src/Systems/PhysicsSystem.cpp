@@ -609,13 +609,13 @@ void PhysicsSystem::update() {
 			aiPositionX = pc->getX();
 			aiPositionY = pc->getY();
 			
-			/*if (cc->getJump() && pc->jumpNum < 2) {
-				pc->setVelY(-jumpSpeed);
-				cc->setJump(false);
-				pc->m_allowedJump = false;
-				pc->jumpNum++;
-			}*/
-			
+		
+			if (ac->getDoubleJump())
+			{
+				pc->setVelY(-30);
+				ac->setDoubleJump(false);
+			}
+
 			if (ac->getJump() && pc->jumpNum < 2) {
 				pc->setVelY(-20);
 				ac->setJump(false);

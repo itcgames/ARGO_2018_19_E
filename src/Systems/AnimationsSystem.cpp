@@ -39,10 +39,10 @@ void AnimationsSystem::render(SDL_Renderer * renderer) {
 
 			lastPos = { pc->getX(), pc->getY() };
 
-			animateExplosion(cc->m_particleVector);
 			
+			animateExplosion(cc->m_particleVector);
 		}
-
+		
 		if (tc->getTag() == "AI_TAG")
 		{
 
@@ -56,12 +56,12 @@ void AnimationsSystem::setRenderer(SDL_Renderer * renderer)
 }
 
 void AnimationsSystem::animateExplosion(std::vector<ParticleExample*> vec)
-{
-	std::cout << vec.size() << std::endl;
-	for (int i = 0; i < vec.size(); i++)
+{ 
+	for (int i = 0; i < vec.size(); ++i)
 	{
 		vec[i]->count++;
-		//std::cout << vec[i]->count << std::endl;
+		
+		std::cout << vec[i]->count << std::endl;
 
 		vec[i]->setStartSpin(0);
 		vec[i]->setStartSpinVar(90);
@@ -69,15 +69,17 @@ void AnimationsSystem::animateExplosion(std::vector<ParticleExample*> vec)
 		vec[i]->setDuration(.1);
 		vec[i]->setStartSize(30);
 		vec[i]->setStartSpinVar(90);
+		
+		
 		vec[i]->update();
 		vec[i]->draw();
-
-		
 
 		if (vec[i]->count > 5)
 		{
 			vec.erase(vec.begin() + i);		
 		}
+
+
 
 		
 		

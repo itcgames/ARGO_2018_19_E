@@ -23,7 +23,7 @@ public:
 	void animateExplosion(std::vector<ParticleExample*> vec);
 	std::vector<ParticleExample*> getVector();
 	void setVector(std::vector<ParticleExample*> vec);
-
+	void call();
 private:
 	SDL_Renderer * m_renderer;
 	c2v lastPos = { 0,0 };

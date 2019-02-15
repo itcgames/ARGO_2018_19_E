@@ -250,16 +250,15 @@ void AISystem::update() {
 
 							if (pc->getVelX() > 7.8)
 							{
-								ac->setJump(true);
+								ac->setDoubleJump(true);
 						
 							}
 							else
 							{
 								pc->setVelX(8);
-								ac->setJump(true);
+								ac->setDoubleJump(true);
 							
 							}
-							ac->setJump(true);
 						}
 
 						if (ac->closestJumpPoint.second == "DOUBLELEFT" && ac->jumping)
@@ -269,14 +268,13 @@ void AISystem::update() {
 
 							if (pc->getVelX() < -7.8)
 							{
-								ac->setJump(true);
+								ac->setDoubleJump(true);
 							}
 							else
 							{
 								pc->setVelX(-8);
-								ac->setJump(true);
+								ac->setDoubleJump(true);
 							}
-							ac->setJump(true);
 						}
 					}
 				}
