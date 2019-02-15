@@ -26,11 +26,8 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-<<<<<<< HEAD
 	*m_currentGameState = (GameState::Game);
-=======
-	*m_currentGameState = (GameState::Menu);
->>>>>>> 37b45bcbd89bd53ab7cf235d9e8f11aa5e201374
+
 
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -63,7 +60,7 @@ Game::Game()
 	testLight->setSize(c2v{ 3.0f, 3.0f });
 
 	for (int i = 0; i < SDL_NumJoysticks(); i++) {
-		m_players.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i)));
+		m_players.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i),i));
 	}
 	h1 = new Hand(m_renderer,1);
 	h2 = new Hand(m_renderer,2);
@@ -156,7 +153,7 @@ void Game::update() {
 		m_cs.update(event);
 		m_collSys.update(m_map->getTiles());
 
-		m_ps.update();
+		m_ps.update(m_renderer);
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.7, 0.5);
 		m_ps.bulletUpdate(m_renderer);

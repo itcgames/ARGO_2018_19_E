@@ -7,7 +7,7 @@ Player::Player()
 
 
 
-Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller)
+Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller,int id)
 {
 	//Set up Sprite component and add to entity component vector
 	oldY = 0;
@@ -41,7 +41,26 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 
 	this->addComponent(new HealthComponent(10));
 	TagComponent * tag = new TagComponent("Player");
-	this->addComponent(new TagComponent("Player"));
+	if (id == 0)
+	{
+		tag->setSubTag("Player1");
+	}
+	else if (id == 1)
+	{
+		tag->setSubTag("Player2");
+	}
+	else if (id == 2)
+	{
+		tag->setSubTag("Player3");
+	}
+	else if (id == 3)
+	{
+		tag->setSubTag("Player4");
+	}
+	else {
+		tag->setSubTag("AIPlayer");
+	}
+	this->addComponent(tag);
 
 	positionComp = new PositionComponent(x, y);
 	this->addComponent(positionComp);

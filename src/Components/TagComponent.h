@@ -28,21 +28,28 @@ public:
 	bool grabable = true;
 	bool gotGunBool = false;
 
+	
+
 	double grabableCount = 0;
 	bool firedBool = false;
 
 	bool getGrabbed() { return grabbed; }
 	bool getGrabable() { return grabable; }
 	void setGrabbed(bool value) { grabbed = value; }
-	void setGrabable(bool value) { grabable = value; }
+	void setGrabable(bool value) { grabable = value; };
 	void setGrabableCount(double value) { grabableCount = value; }
 	void setGotGunBool(bool value) { gotGunBool = value; }
 	bool getGotGunBool() { return gotGunBool; }
-	void setFiredBool(bool value) { firedBool = value; };
-	bool getFiredBool() { return firedBool; };
+	void setFiredBool(bool value) { firedBool = value; }
+	bool getFiredBool() { return firedBool; }
 	double getGrabableCount() { return grabableCount; }
 
-
+	double xOffset = 0;
+	double yOffset = 0;
+	double getXOffset() { return xOffset; }
+	double getYOffset() { return yOffset; }
+	void setXOffset(double value) { xOffset = value; }
+	void setYOffset(double value) { yOffset = value; }
 
 private:
 	std::string subTag = "None";

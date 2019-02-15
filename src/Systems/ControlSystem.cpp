@@ -47,6 +47,8 @@ void ControlSystem::update(SDL_Event e) {
 
 	for (Entity * entity : m_entities) {
 
+		double joystickAngle = 0;
+
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 
@@ -108,21 +110,21 @@ void ControlSystem::setButtons(ControlComponent * cc) {
 	}
 
 	if (AButton) {
-		if (aIndex == 0)
+		if (cc->aIndex == 0)
 			cc->setJump(AButton);
 		
-		aIndex++;
+		cc->aIndex++;
 	}
 	else {
-		aIndex = 0;
+		cc->aIndex = 0;
 	}
 	if (XButton) {
-		if (xIndex == 0)
+		if (cc->xIndex == 0)
 			cc->setThrowWeapon(true);
-		xIndex++;
+		cc->xIndex++;
 	}
 	else {
-		xIndex = 0;
+		cc->xIndex = 0;
 	}
 }
 

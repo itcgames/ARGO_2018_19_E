@@ -23,7 +23,7 @@ public:
 	int aIndex = 0;
 	int xIndex = 0;
 
-	double joystickAngle = 0;
+	
 
 };
 #endif // !CONTROLSYSTEM_H
