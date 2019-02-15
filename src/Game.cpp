@@ -20,6 +20,12 @@ Game::Game()
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 	}
 
+	//Initialize SDL_mixer 
+	if(Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0) 
+	{ 
+		printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() ); 
+	}
+
 
 	if (IMG_Init(imgFlags) != imgFlags)
 	{
@@ -88,6 +94,9 @@ Game::Game()
 	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
 	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
 
+	m_audioManager = new AudioManager();
+	m_audioManager->load();
+
 	initialise();
 
 	
@@ -153,7 +162,7 @@ void Game::update() {
 	case GameState::Game:
 		m_cs.update(event);
 		m_collSys.update(m_map->getTiles());
-
+		m_audioManager->update("grenadeexplosion");
 		m_ps.update();
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.7, 0.5);

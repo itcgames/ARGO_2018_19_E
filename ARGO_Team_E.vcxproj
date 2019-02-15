@@ -86,7 +86,7 @@
       <AdditionalIncludeDirectories>$(SDL_IMAGE)\include;$(SDL_SDK)\include;$(SDL_MIXER)\include;$(TMX_SDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;libtmxlite-s-d.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;libtmxlite-s-d.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>$(TMX_SDK)\bin\DebugStatic;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
@@ -151,6 +151,7 @@
     <ClCompile Include="src\Menus\OnlineScreen.cpp" />
     <ClCompile Include="src\Menus\OptionScreen.cpp" />
     <ClCompile Include="src\Menus\SplashScreen.cpp" />
+    <ClCompile Include="src\ObserverPattern\AudioManager.cpp" />
     <ClCompile Include="src\ParticleExample.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -205,6 +206,9 @@
     <ClInclude Include="src\Menus\OptionScreen.h" />
     <ClInclude Include="src\Menus\SplashScreen.h" />
     <ClInclude Include="src\Gun.h" />
+    <ClInclude Include="src\ObserverPattern\AudioManager.h" />
+    <ClInclude Include="src\ObserverPattern\Observer.h" />
+    <ClInclude Include="src\ObserverPattern\Subject.h" />
     <ClInclude Include="src\ParticleExample.h" />
     <ClInclude Include="src\Menus\State.h" />
     <ClInclude Include="src\ParticleSystem.h" />

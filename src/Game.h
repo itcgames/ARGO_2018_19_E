@@ -2,6 +2,7 @@
 #define GAME
 
 #include <iostream>
+#include <SDL_mixer.h>
 #include "./Systems/HealthSystem.h"
 #include "./Systems/ControlSystem.h"
 #include "./Systems/RenderSystem.h"
@@ -17,6 +18,7 @@
 #include "Menus/OptionScreen.h"
 #include "Menus/OnlineScreen.h"
 #include "Components/SpriteComponent.h"
+#include "ObserverPattern/AudioManager.h"
 
 #include "Player.h"
 #include "Hand.h"
@@ -88,6 +90,7 @@ private:
 	Gun* grenade;
 	std::vector<Entity*> m_ents;
 	Light* testLight;
+	AudioManager* m_audioManager;
 
 	SpriteComponent* m_backgroundSprite;
 
