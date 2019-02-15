@@ -894,17 +894,15 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 		p->setEndSpin(90);
 		p->setDuration(.1);
 		p->setStartSize(30);
-		p->setStartSpinVar(90);// set the renderer
+		p->setStartSpinVar(90);
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
 			p->setPosition(gunPositionX - 15, gunPositionY);
-			//p->setAngle(-angle);
 		}
 		else
 		{
 			p->setPosition(gunPositionX + 60, gunPositionY + 10);
-			//p->setAngle(angle);
 		}
 
 		p->update();
@@ -916,23 +914,18 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 		flash->setStartSpinVar(0);
 		flash->setEndSpin(90);
 		flash->setDuration(.1);
-		flash->setStartSize(10);
-		flash->setEndSize(20);
+		flash->setStartSize(5);
+		flash->setEndSize(10);
 		flash->setStartSpinVar(0);
 
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
 			flash->setPosition(gunPositionX - shotgunTipX +20, gunPositionY + shotgunTipY + 70);
-			//pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70
-
-			//p->setAngle(-angle);
 		}
 		else
 		{
 			flash->setPosition(gunPositionX - shotgunTipX, gunPositionY + shotgunTipY + 70);
-			//pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70
-			//p->setAngle(angle);
 		}
 	
 		flash->update();
@@ -954,12 +947,10 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
 			flash->setPosition(gunPositionX - juicerTipX + 60, gunPositionY + juicerTipY + 110);
-			//p->setAngle(-angle);
 		}
 		else
 		{
 			flash->setPosition(gunPositionX - juicerTipX + 60, gunPositionY + juicerTipY + 110);
-			//p->setAngle(angle);
 		}
 
 		flash->update();
@@ -975,7 +966,7 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer)
 		m_startAnimating = false;
 	}
 
-	else if (m_count > 5 && gunGot == "shotgun")
+	else if (m_count > 8 && gunGot == "shotgun")
 	{
 		m_count = 0;
 		flash->resetSystem();

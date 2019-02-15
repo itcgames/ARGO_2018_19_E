@@ -95,6 +95,7 @@ Game::Game()
 	m_ps.setRenderer(m_renderer);
 	m_grenadeSys.setRenderer(m_renderer);
 	m_collSys.setRenderer(m_renderer);
+	m_animationsSys.setRenderer(m_renderer);
 }
 
 Game::~Game()
@@ -151,8 +152,10 @@ void Game::update() {
 		m_collSys.update(m_map->getTiles());
 		m_ps.update(/*m_backgroundSprite*/);
 		m_guns.update();
+		
 		SDL_RenderSetScale(m_renderer, 0.7, 0.5);
 		m_ps.bulletUpdate(m_renderer);
+		
 		checkRoundOver();
 		if (!(*m_online)) {
 
@@ -213,9 +216,9 @@ void Game::render() {
 		}
 		m_rs.render(m_renderer);
 		m_ps.bulletRender(m_renderer);
-
+		m_animationsSys.render(m_renderer);
 		testLight->render(m_renderer);
-
+		
 		m_grenadeSys.render();
 		m_collSys.render();
 		//m_emitter->update();
@@ -333,7 +336,7 @@ void Game::setGameState(GameState gameState)
 
 void Game::initialise()
 {
-
+	
 	
 	m_cs.addEntity((Entity*)pistol);
 	m_cs.addEntity((Entity*)shotgun);
@@ -378,6 +381,7 @@ void Game::initialise()
 	m_grenadeSys.addEntity((Entity*)grenade);
 
 	for (Player * p : m_players) {
+		m_animationsSys.addEntity((Entity*)p);
 		m_hs.addEntity((Entity*)p);
 		m_cs.addEntity((Entity*)p);
 		m_rs.addEntity((Entity*)p);
@@ -387,6 +391,7 @@ void Game::initialise()
 	}
 
 	for (AI * ai : m_aiCharacters) {
+		m_animationsSys.addEntity((Entity*)ai);
 		m_collSys.addEntity((Entity*)ai);
 		m_ais.addEntity((Entity*)ai);
 		m_rs.addEntity((Entity*)ai);

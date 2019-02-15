@@ -62,12 +62,13 @@ void CollisionSystem::update(std::vector<std::vector<Tile*>> tiles) {
 								pc->m_allowedJump = true;
 								pc->setVelY(0);
 								pc->setY(tiles[i].at(j)->dRect.y - cc->getH());
-
+								pc->m_onTop = true;
 
 							}
 
 							else if (val == "bottom") {
 								pc->setVelY(5);
+								
 							}
 
 							else if (val == "left") {
@@ -200,7 +201,6 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::vec
 		}
 
 	}
-
 	for (int j = 0; j < tiles.size(); j++) {
 		for (int k = 0; k < tiles[j].size(); k++) {
 			std::string val;
@@ -254,7 +254,7 @@ void CollisionSystem::animateExplosion()
 		if (m_particles[i]->count > 5)
 		{
 			m_particles.erase(m_particles.begin() + i);
-			m_particles.resize(m_particles.size());
+			//m_particles.resize(m_particles.size());
 		}
 
 	}	
@@ -262,11 +262,5 @@ void CollisionSystem::animateExplosion()
 
 void CollisionSystem::render()
 {
-
-	for (int i = 0; i < m_particles.size(); i++)
-	{
-		animateExplosion();	
-	}
-
-
+	animateExplosion();	
 }

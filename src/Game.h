@@ -11,6 +11,7 @@
 #include "./Systems/CollisionSystem.h"
 #include "./Systems/GrenadeSystem.h"
 #include "./Systems/RestartSystem.h"
+#include "./Systems/AnimationsSystem.h"
 #include "Menus/SplashScreen.h"
 #include "Menus/CreditScreen.h"
 #include "Menus/MenuScreen.h"
@@ -101,7 +102,7 @@ private:
 	AISystem m_ais;
 	CollisionSystem m_collSys;
 	GrenadeSystem m_grenadeSys;
-
+	AnimationsSystem m_animationsSys;
 	RestartSystem m_restartSys;
 
 	SDL_Rect m_screenSize;
