@@ -7,7 +7,7 @@ void AnimationsSystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
-void AnimationsSystem::render(SDL_Renderer * renderer) {
+void AnimationsSystem::update() {
 	
 
 	for (Entity * entity : m_entities) {
@@ -21,15 +21,17 @@ void AnimationsSystem::render(SDL_Renderer * renderer) {
 	
 		if (tc->getTag() == "Player")
 		{
-			if (pc->getX() != lastPos.x && pc->getY() == lastPos.y)
+			if (pc->getX() != lastPos.x && pc->getY() == lastPos.y && pc->getVelX() > 1.0f ||
+				pc->getX() != lastPos.x && pc->getY() == lastPos.y && pc->getVelX() < -1.0f)
+				
 			{
 				m_count++;
-				if (m_count > 10) {
+				if (m_count > 15) {
 					auto particle = new ParticleExample();
-					particle->setRenderer(renderer);
-					particle->setStyle(ParticleExample::SMOKE);
-					particle->setPosition(pc->getX(), pc->getY() + 70);
-					cc->m_particleVector.push_back(particle);
+					particle->setRenderer(m_renderer);
+					particle->setStyle(ParticleExample::DIRT);
+					particle->setPosition(pc->getX(), pc->getY() + 90);
+					m_particleVector.push_back(particle);
 					
 					m_count = 0;
 					
@@ -40,7 +42,7 @@ void AnimationsSystem::render(SDL_Renderer * renderer) {
 			lastPos = { pc->getX(), pc->getY() };
 
 			
-			animateExplosion(cc->m_particleVector);
+			
 		}
 		
 		if (tc->getTag() == "AI_TAG")
@@ -55,28 +57,32 @@ void AnimationsSystem::setRenderer(SDL_Renderer * renderer)
 	m_renderer = renderer;
 }
 
-void AnimationsSystem::animateExplosion(std::vector<ParticleExample*> vec)
+void AnimationsSystem::render()
+{
+	animateExplosion();
+}
+void AnimationsSystem::animateExplosion()
 { 
-	for (int i = 0; i < vec.size(); ++i)
+	for (int i = 0; i < m_particleVector.size(); ++i)
 	{
-		vec[i]->count++;
+		m_particleVector[i]->count++;
 		
-		std::cout << vec[i]->count << std::endl;
+		std::cout << m_particleVector[i]->count << std::endl;
 
-		vec[i]->setStartSpin(0);
-		vec[i]->setStartSpinVar(90);
-		vec[i]->setEndSpin(90);
-		vec[i]->setDuration(.1);
-		vec[i]->setStartSize(30);
-		vec[i]->setStartSpinVar(90);
+		m_particleVector[i]->setStartSpin(0);
+		m_particleVector[i]->setStartSpinVar(90);
+		m_particleVector[i]->setEndSpin(90);
+		m_particleVector[i]->setDuration(.1);
+		m_particleVector[i]->setStartSize(30);
+		m_particleVector[i]->setStartSpinVar(90);
 		
 		
-		vec[i]->update();
-		vec[i]->draw();
+		m_particleVector[i]->update();
+		m_particleVector[i]->draw();
 
-		if (vec[i]->count > 5)
+		if (m_particleVector[i]->count > 40)
 		{
-			vec.erase(vec.begin() + i);		
+			m_particleVector.erase(m_particleVector.begin() + i);
 		}
 
 

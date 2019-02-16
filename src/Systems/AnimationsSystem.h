@@ -17,10 +17,11 @@ class AnimationsSystem
 public:
 	AnimationsSystem();
 	void addEntity(Entity * e);
-	void render(SDL_Renderer * m_renderer);
+	void update();
+	void render();
 	double distance(c2v  vecOne, c2v vecTwo);
 	void setRenderer(SDL_Renderer * renderer);
-	void animateExplosion(std::vector<ParticleExample*> vec);
+	void animateExplosion();
 	std::vector<ParticleExample*> getVector();
 	void setVector(std::vector<ParticleExample*> vec);
 	void call();

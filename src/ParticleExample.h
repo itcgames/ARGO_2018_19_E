@@ -18,6 +18,7 @@ public:
         FLOWER,
         METEOR,
         SPIRAL,
+		DIRT,
         EXPLOSION,
         SMOKE,
         SNOW,
