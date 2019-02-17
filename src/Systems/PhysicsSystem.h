@@ -33,8 +33,8 @@ public:
 	double aiPositionX = 0;
 	double aiPositionY = 0;
 
-	double gunPositionX = 0;
-	double gunPositionY = 0;
+	//double gunPositionX = 0;
+	//double gunPositionY = 0;
 
 	//double angle = 0;
 
@@ -51,7 +51,7 @@ public:
 	std::vector<Bullet*> pistolBullets;
 	std::vector<Bullet*> juicerBullets;
 	std::vector<Bullet*> shotgunBullets;
-	void animateExplosion(SDL_Renderer * renderer, TagComponent * tc);
+	void animateExplosion(SDL_Renderer * renderer, TagComponent * tc,PositionComponent * pc);
 
 
 	void setGun(TagComponent *tc,ControlComponent *cc,PositionComponent *pc,SpriteComponent *sc, PositionComponent *ownerPosC, ControlComponent * ownerConC);
@@ -61,10 +61,10 @@ public:
 	void throwGunFun(ControlComponent * cc);
 	void playerFlip(PositionComponent *pc, SpriteComponent *sc, ControlComponent *cc, TagComponent *tc);
 	void launchGun(PositionComponent *pc, TagComponent *tc, CollisionComponent * cc);
-	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC);
+	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC, PositionComponent * gunPosition);
 	void setPlayerGunGot(std::string gun, TagComponent *tagC);
-	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC);
-	void setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, ControlComponent * ownerConC);
+	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC, PositionComponent * gunPosition);
+	void setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, ControlComponent * ownerConC, PositionComponent * gunPosition);
 	void setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,TagComponent * tc, PositionComponent *ownerPosC, ControlComponent * ownerConC);
 	void setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, TagComponent * tc, PositionComponent *ownerPosC, ControlComponent * ownerConC);
 	void setHandNormal(SpriteComponent * sc, PositionComponent *pc, PositionComponent *ownerPosC);
@@ -75,6 +75,7 @@ public:
 	void updateShooting(SDL_Renderer* renderer, ControlComponent * ownerConC);
 	void makeBullets(SDL_Renderer* renderer, TagComponent *tagC,ControlComponent *ownerConC);
 	void checkWeaponCollision(CollisionComponent * colc, TagComponent *tagC);
+	void setHands(PositionComponent *handOwnerPos, ControlComponent *handOwnerConC);
 
 	std::string rectCollision(c2AABB A, c2AABB B);
 
@@ -89,6 +90,8 @@ public:
 
 	float shotgunTipX;
 	float shotgunTipY;
+
+	PositionComponent * handOwnerPosC;
 
 	// variables for shotgun animation
 	//int shotgunRotationCount = 0;

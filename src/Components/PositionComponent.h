@@ -48,6 +48,10 @@ public:
 	void setFiredCount(int value) { firedCount = value; }
 	int getFiredCount() { return firedCount; }
 
+	int pistolCount = 0;
+	void setPistolCount(int value) { pistolCount = value; }
+	int getPistolCount() { return pistolCount; }
+
 	int shotgunCount = 0;
 	void setShotgunCount(int value) { shotgunCount = value; }
 	int getShotgunCount() { return shotgunCount; }
