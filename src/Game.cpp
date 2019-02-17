@@ -66,7 +66,7 @@ Game::Game()
 	h2 = new Hand(m_renderer,2);
 
 	for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) {
-		m_aiCharacters.push_back(new AI(m_renderer , 500 + (100 * i), 100));
+		m_aiCharacters.push_back(new AI(m_renderer , 500.0 + (100.0 * i), 100.0));
 	}
 	
 
@@ -89,15 +89,17 @@ Game::Game()
 
 	initialise();
 
-	
-	//m_ents.push_back((Entity*)p);
-	//m_ents.push_back((Entity*)ai);
 	m_ents.push_back((Entity*)pistol);
 	m_ents.push_back((Entity*)shotgun);
+	m_ents.push_back((Entity*)grenade);
+	m_ents.push_back((Entity*)juicer);
 
+
+	m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getWidth(), m_map->getHeight());
 	m_ps.setRenderer(m_renderer);
 	m_grenadeSys.setRenderer(m_renderer);
 	m_collSys.setRenderer(m_renderer);
+	m_animationsSys.setRenderer(m_renderer);
 }
 
 Game::~Game()
@@ -152,20 +154,19 @@ void Game::update() {
 	case GameState::Game:
 		m_cs.update(event);
 		m_collSys.update(m_map->getTiles());
-
 		m_ps.update(m_renderer);
 		m_guns.update();
-		SDL_RenderSetScale(m_renderer, 0.7, 0.5);
+
+		SDL_RenderSetScale(m_renderer, 0.69, 0.5);
 		m_ps.bulletUpdate(m_renderer);
+		
 		checkRoundOver();
 		if (!(*m_online)) {
 		m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
-		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
+		m_ais.update();
 		m_ais.receive(m_ents);
 
-		m_hs.update();
-		m_ais.update(m_map->getJumpPoints(), m_map->getWalkPoints());
-			
+		m_hs.update();		
 		}
 		else {
 			
@@ -216,9 +217,9 @@ void Game::render() {
 		}
 		m_rs.render(m_renderer);
 		m_ps.bulletRender(m_renderer);
-
+		//m_animationsSys.render(m_renderer);
 		testLight->render(m_renderer);
-
+		
 		m_grenadeSys.render();
 		m_collSys.render();
 		//m_emitter->update();
@@ -336,7 +337,7 @@ void Game::setGameState(GameState gameState)
 
 void Game::initialise()
 {
-
+	
 	
 	m_cs.addEntity((Entity*)pistol);
 	m_cs.addEntity((Entity*)shotgun);
@@ -378,6 +379,7 @@ void Game::initialise()
 	m_grenadeSys.addEntity((Entity*)grenade);
 
 	for (Player * p : m_players) {
+		
 		m_hs.addEntity((Entity*)p);
 		m_cs.addEntity((Entity*)p);
 		m_rs.addEntity((Entity*)p);
@@ -387,6 +389,7 @@ void Game::initialise()
 	}
 
 	for (AI * ai : m_aiCharacters) {
+
 		m_collSys.addEntity((Entity*)ai);
 		m_ais.addEntity((Entity*)ai);
 		m_rs.addEntity((Entity*)ai);

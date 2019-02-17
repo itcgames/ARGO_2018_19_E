@@ -36,6 +36,7 @@ public:
 	bool m_allowedJump = true;
 	bool m_hitRightSide = false;
 	bool m_hitLeftSide = false;
+	bool m_onTop = false;
 
 	std::vector<Bullet*> bullets;
 

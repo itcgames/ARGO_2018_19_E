@@ -25,22 +25,26 @@ class AISystem
 public:
 	AISystem();
 	void addEntity(Entity * e);
-	void update(std::vector<c2v*> points, std::vector<std::pair<c2v, std::string>> walkpoints);
+	void update();
+
 	c2v checkClosest(std::vector<std::pair<double, c2v>> distances, std::pair<double, c2v > real);
 	double distance(c2v  vecOne, c2v vecTwo);
-	c2v checkJumpPoints(std::vector<c2v*> points, PositionComponent* pc);
-	std::pair<c2v, std::string> checkWalkPoints(std::vector<std::pair<c2v, std::string>> walkpoints, PositionComponent* pc);
+	std::pair<c2v, std::string> checkPoints(std::vector<std::pair<c2v, std::string>> walkpoints, PositionComponent* pc);
 	void receive(std::vector<Entity*> ents);
-	c2v getPosition(Entity * ent);
+
+	void recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints, std::vector<std::pair<c2v, std::string>> jumpPoints, int width, int height);
 
 private:
 	
 	std::vector<std::pair<double, c2v>> m_dist;
 	
-	
-
 	Animation *fsm;
 	c2v m_position;
+
+	std::vector<std::pair<c2v, std::string>> m_pathPoints;
+	std::vector<std::pair<c2v, std::string>> m_jumpPoints;
+	int m_height;
+	int m_width;
 };
 
 

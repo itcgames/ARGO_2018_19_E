@@ -222,6 +222,7 @@
     <ClCompile Include="src\States\SearchEntity.cpp" />
     <ClCompile Include="src\States\SearchGun.cpp" />
     <ClCompile Include="src\Systems\AISystem.cpp" />
+    <ClCompile Include="src\Systems\AnimationsSystem.cpp" />
     <ClCompile Include="src\Systems\CollisionSystem.cpp" />
     <ClCompile Include="src\Systems\ControlSystem.cpp" />
     <ClCompile Include="src\Systems\GrenadeSystem.cpp" />
@@ -277,6 +278,7 @@
     <ClInclude Include="src\States\SearchEntity.h" />
     <ClInclude Include="src\States\SearchGun.h" />
     <ClInclude Include="src\Systems\AISystem.h" />
+    <ClInclude Include="src\Systems\AnimationsSystem.h" />
     <ClInclude Include="src\Systems\CollisionSystem.h" />
     <ClInclude Include="src\Systems\ControlSystem.h" />
     <ClInclude Include="src\Systems\GrenadeSystem.h" />

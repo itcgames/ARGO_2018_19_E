@@ -2,6 +2,7 @@
 #define CONTROLCOMPONENT_H
 
 #include "Component.h"
+#include "../ParticleExample.h"
 
 class ControlComponent : public Component
 {
@@ -39,6 +40,9 @@ public:
 
 	int aIndex = 0;
 	int xIndex = 0;
+
+
+	std::vector<ParticleExample*> m_particleVector;
 
 private:
 

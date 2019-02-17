@@ -25,24 +25,32 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 
 	m_sprite->loadFromFile(m_map.getTilesets().at(0).getImagePath(), renderer);
 
-	//Set up tile vector.
-	m_tileVector.reserve(m_cols);
-	m_tileVector.resize(m_cols);
-	//m_pointVector
-	for (int i = 0; i < m_cols; i++)
+	//Remove old tiles
+	int tileVectorSize = m_tiles.size();
+	for (int i = 0; i < tileVectorSize; i++)
 	{
-		for (int j = 0; j < m_rows; j++)
+		if (!m_tiles.empty())
 		{
-			if(!m_tileVector[i].empty())
-				m_tileVector[i].pop_back();
+			m_tiles.pop_back();
 		}
 	}
-	
-	for (int i = 0; i < m_cols; i++)
+
+	//Remove old waypoints
+	int walkPointVectorSize = m_walkPointVector.size();
+	for (int i = 0; i < walkPointVectorSize; i++)
 	{
-		for (int j = 0; j < m_rows; j++)
+		if (!m_walkPointVector.empty())
 		{
-			m_tileVector[i].push_back(new Tile);
+			m_walkPointVector.pop_back();
+		}
+	}
+
+	int jumpPointVectorSize = m_jumpPointVector.size();
+	for (int i = 0; i < jumpPointVectorSize; i++)
+	{
+		if (!m_jumpPointVector.empty())
+		{
+			m_jumpPointVector.pop_back();
 		}
 	}
 
@@ -60,7 +68,10 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 
 				if (layer->getName() == "JumpPoints")
 				{
-					m_jumpPointVector.push_back(new c2v{ object.getPosition().x, object.getPosition().y });
+					std::cout << object.getName() << std::endl;
+					c2v position = c2v{ object.getPosition().x, object.getPosition().y };
+					std::string name = object.getName();
+					m_jumpPointVector.push_back(std::make_pair(position, name));
 				}
 
 				if (layer->getName() == "WalkPoints")
@@ -98,38 +109,39 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 				auto tileIndex = i + (j * m_cols);
 				auto currentGID = layer_tiles[tileIndex].ID;
 
-				m_tileVector[i].at(j)->dead = false;
-
 				//Ignore empty tiles
 				if (currentGID == 0)
 				{
 					continue;
 				}
 
-				//std::cout << currentGID << std::endl;
-
 				auto tileSetWidth = 0;
 				auto tileSetHeight = 0;
 
-				SDL_QueryTexture(m_sprite->getTexture(), NULL, NULL, &tileSetWidth, &tileSetHeight);
+				//SDL_QueryTexture(m_sprite->getTexture(), NULL, NULL, &tileSetWidth, &tileSetHeight);
 
-				m_tileVector[i].at(j)->sRect.w = m_tileWidth;
-				m_tileVector[i].at(j)->sRect.h = m_tileHeight;
-				m_tileVector[i].at(j)->sRect.x = (currentGID % m_map.getTilesets().at(0).getColumnCount() - 1) * m_tileWidth;
-				m_tileVector[i].at(j)->sRect.y = (currentGID / m_map.getTilesets().at(0).getColumnCount()) * m_tileHeight;
+				std::shared_ptr<Tile> temp = std::make_shared<Tile>();
 
+				temp->sRect.w = m_tileWidth;
+				temp->sRect.h = m_tileHeight;
+				temp->sRect.x = (currentGID % m_map.getTilesets().at(0).getColumnCount() - 1) * m_tileWidth;
+				temp->sRect.y = (currentGID / m_map.getTilesets().at(0).getColumnCount()) * m_tileHeight;
 
-				m_tileVector[i].at(j)->dRect.w = m_tileWidth;
-				m_tileVector[i].at(j)->dRect.h = m_tileHeight;
-				m_tileVector[i].at(j)->dRect.x = i * m_tileWidth;
-				m_tileVector[i].at(j)->dRect.y = j * m_tileHeight;
+				temp->dead = false;
 
-				float x = m_tileVector[i].at(j)->dRect.x;
-				float y = m_tileVector[i].at(j)->dRect.y;
-				float w = m_tileVector[i].at(j)->dRect.w;
-				float h = m_tileVector[i].at(j)->dRect.h;
+				temp->dRect.w = m_tileWidth;
+				temp->dRect.h = m_tileHeight;
+				temp->dRect.x = i * m_tileWidth;
+				temp->dRect.y = j * m_tileHeight;
 
-				m_tileVector[i].at(j)->collider = c2AABB{ c2v{x, y}, c2v{x + w, y + h} };
+				float x = temp->dRect.x;
+				float y = temp->dRect.y;
+				float w = temp->dRect.w;
+				float h = temp->dRect.h;
+
+				temp->collider = c2AABB{ c2v{x, y}, c2v{x + w, y + h} };
+
+				m_tiles.push_back(temp);
 
 			}
 		}
@@ -139,15 +151,12 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 
 void MapLoader::draw(SDL_Renderer* renderer)
 {
-	for (int i = 0; i < m_tileVector.size(); i++)
+	for (int i = 0; i < m_tiles.size(); i++)
 	{
-		for (int j = 0; j < m_tileVector[i].size(); j++)
+		SDL_RenderCopy(renderer, m_sprite->getTexture(), &m_tiles.at(i)->sRect, &m_tiles.at(i)->dRect);
+		if (m_tiles.at(i)->dead == true)
 		{
-			SDL_RenderCopy(renderer, m_sprite->getTexture(), &m_tileVector[i].at(j)->sRect, &m_tileVector[i].at(j)->dRect);
-			
-			if (m_tileVector[i].at(j)->dead) {
-				m_tileVector[i].erase(m_tileVector[i].begin() + j);
-			}
+			m_tiles.erase(m_tiles.begin() + i);
 		}
 	}
 }

@@ -622,7 +622,6 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 			}
 			movePlayer(cc,pc,tc);
 			setPosition(pc);  // Set the position after movement
-
 			pc->setVelY(pc->getVelY() + Friction.y);  // Friction
 		}
 		if (tc->getTag() == "Gun")
@@ -689,11 +688,18 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 			aiPositionX = pc->getX();
 			aiPositionY = pc->getY();
 			
-			
-			if (ac->getJump() && pc->m_allowedJump) {
-				pc->setVelY(pc->getVelY() - 20);
+		
+			if (ac->getDoubleJump())
+			{
+				pc->setVelY(-30);
+				ac->setDoubleJump(false);
+			}
+
+			if (ac->getJump() && pc->jumpNum < 2) {
+				pc->setVelY(-20);
 				ac->setJump(false);
 				pc->m_allowedJump = false;
+				pc->jumpNum++;
 			}
 			
 			if (ac->getLeft()) {
@@ -1026,7 +1032,7 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer,TagComponent * tc, 
 		p->setEndSpin(90);
 		p->setDuration(.1);
 		p->setStartSize(30);
-		p->setStartSpinVar(90);// set the renderer
+		p->setStartSpinVar(90);
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
@@ -1035,6 +1041,7 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer,TagComponent * tc, 
 		else
 		{
 			p->setPosition(pc->getX() + 60, pc->getY() + 10);
+
 		}
 
 		p->update();
@@ -1046,8 +1053,8 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer,TagComponent * tc, 
 		flash->setStartSpinVar(0);
 		flash->setEndSpin(90);
 		flash->setDuration(.1);
-		flash->setStartSize(10);
-		flash->setEndSize(20);
+		flash->setStartSize(5);
+		flash->setEndSize(10);
 		flash->setStartSpinVar(0);
 
 
@@ -1055,7 +1062,6 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer,TagComponent * tc, 
 		{
 			flash->setPosition(pc->getX() - shotgunTipX +20, pc->getY() + shotgunTipY + 70);
 			//pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70
-
 		}
 		else
 		{

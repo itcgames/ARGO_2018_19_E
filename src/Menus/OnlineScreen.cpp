@@ -83,6 +83,10 @@ void OnlineScreen::update() {
 		m_client->sendMessage(m_pack);
 		*m_currentGameState = GameState::Menu;
 		m_firstRunThrough = false;
+		m_textures.clear();
+		m_strings.clear();
+		m_quads.clear();
+		m_index.clear();
 	}
 
 	m_client->receive();

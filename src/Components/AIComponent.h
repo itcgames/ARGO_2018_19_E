@@ -33,6 +33,9 @@ public:
 	bool getJump() { return m_jump; }
 	void setJump(bool jump) { m_jump = jump; }
 
+	bool getDoubleJump() { return m_doublejump; }
+	void setDoubleJump(bool jumper) { m_doublejump = jumper; }
+
 	float getAngle() { return m_gunAngle; }
 	void setAngle(float angle) { m_gunAngle = angle; }
 
@@ -56,12 +59,17 @@ public:
 	bool facingRight = false;
 
 	bool checkGunDirection = true;
+
+	bool jumping = false;
+
 	bool set = false;
 	c2v closestEnemy;
-	c2v closestJumpPoint;
+
 	std::pair<c2v, std::string> closestWalkPoint;
+	std::pair<c2v, std::string> closestJumpPoint;
 
 	std::vector<std::pair<c2v, std::string>> curWalkPoints;
+	std::vector<std::pair<c2v, std::string>> curJumpPoints;
 
 	float oldYVel = 0;
 	float newYVel = 0;
@@ -70,6 +78,7 @@ public:
 
 	c2v curPosition = { 0,0 };
 	c2v lastPosition = { 0,0 };
+
 	bool m_landed;
 
 
@@ -88,6 +97,7 @@ private:
 
 	bool m_throwWeapon = false;
 	bool m_jump = false;
+	bool m_doublejump = false;
 
 	bool m_fire = false;
 
