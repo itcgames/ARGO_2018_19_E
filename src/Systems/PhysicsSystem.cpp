@@ -135,11 +135,11 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 			{
 				pc->setY(ownerPosC->getY() -60 + tc->getYOffset());
 				// Count for recoil animation
-				if (ownerPosC->getShotgunCount() < 6)
+				if (ownerPosC->getShotgunCount() < 20)
 				{
 					ownerPosC->setShotgunRotationCount(ownerPosC->getShotgunRotationCount() + 3);
 				}
-				else if (ownerPosC->getShotgunCount() < 20)
+				else if (ownerPosC->getShotgunCount() < 40)
 				{
 					ownerPosC->setShotgunRotationCount(ownerPosC->getShotgunRotationCount() - 3);
 					if (ownerPosC->getShotgunRotationCount() < 0)
@@ -154,10 +154,10 @@ void PhysicsSystem::setGun(TagComponent * tc,ControlComponent * cc,PositionCompo
 				}
 				else {
 					ownerPosC->setShotgunPumpCount(ownerPosC->getShotgunPumpCount() - 1);
-					if (ownerPosC->getShotgunPumpCount() < 0)
-					{
-						ownerPosC->setShotgunPumpCount(0);
-					}
+				}
+				if (ownerPosC->getShotgunPumpCount() < 0)
+				{
+					ownerPosC->setShotgunPumpCount(0);
 				}
 		
 				if (sc->m_flipValue == SDL_FLIP_NONE)
@@ -415,8 +415,8 @@ void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc
 	else if (tc->getSubTag() == "left")
 	{
 
-		float radiusPump = 55 - (ownerPosC->getShotgunPumpCount() / 2);  // Change the radius so hand moves along radius line and looks like pumping
-		//std::cout << "PUMP COUNT = " << ownerPosC->getShotgunPumpCount() << std::endl;
+		float radiusPump = 55 - (ownerPosC->getShotgunPumpCount() * 2.5);  // Change the radius so hand moves along radius line and looks like pumping
+		std::cout << "PUMP COUNT = " << ownerPosC->getShotgunPumpCount() << std::endl;
 		float shotgunPumpRadAng = (ownerConC->getAngle() + 90) * 3.14159265359 / 180;  // :)
 		//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 		//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
@@ -442,7 +442,7 @@ void PhysicsSystem::setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc,
 	if (tc->getSubTag() == "right")
 	{
 		float radiusHandle = 40;
-		float juicerHandleRadAng = ownerConC->getAngle() * 3.14159265359 / 180; // :)
+		float juicerHandleRadAng = (ownerConC->getAngle() + 90) * 3.14159265359 / 180; // :)
 		//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 		//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
 		float juicerHandleX = radiusHandle * (cos(juicerHandleRadAng));
@@ -464,7 +464,7 @@ void PhysicsSystem::setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc,
 	{
 
 		float radiusPump = 55 - (ownerPosC->getShotgunPumpCount());
-		float shotgunPumpRadAng = ownerConC->getAngle() * 3.14159265359 / 180; // :)
+		float shotgunPumpRadAng = (ownerConC->getAngle() + 90) * 3.14159265359 / 180; // :)
 		//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 		//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
 		float shotgunPumpX = radiusPump * (cos(shotgunPumpRadAng));
@@ -541,11 +541,11 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 
 		if (tc->getTag() == "Hand") {
-			if (left == true)
+			if (ownerConC->getAngle() + 90 < 90)
 			{
 				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
 			}
-			else if (right == true)
+			else
 			{
 				sc->m_flipValue = SDL_FLIP_NONE;
 			}
@@ -796,7 +796,7 @@ void PhysicsSystem::updateShooting(SDL_Renderer* renderer,ControlComponent* owne
 					{
 						pc->setFiredCount(pc->getFiredCount() + 1);
 						pc->setShotgunCount(pc->getShotgunCount() + 1);
-						std::cout << "ADD" << std::endl;
+						//std::cout << "COUNT = " << pc->getShotgunCount() << std::endl;
 					}
 					else {
 						tc->setFiredBool(false);
@@ -888,7 +888,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC,Contro
 							{
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 							}
-							pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(ownerConC->getAngle() - 90), -tc->getXOffset(), tc->getYOffset(), 1000));  // :)
+							pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(ownerConC->getAngle() - 180), -tc->getXOffset(), tc->getYOffset(), 1000));  // :)
 
 
 						}
