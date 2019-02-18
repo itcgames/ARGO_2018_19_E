@@ -8,6 +8,7 @@
 #include "../cute_c2.h"
 #include "../MapLoader.h"
 #include "../ParticleExample.h"
+#include "ControlSystem.h"
 
 class GrenadeSystem
 {

@@ -20,11 +20,10 @@ public:
 	SOCKET sock;
 	sockaddr_in hint;
 
+	int m_serverSize = 0;
+
 	std::string ipAddress;
 	int port;
-
-	char buf[4096];
-	std::string returnMessage = "";
 
 	int number = 0;
 
@@ -33,6 +32,11 @@ public:
 
 	Packet p;
 
+	bool m_startGame = false;
+
+	int m_size = 0;
+
+	Packet * packet = new Packet();
 private:
 	
 };

@@ -11,6 +11,7 @@
  * 2: join
  * 3: leave
  * 4: start
+ * 5: update
  */
 
 struct Packet
@@ -19,5 +20,16 @@ struct Packet
 	int message;
 	c2v position;
 	bool alive;
+
+	bool left;
+	bool right;
+
+	bool throwWeapon;
+	bool jump;
+
+	bool fire;
+
+	float gunAngle;
+
 };
 #endif // !PACKAGE_H

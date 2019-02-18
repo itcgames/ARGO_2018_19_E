@@ -61,6 +61,8 @@ void CollisionSystem::update(std::vector<std::shared_ptr<Tile>> tiles) {
 								pc->jumpNum = 0;
 								pc->m_allowedJump = true;
 								pc->setVelY(0);
+
+								pc->m_onTop = true;
 								pc->setY(tiles.at(i)->dRect.y - cc->getH());
 
 
@@ -68,6 +70,7 @@ void CollisionSystem::update(std::vector<std::shared_ptr<Tile>> tiles) {
 
 							else if (val == "bottom") {
 								pc->setVelY(5);
+								
 							}
 
 							else if (val == "left") {
@@ -209,23 +212,27 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 
 	
 	for (int i= 0; i < tiles.size(); i++) {
+		std::string val;
+		if (tiles.at(i)->dRect.x >= 0) {
+			for (int j = 0; j < bullets->size(); j++) {
+				val = rectCollision(bullets->at(j)->collider, tiles.at(i)->collider);
+				if (val != "none") {
 
-			std::string val;
-			if (tiles.at(i)->dRect.x >= 0) {
-				for (int j = 0; j < bullets->size(); j++) {
-					val = rectCollision(bullets->at(j)->collider, tiles.at(i)->collider);
-					if (val != "none") {
 
-						bullets->erase(bullets->begin() + j);
+					auto particle = new ParticleExample();
 
-						auto particle = new ParticleExample();
-						
-						particle->setRenderer(m_renderer);
-						particle->setStyle(ParticleExample::SMOKE);
+					particle->setRenderer(m_renderer);
+					particle->setStyle(ParticleExample::SMOKE);
 
-					}
+					particle->setPosition((*bullets->begin())->m_spriteComponent->getPosition().x, (*bullets->begin())->m_spriteComponent->getPosition().y);
+					//particle->startAnimating = true;
+					m_particles.push_back(particle);
+					bullets->erase(bullets->begin() + j);
 				}
+
+
 			}
+		}
 	}
 }	
 
@@ -248,8 +255,8 @@ void CollisionSystem::animateExplosion()
 		m_particles[i]->setStartSpinVar(0);
 		m_particles[i]->setEndSpin(90);
 		m_particles[i]->setDuration(.1);
-		m_particles[i]->setStartSize(50);
-		m_particles[i]->setEndSize(50);
+		m_particles[i]->setStartSize(70);
+		m_particles[i]->setEndSize(70);
 		m_particles[i]->setStartSpinVar(0);
 
 
@@ -258,9 +265,8 @@ void CollisionSystem::animateExplosion()
 		
 		if (m_particles[i]->count > 5)
 		{
-			m_particles[i]->count = 0;
-			m_particles[i]->startAnimating = false;
 			m_particles.erase(m_particles.begin() + i);
+			//m_particles.resize(m_particles.size());
 		}
 
 	}	
@@ -268,16 +274,5 @@ void CollisionSystem::animateExplosion()
 
 void CollisionSystem::render()
 {
-
-	for (int i = 0; i < m_particles.size(); i++)
-	{
-		if (m_particles[i]->startAnimating)
-		{
-			animateExplosion();
-		}
-
-	}
-		
-
-
+	animateExplosion();
 }
