@@ -31,18 +31,13 @@ void AnimationsSystem::update() {
 					particle->setRenderer(m_renderer);
 					particle->setStyle(ParticleExample::DIRT);
 					particle->setPosition(pc->getX(), pc->getY() + 90);
-					m_particleVector.push_back(particle);
+					cc->m_particleVector.push_back(particle);
 					
 					m_count = 0;
 					
-				}
-				
+				}	
 			}
-
-			lastPos = { pc->getX(), pc->getY() };
-
-			
-			
+			lastPos = { pc->getX(), pc->getY() };		
 		}
 		
 		if (tc->getTag() == "AI_TAG")
@@ -59,30 +54,40 @@ void AnimationsSystem::setRenderer(SDL_Renderer * renderer)
 
 void AnimationsSystem::render()
 {
-	animateExplosion();
-}
-void AnimationsSystem::animateExplosion()
-{ 
-	for (int i = 0; i < m_particleVector.size(); ++i)
-	{
-		m_particleVector[i]->count++;
-		
-		std::cout << m_particleVector[i]->count << std::endl;
+	for (Entity * entity : m_entities) {
 
-		m_particleVector[i]->setStartSpin(0);
-		m_particleVector[i]->setStartSpinVar(90);
-		m_particleVector[i]->setEndSpin(90);
-		m_particleVector[i]->setDuration(.1);
-		m_particleVector[i]->setStartSize(30);
-		m_particleVector[i]->setStartSpinVar(90);
-		
-		
-		m_particleVector[i]->update();
-		m_particleVector[i]->draw();
+		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
+		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 
-		if (m_particleVector[i]->count > 40)
+		if (tc->getTag() == "Player")
 		{
-			m_particleVector.erase(m_particleVector.begin() + i);
+			animateExplosion(cc->m_particleVector);
+		}
+	}
+	
+}
+void AnimationsSystem::animateExplosion(std::vector<ParticleExample*> vec)
+{ 
+	for (int i = 0; i < vec.size(); ++i)
+	{
+		vec[i]->count++;
+		
+		//std::cout << m_particleVector[i]->count << std::endl;
+
+		vec[i]->setStartSpin(0);
+		vec[i]->setStartSpinVar(90);
+		vec[i]->setEndSpin(90);
+		vec[i]->setDuration(.1);
+		vec[i]->setStartSize(30);
+		vec[i]->setStartSpinVar(90);
+		
+		
+		vec[i]->update();
+		vec[i]->draw();
+
+		if (vec[i]->count > 40)
+		{
+			vec.erase(vec.begin() + i);
 		}
 
 

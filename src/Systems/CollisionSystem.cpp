@@ -218,20 +218,15 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 				val = rectCollision(bullets->at(j)->collider, tiles.at(i)->collider);
 				if (val != "none") {
 
-					bullets->erase(bullets->begin() + j);
-
 					auto particle = new ParticleExample();
 
 					particle->setRenderer(m_renderer);
 					particle->setStyle(ParticleExample::SMOKE);
 
-					//particle->setPosition((*bullets->begin())->m_spriteComponent->getPosition().x, (*bullets->begin())->m_spriteComponent->getPosition().y);
-					//particle->startAnimating = true;
-					//m_particles.push_back(particle);
-					//bullets->erase(bullets->begin() + i);
+					particle->setPosition((*bullets->begin())->m_spriteComponent->getPosition().x, (*bullets->begin())->m_spriteComponent->getPosition().y);
+					m_particles.push_back(particle);
+					bullets->erase(bullets->begin() + j);
 				}
-
-
 			}
 		}
 	}
@@ -251,7 +246,6 @@ void CollisionSystem::animateExplosion()
 		m_particles[i]->count++;
 
 
-		std::cout << m_particles[i]->count << std::endl;
 		m_particles[i]->setStartSpin(0);
 		m_particles[i]->setStartSpinVar(0);
 		m_particles[i]->setEndSpin(90);
@@ -267,7 +261,7 @@ void CollisionSystem::animateExplosion()
 		if (m_particles[i]->count > 5)
 		{
 			m_particles.erase(m_particles.begin() + i);
-			//m_particles.resize(m_particles.size());
+			m_particles.resize(m_particles.size());
 		}
 
 	}	
@@ -277,5 +271,4 @@ void CollisionSystem::render()
 {
 
 	animateExplosion();
-
 }

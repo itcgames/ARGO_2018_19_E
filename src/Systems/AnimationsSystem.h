@@ -21,7 +21,7 @@ public:
 	void render();
 	double distance(c2v  vecOne, c2v vecTwo);
 	void setRenderer(SDL_Renderer * renderer);
-	void animateExplosion();
+	void animateExplosion(std::vector<ParticleExample*> vec);
 	std::vector<ParticleExample*> getVector();
 	void setVector(std::vector<ParticleExample*> vec);
 	void call();
