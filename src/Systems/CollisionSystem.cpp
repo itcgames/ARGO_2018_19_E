@@ -218,7 +218,6 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 				val = rectCollision(bullets->at(j)->collider, tiles.at(i)->collider);
 				if (val != "none") {
 
-					bullets->erase(bullets->begin() + j);
 
 					auto particle = new ParticleExample();
 
@@ -228,7 +227,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 					particle->setPosition((*bullets->begin())->m_spriteComponent->getPosition().x, (*bullets->begin())->m_spriteComponent->getPosition().y);
 					//particle->startAnimating = true;
 					m_particles.push_back(particle);
-					bullets->erase(bullets->begin() + i);
+					bullets->erase(bullets->begin() + j);
 				}
 
 

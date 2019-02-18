@@ -117,7 +117,7 @@ void Player::render(SDL_Renderer* renderer) {
 	else {
 		if (falling)
 		{
-			if (SDL_HapticRumblePlay(haptic, rumbleCount, 75) != 0)
+			if (SDL_HapticRumblePlay(controlComp->getHaptic(), rumbleCount, 75) != 0)
 			{
 				printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 			}

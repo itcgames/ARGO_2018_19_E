@@ -51,6 +51,24 @@ public:
 	void setXOffset(double value) { xOffset = value; }
 	void setYOffset(double value) { yOffset = value; }
 
+	float shotgunTipX;
+	float shotgunTipY;
+	float getShotgunTipX() { return shotgunTipX; }
+	float getShotgunTipY() { return shotgunTipY; }
+	void setShotgunTipX(float value) { shotgunTipX = value; }
+	void setShotgunTipY(float value) { shotgunTipY = value; }
+
+	float juicerTipX;
+	float juicerTipY;
+	float getJuicerTipX() { return juicerTipX; }
+	float getJuicerTipY() { return juicerTipY; }
+	void setJuicerTipX(float value) { juicerTipX = value; }
+	void setJuicerTipY(float value) { juicerTipY = value; }
+
+	bool startAnimating = false;
+	void setStartAnimating(bool value) { startAnimating = value; }
+	bool getStartAnimating() { return startAnimating; }
+
 private:
 	std::string subTag = "None";
 	std::string tag;

@@ -42,8 +42,6 @@ public:
 	//double xOffset = 0;
 	//double yOffset = 0;
 
-	bool throwGun = false;
-
 	bool left = false;
 	bool right = false;
 	SDL_RendererFlip flipval;
@@ -60,7 +58,7 @@ public:
 	void setPlayer2Position(PositionComponent *pc);
 	void throwGunFun(ControlComponent * cc);
 	void playerFlip(PositionComponent *pc, SpriteComponent *sc, ControlComponent *cc, TagComponent *tc);
-	void launchGun(PositionComponent *pc, TagComponent *tc, CollisionComponent * cc);
+	void launchGun(PositionComponent *pc, TagComponent *tc, CollisionComponent * cc, ControlComponent * ownerConC, TagComponent * ownerTagC);
 	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC, PositionComponent * gunPosition);
 	void setPlayerGunGot(std::string gun, TagComponent *tagC);
 	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC, PositionComponent * gunPosition);
@@ -86,21 +84,11 @@ public:
 	void setRenderer(SDL_Renderer * renderer);
 	SDL_Renderer * m_renderer;
 	int m_count = 0;
-	bool m_startAnimating = false;
 
-	float shotgunTipX;
-	float shotgunTipY;
 
 	PositionComponent * handOwnerPosC;
 
-	// variables for shotgun animation
-	//int shotgunRotationCount = 0;
-	//int shotgunPumpCount = 0;
-
 	int juicerRotationCount = 0;
-
-	float juicerTipX = 0;
-	float juicerTipY = 0;
 
 	float m_grenadeColor = 0;
 

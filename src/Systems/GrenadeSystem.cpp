@@ -90,10 +90,10 @@ void GrenadeSystem::animateExplosion()
 	explode->update();
 	explode->draw();
 
-	if (SDL_HapticRumblePlay(haptic, .5, 100) != 0)
-	{
-		printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
-	}
+	//if (SDL_HapticRumblePlay(haptic, .5, 100) != 0)
+	//{
+	//	printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+	//}
 
 	if (m_count > 30)
 	{

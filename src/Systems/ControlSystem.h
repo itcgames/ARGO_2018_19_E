@@ -4,15 +4,17 @@
 #include <iostream>
 #include <vector>
 #include "../Entity.h"
-extern SDL_Haptic * haptic;
 
 class ControlSystem
 {
 public:
 	ControlSystem();
-	void init(SDL_GameController* controller);
+	SDL_Haptic* init(SDL_GameController* controller);
 	void addEntity(Entity * e);
 	void update(SDL_Event e);
+
+	SDL_Haptic * haptic;
+
 
 	void setButtons(ControlComponent* cc);
 

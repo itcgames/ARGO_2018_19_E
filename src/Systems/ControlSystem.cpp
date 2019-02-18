@@ -1,12 +1,10 @@
 #include "ControlSystem.h"
 
-SDL_Haptic * haptic = NULL;
-
 ControlSystem::ControlSystem() {
 	//init();
 }
 
-void ControlSystem::init(SDL_GameController* controller) {
+SDL_Haptic* ControlSystem::init(SDL_GameController* controller) {
 	//Initialization flag
 	bool success = true;
 
@@ -34,6 +32,7 @@ void ControlSystem::init(SDL_GameController* controller) {
 			printf("Warning: Unable to initialize rumble! SDL Error: %s\n", SDL_GetError());
 		}
 	}
+	return haptic;
 	
 }
 
@@ -54,7 +53,7 @@ void ControlSystem::update(SDL_Event e) {
 
 		if (tc->getTag() == "Player") {
 			if (!cc->m_init) {
-				init(cc->gGameController);
+				cc->setHaptic(init(cc->gGameController));
 				cc->m_init = true;
 			}
 		}
