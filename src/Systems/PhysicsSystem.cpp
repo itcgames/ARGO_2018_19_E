@@ -860,6 +860,9 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC) {
 							{
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 							}
+
+							//notifyAudioObservers(AudioObserver::SFX::GRENADE_EXPLOSION);
+							
 						}
 					}
 				}
