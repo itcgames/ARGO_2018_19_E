@@ -17,7 +17,6 @@ public:
 		GRENADE_EXPLOSION,
 		MINIGUN_SHOOT,
 		SHOTGUN_SHOOT,
-		SHOTGUN_RECHAMBER
 	};
 
 	AudioObserver();

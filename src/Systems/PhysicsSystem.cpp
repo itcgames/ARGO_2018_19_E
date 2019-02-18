@@ -786,7 +786,6 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC) {
 								float unitY = shotgunYOffset / mag;
 
 								notifyAudioObservers(AudioObserver::SFX::SHOTGUN_SHOOT);
-								notifyAudioObservers(AudioObserver::SFX::SHOTGUN_RECHAMBER);
 
 								if (sc->m_flipValue == SDL_FLIP_NONE)
 								{

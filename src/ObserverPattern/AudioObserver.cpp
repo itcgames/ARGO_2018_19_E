@@ -43,9 +43,6 @@ void AudioObserver::onNotify(SFX sfx)
 	case AudioObserver::SHOTGUN_SHOOT:
 		Mix_PlayChannel(-1, m_shotgunShoot, 0);
 		break;
-	case AudioObserver::SHOTGUN_RECHAMBER:
-		Mix_PlayChannel(-1, m_shotgunRechamber, 0);
-		break;
 	default:
 		break;
 	}
@@ -58,7 +55,6 @@ void AudioObserver::load()
 	m_pistolPickup = Mix_LoadWAV("assets/sfx/pistolPickup.wav");
 	m_grenadeExplosion = Mix_LoadWAV("assets/sfx/grenadeExplosion.wav");
 	m_shotgunShoot = Mix_LoadWAV("assets/sfx/shotgunShoot.wav");
-	m_shotgunRechamber = Mix_LoadWAV("assets/sfx/ShotgunRechamber.wav");
 	
 	m_bgm1 = Mix_LoadMUS("assets/sfx/bgm1.wav");
 }
