@@ -21,29 +21,46 @@ void AnimationsSystem::update() {
 	
 		if (tc->getTag() == "Player")
 		{
-			if (pc->getX() != lastPos.x && pc->getY() == lastPos.y && pc->getVelX() > 1.0f ||
-				pc->getX() != lastPos.x && pc->getY() == lastPos.y && pc->getVelX() < -1.0f)
+			//std::cout << cc->m_particleVector.size() << std::endl;
+			if (pc->getX() != cc->lastPos.x && pc->getY() == cc->lastPos.y && pc->getVelX() > 1.0f ||
+				pc->getX() != cc->lastPos.x && pc->getY() == cc->lastPos.y && pc->getVelX() < -1.0f)
 				
 			{
-				m_count++;
-				if (m_count > 15) {
+				cc->m_count++;
+				if (cc->m_count > 15) {
 					auto particle = new ParticleExample();
 					particle->setRenderer(m_renderer);
 					particle->setStyle(ParticleExample::DIRT);
 					particle->setPosition(pc->getX(), pc->getY() + 90);
 					cc->m_particleVector.push_back(particle);
 					
-					m_count = 0;
+					cc->m_count = 0;
 					
 				}	
 			}
-			lastPos = { pc->getX(), pc->getY() };		
+			cc->lastPos = { pc->getX(), pc->getY() };
 		}
 		
-		if (tc->getTag() == "AI_TAG")
-		{
+		//if (tc->getTag() == "AI_TAG")
+		//{
+		//	if (pc->getX() != ac->lastPos.x && pc->getY() == ac->lastPos.y && pc->getVelX() > 1.0f ||
+		//		pc->getX() != ac->lastPos.x && pc->getY() == ac->lastPos.y && pc->getVelX() < -1.0f)
 
-		}
+		//	{
+		//		ac->m_count++;
+		//		if (ac->m_count > 15) {
+		//			auto particle = new ParticleExample();
+		//			particle->setRenderer(m_renderer);
+		//			particle->setStyle(ParticleExample::DIRT);
+		//			particle->setPosition(pc->getX(), pc->getY() + 90);
+		//			ac->m_particleVector.push_back(particle);
+
+		//			ac->m_count = 0;
+		//			//std::cout << ac->m_particleVector.size() << std::endl;
+		//		}
+		//	}
+		//	ac->lastPos = { pc->getX(), pc->getY() };
+		//}
 	}
 }
 
@@ -58,11 +75,17 @@ void AnimationsSystem::render()
 
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
+		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 
 		if (tc->getTag() == "Player")
 		{
 			animateExplosion(cc->m_particleVector);
 		}
+
+	//	/*if (tc->getTag() == "AI_TAG")
+	//	{
+	//		animateExplosion(ac->m_particleVector);
+	//	}*/
 	}
 	
 }
@@ -72,7 +95,7 @@ void AnimationsSystem::animateExplosion(std::vector<ParticleExample*> vec)
 	{
 		vec[i]->count++;
 		
-		//std::cout << m_particleVector[i]->count << std::endl;
+		std::cout << vec[i]->count << std::endl;
 
 		vec[i]->setStartSpin(0);
 		vec[i]->setStartSpinVar(90);
@@ -87,13 +110,9 @@ void AnimationsSystem::animateExplosion(std::vector<ParticleExample*> vec)
 
 		if (vec[i]->count > 40)
 		{
+			std::cout << "erased" << std::endl;
 			vec.erase(vec.begin() + i);
-		}
-
-
-
-		
-		
+		}	
 	}		
 }
 

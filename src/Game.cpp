@@ -79,7 +79,7 @@ Game::Game()
 
 	m_map = new MapLoader();
 
-	m_map->load("testlevel.tmx", m_renderer);
+	m_map->load("level3.tmx", m_renderer);
 
 	pistol = new Gun(m_renderer, 1, 1500, 100);
 	shotgun = new Gun(m_renderer,2, 1000,100);
