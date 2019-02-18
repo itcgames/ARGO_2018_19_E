@@ -10,11 +10,22 @@
 class AudioManager : public Observer
 {
 public:
+	enum SFX
+	{
+		PISTOL_SHOOT,
+		PISTOL_PICKUP,
+		GRENADE_EXPLOSION,
+		MINIGUN_SHOOT,
+		SHOTGUN_SHOOT,
+		SHOTGUN_RECHAMBER
+	};
+
 	AudioManager();
 	void load();
-	void update(std::string sfxName);
+	//Function to be called when a message is received from the subject
+	//\param sfx: Enum of sound effects
+	void onNotify(SFX sfx);
 private:
-	std::map<std::string, Mix_Chunk*> m_sfxMap;
 	Mix_Chunk* m_pistolShoot = NULL;
 	Mix_Chunk* m_pistolPickup = NULL;
 	Mix_Chunk* m_grenadeExplosion = NULL;

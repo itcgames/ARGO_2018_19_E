@@ -7,7 +7,7 @@
 class Observer
 {
 public:
-	virtual void update(std::string sfxName) = 0;
+	void onNotify();
 private:
 
 };

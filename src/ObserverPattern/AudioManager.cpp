@@ -5,17 +5,30 @@ AudioManager::AudioManager()
 
 }
 
-void AudioManager::update(std::string sfxName)
+void AudioManager::onNotify(SFX sfx) 
 {
-	if (sfxName == "shotgunrechamber")
+	switch (sfx)
 	{
-		Mix_PlayChannel(-1, m_shotgunRechamber, 0);
-		
-	}
-
-	else if (sfxName == "grenadeexplosion")
-	{
+	case AudioManager::PISTOL_SHOOT:
+		Mix_PlayChannel(-1, m_pistolShoot, 0);
+		break;
+	case AudioManager::PISTOL_PICKUP:
+		Mix_PlayChannel(-1, m_pistolPickup, 0);
+		break;
+	case AudioManager::GRENADE_EXPLOSION:
 		Mix_PlayChannel(-1, m_grenadeExplosion, 0);
+		break;
+	case AudioManager::MINIGUN_SHOOT:
+		Mix_PlayChannel(-1, m_minigunShoot, 0);
+		break;
+	case AudioManager::SHOTGUN_SHOOT:
+		Mix_PlayChannel(-1, m_shotgunShoot, 0);
+		break;
+	case AudioManager::SHOTGUN_RECHAMBER:
+		Mix_PlayChannel(-1, m_shotgunRechamber, 0);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -27,11 +40,4 @@ void AudioManager::load()
 	m_grenadeExplosion = Mix_LoadWAV("assets/sfx/grenadeExplosion.wav");
 	m_shotgunShoot = Mix_LoadWAV("assets/sfx/shotgunShoot.wav");
 	m_shotgunRechamber = Mix_LoadWAV("assets/sfx/ShotgunRechamber.wav");
-
-	m_sfxMap.insert(std::pair<std::string, Mix_Chunk*>("minigunshoot", m_minigunShoot));
-	m_sfxMap.insert(std::pair<std::string, Mix_Chunk*>("pistolshoot", m_pistolShoot));
-	m_sfxMap.insert(std::pair<std::string, Mix_Chunk*>("pistolpickup", m_pistolPickup));
-	m_sfxMap.insert(std::pair<std::string, Mix_Chunk*>("grenadeexplosion", m_grenadeExplosion));
-	m_sfxMap.insert(std::pair<std::string, Mix_Chunk*>("shotgunshoot", m_shotgunShoot));
-	m_sfxMap.insert(std::pair<std::string, Mix_Chunk*>("shotgunrechamber", m_shotgunRechamber));
 }

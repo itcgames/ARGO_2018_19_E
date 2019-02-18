@@ -6,11 +6,12 @@
 #include "../Entity.h"
 #include "../cute_c2.h"
 #include "ControlSystem.h"
+#include "../ObserverPattern/Subject.h"
 
 #include "../ParticleExample.h"
 
 
-class PhysicsSystem
+class PhysicsSystem : public Subject
 {
 public:
 	std::vector<Entity *> m_entities;

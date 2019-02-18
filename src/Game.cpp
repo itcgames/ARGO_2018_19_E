@@ -15,13 +15,13 @@ Game::Game()
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
 
 	//Initialize SDL
-	if (SDL_Init( SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC) < 0)
+	if (SDL_Init( SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC) | SDL_INIT_AUDIO < 0)
 	{
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 	}
 
 	//Initialize SDL_mixer 
-	if(Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0) 
+	if(Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, NULL, 2048 ) < 0) 
 	{ 
 		printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() ); 
 	}
@@ -162,7 +162,20 @@ void Game::update() {
 	case GameState::Game:
 		m_cs.update(event);
 		m_collSys.update(m_map->getTiles());
-		m_audioManager->update("grenadeexplosion");
+		
+		//if (event.type == SDL_KEYDOWN)
+		//{
+		//	switch (event.key.keysym.sym)
+		//	{
+		//	case SDLK_w:
+		//		m_audioManager->onNotify(AudioManager::SFX::SHOTGUN_SHOOT);
+		//		break;
+		//	case SDLK_a:
+		//		m_audioManager->onNotify(m_audioManager->PISTOL_PICKUP);
+		//		break;
+		//	}
+		//}
+
 		m_ps.update();
 		m_guns.update();
 		SDL_RenderSetScale(m_renderer, 0.7, 0.5);
