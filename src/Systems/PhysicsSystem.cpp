@@ -1027,7 +1027,6 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer,TagComponent * tc)
 	{
 		m_count = 0;
 		flash->resetSystem();
-
 		m_startAnimating = false;
 	}
 }
