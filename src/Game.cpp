@@ -26,8 +26,8 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
+	*m_currentGameState = (GameState::Game);
 
-	*m_currentGameState = (GameState::Menu);
 
 
 	if (TTF_Init() == -1) {
@@ -53,7 +53,9 @@ Game::Game()
 	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client, m_online);
 	m_options = new OptionScreen();
 	m_credits = new CreditScreen();
+
 	m_screenSize = { 0,0,1200,700 };	
+
 }
 
 Game::~Game()
@@ -106,7 +108,9 @@ void Game::update() {
 	case GameState::Options:
 		break;
 	case GameState::Game:
+
 		m_playScreen->update(m_online, event, m_onlineScreen->m_lobbySize, m_client);
+
 		break;
 	case GameState::Credits:
 		break;

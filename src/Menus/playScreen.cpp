@@ -164,7 +164,7 @@ void PlayScreen::update(bool * online, SDL_Event event,int size, Client * client
 
 	m_cs.update(event);
 	m_collSys.update(m_map->getTiles());
-	m_ps.update(/*m_backgroundSprite*/);
+	m_ps.update(m_renderer);
 	m_guns.update();
 	SDL_RenderSetScale(m_renderer, 0.69, 0.5);
 	m_ps.bulletUpdate(m_renderer);
