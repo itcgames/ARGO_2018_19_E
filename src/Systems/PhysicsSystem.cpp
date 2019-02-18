@@ -771,6 +771,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC) {
 							//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
 							shotgunTipX = 103.6 * (cos(shotgunRadAng));
 							shotgunTipY = 103.6 * (sin(shotgunRadAng));
+							notifyAudioObservers(AudioObserver::SFX::SHOTGUN_SHOOT);
 							for (int i = 0; i < 7; i++)
 							{
 								float random = rand() % 40 - 20;
@@ -785,7 +786,6 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC) {
 								float unitX = -shotgunXOffset / mag;
 								float unitY = shotgunYOffset / mag;
 
-								notifyAudioObservers(AudioObserver::SFX::SHOTGUN_SHOOT);
 
 								if (sc->m_flipValue == SDL_FLIP_NONE)
 								{
