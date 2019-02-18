@@ -25,6 +25,7 @@ public:
 	//Function to be called when a message is received from the subject
 	//\param sfx: Enum of sound effects
 	void onNotify(SFX sfx);
+	void StartBGM(int bgmSong);
 private:
 	Mix_Chunk* m_pistolShoot = NULL;
 	Mix_Chunk* m_pistolPickup = NULL;
@@ -32,7 +33,10 @@ private:
 	Mix_Chunk* m_minigunShoot = NULL;
 	Mix_Chunk* m_shotgunShoot = NULL;
 	Mix_Chunk* m_shotgunRechamber = NULL;
-	//std::shared_ptr<Mix_Music> m_bgm = NULL;
+	Mix_Music* m_bgm1 = NULL;
+	Mix_Music* m_bgm2 = NULL;
+	Mix_Music* m_bgm3 = NULL;
+	Mix_Music* m_bgm4 = NULL;
 };
 
 #endif

@@ -5,6 +5,25 @@ AudioObserver::AudioObserver()
 
 }
 
+void AudioObserver::StartBGM(int bgmSong)
+{
+	switch (bgmSong)
+	{
+	case 0:
+		Mix_PlayMusic(m_bgm1, -1);
+		break;
+	case 1:
+		Mix_PlayMusic(m_bgm2, -1);
+		break;
+	case 2:
+		Mix_PlayMusic(m_bgm3, -1);
+		break;
+	case 3:
+		Mix_PlayMusic(m_bgm4, -1);
+		break;
+	}
+}
+
 void AudioObserver::onNotify(SFX sfx)
 {
 	switch (sfx)
@@ -40,4 +59,6 @@ void AudioObserver::load()
 	m_grenadeExplosion = Mix_LoadWAV("assets/sfx/grenadeExplosion.wav");
 	m_shotgunShoot = Mix_LoadWAV("assets/sfx/shotgunShoot.wav");
 	m_shotgunRechamber = Mix_LoadWAV("assets/sfx/ShotgunRechamber.wav");
+	
+	m_bgm1 = Mix_LoadMUS("assets/sfx/bgm1.wav");
 }

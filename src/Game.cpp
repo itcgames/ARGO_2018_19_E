@@ -163,18 +163,15 @@ void Game::update() {
 		m_cs.update(event);
 		m_collSys.update(m_map->getTiles());
 		
-		//if (event.type == SDL_KEYDOWN)
-		//{
-		//	switch (event.key.keysym.sym)
-		//	{
-		//	case SDLK_w:
-		//		m_audioManager->onNotify(AudioManager::SFX::SHOTGUN_SHOOT);
-		//		break;
-		//	case SDLK_a:
-		//		m_audioManager->onNotify(m_audioManager->PISTOL_PICKUP);
-		//		break;
-		//	}
-		//}
+		if (event.type == SDL_KEYDOWN)
+		{
+			switch (event.key.keysym.sym)
+			{
+			case SDLK_w:
+				m_audioObserver->StartBGM(0);
+				break;
+			}
+		}
 
 		m_ps.update();
 		m_guns.update();
