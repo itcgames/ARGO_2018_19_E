@@ -42,7 +42,7 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 void PlayScreen::initialise(bool online, int size, int num) {
 
 	if (online) {
-		m_players.push_back(new Player(m_renderer, 600, 200, SDL_GameControllerOpen(0), num));	
+		m_players.push_back(new Player(m_renderer, 600 + (100 * num), 200, SDL_GameControllerOpen(0), num));
 
 		m_hs.addEntity((Entity*)m_players[0]);
 		m_cs.addEntity((Entity*)m_players[0]);
