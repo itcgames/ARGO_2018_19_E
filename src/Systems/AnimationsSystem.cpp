@@ -82,6 +82,8 @@ void AnimationsSystem::render()
 			animateExplosion(cc->m_particleVector);
 		}
 
+
+		//std::cout << m_entities.size() << std::endl;
 	//	/*if (tc->getTag() == "AI_TAG")
 	//	{
 	//		animateExplosion(ac->m_particleVector);
@@ -110,7 +112,6 @@ void AnimationsSystem::animateExplosion(std::vector<ParticleExample*> vec)
 
 		if (vec[i]->count > 40)
 		{
-			std::cout << "erased" << std::endl;
 			vec.erase(vec.begin() + i);
 		}	
 	}		

@@ -22,7 +22,7 @@ public:
 
 private:
 	vector<sockaddr_in> m_clients;
-	map<char *, int> m_players;
+	map<string, int> m_players;
 	SOCKET in;
 	int playerNum = 0;
 };

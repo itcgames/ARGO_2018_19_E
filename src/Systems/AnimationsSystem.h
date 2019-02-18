@@ -31,7 +31,6 @@ private:
 	std::vector<ParticleExample*> m_vector;
 	int m_count = 0;
 
-	std::vector<ParticleExample*> m_particleVector;
 
 	int erased = 0;
 };

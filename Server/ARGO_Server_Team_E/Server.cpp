@@ -94,6 +94,7 @@ void Server::loop() {
 				}
 			}
 			else {
+
 				for (int i = 1; i <= playerNum; i++)
 				{
 					if (i != m_players[clientIp])
@@ -112,6 +113,12 @@ void Server::loop() {
 							std::cout << "<SERVER> Message sent to client at " << sendIp << "!" << std::endl;
 						}
 					}
+				}
+				if (packet.message == 3) {
+					int index = m_players[clientIp];
+					m_players[clientIp] = 0;
+					playerNum--;
+					m_clients.erase(m_clients.begin() + (index - 1));
 				}
 			}
 
