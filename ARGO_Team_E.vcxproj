@@ -151,7 +151,7 @@
     <ClCompile Include="src\Menus\OnlineScreen.cpp" />
     <ClCompile Include="src\Menus\OptionScreen.cpp" />
     <ClCompile Include="src\Menus\SplashScreen.cpp" />
-    <ClCompile Include="src\ObserverPattern\AudioManager.cpp" />
+    <ClCompile Include="src\ObserverPattern\AudioObserver.cpp" />
     <ClCompile Include="src\ParticleExample.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -206,7 +206,7 @@
     <ClInclude Include="src\Menus\OptionScreen.h" />
     <ClInclude Include="src\Menus\SplashScreen.h" />
     <ClInclude Include="src\Gun.h" />
-    <ClInclude Include="src\ObserverPattern\AudioManager.h" />
+    <ClInclude Include="src\ObserverPattern\AudioObserver.h" />
     <ClInclude Include="src\ObserverPattern\Observer.h" />
     <ClInclude Include="src\ObserverPattern\Subject.h" />
     <ClInclude Include="src\ParticleExample.h" />

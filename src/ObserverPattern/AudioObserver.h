@@ -1,13 +1,13 @@
 #pragma once
-#ifndef AUDIOMANAGER_H
-#define AUDIOMANAGER_H
+#ifndef AUDIOOBSERVER_H
+#define AUDIOOBSERVER
 
 #include "Observer.h"
 #include <map>
 #include <SDL.h>
 #include <SDL_mixer.h>
 
-class AudioManager : public Observer
+class AudioObserver : public Observer
 {
 public:
 	enum SFX
@@ -20,7 +20,7 @@ public:
 		SHOTGUN_RECHAMBER
 	};
 
-	AudioManager();
+	AudioObserver();
 	void load();
 	//Function to be called when a message is received from the subject
 	//\param sfx: Enum of sound effects

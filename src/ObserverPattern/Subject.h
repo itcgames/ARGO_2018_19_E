@@ -3,14 +3,16 @@
 #define SUBJECT_H
 
 #include "Observer.h"
+#include <vector>
 
 class Subject
 {
 public:
-	virtual void registerObserver(Observer* observer) = 0;
-	virtual void removeObserver(Observer* observer) = 0;
-	virtual void notifyObservers() = 0;
-private:
+	virtual void registerObserver(Observer* observer) {};
+	virtual void removeObserver(Observer* observer) {};
+	virtual void notifyObservers() {};
+protected:
+	std::vector<Observer*> m_observers;
 
 };
 

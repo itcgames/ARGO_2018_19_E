@@ -94,8 +94,8 @@ Game::Game()
 	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
 	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
 
-	m_audioManager = new AudioManager();
-	m_audioManager->load();
+	m_audioObserver = new AudioObserver();
+	m_audioObserver->load();
 
 	initialise();
 
@@ -384,6 +384,7 @@ void Game::initialise()
 	m_ps.addEntity((Entity*)grenade);
 	m_ps.addEntity((Entity*)h1);
 	m_ps.addEntity((Entity*)h2);
+	m_ps.registerAudioObserver(m_audioObserver);
 
 
 	m_guns.addEntity((Entity*)pistol);

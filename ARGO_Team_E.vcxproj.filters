@@ -36,7 +36,7 @@
     <ClCompile Include="src\Systems\RenderSystem.cpp" />
     <ClCompile Include="src\Systems\RestartSystem.cpp" />
     <ClCompile Include="src\Systems\SoundSystem.cpp" />
-    <ClCompile Include="src\ObserverPattern\AudioManager.cpp" />
+    <ClCompile Include="src\ObserverPattern\AudioObserver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Factory.h" />
@@ -94,6 +94,6 @@
     <ClInclude Include="src\Client\Packet.h" />
     <ClInclude Include="src\ObserverPattern\Subject.h" />
     <ClInclude Include="src\ObserverPattern\Observer.h" />
-    <ClInclude Include="src\ObserverPattern\AudioManager.h" />
+    <ClInclude Include="src\ObserverPattern\AudioObserver.h" />
   </ItemGroup>
 </Project>

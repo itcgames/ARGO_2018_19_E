@@ -7,11 +7,12 @@
 #include "../cute_c2.h"
 #include "ControlSystem.h"
 #include "../ObserverPattern/Subject.h"
+#include "../ObserverPattern/AudioObserver.h"
 
 #include "../ParticleExample.h"
 
 
-class PhysicsSystem : public Subject
+class PhysicsSystem : Subject
 {
 public:
 	std::vector<Entity *> m_entities;
@@ -76,6 +77,13 @@ public:
 	void flipHorizontal(SpriteComponent * sc);
 	void updateShooting(SDL_Renderer* renderer);
 	void makeBullets(SDL_Renderer* renderer, TagComponent *tagC);
+
+
+	std::vector<AudioObserver*> m_audioObservers;
+	void registerAudioObserver(AudioObserver* observer);
+	void removeAudioObserver(AudioObserver* observer);
+	//Function to notify audio observers to play a sound
+	void notifyAudioObservers(AudioObserver::SFX sfx);
 
 	std::string gunGot;
 

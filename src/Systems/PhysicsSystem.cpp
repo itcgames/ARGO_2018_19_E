@@ -1031,3 +1031,19 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer,TagComponent * tc)
 	}
 }
 
+void PhysicsSystem::notifyAudioObservers(AudioObserver::SFX sfx)
+{
+	if (m_audioObservers.size() > 0)
+	{
+		for (int i = 0; i < m_observers.size(); i++)
+		{
+			m_audioObservers.at(i)->onNotify(sfx);
+		}
+	}
+}
+
+void PhysicsSystem::registerAudioObserver(AudioObserver* audioObserver)
+{
+	m_audioObservers.push_back(audioObserver);
+}
+

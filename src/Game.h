@@ -18,7 +18,7 @@
 #include "Menus/OptionScreen.h"
 #include "Menus/OnlineScreen.h"
 #include "Components/SpriteComponent.h"
-#include "ObserverPattern/AudioManager.h"
+#include "ObserverPattern/AudioObserver.h"
 
 #include "Player.h"
 #include "Hand.h"
@@ -90,7 +90,7 @@ private:
 	Gun* grenade;
 	std::vector<Entity*> m_ents;
 	Light* testLight;
-	AudioManager* m_audioManager;
+	AudioObserver* m_audioObserver;
 
 	SpriteComponent* m_backgroundSprite;
 
