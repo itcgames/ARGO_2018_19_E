@@ -468,7 +468,6 @@ void PhysicsSystem::movePlayer(ControlComponent * cc,PositionComponent *pc, TagC
 			pc->setVelX(pc->getVelX() + speed);
 		}
 	}
-	std::cout << "JUMP =" << cc->getJump() << std::endl;
 	if (cc->getJump() && pc->jumpNum < 2) {
 		std::cout << "Called" << std::endl;
 		pc->setVelY(- jumpSpeed);

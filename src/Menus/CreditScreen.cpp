@@ -2,19 +2,15 @@
 
 
 
-CreditScreen::CreditScreen()
-{
+CreditScreen::CreditScreen() {
+
 }
 
 
-CreditScreen::~CreditScreen()
-{
-}
+CreditScreen::~CreditScreen() {}
 
 
-void CreditScreen::update(double dt)
-{
-
+void CreditScreen::update(double dt) {
 
 }
 
