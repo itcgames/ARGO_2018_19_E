@@ -7,7 +7,7 @@ Player::Player()
 
 
 
-Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller)
+Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller, int index)
 {
 	//Set up Sprite component and add to entity component vector
 	oldY = 0;
@@ -47,6 +47,7 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	this->addComponent(positionComp);
 	controlComp = new ControlComponent();
 	controlComp->gGameController = controller;
+	controlComp->m_playerNum = index;
 	this->addComponent(controlComp);
 	this->addComponent(new CollisionComponent(x, y, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }

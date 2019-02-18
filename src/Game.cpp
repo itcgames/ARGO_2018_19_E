@@ -40,12 +40,12 @@ Game::Game()
 		// handle error
 	}
 
-
 	TTF_Font* menuFont = TTF_OpenFont("arial.ttf", 30);
 	if (!menuFont) {
 		printf("TTF_OpenFont: %s\n", TTF_GetError());
 		// handle error
 	}
+	m_client = new Client("149.153.106.155", 54000);
 	setUpController();
 	m_playScreen = new PlayScreen(m_renderer, Font);
 	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
@@ -89,6 +89,7 @@ void Game::run()
 
 void Game::update() {
 	SDL_PollEvent(&event);
+	m_client->receive();
 	switch (*m_currentGameState)
 	{
 	case GameState::None:
@@ -105,7 +106,7 @@ void Game::update() {
 	case GameState::Options:
 		break;
 	case GameState::Game:
-		m_playScreen->update(m_online, event);
+		m_playScreen->update(m_online, event, m_onlineScreen->m_lobbySize, m_client);
 		break;
 	case GameState::Credits:
 		break;

@@ -38,6 +38,7 @@
     <ClCompile Include="src\Systems\SoundSystem.cpp" />
     <ClCompile Include="src\Systems\AnimationsSystem.cpp" />
     <ClCompile Include="src\Menus\playScreen.cpp" />
+    <ClCompile Include="src\Systems\NetworkSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Factory.h" />
@@ -94,5 +95,6 @@
     <ClInclude Include="src\Client\Packet.h" />
     <ClInclude Include="src\Systems\AnimationsSystem.h" />
     <ClInclude Include="src\Menus\playScreen.h" />
+    <ClInclude Include="src\Systems\NetworkSystem.h" />
   </ItemGroup>
 </Project>

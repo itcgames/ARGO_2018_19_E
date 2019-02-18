@@ -12,6 +12,7 @@
 #include "../Systems/GrenadeSystem.h"
 #include "../Systems/RestartSystem.h"
 #include "../Systems/AnimationsSystem.h"
+#include "../Systems/NetworkSystem.h"
 
 #include "../Player.h"
 #include "../Hand.h"
@@ -19,6 +20,8 @@
 #include "../Gun.h"
 #include "../MapLoader.h"
 #include "../Light.h"
+
+#include "../Client/Client.h"
 
 #include <SDL_ttf.h>
 
@@ -28,10 +31,10 @@ public:
 	PlayScreen(SDL_Renderer * renderer, TTF_Font* font);
 	~PlayScreen() {}
 
-	void update(bool * online, SDL_Event event);
+	void update(bool * online, SDL_Event event, int size, Client * client);
 	void render(SDL_Renderer * renderer);
 
-	void initialise();
+	void initialise(bool online, int size, int num);
 
 	
 	void checkRoundOver();
@@ -41,6 +44,7 @@ public:
 	Hand* h2;
 	std::vector<Player *> m_players;
 	std::vector<AI *> m_aiCharacters;
+	std::vector<Player *> m_networkCharacters;
 	Gun* pistol;
 	Gun* shotgun;
 	Gun* juicer;
@@ -62,7 +66,7 @@ public:
 	GrenadeSystem m_grenadeSys;
 	AnimationsSystem m_animationsSys;
 	RestartSystem m_restartSys;
-
+	NetworkSystem m_netSystem;
 	
 
 	SDL_Rect* m_camera;
@@ -84,4 +88,6 @@ public:
 	
 
 	TTF_Font* Font;
+
+	bool m_startGame = true;
 };

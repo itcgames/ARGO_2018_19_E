@@ -44,6 +44,8 @@ public:
 
 	std::vector<ParticleExample*> m_particleVector;
 
+	int m_playerNum;
+
 private:
 
 	bool m_left = false;
