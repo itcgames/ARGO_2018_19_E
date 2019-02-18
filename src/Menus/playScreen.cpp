@@ -52,7 +52,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 		m_collSys.addEntity((Entity*)m_players[0]);
 		
 		if (num < size) {
-			for (int i = num + 1; i < size; i++) {
+			for (int i = num + 1; i <= size; i++) {
 				m_networkCharacters.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i));
 			}
 		}
@@ -72,9 +72,9 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			m_netSystem.addEntity((Entity*)net);
 		}
 
-		for (int i = 0; i < (4 - size); i++) {
+		/*for (int i = 0; i < (4 - size); i++) {
 			m_aiCharacters.push_back(new AI(m_renderer, 500.0 + (100.0 * i), 100.0));
-		}
+		}*/
 
 	}
 	else {
