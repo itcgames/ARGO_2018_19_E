@@ -21,6 +21,8 @@
 #include "../MapLoader.h"
 #include "../Light.h"
 
+#include "../ObserverPattern/AudioObserver.h"
+
 #include "../Client/Client.h"
 
 #include <SDL_ttf.h>
@@ -36,6 +38,7 @@ public:
 
 	void initialise(bool online, int size, int num);
 
+	AudioObserver* m_audioObserver;
 	
 	void checkRoundOver();
 	void initialiseText(std::string message);

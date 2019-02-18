@@ -36,9 +36,13 @@
     <ClCompile Include="src\Systems\RenderSystem.cpp" />
     <ClCompile Include="src\Systems\RestartSystem.cpp" />
     <ClCompile Include="src\Systems\SoundSystem.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="src\ObserverPattern\AudioObserver.cpp" />
+=======
     <ClCompile Include="src\Systems\AnimationsSystem.cpp" />
     <ClCompile Include="src\Menus\playScreen.cpp" />
     <ClCompile Include="src\Systems\NetworkSystem.cpp" />
+>>>>>>> b0c4ad4111e398e995cc39c24281725f3e275a7c
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Factory.h" />
@@ -93,8 +97,14 @@
     <ClInclude Include="src\Systems\RestartSystem.h" />
     <ClInclude Include="src\Systems\SoundSystem.h" />
     <ClInclude Include="src\Client\Packet.h" />
+<<<<<<< HEAD
+    <ClInclude Include="src\ObserverPattern\Subject.h" />
+    <ClInclude Include="src\ObserverPattern\Observer.h" />
+    <ClInclude Include="src\ObserverPattern\AudioObserver.h" />
+=======
     <ClInclude Include="src\Systems\AnimationsSystem.h" />
     <ClInclude Include="src\Menus\playScreen.h" />
     <ClInclude Include="src\Systems\NetworkSystem.h" />
+>>>>>>> b0c4ad4111e398e995cc39c24281725f3e275a7c
   </ItemGroup>
 </Project>

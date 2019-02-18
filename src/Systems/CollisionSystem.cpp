@@ -274,7 +274,5 @@ void CollisionSystem::animateExplosion()
 
 void CollisionSystem::render()
 {
-
 	animateExplosion();
-
 }

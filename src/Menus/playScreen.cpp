@@ -10,6 +10,9 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	testLight->setPosition(c2v{ 400.0f, 0.0f });
 	testLight->setSize(c2v{ 3.0f, 3.0f });
 
+	m_audioObserver = new AudioObserver();
+	m_audioObserver->load();
+
 	
 	h1 = new Hand(renderer, 1);
 	h2 = new Hand(renderer, 2);
@@ -111,6 +114,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	m_ps.addEntity((Entity*)grenade);
 	m_ps.addEntity((Entity*)h1);
 	m_ps.addEntity((Entity*)h2);
+	m_ps.registerAudioObserver(m_audioObserver);
 
 
 	m_guns.addEntity((Entity*)pistol);

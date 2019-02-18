@@ -850,10 +850,12 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC,Contro
 							}
 
 							float shotgunRadAng = (ownerConC->getAngle() + 90) * 3.14159265359 / 180; // :)
-							//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
-							//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
+
+							notifyAudioObservers(AudioObserver::SFX::SHOTGUN_SHOOT);
+
 							tagC->setShotgunTipX(100 * (cos(shotgunRadAng)));
 							tagC->setShotgunTipY(103.6 * (sin(shotgunRadAng)));
+
 							for (int i = 0; i < 7; i++)
 							{
 						
@@ -868,6 +870,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC,Contro
 								float mag = c2Len(vector);
 								float unitX = -shotgunXOffset / mag;
 								float unitY = shotgunYOffset / mag;
+
 
 								if (sc->m_flipValue == SDL_FLIP_NONE)
 								{
@@ -890,16 +893,23 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC,Contro
 							{
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 							}
+
+							notifyAudioObservers(AudioObserver::SFX::PISTOL_SHOOT);
 							pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(ownerConC->getAngle() - 180), -tc->getXOffset(), tc->getYOffset(), 1000));  // :)
+
 
 
 						}
 						else if (tagC->getGunGot() == "juicer")
 						{
 							//tagC->setFiredBool(false);
+
+
+
 							tagC->setStartAnimating(true);
 
 							if (SDL_HapticRumblePlay(ownerConC->getHaptic(), 1, 300) != 0)
+
 							{
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 							}
@@ -923,6 +933,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC,Contro
 							float mag = c2Len(vector);
 							float unitX = -juicerXOffset / mag;
 							float unitY = juicerYOffset / mag;
+							notifyAudioObservers(AudioObserver::SFX::MINIGUN_SHOOT);
 							if (sc->m_flipValue == SDL_FLIP_NONE)
 							{
 								
@@ -944,6 +955,9 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC,Contro
 							{
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 							}
+
+							//notifyAudioObservers(AudioObserver::SFX::GRENADE_EXPLOSION);
+							
 						}
 					}
 				}
@@ -1124,5 +1138,21 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer,TagComponent * tc, 
 
 		tc->setStartAnimating(false);
 	}
+}
+
+void PhysicsSystem::notifyAudioObservers(AudioObserver::SFX sfx)
+{
+	if (m_audioObservers.size() > 0)
+	{
+		for (int i = 0; i < m_audioObservers.size(); i++)
+		{
+			m_audioObservers.at(i)->onNotify(sfx);
+		}
+	}
+}
+
+void PhysicsSystem::registerAudioObserver(AudioObserver* audioObserver)
+{
+	m_audioObservers.push_back(audioObserver);
 }
 
