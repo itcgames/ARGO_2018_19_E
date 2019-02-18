@@ -784,6 +784,10 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC) {
 								float mag = c2Len(vector);
 								float unitX = -shotgunXOffset / mag;
 								float unitY = shotgunYOffset / mag;
+
+								notifyAudioObservers(AudioObserver::SFX::SHOTGUN_SHOOT);
+								notifyAudioObservers(AudioObserver::SFX::SHOTGUN_RECHAMBER);
+
 								if (sc->m_flipValue == SDL_FLIP_NONE)
 								{
 									pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - shotgunTipX, pc->getY() + shotgunTipY + 70, -(angle - 90), unitX * 80, unitY * 80, 50));
@@ -804,6 +808,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC) {
 							{
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 							}
+							notifyAudioObservers(AudioObserver::SFX::PISTOL_SHOOT);
 							pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(angle - 90), -xOffset, yOffset, 1000));
 
 
@@ -812,7 +817,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer,TagComponent* tagC) {
 						{
 							//tagC->setFiredBool(false);
 							m_startAnimating = true;
-
+							notifyAudioObservers(AudioObserver::SFX::MINIGUN_SHOOT);
 							if (SDL_HapticRumblePlay(haptic, 1, 300) != 0)
 							{
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
@@ -1035,7 +1040,7 @@ void PhysicsSystem::notifyAudioObservers(AudioObserver::SFX sfx)
 {
 	if (m_audioObservers.size() > 0)
 	{
-		for (int i = 0; i < m_observers.size(); i++)
+		for (int i = 0; i < m_audioObservers.size(); i++)
 		{
 			m_audioObservers.at(i)->onNotify(sfx);
 		}
