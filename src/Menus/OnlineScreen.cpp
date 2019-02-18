@@ -37,7 +37,7 @@ OnlineScreen::~OnlineScreen() {}
 void OnlineScreen::update() {
 	if (!m_joined && !m_firstRunThrough) {
 		m_firstRunThrough = true;
-		m_client = new Client("149.153.106.155", 54000);
+		
 
 		if (m_client->run()) {
 			m_joined = true;
@@ -76,6 +76,7 @@ void OnlineScreen::update() {
 	bool BButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_B);
 	bool AButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_A);
 
+
 	if (BButton) {
 		m_joined = false;
 		m_pack.message = 3;
@@ -107,6 +108,13 @@ void OnlineScreen::update() {
 			m_client->sendMessage(m_pack);
 			*m_online = true;
 			*m_currentGameState = GameState::Game;
+			m_lobbySize = m_strings.size();
+		}
+		else if (m_client->m_startGame) {
+			m_joined = false;
+			*m_online = true;
+			*m_currentGameState = GameState::Game;
+			m_lobbySize = m_strings.size();
 		}
 	}
 	else {

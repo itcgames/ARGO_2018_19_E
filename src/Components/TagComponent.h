@@ -3,7 +3,6 @@
 
 #include "Component.h"
 #include <SDL.h>
-#include "../cute_math2d.h"
 #include <string.h>
 
 class TagComponent : public Component

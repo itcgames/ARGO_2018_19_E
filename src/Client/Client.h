@@ -32,6 +32,11 @@ public:
 
 	Packet p;
 
+	bool m_startGame = false;
+
+	int m_size = 0;
+
+	Packet * packet = new Packet();
 private:
 	
 };

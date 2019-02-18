@@ -212,6 +212,7 @@
     <ClCompile Include="src\Menus\MenuScreen.cpp" />
     <ClCompile Include="src\Menus\OnlineScreen.cpp" />
     <ClCompile Include="src\Menus\OptionScreen.cpp" />
+    <ClCompile Include="src\Menus\playScreen.cpp" />
     <ClCompile Include="src\Menus\SplashScreen.cpp" />
     <ClCompile Include="src\ParticleExample.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />
@@ -228,6 +229,7 @@
     <ClCompile Include="src\Systems\GrenadeSystem.cpp" />
     <ClCompile Include="src\Systems\GunSystem.cpp" />
     <ClCompile Include="src\Systems\HealthSystem.cpp" />
+    <ClCompile Include="src\Systems\NetworkSystem.cpp" />
     <ClCompile Include="src\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="src\Systems\RenderSystem.cpp" />
     <ClCompile Include="src\Systems\RestartSystem.cpp" />
@@ -254,7 +256,6 @@
     <ClInclude Include="src\Components\StateComponent.h" />
     <ClInclude Include="src\Components\TagComponent.h" />
     <ClInclude Include="src\cute_c2.h" />
-    <ClInclude Include="src\cute_math2d.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Factory.h" />
     <ClInclude Include="src\Game.h" />
@@ -266,6 +267,7 @@
     <ClInclude Include="src\Menus\MenuScreen.h" />
     <ClInclude Include="src\Menus\OnlineScreen.h" />
     <ClInclude Include="src\Menus\OptionScreen.h" />
+    <ClInclude Include="src\Menus\playScreen.h" />
     <ClInclude Include="src\Menus\SplashScreen.h" />
     <ClInclude Include="src\Gun.h" />
     <ClInclude Include="src\ParticleExample.h" />
@@ -284,6 +286,7 @@
     <ClInclude Include="src\Systems\GrenadeSystem.h" />
     <ClInclude Include="src\Systems\GunSystem.h" />
     <ClInclude Include="src\Systems\HealthSystem.h" />
+    <ClInclude Include="src\Systems\NetworkSystem.h" />
     <ClInclude Include="src\Systems\PhysicsSystem.h" />
     <ClInclude Include="src\Systems\RenderSystem.h" />
     <ClInclude Include="src\Systems\RestartSystem.h" />
