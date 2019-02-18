@@ -7,7 +7,8 @@ Player::Player()
 
 
 
-Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller)
+Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller, int index)
+
 {
 	//Set up Sprite component and add to entity component vector
 	oldY = 0;
@@ -41,12 +42,32 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 
 	this->addComponent(new HealthComponent(10));
 	TagComponent * tag = new TagComponent("Player");
-	this->addComponent(new TagComponent("Player"));
+	if (index == 0)
+	{
+		tag->setSubTag("Player1");
+	}
+	else if (index == 1)
+	{
+		tag->setSubTag("Player2");
+	}
+	else if (index == 2)
+	{
+		tag->setSubTag("Player3");
+	}
+	else if (index == 3)
+	{
+		tag->setSubTag("Player4");
+	}
+	else {
+		tag->setSubTag("AIPlayer");
+	}
+	this->addComponent(tag);
 
 	positionComp = new PositionComponent(x, y);
 	this->addComponent(positionComp);
 	controlComp = new ControlComponent();
 	controlComp->gGameController = controller;
+	controlComp->m_playerNum = index;
 	this->addComponent(controlComp);
 	this->addComponent(new CollisionComponent(x, y, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }
@@ -98,7 +119,7 @@ void Player::render(SDL_Renderer* renderer) {
 	else {
 		if (falling)
 		{
-			if (SDL_HapticRumblePlay(haptic, rumbleCount, 75) != 0)
+			if (SDL_HapticRumblePlay(controlComp->getHaptic(), rumbleCount, 75) != 0)
 			{
 				printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 			}

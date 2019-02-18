@@ -1,12 +1,10 @@
 #include "ControlSystem.h"
 
-SDL_Haptic * haptic = NULL;
-
 ControlSystem::ControlSystem() {
 	//init();
 }
 
-void ControlSystem::init(SDL_GameController* controller) {
+SDL_Haptic* ControlSystem::init(SDL_GameController* controller) {
 	//Initialization flag
 	bool success = true;
 
@@ -34,6 +32,7 @@ void ControlSystem::init(SDL_GameController* controller) {
 			printf("Warning: Unable to initialize rumble! SDL Error: %s\n", SDL_GetError());
 		}
 	}
+	return haptic;
 	
 }
 
@@ -47,12 +46,14 @@ void ControlSystem::update(SDL_Event e) {
 
 	for (Entity * entity : m_entities) {
 
+		double joystickAngle = 0;
+
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 
 		if (tc->getTag() == "Player") {
 			if (!cc->m_init) {
-				init(cc->gGameController);
+				cc->setHaptic(init(cc->gGameController));
 				cc->m_init = true;
 			}
 		}
@@ -108,21 +109,21 @@ void ControlSystem::setButtons(ControlComponent * cc) {
 	}
 
 	if (AButton) {
-		if (aIndex == 0)
+		if (cc->aIndex == 0)
 			cc->setJump(AButton);
 		
-		aIndex++;
+		cc->aIndex++;
 	}
 	else {
-		aIndex = 0;
+		cc->aIndex = 0;
 	}
 	if (XButton) {
-		if (xIndex == 0)
+		if (cc->xIndex == 0)
 			cc->setThrowWeapon(true);
-		xIndex++;
+		cc->xIndex++;
 	}
 	else {
-		xIndex = 0;
+		cc->xIndex = 0;
 	}
 }
 

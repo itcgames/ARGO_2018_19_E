@@ -7,12 +7,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ARGO_Team_E", "ARGO_Team_E.
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		ddd|x64 = ddd|x64
+		ddd|x86 = ddd|x86
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9DE0A50F-46BF-44BC-8D51-2E9C98C169DE}.ddd|x64.ActiveCfg = ddd|x64
+		{9DE0A50F-46BF-44BC-8D51-2E9C98C169DE}.ddd|x64.Build.0 = ddd|x64
+		{9DE0A50F-46BF-44BC-8D51-2E9C98C169DE}.ddd|x86.ActiveCfg = ddd|Win32
+		{9DE0A50F-46BF-44BC-8D51-2E9C98C169DE}.ddd|x86.Build.0 = ddd|Win32
 		{9DE0A50F-46BF-44BC-8D51-2E9C98C169DE}.Debug|x64.ActiveCfg = Debug|x64
 		{9DE0A50F-46BF-44BC-8D51-2E9C98C169DE}.Debug|x64.Build.0 = Debug|x64
 		{9DE0A50F-46BF-44BC-8D51-2E9C98C169DE}.Debug|x86.ActiveCfg = Debug|Win32
