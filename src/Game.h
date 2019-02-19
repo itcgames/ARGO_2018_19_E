@@ -3,12 +3,29 @@
 
 #include <iostream>
 
+#include <SDL_mixer.h>
+#include "./Systems/HealthSystem.h"
+#include "./Systems/ControlSystem.h"
+#include "./Systems/RenderSystem.h"
+#include "./Systems/AISystem.h"
+#include "./Systems/PhysicsSystem.h"
+#include "./Systems/GunSystem.h"
+#include "./Systems/CollisionSystem.h"
+#include "./Systems/GrenadeSystem.h"
+#include "./Systems/RestartSystem.h"
+
+
 #include "Menus/SplashScreen.h"
 #include "Menus/CreditScreen.h"
 #include "Menus/MenuScreen.h"
 #include "Menus/OptionScreen.h"
 #include "Menus/OnlineScreen.h"
+
+#include "Components/SpriteComponent.h"
+#include "ObserverPattern/AudioObserver.h"
+
 #include "Menus/playScreen.h"
+
 
 
 
@@ -55,8 +72,31 @@ private:
 
 	SDL_Window *m_window;
 	SDL_Renderer *m_renderer;
-	
+	SDL_Event event;
 	bool exit;
+
+	MapLoader* m_map;
+
+	Hand* h1;
+	Hand* h2;
+	std::vector<Player *> m_players;
+	std::vector<AI *> m_aiCharacters;
+	Gun* pistol;
+	Gun* shotgun;
+	Gun* juicer;
+	Gun* grenade;
+	std::vector<Entity*> m_ents;
+	Light* testLight;
+	AudioObserver* m_audioObserver;
+
+	SpriteComponent* m_backgroundSprite;
+
+	HealthSystem m_hs;
+	ControlSystem m_cs;
+	RenderSystem m_rs;
+	GunSystem m_guns;
+
+	
 	
 	SplashScreen * m_splash;
 	MenuScreen * m_menu;
@@ -82,7 +122,6 @@ private:
 	SDL_Rect renderQuad;
 	SDL_Color textColor = { 188, 110, 121, 255 };
 	SDL_Surface * textSurface = new SDL_Surface;
-	SDL_Event event;
 };
 
 

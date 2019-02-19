@@ -6,11 +6,13 @@
 #include "../Entity.h"
 #include "../cute_c2.h"
 #include "ControlSystem.h"
+#include "../ObserverPattern/Subject.h"
+#include "../ObserverPattern/AudioObserver.h"
 
 #include "../ParticleExample.h"
 
 
-class PhysicsSystem
+class PhysicsSystem : Subject
 {
 public:
 	std::vector<Entity *> m_entities;
@@ -77,7 +79,18 @@ public:
 
 	
 
+
+
+	std::vector<AudioObserver*> m_audioObservers;
+	void registerAudioObserver(AudioObserver* observer);
+	void removeAudioObserver(AudioObserver* observer);
+	//Function to notify audio observers to play a sound
+	void notifyAudioObservers(AudioObserver::SFX sfx);
+
+	std::string gunGot;
+
 	std::string rectCollision(c2AABB A, c2AABB B);
+
 
 	ParticleExample * p; 
 	ParticleExample * flash;

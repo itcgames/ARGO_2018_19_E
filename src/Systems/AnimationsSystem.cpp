@@ -7,7 +7,7 @@ void AnimationsSystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
-void AnimationsSystem::render(SDL_Renderer * renderer) {
+void AnimationsSystem::update() {
 	
 
 	for (Entity * entity : m_entities) {
@@ -21,32 +21,46 @@ void AnimationsSystem::render(SDL_Renderer * renderer) {
 	
 		if (tc->getTag() == "Player")
 		{
-			if (pc->getX() != lastPos.x && pc->getY() == lastPos.y)
+			//std::cout << cc->m_particleVector.size() << std::endl;
+			if (pc->getX() != cc->lastPos.x && pc->getY() == cc->lastPos.y && pc->getVelX() > 1.0f ||
+				pc->getX() != cc->lastPos.x && pc->getY() == cc->lastPos.y && pc->getVelX() < -1.0f)
+				
 			{
-				m_count++;
-				if (m_count > 10) {
+				cc->m_count++;
+				if (cc->m_count > 15) {
 					auto particle = new ParticleExample();
-					particle->setRenderer(renderer);
-					particle->setStyle(ParticleExample::SMOKE);
-					particle->setPosition(pc->getX(), pc->getY() + 70);
+					particle->setRenderer(m_renderer);
+					particle->setStyle(ParticleExample::DIRT);
+					particle->setPosition(pc->getX(), pc->getY() + 90);
 					cc->m_particleVector.push_back(particle);
 					
-					m_count = 0;
+					cc->m_count = 0;
 					
-				}
-				
+				}	
 			}
-
-			lastPos = { pc->getX(), pc->getY() };
-
-			
-			animateExplosion(cc->m_particleVector);
+			cc->lastPos = { pc->getX(), pc->getY() };
 		}
 		
-		if (tc->getTag() == "AI_TAG")
-		{
+		//if (tc->getTag() == "AI_TAG")
+		//{
+		//	if (pc->getX() != ac->lastPos.x && pc->getY() == ac->lastPos.y && pc->getVelX() > 1.0f ||
+		//		pc->getX() != ac->lastPos.x && pc->getY() == ac->lastPos.y && pc->getVelX() < -1.0f)
 
-		}
+		//	{
+		//		ac->m_count++;
+		//		if (ac->m_count > 15) {
+		//			auto particle = new ParticleExample();
+		//			particle->setRenderer(m_renderer);
+		//			particle->setStyle(ParticleExample::DIRT);
+		//			particle->setPosition(pc->getX(), pc->getY() + 90);
+		//			ac->m_particleVector.push_back(particle);
+
+		//			ac->m_count = 0;
+		//			//std::cout << ac->m_particleVector.size() << std::endl;
+		//		}
+		//	}
+		//	ac->lastPos = { pc->getX(), pc->getY() };
+		//}
 	}
 }
 
@@ -55,6 +69,28 @@ void AnimationsSystem::setRenderer(SDL_Renderer * renderer)
 	m_renderer = renderer;
 }
 
+void AnimationsSystem::render()
+{
+	for (Entity * entity : m_entities) {
+
+		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
+		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
+		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
+
+		if (tc->getTag() == "Player")
+		{
+			animateExplosion(cc->m_particleVector);
+		}
+
+
+		//std::cout << m_entities.size() << std::endl;
+	//	/*if (tc->getTag() == "AI_TAG")
+	//	{
+	//		animateExplosion(ac->m_particleVector);
+	//	}*/
+	}
+	
+}
 void AnimationsSystem::animateExplosion(std::vector<ParticleExample*> vec)
 { 
 	for (int i = 0; i < vec.size(); ++i)
@@ -74,15 +110,10 @@ void AnimationsSystem::animateExplosion(std::vector<ParticleExample*> vec)
 		vec[i]->update();
 		vec[i]->draw();
 
-		if (vec[i]->count > 5)
+		if (vec[i]->count > 40)
 		{
-			vec.erase(vec.begin() + i);		
-		}
-
-
-
-		
-		
+			vec.erase(vec.begin() + i);
+		}	
 	}		
 }
 

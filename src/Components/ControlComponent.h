@@ -44,6 +44,10 @@ public:
 	int aIndex = 0;
 	int xIndex = 0;
 
+
+	int m_count = 0;
+	c2v lastPos = { 0,0 };
+
 	bool throwGun = false;
 
 	bool getThrowGun() { return throwGun; }

@@ -1,7 +1,7 @@
 #include "playScreen.h"
 
 PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
-	
+
 	Font = font;
 
 	m_renderer = renderer;
@@ -10,7 +10,8 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	testLight->setPosition(c2v{ 400.0f, 0.0f });
 	testLight->setSize(c2v{ 3.0f, 3.0f });
 
-	
+	m_audioObserver = new AudioObserver();
+	m_audioObserver->load();
 
 
 	m_backgroundSprite = new SpriteComponent(0, 0, 1920, 1080);
@@ -42,9 +43,12 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	
 	if (online) {
 		m_players.push_back(new Player(m_renderer, 600 + (100 * num), 200, SDL_GameControllerOpen(0), num));
+
 		m_leftHands.push_back(new Hand(m_renderer, 1, num));
 		m_rightHands.push_back(new Hand(m_renderer, 2, num));
 			
+
+		m_animationsSys.addEntity((Entity*)m_players[0]);
 		m_hs.addEntity((Entity*)m_players[0]);
 		m_cs.addEntity((Entity*)m_players[0]);
 		m_rs.addEntity((Entity*)m_players[0]);
@@ -80,7 +84,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 				m_rightHands.push_back(new Hand(m_renderer, 2, i));
 			}
 		}
-		
+
 
 		for (Player * net : m_networkCharacters) {
 			m_hs.addEntity((Entity*)net);
@@ -89,10 +93,11 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			m_restartSys.addEntity((Entity*)net);
 			m_collSys.addEntity((Entity*)net);
 			m_netSystem.addEntity((Entity*)net);
+			m_animationsSys.addEntity((Entity*)net);
 		}
 
 		/*for (int i = 0; i < (4 - size); i++) {
-			m_aiCharacters.push_back(new AI(m_renderer, 500.0 + (100.0 * i), 100.0));
+		m_aiCharacters.push_back(new AI(m_renderer, 500.0 + (100.0 * i), 100.0));
 		}*/
 
 	}
@@ -143,7 +148,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 		m_cs.addEntity((Entity*)net);
 
 	}
-	
+
 	m_cs.addEntity((Entity*)pistol);
 	m_cs.addEntity((Entity*)shotgun);
 	m_cs.addEntity((Entity*)juicer);
@@ -160,6 +165,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	m_ps.addEntity((Entity*)juicer);
 	m_ps.addEntity((Entity*)grenade);
 
+	m_ps.registerAudioObserver(m_audioObserver);
 
 
 	m_guns.addEntity((Entity*)pistol);
@@ -176,7 +182,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 
 	m_grenadeSys.addEntity((Entity*)grenade);
 
-	
+
 
 	for (AI * ai : m_aiCharacters) {
 
@@ -200,12 +206,11 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	m_animationsSys.setRenderer(m_renderer);
 }
 
-void PlayScreen::update(bool * online, SDL_Event event,int size, Client * client) {
+void PlayScreen::update(bool * online, SDL_Event event, int size, Client * client) {
 
 	if (m_startGame) {
 
 		initialise(*online, size, client->number);
-		
 		m_startGame = false;
 	}
 
@@ -219,9 +224,10 @@ void PlayScreen::update(bool * online, SDL_Event event,int size, Client * client
 	m_ais.update();
 	m_ais.receive(m_ents);
 	m_hs.update();
+	m_animationsSys.update();
 	checkRoundOver();
 	if (!(*online)) {
-		
+
 	}
 	else {
 		if (client->packet->message == 5) {
@@ -254,7 +260,7 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 	}
 	m_rs.render(m_renderer);
 	m_ps.bulletRender(m_renderer);
-	//m_animationsSys.render(m_renderer);
+	m_animationsSys.render();
 	testLight->render(m_renderer);
 	m_grenadeSys.render();
 	m_collSys.render();
