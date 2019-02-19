@@ -218,6 +218,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 				val = rectCollision(bullets->at(j)->collider, tiles.at(i)->collider);
 				if (val != "none") {
 
+
 					auto particle = new ParticleExample();
 
 					particle->setRenderer(m_renderer);
@@ -269,6 +270,5 @@ void CollisionSystem::animateExplosion()
 
 void CollisionSystem::render()
 {
-
 	animateExplosion();
 }

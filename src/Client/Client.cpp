@@ -10,8 +10,7 @@ Client::~Client() {
 }
 
 void Client::receive() {
-	
-	Packet * packet = new Packet();
+	packet = new Packet();
 	m_serverSize = sizeof(hint);
 	int bytesReceived = recvfrom(sock, (char*)packet, sizeof(struct Packet) + 1, 0, (sockaddr*)&hint, &m_serverSize);
 	if (packet->playerNum > 0)
@@ -28,7 +27,12 @@ void Client::receive() {
 		if (packet->message == 3) {
 			m_leavers.push_back(packet->playerNum);
 		}
-		
+		if (packet->message == 4) {
+			m_startGame = true;
+		}
+		if (packet->message == 5) {
+			
+		}
 	}
 }
 

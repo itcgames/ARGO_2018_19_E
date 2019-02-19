@@ -1,7 +1,7 @@
 #include "playScreen.h"
 
 PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
-	
+
 	Font = font;
 
 	m_renderer = renderer;
@@ -10,15 +10,12 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	testLight->setPosition(c2v{ 400.0f, 0.0f });
 	testLight->setSize(c2v{ 3.0f, 3.0f });
 
-	for (int i = 0; i < SDL_NumJoysticks(); i++) {
-		m_players.push_back(new Player(renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i)));
-	}
+	m_audioObserver = new AudioObserver();
+	m_audioObserver->load();
+
+
 	h1 = new Hand(renderer, 1);
 	h2 = new Hand(renderer, 2);
-
-	for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) {
-		m_aiCharacters.push_back(new AI(renderer, 500.0 + (100.0 * i), 100.0));
-	}
 
 
 	m_backgroundSprite = new SpriteComponent(0, 0, 1920, 1080);
@@ -28,7 +25,7 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 
 	m_map = new MapLoader();
 
-	m_map->load("level3.tmx", renderer);
+	m_map->load("testlevel.tmx", renderer);
 
 	pistol = new Gun(renderer, 1, 1500, 100);
 	shotgun = new Gun(renderer, 2, 1000, 100);
@@ -38,22 +35,63 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
 	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
 
-	initialise();
-
 	m_ents.push_back((Entity*)pistol);
 	m_ents.push_back((Entity*)shotgun);
 	m_ents.push_back((Entity*)grenade);
 	m_ents.push_back((Entity*)juicer);
 
-
-	m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getWidth(), m_map->getHeight());
-	m_ps.setRenderer(renderer);
-	m_grenadeSys.setRenderer(renderer);
-	m_collSys.setRenderer(renderer);
-	m_animationsSys.setRenderer(renderer);
 }
 
-void PlayScreen::initialise() {
+void PlayScreen::initialise(bool online, int size, int num) {
+
+	if (online) {
+		m_players.push_back(new Player(m_renderer, 600 + (100 * num), 200, SDL_GameControllerOpen(0), num));
+		m_animationsSys.addEntity((Entity*)m_players[0]);
+		m_hs.addEntity((Entity*)m_players[0]);
+		m_cs.addEntity((Entity*)m_players[0]);
+		m_rs.addEntity((Entity*)m_players[0]);
+		m_ps.addEntity((Entity*)m_players[0]);
+		m_restartSys.addEntity((Entity*)m_players[0]);
+		m_collSys.addEntity((Entity*)m_players[0]);
+
+		if (num < size) {
+			for (int i = num + 1; i <= size; i++) {
+				m_networkCharacters.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i));
+			}
+		}
+		if (num > 1) {
+			for (int i = num - 1; i > 0; i--) {
+				m_networkCharacters.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i));
+			}
+		}
+
+
+		for (Player * net : m_networkCharacters) {
+			m_hs.addEntity((Entity*)net);
+			m_rs.addEntity((Entity*)net);
+			m_ps.addEntity((Entity*)net);
+			m_restartSys.addEntity((Entity*)net);
+			m_collSys.addEntity((Entity*)net);
+			m_netSystem.addEntity((Entity*)net);
+			m_animationsSys.addEntity((Entity*)net);
+		}
+
+		/*for (int i = 0; i < (4 - size); i++) {
+		m_aiCharacters.push_back(new AI(m_renderer, 500.0 + (100.0 * i), 100.0));
+		}*/
+
+	}
+	else {
+		for (int i = 0; i < SDL_NumJoysticks(); i++) {
+			m_players.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i));
+		}
+
+		for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) {
+			m_aiCharacters.push_back(new AI(m_renderer, 500.0 + (100.0 * i), 100.0));
+		}
+
+	}
+
 	m_cs.addEntity((Entity*)pistol);
 	m_cs.addEntity((Entity*)shotgun);
 	m_cs.addEntity((Entity*)juicer);
@@ -77,6 +115,7 @@ void PlayScreen::initialise() {
 	m_ps.addEntity((Entity*)grenade);
 	m_ps.addEntity((Entity*)h1);
 	m_ps.addEntity((Entity*)h2);
+	m_ps.registerAudioObserver(m_audioObserver);
 
 
 	m_guns.addEntity((Entity*)pistol);
@@ -93,16 +132,7 @@ void PlayScreen::initialise() {
 
 	m_grenadeSys.addEntity((Entity*)grenade);
 
-	for (Player * p : m_players) {
 
-		m_hs.addEntity((Entity*)p);
-		m_cs.addEntity((Entity*)p);
-		m_rs.addEntity((Entity*)p);
-		m_animationsSys.addEntity((Entity*)p);
-		m_ps.addEntity((Entity*)p);
-		m_restartSys.addEntity((Entity*)p);
-		m_collSys.addEntity((Entity*)p);
-	}
 
 	for (AI * ai : m_aiCharacters) {
 
@@ -120,28 +150,55 @@ void PlayScreen::initialise() {
 	m_restartSys.addEntity((Entity*)grenade);
 	m_restartSys.addEntity((Entity*)h1);
 	m_restartSys.addEntity((Entity*)h2);
+
+	m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getWidth(), m_map->getHeight());
+	m_ps.setRenderer(m_renderer);
+	m_grenadeSys.setRenderer(m_renderer);
+	m_collSys.setRenderer(m_renderer);
+	m_animationsSys.setRenderer(m_renderer);
 }
 
-void PlayScreen::update(bool * online, SDL_Event event) {
+void PlayScreen::update(bool * online, SDL_Event event, int size, Client * client) {
+
+	if (m_startGame) {
+
+		initialise(online, size, client->number);
+
+		m_startGame = false;
+	}
 
 	m_cs.update(event);
 	m_collSys.update(m_map->getTiles());
-	m_ps.update(/*m_backgroundSprite*/);
+	m_ps.update(m_renderer);
 	m_guns.update();
-
 	SDL_RenderSetScale(m_renderer, 0.69, 0.5);
 	m_ps.bulletUpdate(m_renderer);
+	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
+	m_ais.update();
+	m_ais.receive(m_ents);
+	m_hs.update();
 	m_animationsSys.update();
 	checkRoundOver();
 	if (!(*online)) {
-		m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
-		m_ais.update();
-		m_ais.receive(m_ents);
 
-		m_hs.update();
 	}
 	else {
-
+		if (client->packet->message == 5) {
+			m_netSystem.update(client->packet);
+		}
+		Entity * ent = (Entity*)m_players[0];
+		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
+		Packet p;
+		p.message = 5;
+		p.playerNum = cc->m_playerNum;
+		p.left = cc->getLeft();
+		p.right = cc->getRight();
+		p.jump = cc->getJump();
+		p.fire = cc->getFire();
+		p.gunAngle = cc->getAngle();
+		p.alive = cc->getAlive();
+		p.throwWeapon = cc->getThrowWeapon();
+		client->sendMessage(p);
 	}
 }
 
@@ -156,9 +213,9 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 	}
 	m_rs.render(m_renderer);
 	m_ps.bulletRender(m_renderer);
-	//m_animationsSys.render(m_renderer);
-	testLight->render(m_renderer);
 	m_animationsSys.render();
+	testLight->render(m_renderer);
+
 	m_grenadeSys.render();
 	m_collSys.render();
 	//m_emitter->update();

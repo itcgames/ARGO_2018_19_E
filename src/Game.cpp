@@ -15,19 +15,26 @@ Game::Game()
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
 	
 	//Initialize SDL
-	if (SDL_Init( SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC) < 0)
+	if (SDL_Init( SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC) | SDL_INIT_AUDIO < 0)
 	{
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 	}
-	
+
+
+	//Initialize SDL_mixer 
+	if(Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, NULL, 2048 ) < 0) 
+	{ 
+		printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() ); 
+	}
+
 
 	if (IMG_Init(imgFlags) != imgFlags)
 	{
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-
 	*m_currentGameState = (GameState::Menu);
+
 
 
 	if (TTF_Init() == -1) {
@@ -40,12 +47,12 @@ Game::Game()
 		// handle error
 	}
 
-
 	TTF_Font* menuFont = TTF_OpenFont("arial.ttf", 30);
 	if (!menuFont) {
 		printf("TTF_OpenFont: %s\n", TTF_GetError());
 		// handle error
 	}
+	m_client = new Client("149.153.106.155", 54000);
 	setUpController();
 	m_playScreen = new PlayScreen(m_renderer, Font);
 	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
@@ -55,6 +62,13 @@ Game::Game()
 	m_credits = new CreditScreen();
 
 	m_screenSize = { 0,0,1200,700 };	
+
+
+	
+	m_ents.push_back((Entity*)pistol);
+	m_ents.push_back((Entity*)shotgun);
+
+
 }
 
 Game::~Game()
@@ -90,6 +104,7 @@ void Game::run()
 
 void Game::update() {
 	SDL_PollEvent(&event);
+	m_client->receive();
 	switch (*m_currentGameState)
 	{
 	case GameState::None:
@@ -106,7 +121,7 @@ void Game::update() {
 	case GameState::Options:
 		break;
 	case GameState::Game:
-		m_playScreen->update(m_online, event);
+		m_playScreen->update(m_online, event, m_onlineScreen->m_lobbySize, m_client);
 		break;
 	case GameState::Credits:
 		break;
@@ -166,28 +181,6 @@ void Game::initialiseText(std::string message) {
 	SDL_FreeSurface(textSurface);
 	renderQuad = { 150, 200, text_width, text_height };
 }
-
-//SDL_Rect* Game::getCamera()
-//{
-//	return m_camera;
-//}
-//
-//c2v* Game::getCameraCentre()
-//{
-//	return m_cameraCentre;
-//}
-//
-//void Game::setCameraPosition(int x, int y)
-//{
-//	m_camera->x = x;
-//	m_camera->y = y;
-//}
-//
-//void Game::setCameraCentre(float x, float y)
-//{
-//	m_cameraCentre->x = x;
-//	m_cameraCentre->y = y;
-//}
 
 void Game::setUpController() {
 	gGameController = SDL_GameControllerOpen(0);

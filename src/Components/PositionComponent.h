@@ -44,6 +44,30 @@ public:
 	float startY;
 
 	int jumpNum = 0;
+
+	int firedCount = 0;
+	void setFiredCount(int value) { firedCount = value; }
+	int getFiredCount() { return firedCount; }
+
+	int pistolCount = 0;
+	void setPistolCount(int value) { pistolCount = value; }
+	int getPistolCount() { return pistolCount; }
+
+	int shotgunCount = 0;
+	void setShotgunCount(int value) { shotgunCount = value; }
+	int getShotgunCount() { return shotgunCount; }
+
+	int juicerCount = 0;
+	void setJuicerCount(int value) { juicerCount = value; }
+	int getJuicerCount() { return juicerCount; }
+
+	int shotgunRotationCount = 0;
+	void setShotgunRotationCount(int value) { shotgunRotationCount = value; }
+	int getShotgunRotationCount() { return shotgunRotationCount; }
+
+	int shotgunPumpCount = 0;
+	void setShotgunPumpCount(int value) { shotgunPumpCount = value; }
+	int getShotgunPumpCount() { return shotgunPumpCount; }
 	
 private:
 	float x;

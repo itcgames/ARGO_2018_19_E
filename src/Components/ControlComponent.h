@@ -36,14 +36,27 @@ public:
 
 	SDL_GameController* gGameController = NULL;
 
+	SDL_Haptic * haptic;
+	void setHaptic(SDL_Haptic * value) { haptic = value; }
+	SDL_Haptic * getHaptic() { return haptic; }
 	bool m_init = false;
 
 	int aIndex = 0;
 	int xIndex = 0;
 
+
 	int m_count = 0;
 	c2v lastPos = { 0,0 };
+
+	bool throwGun = false;
+
+	bool getThrowGun() { return throwGun; }
+	void setThrowGun(bool value) { throwGun = value; }
+
+
 	std::vector<ParticleExample*> m_particleVector;
+
+	int m_playerNum;
 
 private:
 
