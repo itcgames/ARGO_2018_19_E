@@ -26,7 +26,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Game);
+	*m_currentGameState = (GameState::Menu);
 
 
 

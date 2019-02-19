@@ -5,7 +5,7 @@ Hand::Hand()
 }
 
 
-Hand::Hand(SDL_Renderer* renderer,int handValue)
+Hand::Hand(SDL_Renderer* renderer,int handValue,int index)
 {
 	//Set up Sprite component and add to entity component vector
 
@@ -19,10 +19,29 @@ Hand::Hand(SDL_Renderer* renderer,int handValue)
 	m_tagComponent = new TagComponent("Hand");
 	if (handValue == 1)
 	{
-		m_tagComponent->setSubTag("right");
+		m_tagComponent->setSubTag2("right");
 	}
 	else if (handValue == 2) {
-		m_tagComponent->setSubTag("left");
+		m_tagComponent->setSubTag2("left");
+	}
+	if (index == 0)
+	{
+		m_tagComponent->setSubTag("Player1");
+	}
+	else if (index == 1)
+	{
+		m_tagComponent->setSubTag("Player2");
+	}
+	else if (index == 2)
+	{
+		m_tagComponent->setSubTag("Player3");
+	}
+	else if (index == 3)
+	{
+		m_tagComponent->setSubTag("Player4");
+	}
+	else {
+		m_tagComponent->setSubTag("AIPlayer");
 	}
 	this->addComponent(m_tagComponent);
 	this->addComponent(new PositionComponent(300, 500));

@@ -12,8 +12,10 @@ public:
 
 	std::string getTag() { return tag; }
 	std::string getSubTag() { return subTag; }
+	std::string getSubTag2() { return subTag2; }
 
 	void setSubTag(std::string subName){subTag = subName; }
+	void setSubTag2(std::string subName) { subTag2 = subName; }
 
 	std::string m_tag = "TAG";
 
@@ -68,8 +70,13 @@ public:
 	void setStartAnimating(bool value) { startAnimating = value; }
 	bool getStartAnimating() { return startAnimating; }
 
+	c2v juicerExplosionPos;
+	void setJuicerExplosionPos(c2v value) { juicerExplosionPos = value; };
+	c2v getJuicerExplosionPos() { return juicerExplosionPos; };
+
 private:
 	std::string subTag = "None";
+	std::string subTag2 = "None";
 	std::string tag;
 };
 #endif // !TAGCOMPONENT_H
