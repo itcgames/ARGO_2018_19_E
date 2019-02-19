@@ -98,7 +98,7 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 				if (layer->getName() == "PlayerSpawnPoints")
 				{
 					c2v position = c2v{ object.getPosition().x, object.getPosition().y };
-					m_spawnPointVector.push_back(std::make_pair(false, position));
+					m_spawnPointVector.push_back(new std::pair<bool, c2v>(false, position));
 				}
 				
 			}
