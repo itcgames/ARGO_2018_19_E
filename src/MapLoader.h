@@ -33,6 +33,7 @@ public:
 
 	std::vector<std::pair<c2v, std::string>> getWalkPoints() { return m_walkPointVector; }
 	std::vector<std::pair<c2v, std::string>> getJumpPoints() { return m_jumpPointVector; }
+	std::vector <std::pair<bool, c2v>> getSpawnPoints() { return m_spawnPointVector; }
 
 	int getWidth();
 	int getHeight();
@@ -49,6 +50,7 @@ private:
 
 	std::vector<std::pair<c2v, std::string>> m_jumpPointVector;
 	std::vector<std::pair<c2v, std::string>>  m_walkPointVector;
+	std::vector<std::pair<bool, c2v>> m_spawnPointVector;
 
 	std::vector<std::shared_ptr<Tile>> m_tiles;
 	
