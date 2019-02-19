@@ -275,7 +275,7 @@ void PhysicsSystem::setPlayerGunGot(std::string gun, TagComponent * tagC)
 				tagC->setGotGunBool(false);
 			}
 		}
-		if (tc->getTag() == "Hand")
+		if (tc->getTag() == "Hand" && tc->getSubTag() == tagC->getSubTag())
 		{
 			tc->setGunGot(gun);
 			tc->setGotGunBool(true);
