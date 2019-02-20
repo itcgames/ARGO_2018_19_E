@@ -681,7 +681,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 
 
 		// check gun player collide
-		if (tc->getTag() == "Player")
+		if (tc->getTag() == "Player" && cc->getAlive() == true)
 		{
 			handOwnerPosC = (PositionComponent*)entity->getCompByType("POSITION");
 			setHands(handOwnerPosC, ownerConC,ownerTagC);
@@ -700,6 +700,10 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 			movePlayer(cc, pc, tc);
 			setPosition(pc);  // Set the position after movement
 			pc->setVelY(pc->getVelY() + Friction.y);  // Friction
+		}
+		else if (tc->getTag() == "Player" && cc->getAlive() == false)
+		{
+			throwGunFun(cc);
 		}
 		if (tc->getTag() == "Gun")
 		{
@@ -873,7 +877,7 @@ void PhysicsSystem::updateShooting(SDL_Renderer* renderer, ControlComponent* own
 				}
 				if (tc->getGunGot() == "shotgun")
 				{
-					if (pc->getFiredCount() < 60)
+					if (pc->getFiredCount() < 120)
 					{
 						pc->setFiredCount(pc->getFiredCount() + 1);
 						pc->setShotgunCount(pc->getShotgunCount() + 1);

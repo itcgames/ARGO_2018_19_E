@@ -131,7 +131,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			{
 				if (m_map->getSpawnPoints().at(j)->first == false)
 				{
-					m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, SDL_GameControllerOpen(0), num));
+					m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, SDL_GameControllerOpen(i), i));
 					m_leftHands.push_back(new Hand(m_renderer, 1, i));
 					m_rightHands.push_back(new Hand(m_renderer, 2, i));
 					m_map->getSpawnPoints().at(j)->first = true;
