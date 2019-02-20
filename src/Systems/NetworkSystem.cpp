@@ -10,7 +10,9 @@ void NetworkSystem::addEntity(Entity * e) {
 
 void NetworkSystem::update(Packet * p) {
 	for (Entity * ent : m_entities) {
+
 		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
+
 		if (p->playerNum == cc->m_playerNum) {
 			cc->setLeft(p->left);
 			cc->setRight(p->right);

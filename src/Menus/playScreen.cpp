@@ -96,9 +96,9 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			m_animationsSys.addEntity((Entity*)net);
 		}
 
-		/*for (int i = 0; i < (4 - size); i++) {
+		for (int i = 0; i < (4 - size); i++) {
 		m_aiCharacters.push_back(new AI(m_renderer, 500.0 + (100.0 * i), 100.0));
-		}*/
+		}
 
 	}
 	else {
@@ -224,7 +224,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_ais.update();
 	m_ais.receive(m_ents);
 	m_hs.update();
-	m_animationsSys.update();
+	//m_animationsSys.update();
 	checkRoundOver();
 	if (!(*online)) {
 
@@ -245,7 +245,23 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		p.gunAngle = cc->getAngle();
 		p.alive = cc->getAlive();
 		p.throwWeapon = cc->getThrowWeapon();
-		client->sendMessage(p);
+
+		if (p.message != lastPacket.message || p.playerNum != lastPacket.message ||
+			p.left != lastPacket.left || p.right != lastPacket.right || p.jump != lastPacket.jump ||
+			p.fire != lastPacket.fire || p.gunAngle != lastPacket.gunAngle || p.alive != lastPacket.alive ||
+			p.throwWeapon != lastPacket.throwWeapon) {
+			client->sendMessage(p);
+		}	
+
+		lastPacket.message = p.message;
+		lastPacket.playerNum = p.playerNum;
+		lastPacket.left = p.left;
+		lastPacket.right = p.right;
+		lastPacket.jump = p.jump;
+		lastPacket.fire = p.fire;
+		lastPacket.gunAngle = p.gunAngle;
+		lastPacket.alive = p.alive;
+		lastPacket.throwWeapon = p.throwWeapon;
 	}
 }
 
@@ -260,7 +276,7 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 	}
 	m_rs.render(m_renderer);
 	m_ps.bulletRender(m_renderer);
-	m_animationsSys.render();
+	//m_animationsSys.render();
 	testLight->render(m_renderer);
 	m_grenadeSys.render();
 	m_collSys.render();

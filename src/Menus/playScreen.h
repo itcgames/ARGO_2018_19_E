@@ -93,4 +93,6 @@ public:
 	TTF_Font* Font;
 
 	bool m_startGame = true;
+
+	Packet lastPacket;
 };
