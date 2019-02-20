@@ -95,4 +95,6 @@ public:
 	bool m_startGame = true;
 
 	Packet lastPacket;
+
+	bool* m_online = false;
 };
