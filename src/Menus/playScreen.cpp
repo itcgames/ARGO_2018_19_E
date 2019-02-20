@@ -230,8 +230,16 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	}
 	else {
-		if (client->packet->message == 5) {
-			m_netSystem.update(client->packet);
+		for (Entity * ent : m_netSystem.m_entities) {
+			
+			if (client->packet->message == 5) {
+				m_netSystem.update(client->packet);
+
+				client->receive();
+
+			}
+
+			
 		}
 		Entity * ent = (Entity*)m_players[0];
 		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
