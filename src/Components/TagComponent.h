@@ -70,6 +70,14 @@ public:
 	void setStartAnimating(bool value) { startAnimating = value; }
 	bool getStartAnimating() { return startAnimating; }
 
+	float previousAngle = 0;
+	void setPreviousAngle(float value) { previousAngle = value; }
+	float getPreviousAngle() { return previousAngle; }
+
+	float angle = 0;
+	void setAngle(float value) { angle = value; };
+	float getAngle() { return angle; };
+
 	c2v juicerExplosionPos;
 	void setJuicerExplosionPos(c2v value) { juicerExplosionPos = value; };
 	c2v getJuicerExplosionPos() { return juicerExplosionPos; };
