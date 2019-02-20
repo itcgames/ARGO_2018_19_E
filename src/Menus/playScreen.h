@@ -52,7 +52,8 @@ public:
 	Gun* shotgun;
 	Gun* juicer;
 	Gun* grenade;
-	std::vector<Entity*> m_ents;
+	std::vector<Entity*> m_Gunents;
+	std::vector<Entity*> m_playerents;
 	Light* testLight;
 
 	SpriteComponent * m_backgroundSprite;

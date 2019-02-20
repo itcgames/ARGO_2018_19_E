@@ -31,10 +31,10 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
 	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
 
-	m_ents.push_back((Entity*)pistol);
-	m_ents.push_back((Entity*)shotgun);
-	m_ents.push_back((Entity*)grenade);
-	m_ents.push_back((Entity*)juicer);
+	m_Gunents.push_back((Entity*)pistol);
+	m_Gunents.push_back((Entity*)shotgun);
+	m_Gunents.push_back((Entity*)grenade);
+	m_Gunents.push_back((Entity*)juicer);
 
 }
 
@@ -72,14 +72,16 @@ void PlayScreen::initialise(bool online, int size, int num) {
 		
 		if (num < size) {
 			for (int i = num + 1; i <= size; i++) {
-				m_networkCharacters.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i));
+				Player * player = new  Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i);
+				m_networkCharacters.push_back(player);
 				m_leftHands.push_back(new Hand(m_renderer, 1, i));
 				m_rightHands.push_back(new Hand(m_renderer, 2, i));
 			}
 		}
 		if (num > 1) {
-			for (int i = num - 1; i > 0; i--) {
-				m_networkCharacters.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i));
+			for (int i = num - 1; i > 0; i--) { 
+				Player * player = new  Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i);
+				m_networkCharacters.push_back(player);
 				m_leftHands.push_back(new Hand(m_renderer, 1, i));
 				m_rightHands.push_back(new Hand(m_renderer, 2, i));
 			}
@@ -97,19 +99,25 @@ void PlayScreen::initialise(bool online, int size, int num) {
 		}
 
 		for (int i = 0; i < (4 - size); i++) {
-		m_aiCharacters.push_back(new AI(m_renderer, 500.0 + (100.0 * i), 100.0));
+			AI * ai = new AI(m_renderer, 500.0 + (100.0 * i), 100.0);
+			m_playerents.push_back((Entity*)ai);
+			m_aiCharacters.push_back(ai);
 		}
 
 	}
 	else {
 		for (int i = 0; i < SDL_NumJoysticks(); i++) {
-			m_players.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i));
+			Player * player = new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i);
+			m_playerents.push_back((Entity*)player);
+			m_players.push_back(player);
 			m_leftHands.push_back(new Hand(m_renderer, 1, i));
 			m_rightHands.push_back(new Hand(m_renderer, 2, i));
 		}
 
 		for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) {
-			m_aiCharacters.push_back(new AI(m_renderer, 500.0 + (100.0 * i), 100.0));
+			AI * ai = new AI(m_renderer, 500.0 + (100.0 * i), 100.0);
+			//m_playerents.push_back((Entity*)ai);
+			m_aiCharacters.push_back(ai);
 			m_leftHands.push_back(new Hand(m_renderer, 1, 4));
 			m_rightHands.push_back(new Hand(m_renderer, 2, 4));
 		}
@@ -199,7 +207,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	m_restartSys.addEntity((Entity*)juicer);
 	m_restartSys.addEntity((Entity*)grenade);
 
-	m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getWidth(), m_map->getHeight());
+	m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getTiles(), m_map->getWidth(), m_map->getHeight());
 	m_ps.setRenderer(m_renderer);
 	m_grenadeSys.setRenderer(m_renderer);
 	m_collSys.setRenderer(m_renderer);
@@ -223,7 +231,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
 	m_ais.update();
-	m_ais.receive(m_ents);
+	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
 	//m_animationsSys.update();
 	checkRoundOver();
