@@ -14,10 +14,6 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	m_audioObserver->load();
 
 
-	h1 = new Hand(renderer, 1);
-	h2 = new Hand(renderer, 2);
-
-
 	m_backgroundSprite = new SpriteComponent(0, 0, 1920, 1080);
 	m_backgroundSprite->loadFromFile("assets/cybercity.png", renderer);
 	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
@@ -44,8 +40,14 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 
 void PlayScreen::initialise(bool online, int size, int num) {
 
+	
 	if (online) {
 		m_players.push_back(new Player(m_renderer, 600 + (100 * num), 200, SDL_GameControllerOpen(0), num));
+
+		m_leftHands.push_back(new Hand(m_renderer, 1, num));
+		m_rightHands.push_back(new Hand(m_renderer, 2, num));
+			
+
 		m_animationsSys.addEntity((Entity*)m_players[0]);
 		m_hs.addEntity((Entity*)m_players[0]);
 		m_cs.addEntity((Entity*)m_players[0]);
@@ -54,14 +56,32 @@ void PlayScreen::initialise(bool online, int size, int num) {
 		m_restartSys.addEntity((Entity*)m_players[0]);
 		m_collSys.addEntity((Entity*)m_players[0]);
 
+		m_hs.addEntity((Entity*)m_leftHands[0]);
+		m_cs.addEntity((Entity*)m_leftHands[0]);
+		m_rs.addEntity((Entity*)m_leftHands[0]);
+		m_ps.addEntity((Entity*)m_leftHands[0]);
+		m_restartSys.addEntity((Entity*)m_leftHands[0]);
+		m_collSys.addEntity((Entity*)m_leftHands[0]);
+
+		m_hs.addEntity((Entity*)m_rightHands[0]);
+		m_cs.addEntity((Entity*)m_rightHands[0]);
+		m_rs.addEntity((Entity*)m_rightHands[0]);
+		m_ps.addEntity((Entity*)m_rightHands[0]);
+		m_restartSys.addEntity((Entity*)m_rightHands[0]);
+		m_collSys.addEntity((Entity*)m_rightHands[0]);
+		
 		if (num < size) {
 			for (int i = num + 1; i <= size; i++) {
 				m_networkCharacters.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i));
+				m_leftHands.push_back(new Hand(m_renderer, 1, i));
+				m_rightHands.push_back(new Hand(m_renderer, 2, i));
 			}
 		}
 		if (num > 1) {
 			for (int i = num - 1; i > 0; i--) {
 				m_networkCharacters.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i));
+				m_leftHands.push_back(new Hand(m_renderer, 1, i));
+				m_rightHands.push_back(new Hand(m_renderer, 2, i));
 			}
 		}
 
@@ -84,11 +104,48 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	else {
 		for (int i = 0; i < SDL_NumJoysticks(); i++) {
 			m_players.push_back(new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i));
+			m_leftHands.push_back(new Hand(m_renderer, 1, i));
+			m_rightHands.push_back(new Hand(m_renderer, 2, i));
 		}
 
 		for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) {
 			m_aiCharacters.push_back(new AI(m_renderer, 500.0 + (100.0 * i), 100.0));
+			m_leftHands.push_back(new Hand(m_renderer, 1, 4));
+			m_rightHands.push_back(new Hand(m_renderer, 2, 4));
 		}
+		for (Player * net : m_players) {
+			m_hs.addEntity((Entity*)net);
+			m_rs.addEntity((Entity*)net);
+			m_ps.addEntity((Entity*)net);
+			m_restartSys.addEntity((Entity*)net);
+			m_collSys.addEntity((Entity*)net);
+			m_cs.addEntity((Entity*)net);
+
+		}
+	
+	}
+
+	m_rs.addEntity((Entity*)pistol);
+	m_rs.addEntity((Entity*)grenade);
+	m_rs.addEntity((Entity*)shotgun);
+	m_rs.addEntity((Entity*)juicer);
+
+	for (Hand * net : m_leftHands) {
+		m_hs.addEntity((Entity*)net);
+		m_rs.addEntity((Entity*)net);
+		m_ps.addEntity((Entity*)net);
+		m_restartSys.addEntity((Entity*)net);
+		m_collSys.addEntity((Entity*)net);
+		m_cs.addEntity((Entity*)net);
+
+	}
+	for (Hand * net : m_rightHands) {
+		m_hs.addEntity((Entity*)net);
+		m_rs.addEntity((Entity*)net);
+		m_ps.addEntity((Entity*)net);
+		m_restartSys.addEntity((Entity*)net);
+		m_collSys.addEntity((Entity*)net);
+		m_cs.addEntity((Entity*)net);
 
 	}
 
@@ -96,16 +153,10 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	m_cs.addEntity((Entity*)shotgun);
 	m_cs.addEntity((Entity*)juicer);
 	m_cs.addEntity((Entity*)grenade);
-	m_cs.addEntity((Entity*)h1);
-	m_cs.addEntity((Entity*)h2);
 
 
-	m_rs.addEntity((Entity*)pistol);
-	m_rs.addEntity((Entity*)grenade);
-	m_rs.addEntity((Entity*)shotgun);
-	m_rs.addEntity((Entity*)juicer);
-	m_rs.addEntity((Entity*)h1);
-	m_rs.addEntity((Entity*)h2);
+
+
 
 
 
@@ -113,8 +164,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	m_ps.addEntity((Entity*)shotgun);
 	m_ps.addEntity((Entity*)juicer);
 	m_ps.addEntity((Entity*)grenade);
-	m_ps.addEntity((Entity*)h1);
-	m_ps.addEntity((Entity*)h2);
+
 	m_ps.registerAudioObserver(m_audioObserver);
 
 
@@ -148,8 +198,6 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	m_restartSys.addEntity((Entity*)shotgun);
 	m_restartSys.addEntity((Entity*)juicer);
 	m_restartSys.addEntity((Entity*)grenade);
-	m_restartSys.addEntity((Entity*)h1);
-	m_restartSys.addEntity((Entity*)h2);
 
 	m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getWidth(), m_map->getHeight());
 	m_ps.setRenderer(m_renderer);
@@ -162,8 +210,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	if (m_startGame) {
 
-		initialise(online, size, client->number);
-
+		initialise(*online, size, client->number);
 		m_startGame = false;
 	}
 
@@ -205,17 +252,16 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 void PlayScreen::render(SDL_Renderer * renderer) {
 	m_backgroundSprite->render(m_renderer);
 	m_map->draw(m_renderer);
-	for (Player *p : m_players) {
-		p->render(m_renderer);
-	}
 	for (AI * ai : m_aiCharacters) {
 		ai->render(m_renderer);
+	}
+	for (Player *p : m_players) {
+		p->render(m_renderer);
 	}
 	m_rs.render(m_renderer);
 	m_ps.bulletRender(m_renderer);
 	//m_animationsSys.render();
 	testLight->render(m_renderer);
-
 	m_grenadeSys.render();
 	m_collSys.render();
 	//m_emitter->update();

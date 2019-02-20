@@ -75,7 +75,9 @@ public:
 	void updateShooting(SDL_Renderer* renderer, ControlComponent * ownerConC);
 	void makeBullets(SDL_Renderer* renderer, TagComponent *tagC,ControlComponent *ownerConC);
 	void checkWeaponCollision(CollisionComponent * colc, TagComponent *tagC);
-	void setHands(PositionComponent *handOwnerPos, ControlComponent *handOwnerConC);
+	void setHands(PositionComponent *handOwnerPos, ControlComponent *handOwnerConC, TagComponent * ownerTagC);
+
+	
 
 
 
@@ -106,5 +108,7 @@ public:
 	float m_grenadeColor = 0;
 
 	int index = -1;
+
+
 };
 #endif // !PHYSICSSYSTEM_H

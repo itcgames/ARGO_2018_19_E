@@ -199,7 +199,14 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 
 					if (tag->getTag() == "Player") {
 						ControlComponent * control = (ControlComponent*)entity->getCompByType("CONTROL");
-						control->setAlive(false);
+						if (val == "right") {
+							control->setAlive(false);
+							control->setHitFrom("right");
+						}
+						if (val == "left") {
+							control->setAlive(false);
+							control->setHitFrom("left");
+						}
 					}
 				}
 
