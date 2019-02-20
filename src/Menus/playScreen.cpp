@@ -245,7 +245,23 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		p.gunAngle = cc->getAngle();
 		p.alive = cc->getAlive();
 		p.throwWeapon = cc->getThrowWeapon();
-		client->sendMessage(p);
+
+		if (p.message != lastPacket.message || p.playerNum != lastPacket.message ||
+			p.left != lastPacket.left || p.right != lastPacket.right || p.jump != lastPacket.jump ||
+			p.fire != lastPacket.fire || p.gunAngle != lastPacket.gunAngle || p.alive != lastPacket.alive ||
+			p.throwWeapon != lastPacket.throwWeapon) {
+			client->sendMessage(p);
+		}	
+
+		lastPacket.message = p.message;
+		lastPacket.playerNum = p.playerNum;
+		lastPacket.left = p.left;
+		lastPacket.right = p.right;
+		lastPacket.jump = p.jump;
+		lastPacket.fire = p.fire;
+		lastPacket.gunAngle = p.gunAngle;
+		lastPacket.alive = p.alive;
+		lastPacket.throwWeapon = p.throwWeapon;
 	}
 }
 
