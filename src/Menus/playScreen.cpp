@@ -40,13 +40,28 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 
 void PlayScreen::initialise(bool online, int size, int num) {
 	*m_online = online;
+
+	if (SDL_NumJoysticks() >= 2) {
+		m_multiplayer = true;
+	}
+	else {
+		m_multiplayer = false;
+	}
 	
 	if (online) {
-		m_players.push_back(new Player(m_renderer, 600 + (100 * num), 200, SDL_GameControllerOpen(0), num));
 
-		m_leftHands.push_back(new Hand(m_renderer, 1, num));
-		m_rightHands.push_back(new Hand(m_renderer, 2, num));
-			
+		//Place player at the first available spawn point
+		for (int i = 0; i < m_map->getSpawnPoints().size(); i++)
+		{
+			if (m_map->getSpawnPoints().at(i)->first == false)
+			{
+				m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(i)->second.x, m_map->getSpawnPoints().at(i)->second.y, SDL_GameControllerOpen(0), num, Font));
+				m_leftHands.push_back(new Hand(m_renderer, 1, num));
+				m_rightHands.push_back(new Hand(m_renderer, 2, num));
+				m_map->getSpawnPoints().at(i)->first = true;
+				break;
+			}
+		}	
 
 		m_animationsSys.addEntity((Entity*)m_players[0]);
 		m_hs.addEntity((Entity*)m_players[0]);
@@ -72,21 +87,21 @@ void PlayScreen::initialise(bool online, int size, int num) {
 		
 		if (num < size) {
 			for (int i = num + 1; i <= size; i++) {
-				Player * player = new  Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i);
-				m_networkCharacters.push_back(player);
-				m_leftHands.push_back(new Hand(m_renderer, 1, i));
-				m_rightHands.push_back(new Hand(m_renderer, 2, i));
-			}
-		}
-		if (num > 1) {
-			for (int i = num - 1; i > 0; i--) { 
-				Player * player = new  Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i);
+				Player * player = new  Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i, Font);
 				m_networkCharacters.push_back(player);
 				m_leftHands.push_back(new Hand(m_renderer, 1, i));
 				m_rightHands.push_back(new Hand(m_renderer, 2, i));
 			}
 		}
 
+		if (num > 1) {
+			for (int i = num - 1; i > 0; i--) { 
+				Player * player = new  Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i, Font);
+				m_networkCharacters.push_back(player);
+				m_leftHands.push_back(new Hand(m_renderer, 1, i));
+				m_rightHands.push_back(new Hand(m_renderer, 2, i));
+			}
+		}
 
 		for (Player * net : m_networkCharacters) {
 			m_hs.addEntity((Entity*)net);
@@ -99,28 +114,54 @@ void PlayScreen::initialise(bool online, int size, int num) {
 		}
 
 		for (int i = 0; i < (4 - size); i++) {
-			AI * ai = new AI(m_renderer, 500.0 + (100.0 * i), 100.0);
-			m_playerents.push_back((Entity*)ai);
-			m_aiCharacters.push_back(ai);
+
+			for (int j = 0; j < m_map->getSpawnPoints().size(); j++)
+			{
+				if (m_map->getSpawnPoints().at(j)->first == false)
+				{
+					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y));
+					m_map->getSpawnPoints().at(j)->first = true;
+					
+				}
+			}
 		}
 
 	}
 	else {
-		for (int i = 0; i < SDL_NumJoysticks(); i++) {
-			Player * player = new Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i);
-			m_playerents.push_back((Entity*)player);
-			m_players.push_back(player);
-			m_leftHands.push_back(new Hand(m_renderer, 1, i));
-			m_rightHands.push_back(new Hand(m_renderer, 2, i));
+
+		for (int i = 0; i < SDL_NumJoysticks(); i++) 
+		{
+			for (int j = 0; j < m_map->getSpawnPoints().size(); j++)
+			{
+				if (m_map->getSpawnPoints().at(j)->first == false)
+				{
+					Player * player = new Player(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, SDL_GameControllerOpen(i), i, Font);
+					m_playerents.push_back((Entity*)player);
+					m_players.push_back(player);
+					m_leftHands.push_back(new Hand(m_renderer, 1, i));
+					m_rightHands.push_back(new Hand(m_renderer, 2, i));
+					m_map->getSpawnPoints().at(j)->first = true;
+					break;
+				}
+			}
 		}
 
-		for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) {
-			AI * ai = new AI(m_renderer, 500.0 + (100.0 * i), 100.0);
-			//m_playerents.push_back((Entity*)ai);
-			m_aiCharacters.push_back(ai);
-			m_leftHands.push_back(new Hand(m_renderer, 1, 4));
-			m_rightHands.push_back(new Hand(m_renderer, 2, 4));
+		for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) 
+		{
+			for (int j = 0; j < m_map->getSpawnPoints().size(); j++)
+			{
+				if (m_map->getSpawnPoints().at(j)->first == false)
+				{
+					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y));
+					m_leftHands.push_back(new Hand(m_renderer, 1, 4));
+					m_rightHands.push_back(new Hand(m_renderer, 2, 4));
+					m_map->getSpawnPoints().at(j)->first = true;
+				}
+			}
 		}
+	}
+
+
 		for (Player * net : m_players) {
 			m_hs.addEntity((Entity*)net);
 			m_rs.addEntity((Entity*)net);
@@ -130,8 +171,6 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			m_cs.addEntity((Entity*)net);
 
 		}
-	
-	}
 
 	m_rs.addEntity((Entity*)pistol);
 	m_rs.addEntity((Entity*)grenade);
@@ -229,7 +268,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_guns.update();
 	SDL_RenderSetScale(m_renderer, 0.69, 0.5);
 	m_ps.bulletUpdate(m_renderer);
-	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters);
+	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
 	m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
@@ -352,15 +391,43 @@ void PlayScreen::checkRoundOver() {
 		}
 	}
 	else {
-		Entity * ent = (Entity *)m_players[0];
-		ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
-		if (!control->getAlive()) {
+		int dead = 0;
+
+		if (!m_multiplayer) {
+			Entity * ent = (Entity *)m_players[0];
+			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+			if (!control->getAlive()) {
+				if (!m_drawRoundText) {
+					initialiseText("AI Wins");
+					m_drawRoundText = true;
+				}
+				roundEnd = true;
+
+			}
+		}
+		
+		for (Player * p : m_players) {
+			Entity * ent = (Entity *)p;
+			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+			if (!control->getAlive()) {
+				dead++;
+
+			}
+		}
+		
+		for (AI * ai : m_aiCharacters) {
+			Entity * ent = (Entity *)ai;
+			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
+			if (!ai->m_alive) {
+				dead++;
+			}
+		}
+		if (dead >= 3) {
 			if (!m_drawRoundText) {
-				initialiseText("AI Wins");
+				initialiseText("Player Wins");
 				m_drawRoundText = true;
 			}
 			roundEnd = true;
-
 		}
 	}
 

@@ -28,7 +28,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 		}
 		else if (tc->getSubTag() == "shotgun")
 		{
-			ease = 0.06;
+			ease = 0.04;
 		}
 
 		angle += angleDifference * ease;
@@ -131,7 +131,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 					double ease = 0.1;
 					if (tc->getSubTag() == "shotgun")
 					{
-						ease = 0.06;
+						ease = 0.04;
 					}
 					float previousAngle = tc->getPreviousAngle();
 					tc->setPreviousAngle(previousAngle += angleDifference * ease);
@@ -148,17 +148,17 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 			if (tc->getSubTag() == "pistol" || tc->getSubTag() == "grenade")
 			{
 				pc->setY(ownerPosC->getY() + tc->getYOffset());
+				std::cout << "Pistol angle = " << tc->getAngle() << std::endl;
 				if (sc->m_flipValue == SDL_FLIP_NONE)
 				{
 
 					pc->setX(ownerPosC->getX() - tc->getXOffset() - (ownerPosC->getPistolCount()) / 2);  // set gun position + offset for player centre - offset for angle
-																										 //sc->rotate(ownerPosC->getFiredCount());
-					sc->setRotation((ownerConC->getAngle())*-1 - ownerPosC->getFiredCount() / 2); //rotate gun with recoil
+					sc->setRotation(-tc->getPreviousAngle() + 90 - ownerPosC->getPistolCount()); //rotate gun with recoil
 
 				}
 				else {
-					sc->setRotation((ownerConC->getAngle())*-1 + ownerPosC->getPistolCount()); //rotate gun with recoil
 					pc->setX(ownerPosC->getX() - tc->getXOffset() + (ownerPosC->getPistolCount()));
+					sc->setRotation(-tc->getPreviousAngle() + 90 + ownerPosC->getPistolCount()); //rotate gun with recoil
 				}
 				double angleTo = ownerConC->getAngle() + 90;
 				double angleDifference = angleTo - tc->getPreviousAngle();
@@ -169,7 +169,6 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 				}
 				float previousAngle = tc->getPreviousAngle();
 				tc->setPreviousAngle(previousAngle += angleDifference * ease);
-				sc->setRotation(-tc->getPreviousAngle() + 90); //rotate gun
 			}
 			else if (tc->getSubTag() == "shotgun")
 			{
@@ -215,7 +214,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 				double ease = 0.1;
 				if (tc->getSubTag() == "shotgun")
 				{
-					ease = 0.06;
+					ease = 0.04;
 				}
 				float previousAngle = tc->getPreviousAngle();
 				tc->setPreviousAngle(previousAngle += angleDifference * ease);
@@ -306,7 +305,8 @@ std::string PhysicsSystem::rectCollision(c2AABB A, c2AABB B)
 
 	return(collision);
 }
-void PhysicsSystem::pickUpAgain(TagComponent * tc) {
+
+void PhysicsSystem::pickUpAgain(TagComponent * tc, SpriteComponent * sc, CollisionComponent * colisionc) {
 	// Increase grabable count to allow thrown gun to be picked up again.
 	if (tc->getGrabable() == false)
 	{
@@ -314,6 +314,8 @@ void PhysicsSystem::pickUpAgain(TagComponent * tc) {
 		{
 			tc->setGrabable(true);
 			tc->setGrabableCount(0);
+			colisionc->setW(sc->getWidth());
+			colisionc->setH(sc->getHeight());
 		}
 		else
 		{
@@ -347,15 +349,15 @@ void PhysicsSystem::setPlayerGunGot(std::string gun, TagComponent * tagC)
 	}
 }
 
-// Set the player position variable.
-void PhysicsSystem::setPlayer1Position(PositionComponent * pc) {
-	player1PositionX = pc->getX();
-	player1PositionY = pc->getY();
-}
-void PhysicsSystem::setPlayer2Position(PositionComponent * pc) {
-	player2PositionX = pc->getX();
-	player2PositionY = pc->getY();
-}
+//// Set the player position variable.
+//void PhysicsSystem::setPlayer1Position(PositionComponent * pc) {
+//	player1PositionX = pc->getX();
+//	player1PositionY = pc->getY();
+//}
+//void PhysicsSystem::setPlayer2Position(PositionComponent * pc) {
+//	player2PositionX = pc->getX();
+//	player2PositionY = pc->getY();
+//}
 void PhysicsSystem::throwGunFun(ControlComponent * cc) {
 	cc->setThrowWeapon(false);
 	cc->setThrowGun(true);
@@ -393,24 +395,20 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc, CollisionComponent * cc, ControlComponent * ownerConC, TagComponent * ownerTagC) {
 	if (tc->getSubTag() == "pistol")
 	{
-		pc->setVelX(-tc->getXOffset() / 2.5);
-		pc->setVelY(tc->getYOffset() / 2.5);
-
+		pc->setVelX(-tc->getXOffset() / 3);
+		pc->setVelY(-15);	
 	}
 	else if (tc->getSubTag() == "shotgun")
 	{
-		pc->setVelX(-tc->getXOffset() * 2);
-		pc->setVelY(tc->getYOffset() * 2);
+		pc->setVelX(-tc->getXOffset() * 2);		
+		pc->setVelY(-15);
+		
+		std::cout << "Y Offset = " << tc->getYOffset() << std::endl;
 	}
 	else if (tc->getSubTag() == "juicer")
 	{
-		float ySpeed = tc->getYOffset();
-		if (tc->getYOffset() > 0)
-		{
-			ySpeed = 0;
-		}
 		pc->setVelX(-tc->getXOffset() / 5);
-		pc->setVelY(ySpeed / 5);
+		pc->setVelY(-20);
 	}
 	else if (tc->getSubTag() == "grenade") {
 		pc->setVelX(-tc->getXOffset() / 2);
@@ -440,13 +438,28 @@ void PhysicsSystem::setHandOnPistol(SpriteComponent * sc, PositionComponent *pc,
 {
 	double handAngle = gunTagC->getAngle(); // :)
 
-	sc->setRotation((gunTagC->getAngle() + 90)*-1); //rotate hand
-	pc->setX(gunPosition->getX());
+	sc->setRotation((gunTagC->getAngle() - 90)*-1); //rotate hand
+
+	if (sc->m_flipValue == SDL_FLIP_HORIZONTAL)
+	{
+		if (handAngle < 0)
+		{
+			pc->setX(gunPosition->getX() + 20 + (handAngle / 10));
+			pc->setY(gunPosition->getY() + 20 - (handAngle / 8));
+		}
+		else {
+			pc->setX(gunPosition->getX() + 20 - (handAngle / 10));
+			pc->setY(gunPosition->getY() + 20 - (handAngle / 15));
+		}
+	}
+	else {
+		pc->setX(gunPosition->getX());
+		pc->setY(gunPosition->getY() + (handAngle / 8));
+	}
 	if (handAngle < 0)
 	{
 		handAngle = handAngle * -1;
 	}
-	pc->setY(gunPosition->getY() + (handAngle / 5));
 }
 void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, TagComponent * tc, PositionComponent * ownerPosC, ControlComponent * ownerConC, TagComponent * gunTagC)
 {
@@ -546,6 +559,13 @@ void PhysicsSystem::setHandNormal(SpriteComponent * sc, PositionComponent *pc, P
 {
 	pc->setX(ownerPosC->getX());
 	pc->setY(ownerPosC->getY() + 6);
+	if (ownerPosC->getVelX() >= 0)
+	{
+		sc->m_flipValue = SDL_FLIP_NONE;
+	}
+	else {
+		sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+	}
 	sc->setRotation(0);
 }
 void PhysicsSystem::movePlayer(ControlComponent * cc, PositionComponent *pc, TagComponent *tc) {
@@ -602,16 +622,16 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 		TagComponent * gunGotTag = (TagComponent*)entity->getCompByType("TAG");
 
 		if (tc->getTag() == "Hand" && tc->getSubTag() == ownerTagC->getSubTag()) {
-			if (ownerConC->getAngle() + 90 < 90)
-			{
-				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
-			}
-			else
-			{
-				sc->m_flipValue = SDL_FLIP_NONE;
-			}
 			if (tc->getGotGunBool() == true)
 			{
+				if (ownerConC->getAngle() + 90 < 90)
+				{
+					sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+				}
+				else
+				{
+					sc->m_flipValue = SDL_FLIP_NONE;
+				}
 				PositionComponent * gunPos = (PositionComponent*)entity->getCompByType("POSITION");
 				for (Entity * entity : m_entities) {
 					TagComponent * gunTag = (TagComponent*)entity->getCompByType("TAG");
@@ -640,13 +660,6 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 			else {
 				setHandNormal(sc, pc, handOwnerPos); // Set hand to body
 			}
-			if (cc->getAngle() < 0 && tc->getGotGunBool() == true)
-			{
-				//flipHorizontal(sc);
-			}
-			else if (tc->getGotGunBool() == true) {
-				//flipNone(sc);
-			}
 		}
 	}
 }
@@ -668,7 +681,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 
 
 		// check gun player collide
-		if (tc->getTag() == "Player")
+		if (tc->getTag() == "Player" && cc->getAlive() == true)
 		{
 			handOwnerPosC = (PositionComponent*)entity->getCompByType("POSITION");
 			setHands(handOwnerPosC, ownerConC,ownerTagC);
@@ -688,6 +701,10 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 			setPosition(pc);  // Set the position after movement
 			pc->setVelY(pc->getVelY() + Friction.y);  // Friction
 		}
+		else if (tc->getTag() == "Player" && cc->getAlive() == false)
+		{
+			throwGunFun(cc);
+		}
 		if (tc->getTag() == "Gun")
 		{
 			std::string currentGun = tc->getSubTag();
@@ -705,7 +722,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 
 			updateShooting(renderer, ownerConC);
 			setGun(tc, cc, pc, sc, ownerPosC, ownerConC);
-			pickUpAgain(tc);
+			pickUpAgain(tc,sc,colc);
 			if (tc->getGrabbed() == true)
 			{
 				if (ownerConC->getThrowGun() == true)  // Check if a weapon wants to be thrown
@@ -848,7 +865,11 @@ void PhysicsSystem::updateShooting(SDL_Renderer* renderer, ControlComponent* own
 						pc->setFiredCount(pc->getFiredCount() + 1);
 						pc->setPistolCount(pc->getPistolCount() - 1);
 					}
-					else {
+					else if (pc->getFiredCount() < 80) {
+						pc->setFiredCount(pc->getFiredCount() + 1);
+						pc->setPistolCount(0);
+					}
+					else{
 						tc->setFiredBool(false);
 						pc->setFiredCount(0);
 						pc->setPistolCount(0);
@@ -856,7 +877,7 @@ void PhysicsSystem::updateShooting(SDL_Renderer* renderer, ControlComponent* own
 				}
 				if (tc->getGunGot() == "shotgun")
 				{
-					if (pc->getFiredCount() < 60)
+					if (pc->getFiredCount() < 120)
 					{
 						pc->setFiredCount(pc->getFiredCount() + 1);
 						pc->setShotgunCount(pc->getShotgunCount() + 1);

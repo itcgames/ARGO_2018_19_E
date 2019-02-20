@@ -27,6 +27,7 @@ void RestartSystem::reset(int level) {
 			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
 			ai->m_alive = true;
 			ai->set = false;
+			ai->hasGun = false;
 			sc->setColor(255, 255, 255);
 			
 		}
@@ -41,6 +42,9 @@ void RestartSystem::reset(int level) {
 			tc->setGotGunBool(false);
 		}
 		else if (tc->getTag() == "Gun") {
+			CollisionComponent * colisionc = (CollisionComponent*)ent->getCompByType("COLLISION");
+			colisionc->setW(sc->getWidth());
+			colisionc->setH(sc->getHeight());
 			tc->setGrabable(true);
 			tc->setGrabbed(false);
 			tc->setGrabableCount(0);

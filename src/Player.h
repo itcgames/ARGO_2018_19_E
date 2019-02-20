@@ -5,14 +5,15 @@
 #include "Components/SpriteComponent.h"
 #include "Systems/ControlSystem.h"
 
+#include <SDL_ttf.h>
 
 class Player : Entity
 {
 public:
 	Player();
-	Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller, int index);
+	Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller, int index, TTF_Font* font);
 
-
+	void initialiseText(std::string message, int x, int y);
 	void render(SDL_Renderer* renderer);
 
 private:
@@ -23,6 +24,7 @@ private:
 	SpriteComponent* m_spriteComponentHead;
 	SpriteComponent* m_spriteComponentLeftFoot;
 	SpriteComponent* m_spriteComponentRightFoot;
+	SpriteComponent* m_marker;
 
 	int runCount = 0;
 	int fallCount = 0;
@@ -40,7 +42,13 @@ private:
 	float newY = 0;
 	bool falling = false;
 	
-
+	std::string round_text;
+	SDL_Texture* text;
+	SDL_Rect renderQuad;
+	SDL_Color textColor = { 255, 255, 255, 255 };
+	SDL_Surface * textSurface = new SDL_Surface;
+	SDL_Renderer * m_renderer;
+	TTF_Font* Font;
 
 	float rumbleCount = 0;
 };

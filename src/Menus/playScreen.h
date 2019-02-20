@@ -98,4 +98,6 @@ public:
 	Packet lastPacket;
 
 	bool* m_online = false;
+
+	bool m_multiplayer = false;
 };
