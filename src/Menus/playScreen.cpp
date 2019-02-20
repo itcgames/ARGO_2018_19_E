@@ -48,8 +48,8 @@ void PlayScreen::initialise(bool online, int size, int num) {
 
 		//Place player at the first available spawn point
 
-		m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(1)->second.x, m_map->getSpawnPoints().at(1)->second.y, SDL_GameControllerOpen(0), num));
-		m_map->getSpawnPoints().at(1)->first = true;
+		m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(0)->second.x, m_map->getSpawnPoints().at(0)->second.y, SDL_GameControllerOpen(0), num));
+		m_map->getSpawnPoints().at(0)->first = true;
 
 
 		m_hs.addEntity((Entity*)m_players[0]);
@@ -101,7 +101,6 @@ void PlayScreen::initialise(bool online, int size, int num) {
 				{
 					m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, SDL_GameControllerOpen(0), num));
 					m_map->getSpawnPoints().at(j)->first = true;
-
 				}
 			}
 		}
@@ -114,11 +113,9 @@ void PlayScreen::initialise(bool online, int size, int num) {
 				{
 					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y));
 					m_map->getSpawnPoints().at(j)->first = true;
-
 				}
 			}
 		}
-
 	}
 	
 	m_cs.addEntity((Entity*)pistol);
