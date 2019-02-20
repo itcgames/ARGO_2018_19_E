@@ -20,6 +20,8 @@ struct Packet
 	int message;
 	bool alive;
 
+	c2v position;
+
 	bool left;
 	bool right;
 
