@@ -40,6 +40,13 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 
 void PlayScreen::initialise(bool online, int size, int num) {
 	*m_online = online;
+
+	if (SDL_NumJoysticks() >= 2) {
+		m_multiplayer = true;
+	}
+	else {
+		m_multiplayer = false;
+	}
 	
 	if (online) {
 
@@ -55,12 +62,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 				m_map->getSpawnPoints().at(i)->first = true;
 				break;
 			}
-		}
-
-
-
-
-			
+		}	
 
 		m_animationsSys.addEntity((Entity*)m_players[0]);
 		m_hs.addEntity((Entity*)m_players[0]);
@@ -385,18 +387,30 @@ void PlayScreen::checkRoundOver() {
 		}
 	}
 	else {
-		Entity * ent = (Entity *)m_players[0];
-		ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
-		if (!control->getAlive()) {
-			if (!m_drawRoundText) {
-				initialiseText("AI Wins");
-				m_drawRoundText = true;
-			}
-			roundEnd = true;
-
-		}
-
 		int dead = 0;
+
+		if (!m_multiplayer) {
+			Entity * ent = (Entity *)m_players[0];
+			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+			if (!control->getAlive()) {
+				if (!m_drawRoundText) {
+					initialiseText("AI Wins");
+					m_drawRoundText = true;
+				}
+				roundEnd = true;
+
+			}
+		}
+		
+		for (Player * p : m_players) {
+			Entity * ent = (Entity *)p;
+			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+			if (!control->getAlive()) {
+				dead++;
+
+			}
+		}
+		
 		for (AI * ai : m_aiCharacters) {
 			Entity * ent = (Entity *)ai;
 			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
