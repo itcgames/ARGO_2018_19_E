@@ -19,10 +19,25 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	m_spriteComponent->setColor(255, 255, 0);
 	this->addComponent(m_spriteComponent);
 
-	m_spriteComponentHead = new SpriteComponent(0, 0, 107, 91);
-	m_spriteComponentHead->loadFromFile("assets/Head2.png", renderer);
+	m_spriteComponentHead = new SpriteComponent(0, 0, 330, 330);
+	if (index == 0)
+	{
+		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/headGuy.png", renderer);
+	}
+	else if (index == 1)
+	{
+		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/headGuy2.png", renderer);
+	}
+	else if (index == 2)
+	{
+		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/headGuy3.png", renderer);
+	}
+	else if (index == 3)
+	{
+		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/headGuy4.png", renderer);
+	}
 	m_spriteComponentHead->setPosition(c2v{ x, y });
-	m_spriteComponentHead->setScale(c2v{ 0.5f, 0.5f });
+	m_spriteComponentHead->setScale(c2v{ 0.2f, 0.28f });
 
 
 	m_spriteComponentLeftFoot = new SpriteComponent(0, 0, 107, 91);
@@ -164,7 +179,7 @@ void Player::render(SDL_Renderer* renderer) {
 		m_spriteComponentRightFoot->m_flipValue = m_spriteComponent->m_flipValue;
 		if (m_spriteComponentHead->m_flipValue == SDL_FLIP_NONE)
 		{
-			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2,positionComp->getY() - 50 + headCount });
+			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 10 + headCount / 2,positionComp->getY() - 75 + headCount });
 			m_spriteComponentHead->setRotation(-headCount);
 
 			m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount,positionComp->getY() + 52 });
@@ -174,7 +189,7 @@ void Player::render(SDL_Renderer* renderer) {
 			m_spriteComponentRightFoot->setRotation(runCount);
 		}
 		else {
-			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 20 - headCount / 2,positionComp->getY() - 50 + headCount });
+			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 20 - headCount / 2,positionComp->getY() - 75 + headCount });
 			m_spriteComponentHead->setRotation(headCount);
 
 			m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() - 20 + runCount,positionComp->getY() + 52 });  // (Position - player offset + animationCount)

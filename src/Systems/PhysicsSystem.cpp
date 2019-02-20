@@ -267,8 +267,8 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 			{
 				if (tagc->getGunGot() == "none")
 				{
-					colisionc->setH(1);
-					colisionc->setW(1);
+					colisionc->setH(0);
+					colisionc->setW(0);
 					setPlayerGunGot(tc->getSubTag(), tagc);
 					tc->setGrabbed(true);
 				}
@@ -699,7 +699,10 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 			}
 			movePlayer(cc, pc, tc);
 			setPosition(pc);  // Set the position after movement
-			pc->setVelY(pc->getVelY() + Friction.y);  // Friction
+			if (pc->getVelY() < 40)
+			{
+				pc->setVelY(pc->getVelY() + Friction.y);  // Friction
+			}
 		}
 		else if (tc->getTag() == "Player" && cc->getAlive() == false)
 		{

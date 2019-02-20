@@ -72,7 +72,7 @@ private:
 
 	bool m_fire = false;
 
-	float m_gunAngle = 0.0f;
+	float m_gunAngle = 90.0f;
 
 	bool m_alive = true;
 };

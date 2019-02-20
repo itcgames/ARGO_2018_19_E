@@ -34,7 +34,9 @@ void RestartSystem::reset(int level) {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 			tc->setGunGot("none");
 			tc->setGotGunBool(false);
+			control->setThrowGun(false);
 			control->setAlive(true);
+			control->setAngle(90);
 		}
 		else if (tc->getTag() == "Hand") {
 			tc->setGunGot("none");
