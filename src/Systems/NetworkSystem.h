@@ -12,12 +12,11 @@ using namespace std;
 
 class NetworkSystem
 {
-	std::vector<Entity *> m_entities;
-
 public:
 	NetworkSystem();
 	void addEntity(Entity * e);
 	void update(Packet * p);
+	std::vector<Entity *> m_entities;
 private:
 };
 #endif // !NETWORKSYSTEM_H

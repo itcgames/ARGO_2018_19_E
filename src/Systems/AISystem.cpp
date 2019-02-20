@@ -2,6 +2,7 @@
 
 AISystem::AISystem() {
 	fsm = new Animation();
+	std::cout << fsm->getCurrent() << std::endl;
 }
 
 void AISystem::addEntity(Entity * e) {
@@ -306,11 +307,6 @@ void AISystem::update() {
 						ac->setLeft(true);
 				
 					}
-					else
-					{
-						ac->setRight(false);
-						ac->setLeft(false);
-					}
 				}
 				if (ac->direction == "RIGHT" && ac->curPosition.x < ac->closestEnemy.x)
 				{
@@ -320,11 +316,7 @@ void AISystem::update() {
 						ac->setLeft(false);
 					
 					}
-					else
-					{
-						ac->setRight(false);
-						ac->setLeft(false);
-					}		
+				
 				}				
 			}
 			else

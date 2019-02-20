@@ -39,7 +39,7 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 }
 
 void PlayScreen::initialise(bool online, int size, int num) {
-
+	*m_online = online;
 	
 	if (online) {
 
@@ -248,6 +248,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 }
 
 void PlayScreen::update(bool * online, SDL_Event event, int size, Client * client) {
+	m_online = online;
 
 	if (m_startGame) {
 
@@ -271,8 +272,16 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	}
 	else {
-		if (client->packet->message == 5) {
-			m_netSystem.update(client->packet);
+		for (Entity * ent : m_netSystem.m_entities) {
+			
+			if (client->packet->message == 5) {
+				m_netSystem.update(client->packet);
+
+				client->receive();
+
+			}
+
+			
 		}
 		Entity * ent = (Entity*)m_players[0];
 		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
@@ -349,30 +358,61 @@ void PlayScreen::initialiseText(std::string message) {
 
 void PlayScreen::checkRoundOver() {
 	bool roundEnd = false;
-	int dead = 0;
-	for (AI * ai : m_aiCharacters) {
-		Entity * ent = (Entity *)ai;
-		AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
-		if (!ai->m_alive) {
-			dead++;
+	if (*m_online) {
+		int dead = 0;
+		for (AI * ai : m_aiCharacters) {
+			Entity * ent = (Entity *)ai;
+			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
+			if (!ai->m_alive) {
+				dead++;
+			}
+		}
+		for (Player * p : m_players) {
+			Entity * ent = (Entity *)p;
+			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+			if (!control->getAlive()) {
+				dead++;
+
+			}
+		}
+
+		if (dead >= 3) {
+			if (!m_drawRoundText) {
+				initialiseText("Player Wins");
+				m_drawRoundText = true;
+			}
+			roundEnd = true;
 		}
 	}
-	for (Player * p : m_players) {
-		Entity * ent = (Entity *)p;
+	else {
+		Entity * ent = (Entity *)m_players[0];
 		ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 		if (!control->getAlive()) {
-			dead++;
+			if (!m_drawRoundText) {
+				initialiseText("AI Wins");
+				m_drawRoundText = true;
+			}
+			roundEnd = true;
 
+		}
+
+		int dead = 0;
+		for (AI * ai : m_aiCharacters) {
+			Entity * ent = (Entity *)ai;
+			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
+			if (!ai->m_alive) {
+				dead++;
+			}
+		}
+		if (dead >= 3) {
+			if (!m_drawRoundText) {
+				initialiseText("Player Wins");
+				m_drawRoundText = true;
+			}
+			roundEnd = true;
 		}
 	}
 
-	if (dead >= 3) {
-		if (!m_drawRoundText) {
-			initialiseText("Player Wins");
-			m_drawRoundText = true;
-		}
-		roundEnd = true;
-	}
 	if (roundEnd) {
 		m_roundCounter++;
 
