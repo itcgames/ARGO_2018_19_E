@@ -230,8 +230,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 
 					particle->setRenderer(m_renderer);
 					particle->setStyle(ParticleExample::SMOKE);
-
-					particle->setPosition((*bullets->begin())->m_spriteComponent->getPosition().x, (*bullets->begin())->m_spriteComponent->getPosition().y);
+					particle->setPosition(bullets->at(j)->m_spriteComponent->getPosition().x, bullets->at(j)->m_spriteComponent->getPosition().y);
 					m_particles.push_back(particle);
 					bullets->erase(bullets->begin() + j);
 				}
@@ -257,9 +256,9 @@ void CollisionSystem::animateExplosion()
 		m_particles[i]->setStartSpin(0);
 		m_particles[i]->setStartSpinVar(0);
 		m_particles[i]->setEndSpin(90);
-		m_particles[i]->setDuration(.1);
-		m_particles[i]->setStartSize(70);
-		m_particles[i]->setEndSize(70);
+		m_particles[i]->setDuration(.5);
+		m_particles[i]->setStartSize(50);
+		m_particles[i]->setEndSize(50);
 		m_particles[i]->setStartSpinVar(0);
 
 

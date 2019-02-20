@@ -96,9 +96,9 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			m_animationsSys.addEntity((Entity*)net);
 		}
 
-		/*for (int i = 0; i < (4 - size); i++) {
+		for (int i = 0; i < (4 - size); i++) {
 		m_aiCharacters.push_back(new AI(m_renderer, 500.0 + (100.0 * i), 100.0));
-		}*/
+		}
 
 	}
 	else {
@@ -224,7 +224,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_ais.update();
 	m_ais.receive(m_ents);
 	m_hs.update();
-	m_animationsSys.update();
+	//m_animationsSys.update();
 	checkRoundOver();
 	if (!(*online)) {
 
@@ -276,7 +276,7 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 	}
 	m_rs.render(m_renderer);
 	m_ps.bulletRender(m_renderer);
-	m_animationsSys.render();
+	//m_animationsSys.render();
 	testLight->render(m_renderer);
 	m_grenadeSys.render();
 	m_collSys.render();

@@ -22,15 +22,11 @@ public:
 	double distance(c2v  vecOne, c2v vecTwo);
 	void setRenderer(SDL_Renderer * renderer);
 	void animateExplosion(std::vector<ParticleExample*> vec);
-	std::vector<ParticleExample*> getVector();
-	void setVector(std::vector<ParticleExample*> vec);
 	void call();
 private:
 	SDL_Renderer * m_renderer;
 	c2v lastPos = { 0,0 };
-	std::vector<ParticleExample*> m_vector;
 	int m_count = 0;
-
 
 	int erased = 0;
 };
