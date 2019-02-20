@@ -8,7 +8,7 @@ void GrenadeSystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
-void GrenadeSystem::update(std::vector<std::shared_ptr<Tile>> tiles, std::vector<AI *> aiChars) {
+void GrenadeSystem::update(std::vector<std::shared_ptr<Tile>> tiles, std::vector<AI *> aiChars, std::vector<Player *> playerChars) {
 	
 	
 	for (Entity * entity : m_entities) {
@@ -41,6 +41,21 @@ void GrenadeSystem::update(std::vector<std::shared_ptr<Tile>> tiles, std::vector
 					sc->setRotation(90);
 					sc->setColor(255, 40, 40);
 					aiC->m_alive = false;
+					sc->setBlendMode(SDL_BLENDMODE_ADD);
+				}
+			}
+
+			for (Player * player : playerChars) {
+				Entity* ent = (Entity *)player;
+				PositionComponent * pPC = (PositionComponent*)ent->getCompByType("POSITION");
+				SpriteComponent * sc = (SpriteComponent*)ent->getCompByType("SPRITE");
+				ControlComponent * pCC = (ControlComponent*)ent->getCompByType("CONTROL");
+				if (dist(c2v{ pPC->getX(), pPC->getY() }, v2) < 300) {
+					pPC->setVelX(2000 * (1 / (pPC->getX() - v2.x)));
+					pPC->setVelY(2000 * (1 / (pPC->getY() - v2.y)));
+					sc->setRotation(90);
+					sc->setColor(255, 40, 40);
+					pCC->setAlive(false);
 					sc->setBlendMode(SDL_BLENDMODE_ADD);
 				}
 			}
