@@ -47,16 +47,10 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	if (online) {
 
 		//Place player at the first available spawn point
-		for (int i = 0; i < m_map->getSpawnPoints().size(); i++)
-		{
-			if (m_map->getSpawnPoints().at(i)->first == false)
-			{
-				m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(i)->second.x, m_map->getSpawnPoints().at(i)->second.y, SDL_GameControllerOpen(0), num));
-				m_map->getSpawnPoints().at(i)->first = true;
-			}
-			break;
-		}
-		//m_players.push_back(new Player(m_renderer, 600 + (100 * num), 200, SDL_GameControllerOpen(0), num));
+
+		m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(1)->second.x, m_map->getSpawnPoints().at(1)->second.y, SDL_GameControllerOpen(0), num));
+		m_map->getSpawnPoints().at(1)->first = true;
+
 
 		m_hs.addEntity((Entity*)m_players[0]);
 		m_cs.addEntity((Entity*)m_players[0]);
@@ -86,8 +80,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 		}
 
 		for (int i = 0; i < (4 - size); i++) {
-			//m_aiCharacters.push_back(new AI(m_renderer, 500.0 + (100.0 * i), 100.0));
-			for (int j = 0; j < m_map->getSpawnPoints().size(); i++)
+			for (int j = 0; j < m_map->getSpawnPoints().size(); j++)
 			{
 				if (m_map->getSpawnPoints().at(j)->first == false)
 				{
@@ -95,7 +88,6 @@ void PlayScreen::initialise(bool online, int size, int num) {
 					m_map->getSpawnPoints().at(j)->first = true;
 					
 				}
-				break;
 			}
 		}
 
@@ -116,7 +108,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 
 		for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) 
 		{
-			for (int j = 0; j < m_map->getSpawnPoints().size(); i++)
+			for (int j = 0; j < m_map->getSpawnPoints().size(); j++)
 			{
 				if (m_map->getSpawnPoints().at(j)->first == false)
 				{

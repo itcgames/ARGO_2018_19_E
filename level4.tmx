@@ -27,7 +27,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="2" name="SpawnPoints">
+ <objectgroup id="2" name="PlayerSpawnPoints">
   <object id="1" x="385" y="458">
    <point/>
   </object>
