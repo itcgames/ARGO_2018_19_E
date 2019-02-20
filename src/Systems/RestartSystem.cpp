@@ -41,6 +41,9 @@ void RestartSystem::reset(int level) {
 			tc->setGotGunBool(false);
 		}
 		else if (tc->getTag() == "Gun") {
+			CollisionComponent * colisionc = (CollisionComponent*)ent->getCompByType("COLLISION");
+			colisionc->setW(sc->getWidth());
+			colisionc->setH(sc->getHeight());
 			tc->setGrabable(true);
 			tc->setGrabbed(false);
 			tc->setGrabableCount(0);
