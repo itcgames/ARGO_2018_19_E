@@ -354,6 +354,22 @@ void PlayScreen::checkRoundOver() {
 			roundEnd = true;
 
 		}
+
+		int dead = 0;
+		for (AI * ai : m_aiCharacters) {
+			Entity * ent = (Entity *)ai;
+			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
+			if (!ai->m_alive) {
+				dead++;
+			}
+		}
+		if (dead >= 3) {
+			if (!m_drawRoundText) {
+				initialiseText("Player Wins");
+				m_drawRoundText = true;
+			}
+			roundEnd = true;
+		}
 	}
 
 	if (roundEnd) {

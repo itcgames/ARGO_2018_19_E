@@ -19,6 +19,7 @@ struct Tile
 	SDL_Rect sRect;
 	SDL_Rect dRect;
 	c2AABB collider;
+	int health;
 	bool dead;
 };
 
