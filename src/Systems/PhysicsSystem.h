@@ -55,7 +55,7 @@ public:
 
 
 	void setGun(TagComponent *tc,ControlComponent *cc,PositionComponent *pc,SpriteComponent *sc, PositionComponent *ownerPosC, ControlComponent * ownerConC);
-	void pickUpAgain(TagComponent *tc);
+	void pickUpAgain(TagComponent *tc,SpriteComponent * sc, CollisionComponent * colisionc);
 	void setPlayer1Position(PositionComponent *pc);
 	void setPlayer2Position(PositionComponent *pc);
 	void throwGunFun(ControlComponent * cc);
