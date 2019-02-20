@@ -68,16 +68,14 @@ void Server::loop() {
 			// Convert from byte array to chars
 			inet_ntop(AF_INET, &client.sin_addr, clientIp, 256);
 
-			if (std::find(m_ips.begin(), m_ips.end(), clientIp) == m_ips.end()) {
+			if (m_players[clientIp] == 0) {
 				playerNum++;
-				id = "Player:" + to_string(playerNum);
 				Packet * p = new Packet();
 				p->message = 1;
 				p->playerNum = playerNum;
 
-				m_players[id] = playerNum;
+				m_players[clientIp] = playerNum;
 				m_clients.push_back(client);
-				m_ips.push_back(clientIp);
 
 				cout << "<SERVER> Player: " << playerNum << " at IP: " << clientIp << endl;
 				
@@ -91,7 +89,7 @@ void Server::loop() {
 				p->playerNum = playerNum;
 				for (int i = 1; i <= playerNum; i++) {
 
-					if (i != m_players[id]) {
+					if (i != m_players[clientIp]) {
 						sendto(in, (char*)p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&m_clients[i - 1], sizeof(m_clients[i - 1]));
 						cout << "<SERVER> Message sent to other client" << endl;
 					}
@@ -101,7 +99,7 @@ void Server::loop() {
 
 				for (int i = 1; i <= playerNum; i++)
 				{
-					if (i != m_players[id])
+					if (i != m_players[clientIp])
 					{
 						int sendOk = sendto(in, (char*)&packet, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&m_clients[i - 1], sizeof(m_clients[i - 1]));
 						if (sendOk == SOCKET_ERROR)
@@ -119,11 +117,10 @@ void Server::loop() {
 					}
 				}
 				if (packet.message == 3) {
-					int index = m_players[id];
-					m_players[id] = 0;
+					int index = m_players[clientIp];
+					m_players[clientIp] = 0;
 					playerNum--;
 					m_clients.erase(m_clients.begin() + (index - 1));
-					m_ips.erase(m_ips.begin() + (index - 1));
 				}
 			}
 

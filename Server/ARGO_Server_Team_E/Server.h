@@ -5,7 +5,6 @@
 #include <WS2tcpip.h>
 #include <vector>
 #include <map>
-#include <string>
 #include "../../src/Client/Packet.h"
 
 using namespace std;
@@ -23,11 +22,9 @@ public:
 
 private:
 	vector<sockaddr_in> m_clients;
-	vector<string> m_ips;
 	map<string, int> m_players;
 	SOCKET in;
 	int playerNum = 0;
-	string id = "";
 };
 #endif 
 
