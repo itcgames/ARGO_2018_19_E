@@ -45,6 +45,11 @@ void OnlineScreen::update() {
 		
 		while (m_client->number == 0 && m_joined) {
 			m_client->receive();
+			responseTimer++;
+			if (responseTimer > NO_RESPONSE) {
+				responseTimer = 0;
+				m_joined = false;
+			}
 		}	
 
 		if (m_joined) {
