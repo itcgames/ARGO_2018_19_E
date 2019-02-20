@@ -32,7 +32,9 @@ void Server::Bind() {
 	serverHint.sin_family = AF_INET; // Address format is IPv4
 	serverHint.sin_port = htons(54000); // Convert from little to big endian
 
-										// Try and bind the socket to the IP and port
+	/*int const buff_size = sizeof(struct sockaddr_in);
+	setsockopt(in, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<char const *>(&buff_size), sizeof(buff_size));
+	*/									// Try and bind the socket to the IP and port
 	if (bind(in, (sockaddr*)&serverHint, sizeof(serverHint)) == SOCKET_ERROR)
 	{
 		cout << "Can't bind socket! " << WSAGetLastError() << endl;
