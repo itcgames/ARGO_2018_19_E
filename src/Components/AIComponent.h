@@ -92,6 +92,8 @@ public:
 
 	c2v lastPos = { 0,0 };
 	int m_count = 0;
+
+	bool hasGun = false;
 private:
 
 	bool m_left = false;
