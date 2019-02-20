@@ -246,7 +246,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		p.alive = cc->getAlive();
 		p.throwWeapon = cc->getThrowWeapon();
 
-		if (p.message != lastPacket.message || p.playerNum != lastPacket.message ||
+		if (p.message != lastPacket.message || p.playerNum != lastPacket.playerNum ||
 			p.left != lastPacket.left || p.right != lastPacket.right || p.jump != lastPacket.jump ||
 			p.fire != lastPacket.fire || p.gunAngle != lastPacket.gunAngle || p.alive != lastPacket.alive ||
 			p.throwWeapon != lastPacket.throwWeapon) {
