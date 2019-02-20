@@ -10,13 +10,12 @@ using namespace std;
 
 class GunSystem
 {
-	std::vector<Entity *> m_entities;
-
 public:
 	GunSystem();
 	void addEntity(Entity * e);
 	void update();
 
+	std::vector<Entity *> m_entities;
 private:
 
 };
