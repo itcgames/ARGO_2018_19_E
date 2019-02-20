@@ -199,7 +199,14 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 
 					if (tag->getTag() == "Player") {
 						ControlComponent * control = (ControlComponent*)entity->getCompByType("CONTROL");
-						control->setAlive(false);
+						if (val == "right") {
+							control->setAlive(false);
+							control->setHitFrom("right");
+						}
+						if (val == "left") {
+							control->setAlive(false);
+							control->setHitFrom("left");
+						}
 					}
 				}
 
@@ -218,19 +225,18 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 				val = rectCollision(bullets->at(j)->collider, tiles.at(i)->collider);
 				if (val != "none") {
 
-
+					tiles.at(i)->health--;
+					if (tiles.at(i)->health <= 0) {
+						tiles.at(i)->dead = true;
+					}
 					auto particle = new ParticleExample();
 
 					particle->setRenderer(m_renderer);
 					particle->setStyle(ParticleExample::SMOKE);
-
-					particle->setPosition((*bullets->begin())->m_spriteComponent->getPosition().x, (*bullets->begin())->m_spriteComponent->getPosition().y);
-					//particle->startAnimating = true;
+					particle->setPosition(bullets->at(j)->m_spriteComponent->getPosition().x, bullets->at(j)->m_spriteComponent->getPosition().y);
 					m_particles.push_back(particle);
 					bullets->erase(bullets->begin() + j);
 				}
-
-
 			}
 		}
 	}
@@ -250,13 +256,12 @@ void CollisionSystem::animateExplosion()
 		m_particles[i]->count++;
 
 
-		std::cout << m_particles[i]->count << std::endl;
 		m_particles[i]->setStartSpin(0);
 		m_particles[i]->setStartSpinVar(0);
 		m_particles[i]->setEndSpin(90);
-		m_particles[i]->setDuration(.1);
-		m_particles[i]->setStartSize(70);
-		m_particles[i]->setEndSize(70);
+		m_particles[i]->setDuration(.5);
+		m_particles[i]->setStartSize(50);
+		m_particles[i]->setEndSize(50);
 		m_particles[i]->setStartSpinVar(0);
 
 
@@ -266,7 +271,7 @@ void CollisionSystem::animateExplosion()
 		if (m_particles[i]->count > 5)
 		{
 			m_particles.erase(m_particles.begin() + i);
-			//m_particles.resize(m_particles.size());
+			m_particles.resize(m_particles.size());
 		}
 
 	}	

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="30" height="25" tilewidth="70" tileheight="70" infinite="0" nextlayerid="4" nextobjectid="5">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="30" height="25" tilewidth="70" tileheight="70" infinite="0" nextlayerid="4" nextobjectid="29">
  <tileset firstgid="1" name="metalSheet" tilewidth="70" tileheight="70" tilecount="49" columns="7">
   <image source="metalSheet.png" width="512" height="512"/>
  </tileset>
@@ -15,7 +15,7 @@
 36,0,0,0,0,36,36,36,0,0,0,0,0,0,0,0,0,0,0,0,0,0,36,36,36,0,0,0,0,36,
 36,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,36,
 36,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,36,
-36,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,36,
+36,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,36,
 36,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,36,
 36,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,36,
 36,36,36,36,0,0,0,0,0,0,36,36,36,36,36,36,36,36,36,36,0,0,0,0,0,0,36,36,36,36,
@@ -32,6 +32,56 @@
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 </data>
  </layer>
- <objectgroup id="3" name="JumpPoints"/>
- <objectgroup id="2" name="Points"/>
+ <objectgroup color="#0000aa" id="3" name="JumpPoints">
+  <object id="7" name="DOUBLELEFT" x="1611" y="470">
+   <point/>
+  </object>
+  <object id="8" name="DOUBLERIGHT" x="491" y="471">
+   <point/>
+  </object>
+  <object id="15" name="DOUBLERIGHT" x="100" y="890">
+   <point/>
+  </object>
+  <object id="16" name="DOUBLERIGHT" x="173" y="1461">
+   <point/>
+  </object>
+  <object id="17" name="DOUBLELEFT" x="1887" y="1449">
+   <point/>
+  </object>
+  <object id="18" name="DOUBLELEFT" x="1888" y="890">
+   <point/>
+  </object>
+  <object id="19" name="DOUBLELEFT" x="422" y="1100">
+   <point/>
+  </object>
+  <object id="22" name="DOUBLELEFT" x="1713" y="1165">
+   <point/>
+  </object>
+  <object id="28" name="DOUBLELEFT" x="350" y="1172">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup color="#aa0000" id="2" name="WalkPoints">
+  <object id="5" name="LEFT" x="489" y="1651">
+   <point/>
+  </object>
+  <object id="6" name="RIGHT" x="1607" y="1659">
+   <point/>
+  </object>
+  <object id="23" name="LEFT" x="1310" y="893">
+   <point/>
+  </object>
+  <object id="24" name="LEFT" x="997" y="890">
+   <point/>
+  </object>
+  <object id="25" name="LEFT" x="909" y="1648">
+   <point/>
+  </object>
+  <object id="26" name="LEFT" x="702" y="889">
+   <point/>
+  </object>
+  <object id="27" name="RIGHT" x="98" y="1652">
+   <point/>
+  </object>
+ </objectgroup>
 </map>

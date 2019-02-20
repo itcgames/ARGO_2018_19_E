@@ -43,8 +43,8 @@ public:
 	void checkRoundOver();
 	void initialiseText(std::string message);
 
-	Hand* h1;
-	Hand* h2;
+	std::vector<Hand *> m_leftHands;
+	std::vector<Hand *> m_rightHands;
 	std::vector<Player *> m_players;
 	std::vector<AI *> m_aiCharacters;
 	std::vector<Player *> m_networkCharacters;
@@ -93,4 +93,8 @@ public:
 	TTF_Font* Font;
 
 	bool m_startGame = true;
+
+	Packet lastPacket;
+
+	bool* m_online = false;
 };

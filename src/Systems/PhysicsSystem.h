@@ -63,10 +63,10 @@ public:
 	void launchGun(PositionComponent *pc, TagComponent *tc, CollisionComponent * cc, ControlComponent * ownerConC, TagComponent * ownerTagC);
 	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC, PositionComponent * gunPosition);
 	void setPlayerGunGot(std::string gun, TagComponent *tagC);
-	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC, PositionComponent * gunPosition);
-	void setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, ControlComponent * ownerConC, PositionComponent * gunPosition);
-	void setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,TagComponent * tc, PositionComponent *ownerPosC, ControlComponent * ownerConC);
-	void setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, TagComponent * tc, PositionComponent *ownerPosC, ControlComponent * ownerConC);
+	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC);
+	void setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC);
+	void setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,TagComponent * tc, PositionComponent *ownerPosC, ControlComponent * ownerConC, TagComponent * gunTagC);
+	void setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, TagComponent * tc, PositionComponent *ownerPosC, ControlComponent * ownerConC, TagComponent * gunTagC);
 	void setHandNormal(SpriteComponent * sc, PositionComponent *pc, PositionComponent *ownerPosC);
 	void movePlayer(ControlComponent * cc, PositionComponent *pc, TagComponent *tc);
 	void setPosition(PositionComponent * pc);
@@ -75,7 +75,9 @@ public:
 	void updateShooting(SDL_Renderer* renderer, ControlComponent * ownerConC);
 	void makeBullets(SDL_Renderer* renderer, TagComponent *tagC,ControlComponent *ownerConC);
 	void checkWeaponCollision(CollisionComponent * colc, TagComponent *tagC);
-	void setHands(PositionComponent *handOwnerPos, ControlComponent *handOwnerConC);
+	void setHands(PositionComponent *handOwnerPos, ControlComponent *handOwnerConC, TagComponent * ownerTagC);
+
+	
 
 
 
@@ -106,5 +108,7 @@ public:
 	float m_grenadeColor = 0;
 
 	int index = -1;
+
+
 };
 #endif // !PHYSICSSYSTEM_H

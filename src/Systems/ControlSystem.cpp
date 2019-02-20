@@ -86,7 +86,10 @@ void ControlSystem::update(SDL_Event e) {
 			joystickAngle = atan2((double)leftX, (double)leftY) * (180.0 / M_PI);
 		}
 		
-		cc->setAngle(joystickAngle);
+		if (joystickAngle != 0)
+		{
+			cc->setAngle(joystickAngle);
+		}
 
 		//std::cout << joystickAngle << std::endl;
 	}

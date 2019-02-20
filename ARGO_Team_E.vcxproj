@@ -124,6 +124,9 @@
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>$(TMX_SDK)\bin\DebugStatic;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy /y /e "$(OneDrive)" "$(SolutionDir)\assets"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ddd|Win32'">
     <ClCompile>

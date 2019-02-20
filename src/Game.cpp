@@ -27,6 +27,9 @@ Game::Game()
 		printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() ); 
 	}
 
+	//Allocate 128 channels for a max for 128 audio chunks playing at one time
+	Mix_AllocateChannels(128);
+
 
 	if (IMG_Init(imgFlags) != imgFlags)
 	{
@@ -197,5 +200,4 @@ void Game::setGameState(GameState gameState)
 {
 	*m_currentGameState = gameState;
 }
-
 
