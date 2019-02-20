@@ -54,6 +54,17 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 		}
 	}
 
+	int spawnPointVectorSize = m_spawnPointVector.size();
+	{
+		for (int i = 0; i < spawnPointVectorSize; i++)
+		{
+			if (!m_spawnPointVector.empty())
+			{
+				m_spawnPointVector.pop_back();
+			}
+		}
+	}
+
 	auto& map_layers = m_map.getLayers();
 	for (auto& layer : map_layers)
 	{
@@ -80,6 +91,14 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 					c2v position = c2v{ object.getPosition().x, object.getPosition().y };
 					std::string name = object.getName();
 					m_walkPointVector.push_back(std::make_pair(position, name));
+				}
+
+				//Allocate spawn points for players, the boolean in the pair signifies whether or not a player has
+				//taken that spawn or not.
+				if (layer->getName() == "PlayerSpawnPoints")
+				{
+					c2v position = c2v{ object.getPosition().x, object.getPosition().y };
+					m_spawnPointVector.push_back(new std::pair<bool, c2v>(false, position));
 				}
 				
 			}
