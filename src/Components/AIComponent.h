@@ -63,7 +63,7 @@ public:
 	bool jumping = false;
 
 	bool set = false;
-	c2v closestEnemy;
+	std::pair<double,c2v> closestEnemy;
 
 	std::pair<c2v, std::string> closestWalkPoint;
 	std::pair<c2v, std::string> closestJumpPoint;

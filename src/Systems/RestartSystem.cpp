@@ -27,6 +27,7 @@ void RestartSystem::reset(int level) {
 			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
 			ai->m_alive = true;
 			ai->set = false;
+			ai->hasGun = false;
 			sc->setColor(255, 255, 255);
 			
 		}

@@ -7,9 +7,11 @@ Player::Player()
 
 
 
-Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller, int index)
+Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller, int index, TTF_Font* font)
 
 {
+	Font = font;
+	m_renderer = renderer;
 	//Set up Sprite component and add to entity component vector
 	oldY = 0;
 	m_spriteComponent = new SpriteComponent(0, 0, 67, 150);
@@ -37,7 +39,10 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 
 	m_spriteComponentHead->setColor(255, 255, 255);
 
-
+	m_marker = new SpriteComponent(0, 0, 100, 100);
+	m_marker->loadFromFile("assets/marker.png", renderer);
+	m_marker->setPosition(c2v{ x, y - 150});
+	m_marker->setScale(c2v{ 0.8f, 0.8f });
 
 
 	this->addComponent(new HealthComponent(10));
@@ -45,18 +50,22 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	if (index == 0)
 	{
 		tag->setSubTag("Player1");
+		initialiseText(std::to_string(index + 1), m_marker->getPosition().x, m_marker->getPosition().y);
 	}
 	else if (index == 1)
 	{
 		tag->setSubTag("Player2");
+		initialiseText(std::to_string(index + 1), m_marker->getPosition().x, m_marker->getPosition().y);
 	}
 	else if (index == 2)
 	{
 		tag->setSubTag("Player3");
+		initialiseText(std::to_string(index + 1), m_marker->getPosition().x, m_marker->getPosition().y);
 	}
 	else if (index == 3)
 	{
 		tag->setSubTag("Player4");
+		initialiseText(std::to_string(index + 1), m_marker->getPosition().x, m_marker->getPosition().y);
 	}
 	else {
 		tag->setSubTag("AIPlayer");
@@ -72,6 +81,9 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	this->addComponent(new CollisionComponent(x, y, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }
 void Player::render(SDL_Renderer* renderer) {
+	m_marker->setPosition(c2v{ m_spriteComponent->getPosition().x - 20, m_spriteComponent->getPosition().y - 150 });
+	renderQuad.x = m_marker->getPosition().x + 25;
+	renderQuad.y = m_marker->getPosition().y + 10;
 
 	if (controlComp->getAlive() == false) {
 		if (controlComp->getHitFrom() == "right")
@@ -278,5 +290,17 @@ void Player::render(SDL_Renderer* renderer) {
 	m_spriteComponentHead->render(renderer);
 	m_spriteComponentLeftFoot->render(renderer);
 	m_spriteComponentRightFoot->render(renderer);
+	m_marker->render(renderer);
+	SDL_RenderCopy(m_renderer, text, NULL, &renderQuad);
+}
 
+void Player::initialiseText(std::string message, int x, int y) {
+	round_text = message;
+	textSurface = TTF_RenderText_Solid(Font, round_text.c_str(), textColor);
+	text = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+	
+	int text_width = textSurface->w;
+	int text_height = textSurface->h;
+	SDL_FreeSurface(textSurface);
+	renderQuad = { x, y, 30, 50 };
 }

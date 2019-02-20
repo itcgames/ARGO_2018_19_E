@@ -53,12 +53,11 @@ public:
 	std::vector<Player *> m_players;
 	std::vector<AI *> m_aiCharacters;
 	std::vector<Player *> m_networkCharacters;
-	/*Gun* pistol;
-	Gun* shotgun;
-	Gun* juicer;
-	Gun* grenade;*/
+
+	std::vector<Entity*> m_Gunents;
+	std::vector<Entity*> m_playerents;
 	std::vector<Gun*> m_guns;
-	std::vector<Entity*> m_ents;
+
 	Light* testLight;
 
 	SpriteComponent * m_backgroundSprite;
