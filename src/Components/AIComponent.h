@@ -5,7 +5,7 @@
 #include "../cute_c2.h"
 #include "StateComponent.h"
 #include <vector>
-
+#include "../ParticleExample.h"
 class AIComponent : public Component
 {
 
@@ -87,6 +87,11 @@ public:
 	std::string direction = "";
 	std::pair<double, c2v> m_realDist;
 
+
+	std::vector<ParticleExample*> m_particleVector;
+
+	c2v lastPos = { 0,0 };
+	int m_count = 0;
 private:
 
 	bool m_left = false;

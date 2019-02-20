@@ -622,6 +622,65 @@ void ParticleExample::setStyle(PatticleStyle style)
         _posVar = { 20.0f, 0.0f };
         break;
     }
+
+	case ParticleExample::DIRT:
+	{
+		initWithTotalParticles(200);
+
+		// duration
+		_duration = DURATION_INFINITY;
+
+		// Emitter mode: Gravity Mode
+		setEmitterMode(Mode::GRAVITY);
+
+		// Gravity Mode: gravity
+		setGravity(Vec2(0, 0));
+
+		// Gravity Mode: radial acceleration
+		setRadialAccel(0);
+		setRadialAccelVar(0);
+
+		// Gravity Mode: speed of particles
+		setSpeed(-25);
+		setSpeedVar(10);
+
+		// angle
+		_angle = 90;
+		_angleVar = 5;
+
+		// life of particles
+		_life = 4;
+		_lifeVar = 1;
+
+		// size, in pixels
+		_startSize = 60.0f;
+		_startSizeVar = 10.0f;
+		_endSize = START_SIZE_EQUAL_TO_END_SIZE;
+
+		// emits per frame
+		_emissionRate = _totalParticles / _life;
+
+		// color of particles
+		_startColor.r = 0.709f;
+		_startColor.g = 0.580f;
+		_startColor.b = 0.458f;
+		_startColor.a = 1.00f;
+		_startColorVar.r = 0.02f;
+		_startColorVar.g = 0.02f;
+		_startColorVar.b = 0.02f;
+		_startColorVar.a = 0.0f;
+		_endColor.r = 0.0f;
+		_endColor.g = 0.0f;
+		_endColor.b = 0.0f;
+		_endColor.a = 1.0f;
+		_endColorVar.r = 0.0f;
+		_endColorVar.g = 0.0f;
+		_endColorVar.b = 0.0f;
+		_endColorVar.a = 0.0f;
+
+		_posVar = { 20.0f, 0.0f };
+		break;
+	}
     case ParticleExample::SNOW:
     {
         initWithTotalParticles(700);

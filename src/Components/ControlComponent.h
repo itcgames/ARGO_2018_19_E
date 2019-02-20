@@ -44,10 +44,18 @@ public:
 	int aIndex = 0;
 	int xIndex = 0;
 
+
+	int m_count = 0;
+	c2v lastPos = { 0,0 };
+
 	bool throwGun = false;
 
 	bool getThrowGun() { return throwGun; }
 	void setThrowGun(bool value) { throwGun = value; }
+
+	std::string hitFrom = "";
+	std::string getHitFrom() { return hitFrom; }
+	void setHitFrom(std::string value) { hitFrom = value; }
 
 
 	std::vector<ParticleExample*> m_particleVector;
