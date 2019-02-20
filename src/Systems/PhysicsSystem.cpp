@@ -349,15 +349,15 @@ void PhysicsSystem::setPlayerGunGot(std::string gun, TagComponent * tagC)
 	}
 }
 
-// Set the player position variable.
-void PhysicsSystem::setPlayer1Position(PositionComponent * pc) {
-	player1PositionX = pc->getX();
-	player1PositionY = pc->getY();
-}
-void PhysicsSystem::setPlayer2Position(PositionComponent * pc) {
-	player2PositionX = pc->getX();
-	player2PositionY = pc->getY();
-}
+//// Set the player position variable.
+//void PhysicsSystem::setPlayer1Position(PositionComponent * pc) {
+//	player1PositionX = pc->getX();
+//	player1PositionY = pc->getY();
+//}
+//void PhysicsSystem::setPlayer2Position(PositionComponent * pc) {
+//	player2PositionX = pc->getX();
+//	player2PositionY = pc->getY();
+//}
 void PhysicsSystem::throwGunFun(ControlComponent * cc) {
 	cc->setThrowWeapon(false);
 	cc->setThrowGun(true);

@@ -37,6 +37,7 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos)
 	this->addComponent(new FState());
 	this->addComponent(new HealthComponent(10));
 	this->addComponent(new TagComponent("AI_TAG"));
+	this->addComponent(new ControlComponent());
 	controlComp = new AIComponent(10);
 	this->addComponent(controlComp);
 	positionComp = new PositionComponent(xPos, yPos);

@@ -9,15 +9,16 @@ void AISystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
-void AISystem::recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints, std::vector<std::pair<c2v, std::string>> jumpPoints, int width, int height)
+void AISystem::recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints, std::vector<std::pair<c2v, std::string>> jumpPoints, std::vector<std::shared_ptr<Tile>> tiles, int width, int height)
 {
 	m_pathPoints = walkpoints;
 	m_jumpPoints = jumpPoints;
 	m_width = width;
 	m_height = height;
+	m_tiles = tiles;
 }
 
-void AISystem::receive(std::vector<Entity*> ents)
+void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 {
 	
 	c2v vec = { 0.0f, 0.0f };
@@ -25,31 +26,59 @@ void AISystem::receive(std::vector<Entity*> ents)
 		
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 		
-		int count = 0;
-		ac->m_distances.assign(ents.size(), std::make_pair(0.0, vec));
-		m_dist = ac->m_distances;
 		
-		for (auto e = ents.begin(); e != ents.end(); ++e)
+		if (!ac->hasGun)
 		{
-			PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
-			ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
-			
-			m_position = c2v{ pos->getX(), pos->getY() };
+			int count = 0;
+			ac->m_distances.assign(guns.size(), std::make_pair(0.0, vec));
+			m_dist = ac->m_distances;
 
-			ac->m_distances[count].first = distance(ac->curPosition, m_position);
+			for (auto e = guns.begin(); e != guns.end(); ++e)
+			{
+				PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
+				ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
 
-			vec.x = pos->getX();
-			vec.y = pos->getY();
+				m_position = c2v{ pos->getX(), pos->getY() };
 
-			ac->m_distances[count].second = vec;
+				ac->m_distances[count].first = distance(ac->curPosition, m_position);
+
+				vec.x = pos->getX();
+				vec.y = pos->getY();
+
+				ac->m_distances[count].second = vec;
 
 
-			count++;
+				count++;
+			}
+		}
+		else
+		{
+			int count = 0;
+			ac->m_distances.assign(players.size(), std::make_pair(0.0, vec));
+			m_dist = ac->m_distances;
+
+			for (auto e = players.begin(); e != players.end(); ++e)
+			{
+				PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
+				ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
+
+				m_position = c2v{ pos->getX(), pos->getY() };
+
+				ac->m_distances[count].first = distance(ac->curPosition, m_position);
+
+				vec.x = pos->getX();
+				vec.y = pos->getY();
+
+				ac->m_distances[count].second = vec;
+
+
+				count++;
+			}
 		}
 	}
 }
 
-c2v AISystem::checkClosest(std::vector<std::pair<double, c2v>> distances, std::pair<double, c2v > real)
+std::pair<double,c2v> AISystem::checkClosest(std::vector<std::pair<double, c2v>> distances, std::pair<double, c2v > real)
 {
 
 	double smallest = 10000;
@@ -65,7 +94,7 @@ c2v AISystem::checkClosest(std::vector<std::pair<double, c2v>> distances, std::p
 		}
 	}
 	
-	return real.second;
+	return real;
 }
 
 std::pair<c2v, std::string> AISystem::checkPoints(std::vector<std::pair<c2v, std::string>> points, PositionComponent* pc)
@@ -141,13 +170,12 @@ void AISystem::update() {
 				ac->setLeft(false);
 				ac->setRight(true);
 			}
-
 			//sets the initial direction in which the AI will move
 			if (!ac->set)
 			{
 				ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
 				
-				if (ac->closestEnemy.x > ac->curPosition.x)
+				if (ac->closestEnemy.second.x > ac->curPosition.x)
 				{
 					ac->setLeft(true);
 				}
@@ -163,7 +191,7 @@ void AISystem::update() {
 			ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
 
 			//continuely sets the position of the closest target 
-			if (ac->closestEnemy.x > ac->curPosition.x)
+			if (ac->closestEnemy.second.x > ac->curPosition.x)
 			{
 				ac->direction = "RIGHT";
 			}
@@ -284,7 +312,7 @@ void AISystem::update() {
 			}
 
 			//checks the ai jumping state
-			if (ac->curPosition.y + 50 < ac->closestEnemy.y + 200 && ac->m_landed)
+			if (ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
 			{
 				ac->jumping = false;
 			}
@@ -292,25 +320,28 @@ void AISystem::update() {
 			{
 				ac->jumping = true;
 			}
-
+			if (ac->closestEnemy.first < 30)
+			{
+				ac->hasGun = true;
+			}
 			//if the gun is on the same level as the AI character
-			if (ac->curPosition.y + 50 > ac->closestEnemy.y && ac->curPosition.y + 50 < ac->closestEnemy.y + 200 && ac->m_landed)
+			if (ac->curPosition.y + 50 > ac->closestEnemy.second.y && ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
 			{
 				ac->m_gunInSight = true;
 
 				if (ac->direction == "LEFT")
 				{
 					
-					if (ac->curPosition.x > ac->closestEnemy.x)
+					if (ac->curPosition.x > ac->closestEnemy.second.x)
 					{
 						ac->setRight(false);
 						ac->setLeft(true);
 				
 					}
 				}
-				if (ac->direction == "RIGHT" && ac->curPosition.x < ac->closestEnemy.x)
+				if (ac->direction == "RIGHT" && ac->curPosition.x < ac->closestEnemy.second.x)
 				{
-					if (ac->curPosition.x < ac->closestEnemy.x)
+					if (ac->curPosition.x < ac->closestEnemy.second.x)
 					{
 						ac->setRight(true);
 						ac->setLeft(false);

@@ -61,5 +61,8 @@ private:
 	bool m_ready2Play;
 	bool m_firstRunThrough = false;
 	Packet m_pack;
+
+	int responseTimer = 0;
+	int NO_RESPONSE = 12000;
 };
 

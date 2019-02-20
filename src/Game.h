@@ -81,11 +81,7 @@ private:
 	Hand* h2;
 	std::vector<Player *> m_players;
 	std::vector<AI *> m_aiCharacters;
-	Gun* pistol;
-	Gun* shotgun;
-	Gun* juicer;
-	Gun* grenade;
-	std::vector<Entity*> m_ents;
+	
 	Light* testLight;
 	AudioObserver* m_audioObserver;
 

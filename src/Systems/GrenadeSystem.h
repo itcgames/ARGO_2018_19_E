@@ -13,8 +13,6 @@
 
 class GrenadeSystem
 {
-	std::vector<Entity *> m_entities;
-
 public:
 	GrenadeSystem();
 	void addEntity(Entity * e);
@@ -29,5 +27,7 @@ public:
 
 	int m_count = 0;
 	bool m_startAnimating = false;
+
+	std::vector<Entity *> m_entities;
 };
 #endif // !GRENADESYSTEM_H

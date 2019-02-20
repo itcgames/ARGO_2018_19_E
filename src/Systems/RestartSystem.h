@@ -12,13 +12,12 @@ using namespace std;
 
 class RestartSystem
 {
-	std::vector<Entity *> m_entities;
-
 public:
 	RestartSystem();
 	void addEntity(Entity * e);
 	void reset(int level);
 
+	std::vector<Entity *> m_entities;
 private:
 	tmx::Map m_map;
 };
