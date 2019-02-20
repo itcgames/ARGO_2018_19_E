@@ -18,8 +18,9 @@ struct Packet
 {
 	int playerNum;
 	int message;
-	c2v position;
 	bool alive;
+
+	c2v position;
 
 	bool left;
 	bool right;

@@ -18,7 +18,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 	{
 		//x = RCos(Angle)
 		//y = RSin(Angle)
-		double angle = ownerConC->getAngle() + 90;
+		double angle = tc->getPreviousAngle();
 		double angleTo = ownerConC->getAngle() + 90;
 		double angleDifference = angleTo - angle;
 		double ease = 0.1;
@@ -32,6 +32,9 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 		}
 
 		angle += angleDifference * ease;
+		tc->setAngle(angle);
+
+		
 
 		double radAng = angle * 3.14159265359 / 180;
 		double radius = 60;
@@ -85,27 +88,54 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 				if (tc->getSubTag() == "juicer")  // Slow down rotation for juicer balance
 				{
 					double angleTo = ownerConC->getAngle() + 90;
-					double angleDifference = angleTo - angle;
+					double angleDifference = angleTo - tc->getPreviousAngle();
 					double ease = 0.1;
 					if (tc->getSubTag() == "juicer")
 					{
 						ease = 0.01;
 					}
-
-					angle += angleDifference * ease;
-					sc->setRotation(-angle + 90); //rotate gun
+					float previousAngle = tc->getPreviousAngle();
+					tc->setPreviousAngle(previousAngle += angleDifference * ease);
+					sc->setRotation(-tc->getPreviousAngle() + 90); //rotate gun
+				}
+				else if (tc->getSubTag() == "pistol")  // Slow down rotation for juicer balance
+				{
+					double angleTo = ownerConC->getAngle() + 90;
+					double angleDifference = angleTo - tc->getPreviousAngle();
+					double ease = 0.1;
+					if (tc->getSubTag() == "pistol")
+					{
+						ease = 0.1;
+					}
+					float previousAngle = tc->getPreviousAngle();
+					tc->setPreviousAngle(previousAngle += angleDifference * ease);
+					sc->setRotation(-tc->getPreviousAngle() + 90); //rotate gun
+				}
+				else if (tc->getSubTag() == "grenade")  // Slow down rotation for juicer balance
+				{
+					double angleTo = ownerConC->getAngle() + 90;
+					double angleDifference = angleTo - tc->getPreviousAngle();
+					double ease = 0.1;
+					if (tc->getSubTag() == "grenade")
+					{
+						ease = 0.2;
+					}
+					float previousAngle = tc->getPreviousAngle();
+					tc->setPreviousAngle(previousAngle += angleDifference * ease);
+					sc->setRotation(-tc->getPreviousAngle() + 90); //rotate gun
 				}
 				else if (tc->getSubTag() == "shotgun")  // Slow down shotgun rotation to make it look nice
 				{
 					double angleTo = ownerConC->getAngle() + 90;
-					double angleDifference = angleTo - angle;
+					double angleDifference = angleTo - tc->getPreviousAngle();
+					double ease = 0.1;
 					if (tc->getSubTag() == "shotgun")
 					{
 						ease = 0.06;
 					}
-
-					angle += angleDifference * ease;
-					sc->setRotation(-angle + 90); //rotate gun
+					float previousAngle = tc->getPreviousAngle();
+					tc->setPreviousAngle(previousAngle += angleDifference * ease);
+					sc->setRotation(-tc->getPreviousAngle() + 90); //rotate gun
 				}
 				else {
 					sc->setRotation((ownerConC->getAngle())*-1); //rotate gun
@@ -275,7 +305,7 @@ void PhysicsSystem::setPlayerGunGot(std::string gun, TagComponent * tagC)
 				tagC->setGotGunBool(false);
 			}
 		}
-		if (tc->getTag() == "Hand")
+		if (tc->getTag() == "Hand" && tc->getSubTag() == tagC->getSubTag())
 		{
 			tc->setGunGot(gun);
 			tc->setGotGunBool(true);

@@ -17,7 +17,9 @@
     <ClCompile Include="src\Menus\MenuScreen.cpp" />
     <ClCompile Include="src\Menus\OnlineScreen.cpp" />
     <ClCompile Include="src\Menus\OptionScreen.cpp" />
+    <ClCompile Include="src\Menus\playScreen.cpp" />
     <ClCompile Include="src\Menus\SplashScreen.cpp" />
+    <ClCompile Include="src\ObserverPattern\AudioObserver.cpp" />
     <ClCompile Include="src\ParticleExample.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -27,28 +29,24 @@
     <ClCompile Include="src\States\SearchEntity.cpp" />
     <ClCompile Include="src\States\SearchGun.cpp" />
     <ClCompile Include="src\Systems\AISystem.cpp" />
+    <ClCompile Include="src\Systems\AnimationsSystem.cpp" />
     <ClCompile Include="src\Systems\CollisionSystem.cpp" />
     <ClCompile Include="src\Systems\ControlSystem.cpp" />
     <ClCompile Include="src\Systems\GrenadeSystem.cpp" />
     <ClCompile Include="src\Systems\GunSystem.cpp" />
     <ClCompile Include="src\Systems\HealthSystem.cpp" />
+    <ClCompile Include="src\Systems\NetworkSystem.cpp" />
     <ClCompile Include="src\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="src\Systems\RenderSystem.cpp" />
     <ClCompile Include="src\Systems\RestartSystem.cpp" />
     <ClCompile Include="src\Systems\SoundSystem.cpp" />
-<<<<<<< HEAD
-    <ClCompile Include="src\ObserverPattern\AudioObserver.cpp" />
-=======
-    <ClCompile Include="src\Systems\AnimationsSystem.cpp" />
-    <ClCompile Include="src\Menus\playScreen.cpp" />
-    <ClCompile Include="src\Systems\NetworkSystem.cpp" />
->>>>>>> b0c4ad4111e398e995cc39c24281725f3e275a7c
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Factory.h" />
     <ClInclude Include="src\AI.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Client\Client.h" />
+    <ClInclude Include="src\Client\Packet.h" />
     <ClInclude Include="src\Components\AIComponent.h" />
     <ClInclude Include="src\Components\CollisionComponent.h" />
     <ClInclude Include="src\Components\Component.h" />
@@ -75,8 +73,12 @@
     <ClInclude Include="src\Menus\MenuScreen.h" />
     <ClInclude Include="src\Menus\OnlineScreen.h" />
     <ClInclude Include="src\Menus\OptionScreen.h" />
+    <ClInclude Include="src\Menus\playScreen.h" />
     <ClInclude Include="src\Menus\SplashScreen.h" />
     <ClInclude Include="src\Gun.h" />
+    <ClInclude Include="src\ObserverPattern\AudioObserver.h" />
+    <ClInclude Include="src\ObserverPattern\Observer.h" />
+    <ClInclude Include="src\ObserverPattern\Subject.h" />
     <ClInclude Include="src\ParticleExample.h" />
     <ClInclude Include="src\Menus\State.h" />
     <ClInclude Include="src\ParticleSystem.h" />
@@ -87,24 +89,16 @@
     <ClInclude Include="src\States\SearchEntity.h" />
     <ClInclude Include="src\States\SearchGun.h" />
     <ClInclude Include="src\Systems\AISystem.h" />
+    <ClInclude Include="src\Systems\AnimationsSystem.h" />
     <ClInclude Include="src\Systems\CollisionSystem.h" />
     <ClInclude Include="src\Systems\ControlSystem.h" />
     <ClInclude Include="src\Systems\GrenadeSystem.h" />
     <ClInclude Include="src\Systems\GunSystem.h" />
     <ClInclude Include="src\Systems\HealthSystem.h" />
+    <ClInclude Include="src\Systems\NetworkSystem.h" />
     <ClInclude Include="src\Systems\PhysicsSystem.h" />
     <ClInclude Include="src\Systems\RenderSystem.h" />
     <ClInclude Include="src\Systems\RestartSystem.h" />
     <ClInclude Include="src\Systems\SoundSystem.h" />
-    <ClInclude Include="src\Client\Packet.h" />
-<<<<<<< HEAD
-    <ClInclude Include="src\ObserverPattern\Subject.h" />
-    <ClInclude Include="src\ObserverPattern\Observer.h" />
-    <ClInclude Include="src\ObserverPattern\AudioObserver.h" />
-=======
-    <ClInclude Include="src\Systems\AnimationsSystem.h" />
-    <ClInclude Include="src\Menus\playScreen.h" />
-    <ClInclude Include="src\Systems\NetworkSystem.h" />
->>>>>>> b0c4ad4111e398e995cc39c24281725f3e275a7c
   </ItemGroup>
 </Project>
