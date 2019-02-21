@@ -57,7 +57,7 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	m_marker = new SpriteComponent(0, 0, 100, 100);
 	m_marker->loadFromFile("assets/marker.png", renderer);
 	m_marker->setPosition(c2v{ x, y - 150});
-	m_marker->setScale(c2v{ 0.8f, 0.8f });
+	m_marker->setScale(c2v{ 0.1f, 0.1f });
 
 
 	this->addComponent(new HealthComponent(10));
@@ -96,9 +96,21 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	this->addComponent(new CollisionComponent(x, y, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }
 void Player::render(SDL_Renderer* renderer) {
-	m_marker->setPosition(c2v{ m_spriteComponent->getPosition().x - 20, m_spriteComponent->getPosition().y - 150 });
-	renderQuad.x = m_marker->getPosition().x + 25;
-	renderQuad.y = m_marker->getPosition().y + 10;
+
+	m_marker->setPosition(c2v{ m_spriteComponent->getPosition().x + 17 - (startBalloonCount * 40), m_spriteComponent->getPosition().y - 150 - startBalloonFlightCount });
+	m_marker->setScale(c2v{ 0.1f + startBalloonCount, 0.1f + startBalloonCount });
+	if (startBalloonCount < 0.8)
+	{
+		startBalloonCount = startBalloonCount + 0.01;
+	}
+	else {
+		startBalloonFlightCount = startBalloonFlightCount + 5;
+	}
+
+	renderQuad.x = m_marker->getPosition().x + (startBalloonCount * 40);
+	renderQuad.y = m_marker->getPosition().y + (startBalloonCount * 30);
+	renderQuad.w = startBalloonCount * 30;  //30
+	renderQuad.h = startBalloonCount * 50;  //50
 
 	if (controlComp->getAlive() == false) {
 		if (controlComp->getHitFrom() == "right")

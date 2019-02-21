@@ -17,6 +17,8 @@ public:
 	void render(SDL_Renderer* renderer);
 
 private:
+	float startBalloonCount = 0.0f;
+	float startBalloonFlightCount = 0.0f;
 	std::vector<Component*> m_components;
 	PositionComponent* positionComp;
 	ControlComponent* controlComp;
