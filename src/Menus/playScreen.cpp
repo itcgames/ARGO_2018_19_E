@@ -120,7 +120,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			{
 				if (m_map->getSpawnPoints().at(j)->first == false)
 				{
-					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y));
+					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, size));
 					m_map->getSpawnPoints().at(j)->first = true;
 					
 				}
@@ -129,6 +129,8 @@ void PlayScreen::initialise(bool online, int size, int num) {
 
 	}
 	else {
+
+		
 
 		for (int i = 0; i < SDL_NumJoysticks(); i++) 
 		{
@@ -142,24 +144,29 @@ void PlayScreen::initialise(bool online, int size, int num) {
 					m_leftHands.push_back(new Hand(m_renderer, 1, i));
 					m_rightHands.push_back(new Hand(m_renderer, 2, i));
 					m_map->getSpawnPoints().at(j)->first = true;
+					
 					break;
 				}
 			}
 		}
-
+		int noOfPlayers = SDL_NumJoysticks();
+		
 		for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) 
 		{
 			for (int j = 0; j < m_map->getSpawnPoints().size(); j++)
 			{
 				if (m_map->getSpawnPoints().at(j)->first == false)
 				{
-					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y));
+					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, noOfPlayers));
 					m_leftHands.push_back(new Hand(m_renderer, 1, 4));
 					m_rightHands.push_back(new Hand(m_renderer, 2, 4));
 					m_map->getSpawnPoints().at(j)->first = true;
+					noOfPlayers += 1;
 				}
 			}
 		}
+
+		std::cout << noOfPlayers << std::endl;
 	}
 
 
