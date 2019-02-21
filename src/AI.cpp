@@ -74,7 +74,7 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 void AI::render(SDL_Renderer* renderer) {
 
 	if (!control->getAlive()) {
-		if (controlComp->hitFromRight == true)
+		if (control->getHitFrom() == "right")
 		{
 			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
 			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
@@ -84,7 +84,7 @@ void AI::render(SDL_Renderer* renderer) {
 			m_spriteComponentLeftFoot->rotate(3);
 			m_spriteComponentRightFoot->rotate(3);
 		}
-		else if (controlComp->hitFromLeft == true)
+		else if (control->getHitFrom() == "left")
 		{
 			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x - 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
 			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x + 10, m_spriteComponentRightFoot->getPosition().y + 10 });

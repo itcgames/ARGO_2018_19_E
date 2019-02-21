@@ -61,7 +61,6 @@ void CollisionSystem::update(std::vector<std::shared_ptr<Tile>> tiles) {
 								pc->jumpNum = 0;
 								pc->m_allowedJump = true;
 								pc->setVelY(0);
-
 								pc->m_onTop = true;
 								pc->setY(tiles.at(i)->dRect.y - cc->getH());
 
