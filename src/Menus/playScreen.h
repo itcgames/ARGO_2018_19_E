@@ -14,6 +14,7 @@
 #include "../Systems/AnimationsSystem.h"
 #include "../Systems/NetworkSystem.h"
 
+#include "../Entity.h"
 #include "../Player.h"
 #include "../Hand.h"
 #include "../AI.h"
@@ -52,6 +53,7 @@ public:
 	Camera* m_camera;
 	SDL_Rect* m_focusPoint;
 	SDL_Rect* m_offset;
+	std::vector<c2v> m_playerPositions;
 
 	std::vector<Hand *> m_leftHands;
 	std::vector<Hand *> m_rightHands;

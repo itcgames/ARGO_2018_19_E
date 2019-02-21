@@ -5,7 +5,7 @@
 #include "Components/SpriteComponent.h"
 
 
-class AI : Entity
+class AI : public Entity
 {
 public:
 	AI();

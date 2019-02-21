@@ -7,7 +7,7 @@
 
 #include <SDL_ttf.h>
 
-class Player : Entity
+class Player : public Entity
 {
 public:
 	Player();

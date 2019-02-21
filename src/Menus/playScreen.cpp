@@ -23,6 +23,11 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
 	m_backgroundSprite->setScale(c2v{ 1.5f, 1.6f });
 
+	for (int i = 0; i < 4; i++)
+	{
+		m_playerPositions.push_back(c2v{ 0, 0 });
+	}
+
 	m_map = new MapLoader();
 
 	m_map->load("testlevel.tmx", renderer);
@@ -256,7 +261,25 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
 
-	m_camera->focus()
+
+	int entityIndex = 0;
+	for(int i = 0; i < m_players.size(); i++)
+	{
+		PositionComponent* pc = (PositionComponent*)m_players.at(i)->getCompByType("POSITION");
+		m_playerPositions.at(i) = c2v{ pc->getX(), pc->getY() };
+		entityIndex++;
+	}
+
+	for (int i = 0; i < m_aiCharacters.size(); i++)
+	{
+		PositionComponent* pc = (PositionComponent*)m_aiCharacters.at(i)->getCompByType("POSITION");
+		m_playerPositions.at(entityIndex) = c2v{ pc->getX(), pc->getY() };
+		entityIndex++;
+	}
+
+	m_focusPoint = m_camera->focus(m_playerPositions);
+	m_camera->update(m_focusPoint);
+
 	//m_animationsSys.update();
 	checkRoundOver();
 	if (!(*online)) {
@@ -317,14 +340,14 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 void PlayScreen::render(SDL_Renderer * renderer) {
 	m_backgroundSprite->render(m_renderer);
-	m_map->draw(m_renderer);
+	m_map->draw(m_renderer, m_camera);
 	for (AI * ai : m_aiCharacters) {
 		ai->render(m_renderer);
 	}
 	for (Player *p : m_players) {
 		p->render(m_renderer);
 	}
-	m_rs.render(m_renderer);
+	m_rs.render(m_renderer, m_camera);
 	m_ps.bulletRender(m_renderer);
 	//m_animationsSys.render();
 	testLight->render(m_renderer);
