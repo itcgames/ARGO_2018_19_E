@@ -308,9 +308,9 @@ std::string PhysicsSystem::rectCollision(c2AABB A, c2AABB B)
 
 void PhysicsSystem::pickUpAgain(TagComponent * tc, SpriteComponent * sc, CollisionComponent * colisionc) {
 	// Increase grabable count to allow thrown gun to be picked up again.
-	if (tc->getGrabable() == false)
+	if (tc->getGrabable() == false && tc->getGrabbed() == false)
 	{
-		if (tc->getGrabableCount() > 30)
+		if (tc->getGrabableCount() > 10)
 		{
 			tc->setGrabable(true);
 			tc->setGrabableCount(0);
@@ -621,14 +621,14 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 	for (Entity * entity : m_entities) {
 
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
-		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
-		CollisionComponent * colc = (CollisionComponent*)entity->getCompByType("COLLISION");
-		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
-		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
-		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
-		TagComponent * gunGotTag = (TagComponent*)entity->getCompByType("TAG");
 
 		if (tc->getTag() == "Hand" && tc->getSubTag() == ownerTagC->getSubTag()) {
+			ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
+			CollisionComponent * colc = (CollisionComponent*)entity->getCompByType("COLLISION");
+			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
+			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
+			AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
+			TagComponent * gunGotTag = (TagComponent*)entity->getCompByType("TAG");
 			if (tc->getGotGunBool() == true)
 			{
 				if (ownerConC->getAngle() + 90 < 90)

@@ -22,24 +22,29 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	this->addComponent(m_spriteComponent);
 
 	m_spriteComponentHead = new SpriteComponent(0, 0, 330, 330);
+	m_marker = new SpriteComponent(0, 0, 100, 100);
 	if (index == 0)
 	{
-		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/headGuy.png", renderer);
+		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/head1.png", renderer);
+		m_marker->loadFromFile("assets/assets/art/character/finished_character_assets/marker.png", renderer);
 	}
 	else if (index == 1)
 	{
-		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/headGuy2.png", renderer);
+		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/head2.png", renderer);
+		m_marker->loadFromFile("assets/assets/art/character/finished_character_assets/marker2.png", renderer);
 	}
 	else if (index == 2)
 	{
-		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/headGuy3.png", renderer);
+		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/head3.png", renderer);
+		m_marker->loadFromFile("assets/assets/art/character/finished_character_assets/marker3.png", renderer);
 	}
 	else if (index == 3)
 	{
-		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/headGuy4.png", renderer);
+		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/head4.png", renderer);
+		m_marker->loadFromFile("assets/assets/art/character/finished_character_assets/marker4.png", renderer);
 	}
 	m_spriteComponentHead->setPosition(c2v{ x, y });
-	m_spriteComponentHead->setScale(c2v{ 0.2f, 0.28f });
+	m_spriteComponentHead->setScale(c2v{ 0.5f, 0.68f });
 
 
 	m_spriteComponentLeftFoot = new SpriteComponent(0, 0, 107, 91);
@@ -53,9 +58,6 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	m_spriteComponentRightFoot->setScale(c2v{ 0.5f, 0.5f });
 
 	m_spriteComponentHead->setColor(255, 255, 255);
-
-	m_marker = new SpriteComponent(0, 0, 100, 100);
-	m_marker->loadFromFile("assets/marker.png", renderer);
 	m_marker->setPosition(c2v{ x, y - 150});
 	m_marker->setScale(c2v{ 0.1f, 0.1f });
 
