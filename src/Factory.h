@@ -9,9 +9,8 @@ class Bullet
 {
 public:
 	Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl);
-	~Bullet() { 
-		delete m_spriteComponent; 
-		delete this; 
+	~Bullet() {  
+		
 	}
 	SpriteComponent* m_spriteComponent;
 	void render(SDL_Renderer* renderer);

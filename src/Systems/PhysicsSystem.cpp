@@ -703,12 +703,16 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 			{
 				throwGunFun(cc);
 			}
-			movePlayer(cc, pc, tc);
-			setPosition(pc);  // Set the position after movement
-			if (pc->getVelY() < 40)
+
+			if (tc->getSubTag2() != "AI_Player")
 			{
+				movePlayer(cc, pc, tc);
+				// Set the position after movement
 				pc->setVelY(pc->getVelY() + Friction.y);  // Friction
+				setPosition(pc);
 			}
+			
+
 		}
 		else if (tc->getTag() == "Player" && cc->getAlive() == false)
 		{
@@ -773,7 +777,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 
 		}
 
-		if (tc->getTag() == "AI_TAG")
+		if (tc->getSubTag2() == "AI_Player")
 		{
 			aiPositionX = pc->getX();
 			aiPositionY = pc->getY();
@@ -814,7 +818,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 		}
 
 
-		if (tc->getTag() == "AI_TAG")
+		if (tc->getSubTag2() == "AI_Player")
 		{
 			pc->setX(pc->getX() + pc->getVelX());
 			pc->setY(pc->getY() + pc->getVelY());
@@ -980,11 +984,11 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 
 							if (sc->m_flipValue == SDL_FLIP_NONE)
 							{
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX(), pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 500)); // :)
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX(), pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100)); // :)
 							}
 							else {
 
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX() + 20, pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 500)); // :)
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX() + 20, pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100)); // :)
 							}
 						}
 

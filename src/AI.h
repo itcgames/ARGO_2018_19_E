@@ -9,7 +9,7 @@ class AI : Entity
 {
 public:
 	AI();
-	AI(SDL_Renderer* renderer,float xPos,float yPos);
+	AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers);
 
 	void render(SDL_Renderer* renderer);
 private:

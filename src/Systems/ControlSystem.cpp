@@ -131,6 +131,7 @@ void ControlSystem::setButtons(ControlComponent * cc) {
 	}
 	else {
 		cc->aIndex = 0;
+		cc->setJump(false);
 	}
 	if (XButton) {
 		if (cc->xIndex == 0)
@@ -138,6 +139,7 @@ void ControlSystem::setButtons(ControlComponent * cc) {
 		cc->xIndex++;
 	}
 	else {
+		cc->setThrowWeapon(false);
 		cc->xIndex = 0;
 	}
 }

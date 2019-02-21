@@ -61,23 +61,18 @@ void Server::loop() {
 			continue;
 		}
 		else {
-			// Display message and client info
-			char clientIp[256]; // Create enough space to convert the address byte array
-			ZeroMemory(&clientIp, 256); // to string of characters
+			int port = ntohs(client.sin_port);
 
-			// Convert from byte array to chars
-			inet_ntop(AF_INET, &client.sin_addr, clientIp, 256);
-
-			if (m_players[clientIp] == 0) {
+			if (m_players[port] == 0) {
 				playerNum++;
 				Packet * p = new Packet();
 				p->message = 1;
 				p->playerNum = playerNum;
 
-				m_players[clientIp] = playerNum;
+				m_players[port] = playerNum;
 				m_clients.push_back(client);
 
-				cout << "<SERVER> Player: " << playerNum << " at IP: " << clientIp << endl;
+				cout << "<SERVER> Player: " << playerNum << " at Port: " << port << endl;
 				
 				int sendOk = sendto(in, (char*)p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&m_clients[playerNum - 1], sizeof(m_clients[playerNum - 1]));
 				if (sendOk == SOCKET_ERROR)
@@ -89,7 +84,7 @@ void Server::loop() {
 				p->playerNum = playerNum;
 				for (int i = 1; i <= playerNum; i++) {
 
-					if (i != m_players[clientIp]) {
+					if (i != m_players[port]) {
 						sendto(in, (char*)p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&m_clients[i - 1], sizeof(m_clients[i - 1]));
 						cout << "<SERVER> Message sent to other client" << endl;
 					}
@@ -99,7 +94,7 @@ void Server::loop() {
 
 				for (int i = 1; i <= playerNum; i++)
 				{
-					if (i != m_players[clientIp])
+					if (i != m_players[port])
 					{
 						int sendOk = sendto(in, (char*)&packet, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&m_clients[i - 1], sizeof(m_clients[i - 1]));
 						if (sendOk == SOCKET_ERROR)
@@ -117,8 +112,8 @@ void Server::loop() {
 					}
 				}
 				if (packet.message == 3) {
-					int index = m_players[clientIp];
-					m_players[clientIp] = 0;
+					int index = m_players[port];
+					m_players[port] = 0;
 					playerNum--;
 					m_clients.erase(m_clients.begin() + (index - 1));
 				}
