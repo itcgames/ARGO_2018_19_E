@@ -51,17 +51,13 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	
 	if (online) {
 
-		//Place player at the first available spawn point
-		for (int i = 0; i < m_map->getSpawnPoints().size(); i++)
+		if (m_map->getSpawnPoints().at(num - 1)->first == false)
 		{
-			if (m_map->getSpawnPoints().at(i)->first == false)
-			{
-				m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(i)->second.x, m_map->getSpawnPoints().at(i)->second.y, SDL_GameControllerOpen(0), num, Font));
-				m_leftHands.push_back(new Hand(m_renderer, 1, num));
-				m_rightHands.push_back(new Hand(m_renderer, 2, num));
-				m_map->getSpawnPoints().at(i)->first = true;
-				break;
-			}
+			m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(num - 1)->second.x, m_map->getSpawnPoints().at(num - 1)->second.y, SDL_GameControllerOpen(0), num, Font));
+			m_leftHands.push_back(new Hand(m_renderer, 1, num));
+			m_rightHands.push_back(new Hand(m_renderer, 2, num));
+			m_map->getSpawnPoints().at(num - 1)->first = true;
+		
 		}	
 
 		m_animationsSys.addEntity((Entity*)m_players[0]);
@@ -88,19 +84,30 @@ void PlayScreen::initialise(bool online, int size, int num) {
 		
 		if (num < size) {
 			for (int i = num + 1; i <= size; i++) {
-				Player * player = new  Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i, Font);
-				m_networkCharacters.push_back(player);
-				m_leftHands.push_back(new Hand(m_renderer, 1, i));
-				m_rightHands.push_back(new Hand(m_renderer, 2, i));
+				if (m_map->getSpawnPoints().at(i - 1)->first == false)
+				{
+					Player * player = new  Player(m_renderer, m_map->getSpawnPoints().at(i - 1)->second.x, m_map->getSpawnPoints().at(i - 1)->second.y, SDL_GameControllerOpen(i), i, Font);
+					m_networkCharacters.push_back(player);
+					m_leftHands.push_back(new Hand(m_renderer, 1, i));
+					m_rightHands.push_back(new Hand(m_renderer, 2, i));
+					m_map->getSpawnPoints().at(i - 1)->first = true;
+				}
+				
 			}
 		}
 
 		if (num > 1) {
 			for (int i = num - 1; i > 0; i--) { 
-				Player * player = new  Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i, Font);
-				m_networkCharacters.push_back(player);
-				m_leftHands.push_back(new Hand(m_renderer, 1, i));
-				m_rightHands.push_back(new Hand(m_renderer, 2, i));
+				if (m_map->getSpawnPoints().at(i - 1)->first == false)
+				{
+					Player * player = new  Player(m_renderer, m_map->getSpawnPoints().at(i - 1)->second.x, m_map->getSpawnPoints().at(i - 1)->second.y, SDL_GameControllerOpen(i), i, Font);
+					m_networkCharacters.push_back(player);
+					m_leftHands.push_back(new Hand(m_renderer, 1, i));
+					m_rightHands.push_back(new Hand(m_renderer, 2, i));
+					m_map->getSpawnPoints().at(i - 1)->first = true;
+				}
+
+				
 			}
 		}
 
