@@ -9,7 +9,7 @@ class Gun : Entity
 {
 public:
 	Gun();
-	Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos);
+	Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos, int id);
 private:
 	std::vector<Component*> m_components;
 	SpriteComponent* m_spriteComponent;

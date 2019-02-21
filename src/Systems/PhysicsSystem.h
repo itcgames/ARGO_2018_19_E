@@ -62,7 +62,7 @@ public:
 	void playerFlip(PositionComponent *pc, SpriteComponent *sc, ControlComponent *cc, TagComponent *tc);
 	void launchGun(PositionComponent *pc, TagComponent *tc, CollisionComponent * cc, ControlComponent * ownerConC, TagComponent * ownerTagC);
 	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC, PositionComponent * gunPosition);
-	void setPlayerGunGot(std::string gun, TagComponent *tagC);
+	void setPlayerGunGot(std::string gun, TagComponent *tagC, std::string gunID);
 	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC);
 	void setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC);
 	void setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,TagComponent * tc, PositionComponent *ownerPosC, ControlComponent * ownerConC, TagComponent * gunTagC);

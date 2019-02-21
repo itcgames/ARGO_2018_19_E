@@ -45,6 +45,8 @@ public:
 	void endRound();
 	void initialiseText(std::string message);
 
+	int gunAmount = 1;
+
 	void deleteGuns();
 	void spawnGuns();
 
