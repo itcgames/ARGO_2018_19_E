@@ -63,7 +63,8 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 	}
 
 	this->addComponent(tag);
-	this->addComponent(new ControlComponent());
+	control = new ControlComponent();
+	this->addComponent(control);
 	controlComp = new AIComponent(10);
 	this->addComponent(controlComp);
 	positionComp = new PositionComponent(xPos, yPos);
@@ -72,7 +73,7 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 }
 void AI::render(SDL_Renderer* renderer) {
 
-	if (controlComp->m_alive == false) {
+	if (!control->getAlive()) {
 		if (controlComp->hitFromRight == true)
 		{
 			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
@@ -98,7 +99,7 @@ void AI::render(SDL_Renderer* renderer) {
 		controlComp->setLeft(false);
 
 	}
-	else if (controlComp->m_alive == true)
+	else if (control->getAlive())
 	{
 		// Animation loop for head when hitting ground
 		if (animateHead == true)

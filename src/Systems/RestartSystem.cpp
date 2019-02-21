@@ -23,15 +23,8 @@ void RestartSystem::reset(int level) {
 		sc->setRotation(0);
 		sc->setPosition(c2v{pc->startX, pc->startY});
 
-		if (tc->getTag() == "AI_TAG") {
-			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
-			ai->m_alive = true;
-			ai->set = false;
-			ai->hasGun = false;
-			sc->setColor(255, 255, 255);
-			
-		}
-		else if (tc->getTag() == "Player") {
+	
+		if (tc->getTag() == "Player") {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 			tc->setGunGot("none");
 			tc->setGotGunBool(false);

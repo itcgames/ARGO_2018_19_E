@@ -45,7 +45,7 @@ void CollisionSystem::update(std::vector<std::shared_ptr<Tile>> tiles) {
 		
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
 
-		if (tag->getTag() == "Player" || tag->getTag() == "AI_TAG") {
+		if (tag->getTag() == "Player") {
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
 
@@ -146,16 +146,12 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 	for (Entity * entity : m_entities) {
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
 
-		if (tag->getTag() == "AI_TAG" || tag->getTag() == "Player") {
+		if (tag->getTag() == "Player") {
 			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 
-			if (pc->getY() > 3000 && tag->getTag() == "AI_TAG") {
-				AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
-				ai->m_alive = false;
-			}
-			else if (pc->getY() > 3000 && tag->getTag() == "Player") {
+			if (pc->getY() > 3000 && tag->getTag() == "Player") {
 				ControlComponent * control = (ControlComponent*)entity->getCompByType("CONTROL");
 				control->setAlive(false);
 			}
@@ -171,33 +167,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 					Bullet * temp = bullets->at(i);
 					bullets->erase(bullets->begin() + i);
 					delete temp;
-					if (tag->getTag() == "AI_TAG") {
-						AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
-
-
-
-						if (val == "right") {
-							pc->setVelX(40);
-							pc->setVelY(-10);
-							sc->setRotation(90);
-							sc->setColor(255, 40, 40);
-							//sc->setBlendMode(SDL_BLENDMODE_ADD);
-							ai->hitFromRight = true;
-						}
-						if (val == "left") {
-							pc->setVelX(-40);
-							pc->setVelY(-10);
-							sc->setRotation(-90);
-							sc->setColor(255, 40, 40);
-							//sc->setBlendMode(SDL_BLENDMODE_ADD);
-							ai->hitFromLeft = true;
-						}
-
-						PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
-						ai->m_alive = false;	
-
-
-					}
+					
 
 					// Possible error here
 

@@ -147,7 +147,7 @@ void AISystem::update() {
 		ac->curPosition.x = pc->getX();
 		ac->curPosition.y = pc->getY();
 
-		if (ac->m_alive) {
+		if (con->getAlive()) {
 
 			ac->newYVel = pc->getVelY();
 
@@ -191,7 +191,7 @@ void AISystem::update() {
 			}
 
 			//sets the closest target position
-			ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
+			//ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
 
 			//continuely sets the position of the closest target 
 			if (ac->closestEnemy.second.x > ac->curPosition.x)
