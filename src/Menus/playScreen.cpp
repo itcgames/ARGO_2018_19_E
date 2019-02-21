@@ -131,8 +131,8 @@ void PlayScreen::initialise(bool online, int size, int num) {
 				if (m_map->getSpawnPoints().at(j)->first == false)
 				{
 					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, noOfPlayers));
-					m_leftHands.push_back(new Hand(m_renderer, 1, 4));
-					m_rightHands.push_back(new Hand(m_renderer, 2, 4));
+					m_leftHands.push_back(new Hand(m_renderer, 1, noOfPlayers));
+					m_rightHands.push_back(new Hand(m_renderer, 2, noOfPlayers));
 					m_map->getSpawnPoints().at(j)->first = true;
 					noOfPlayers += 1;
 				}
