@@ -61,7 +61,7 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 
 
 	this->addComponent(new HealthComponent(10));
-	TagComponent * tag = new TagComponent("Player");
+	tag = new TagComponent("Player");
 	if (index == 0)
 	{
 		tag->setSubTag("Player1");
@@ -97,14 +97,28 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 }
 void Player::render(SDL_Renderer* renderer) {
 
-	m_marker->setPosition(c2v{ m_spriteComponent->getPosition().x + 17 - (startBalloonCount * 40), m_spriteComponent->getPosition().y - 150 - startBalloonFlightCount });
+	m_marker->setPosition(c2v{ m_spriteComponent->getPosition().x + 17 - (startBalloonCount * 40), m_spriteComponent->getPosition().y - 30});
 	m_marker->setScale(c2v{ 0.1f + startBalloonCount, 0.1f + startBalloonCount });
-	if (startBalloonCount < 0.8)
+
+	if (totalBalloonCount > 2.0)
 	{
-		startBalloonCount = startBalloonCount + 0.01;
+		tag->setBalloonDeflate(true);
+		totalBalloonCount = 0;
+	}
+	if (tag->getBalloonDeflate() == false)
+	{
+		if (startBalloonCount < 0.8)
+		{
+			startBalloonCount = startBalloonCount + 0.03;
+		}
+
+		totalBalloonCount = totalBalloonCount + 0.02;
 	}
 	else {
-		startBalloonFlightCount = startBalloonFlightCount + 5;
+		if (startBalloonCount >= -0.1)
+		{
+			startBalloonCount = startBalloonCount - 0.03;
+		}
 	}
 
 	renderQuad.x = m_marker->getPosition().x + (startBalloonCount * 40);
@@ -317,6 +331,8 @@ void Player::render(SDL_Renderer* renderer) {
 	m_spriteComponentHead->render(renderer);
 	m_spriteComponentLeftFoot->render(renderer);
 	m_spriteComponentRightFoot->render(renderer);
+}
+void Player::renderMarker(SDL_Renderer* renderer) {
 	m_marker->render(renderer);
 	SDL_RenderCopy(m_renderer, text, NULL, &renderQuad);
 }

@@ -5,9 +5,10 @@ Gun::Gun()
 }
 
 
-Gun::Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos)
+Gun::Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos,int id)
 {
 	m_tagComponent = new TagComponent("Gun");
+	m_tagComponent->setSubTag2(std::to_string(id));
 
 	if (gunValue == 1)
 	{

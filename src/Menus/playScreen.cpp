@@ -23,10 +23,14 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 
 	m_map->load("testlevel.tmx", renderer);
 
-	m_guns.push_back(new Gun(renderer, 1, 1500, 100));
-	m_guns.push_back(new Gun(renderer, 2, 1000, 100));
-	m_guns.push_back(new Gun(renderer, 3, 200, 100));
-	m_guns.push_back(new Gun(renderer, 4, 500, 100));
+	m_guns.push_back(new Gun(renderer, 1, 1500, 100,gunAmount));
+	gunAmount = gunAmount + 1;
+	m_guns.push_back(new Gun(renderer, 2, 1000, 100,gunAmount));
+	gunAmount = gunAmount + 1;
+	m_guns.push_back(new Gun(renderer, 3, 200, 100,gunAmount));
+	gunAmount = gunAmount + 1;
+	m_guns.push_back(new Gun(renderer, 4, 500, 100,gunAmount));
+	gunAmount = gunAmount + 1;
 
 	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
 	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
@@ -289,6 +293,9 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 		p->render(m_renderer);
 	}
 	m_rs.render(m_renderer);
+	for (Player *p : m_players) {
+		p->renderMarker(m_renderer);
+	}
 	m_ps.bulletRender(m_renderer);
 	//m_animationsSys.render();
 	testLight->render(m_renderer);
@@ -317,7 +324,8 @@ void PlayScreen::spawnGuns() {
 
 		int gunType = (rand() % 4) + 1;
 		int gunX = (rand() % 1100) + 100;
-		Gun * gun = new Gun(m_renderer, gunType, gunX, -100);
+		Gun * gun = new Gun(m_renderer, gunType, gunX, -100,gunAmount);
+		gunAmount = gunAmount + 1;
 		m_rs.addEntity((Entity*)gun);
 		m_cs.addEntity((Entity*)gun);
 		m_ps.addEntity((Entity*)gun);
