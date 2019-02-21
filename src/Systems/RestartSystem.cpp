@@ -54,7 +54,7 @@ void RestartSystem::reset(int level) {
 				GrenadeComponent * grenade = (GrenadeComponent*)ent->getCompByType("GRENADE");
 				grenade->setArmed(false);
 				grenade->setExplode(false);
-				grenade->setTTL(300);
+				grenade->setTTL(200);
 			}
 		}
 	}

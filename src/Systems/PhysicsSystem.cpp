@@ -966,11 +966,11 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 
 							if (sc->m_flipValue == SDL_FLIP_NONE)
 							{
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX(), pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 500)); // :)
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX(), pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100)); // :)
 							}
 							else {
 
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX() + 20, pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 500)); // :)
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX() + 20, pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100)); // :)
 							}
 						}
 

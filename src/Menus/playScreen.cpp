@@ -377,6 +377,7 @@ void PlayScreen::deleteGuns() {
 		}
 		delete gun;
 	}
+	m_gunCounter = 0;
 }
 
 bool PlayScreen::onlineRoundOver() {
