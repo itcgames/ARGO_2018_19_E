@@ -5,7 +5,7 @@ AI::AI()
 }
 
 
-AI::AI(SDL_Renderer* renderer,float xPos,float yPos)
+AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 {
 	//Set up Sprite component and add to entity component vector
 	oldY = 0;
@@ -36,7 +36,33 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos)
 
 	this->addComponent(new FState());
 	this->addComponent(new HealthComponent(10));
-	this->addComponent(new TagComponent("AI_TAG"));
+	TagComponent * tag = new TagComponent("Player");
+	if (noOfPlayers == 0)
+	{
+		tag->setSubTag("Player1");
+		tag->setSubTag2("AI_Player");
+		
+	}
+	else if (noOfPlayers == 1)
+	{
+		tag->setSubTag("Player2");
+		tag->setSubTag2("AI_Player");
+		
+	}
+	else if (noOfPlayers == 2)
+	{
+		tag->setSubTag("Player3");
+		tag->setSubTag2("AI_Player");
+		
+	}
+	else if (noOfPlayers == 3)
+	{
+		tag->setSubTag("Player4");
+		tag->setSubTag2("AI_Player");
+		
+	}
+
+	this->addComponent(tag);
 	this->addComponent(new ControlComponent());
 	controlComp = new AIComponent(10);
 	this->addComponent(controlComp);
