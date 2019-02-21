@@ -384,7 +384,7 @@ bool PlayScreen::onlineRoundOver() {
 
 		}
 	}
-
+	
 	if (dead >= 3) {
 		if (!m_drawRoundText) {
 			initialiseText("Player Wins");
@@ -419,12 +419,13 @@ void PlayScreen::endRound() {
 
 void PlayScreen::checkRoundOver() {
 	bool roundEnd = false;
+	
 	if (*m_online) {
 		roundEnd = onlineRoundOver();
 	}
 	else {
 		int dead = 0;
-
+		std::cout << dead << std::endl;
 		if (!m_multiplayer) {
 			Entity * ent = (Entity *)m_players[0];
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
@@ -449,8 +450,8 @@ void PlayScreen::checkRoundOver() {
 		
 		for (AI * ai : m_aiCharacters) {
 			Entity * ent = (Entity *)ai;
-			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
-			if (!ai->m_alive) {
+			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+			if (!control->getAlive()) {
 				dead++;
 			}
 		}

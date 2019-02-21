@@ -147,7 +147,7 @@ void AISystem::update() {
 		ac->curPosition.x = pc->getX();
 		ac->curPosition.y = pc->getY();
 
-		if (ac->m_alive) {
+		if (con->getAlive()) {
 
 			ac->newYVel = pc->getVelY();
 
