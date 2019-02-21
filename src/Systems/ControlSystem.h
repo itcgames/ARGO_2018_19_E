@@ -14,7 +14,7 @@ public:
 	void update(SDL_Event e);
 
 	SDL_Haptic * haptic;
-
+	void recieveLevel(int width, int height);
 
 	void setButtons(ControlComponent* cc);
 
@@ -26,6 +26,7 @@ public:
 	int xIndex = 0;
 
 	
-
+	int m_width;
+	int m_height;
 };
 #endif // !CONTROLSYSTEM_H
