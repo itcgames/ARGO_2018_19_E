@@ -215,7 +215,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		initialise(*online, size, client->number);
 		m_startGame = false;
 	}
-	spawnGuns();
+	
 	m_cs.update(event);
 	m_collSys.update(m_map->getTiles());
 	m_ps.update(m_renderer);
@@ -242,6 +242,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		Entity * ent = (Entity*)m_players[0];
 		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
 		PositionComponent * pc = (PositionComponent*)ent->getCompByType("POSITION");
+		TagComponent * tc = (TagComponent*)ent->getCompByType("TAG");
 
 		Packet p;
 
@@ -253,7 +254,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		p.fire = cc->getFire();
 		p.gunAngle = cc->getAngle();
 		p.alive = cc->getAlive();
-		p.throwWeapon = cc->getThrowWeapon();
+		p.throwWeapon = tc->getGotGunBool();
 		p.position.x = pc->getX();
 		p.position.y = pc->getY();
 
@@ -277,6 +278,9 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		lastPacket.throwWeapon = p.throwWeapon;
 		lastPacket.position.x = p.position.x;
 		lastPacket.position.y = p.position.y;
+	}
+	else {
+		spawnGuns();
 	}
 }
 
