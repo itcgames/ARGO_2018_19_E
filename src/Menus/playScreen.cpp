@@ -59,28 +59,6 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			m_map->getSpawnPoints().at(num - 1)->first = true;
 		
 		}	
-
-		m_animationsSys.addEntity((Entity*)m_players[0]);
-		m_hs.addEntity((Entity*)m_players[0]);
-		m_cs.addEntity((Entity*)m_players[0]);
-		m_rs.addEntity((Entity*)m_players[0]);
-		m_ps.addEntity((Entity*)m_players[0]);
-		m_restartSys.addEntity((Entity*)m_players[0]);
-		m_collSys.addEntity((Entity*)m_players[0]);
-
-		m_hs.addEntity((Entity*)m_leftHands[0]);
-		m_cs.addEntity((Entity*)m_leftHands[0]);
-		m_rs.addEntity((Entity*)m_leftHands[0]);
-		m_ps.addEntity((Entity*)m_leftHands[0]);
-		m_restartSys.addEntity((Entity*)m_leftHands[0]);
-		m_collSys.addEntity((Entity*)m_leftHands[0]);
-
-		m_hs.addEntity((Entity*)m_rightHands[0]);
-		m_cs.addEntity((Entity*)m_rightHands[0]);
-		m_rs.addEntity((Entity*)m_rightHands[0]);
-		m_ps.addEntity((Entity*)m_rightHands[0]);
-		m_restartSys.addEntity((Entity*)m_rightHands[0]);
-		m_collSys.addEntity((Entity*)m_rightHands[0]);
 		
 		if (num < size) {
 			for (int i = num + 1; i <= size; i++) {
@@ -119,19 +97,6 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			m_collSys.addEntity((Entity*)net);
 			m_netSystem.addEntity((Entity*)net);
 			m_animationsSys.addEntity((Entity*)net);
-		}
-
-		for (int i = 0; i < (4 - size); i++) {
-
-			for (int j = 0; j < m_map->getSpawnPoints().size(); j++)
-			{
-				if (m_map->getSpawnPoints().at(j)->first == false)
-				{
-					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y));
-					m_map->getSpawnPoints().at(j)->first = true;
-					
-				}
-			}
 		}
 
 	}
@@ -255,19 +220,15 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_hs.update();
 	//m_animationsSys.update();
 	checkRoundOver();
-	if (!(*online)) {
-
-	}
-	else {
+	
+	if ((*online)) {
 		for (Entity * ent : m_netSystem.m_entities) {
 			
 			if (client->packet->message == 5) {
 				m_netSystem.update(client->packet);
 
 				client->receive();
-
 			}
-
 			
 		}
 		Entity * ent = (Entity*)m_players[0];
@@ -318,6 +279,9 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 		ai->render(m_renderer);
 	}
 	for (Player *p : m_players) {
+		p->render(m_renderer);
+	}
+	for (Player *p : m_networkCharacters) {
 		p->render(m_renderer);
 	}
 	m_rs.render(m_renderer);
