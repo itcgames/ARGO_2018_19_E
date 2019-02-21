@@ -11,13 +11,12 @@ using namespace std;
 
 class RenderSystem
 {
-	std::vector<Entity *> m_entities;
-
 public:
 	RenderSystem();
 	void addEntity(Entity * e);
 	void render(SDL_Renderer* renderer);
 
+	std::vector<Entity *> m_entities;
 private:
 
 };

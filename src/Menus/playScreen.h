@@ -41,18 +41,23 @@ public:
 	AudioObserver* m_audioObserver;
 	
 	void checkRoundOver();
+	bool onlineRoundOver();
+	void endRound();
 	void initialiseText(std::string message);
+
+	void deleteGuns();
+	void spawnGuns();
 
 	std::vector<Hand *> m_leftHands;
 	std::vector<Hand *> m_rightHands;
 	std::vector<Player *> m_players;
 	std::vector<AI *> m_aiCharacters;
 	std::vector<Player *> m_networkCharacters;
-	Gun* pistol;
-	Gun* shotgun;
-	Gun* juicer;
-	Gun* grenade;
-	std::vector<Entity*> m_ents;
+
+	std::vector<Entity*> m_Gunents;
+	std::vector<Entity*> m_playerents;
+	std::vector<Gun*> m_guns;
+
 	Light* testLight;
 
 	SpriteComponent * m_backgroundSprite;
@@ -60,7 +65,7 @@ public:
 	HealthSystem m_hs;
 	ControlSystem m_cs;
 	RenderSystem m_rs;
-	GunSystem m_guns;
+	GunSystem m_gunSys;
 
 
 	PhysicsSystem m_ps;
@@ -97,4 +102,11 @@ public:
 	Packet lastPacket;
 
 	bool* m_online = false;
+
+	bool m_multiplayer = false;
+
+private: 
+	int m_gunCounter = 0;
+	const int SPAWN_NEW_GUN = 1000;
+
 };

@@ -27,6 +27,7 @@ void RestartSystem::reset(int level) {
 			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
 			ai->m_alive = true;
 			ai->set = false;
+			ai->hasGun = false;
 			sc->setColor(255, 255, 255);
 			
 		}
@@ -34,7 +35,9 @@ void RestartSystem::reset(int level) {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 			tc->setGunGot("none");
 			tc->setGotGunBool(false);
+			control->setThrowGun(false);
 			control->setAlive(true);
+			control->setAngle(90);
 		}
 		else if (tc->getTag() == "Hand") {
 			tc->setGunGot("none");

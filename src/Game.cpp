@@ -68,8 +68,7 @@ Game::Game()
 
 
 	
-	m_ents.push_back((Entity*)pistol);
-	m_ents.push_back((Entity*)shotgun);
+
 
 
 }

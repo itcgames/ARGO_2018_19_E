@@ -16,8 +16,8 @@ class PhysicsSystem : Subject
 {
 public:
 	std::vector<Entity *> m_entities;
+	void recieveLevel(int width, int height);
 
-	
 	c2v Friction;
 	c2v gunFriction;
 	PhysicsSystem();
@@ -109,6 +109,8 @@ public:
 
 	int index = -1;
 
+	int m_width;
+	int m_height;
 
 };
 #endif // !PHYSICSSYSTEM_H

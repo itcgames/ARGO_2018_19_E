@@ -27,7 +27,7 @@ private:
 	std::string options_text = "(Y) Options";
 	std::string exit_text = "(B) Exit";
 
-	std::string title_text = "Duck Game";
+	std::string title_text = "UnPlayabe";
 	SDL_Renderer *m_renderer;
 
 	SDL_Texture* playtexture;

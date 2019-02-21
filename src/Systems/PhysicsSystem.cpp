@@ -267,8 +267,8 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 			{
 				if (tagc->getGunGot() == "none")
 				{
-					colisionc->setH(1);
-					colisionc->setW(1);
+					colisionc->setH(0);
+					colisionc->setW(0);
 					setPlayerGunGot(tc->getSubTag(), tagc);
 					tc->setGrabbed(true);
 				}
@@ -349,15 +349,15 @@ void PhysicsSystem::setPlayerGunGot(std::string gun, TagComponent * tagC)
 	}
 }
 
-// Set the player position variable.
-void PhysicsSystem::setPlayer1Position(PositionComponent * pc) {
-	player1PositionX = pc->getX();
-	player1PositionY = pc->getY();
-}
-void PhysicsSystem::setPlayer2Position(PositionComponent * pc) {
-	player2PositionX = pc->getX();
-	player2PositionY = pc->getY();
-}
+//// Set the player position variable.
+//void PhysicsSystem::setPlayer1Position(PositionComponent * pc) {
+//	player1PositionX = pc->getX();
+//	player1PositionY = pc->getY();
+//}
+//void PhysicsSystem::setPlayer2Position(PositionComponent * pc) {
+//	player2PositionX = pc->getX();
+//	player2PositionY = pc->getY();
+//}
 void PhysicsSystem::throwGunFun(ControlComponent * cc) {
 	cc->setThrowWeapon(false);
 	cc->setThrowGun(true);
@@ -577,14 +577,19 @@ void PhysicsSystem::movePlayer(ControlComponent * cc, PositionComponent *pc, Tag
 		speed = 0.5;
 		jumpSpeed = 10;
 	}
-	if (cc->getLeft()) {
-		if (pc->getVelX() > -8.0) {
-			pc->setVelX(pc->getVelX() - speed);
+	if (pc->getX() > 100) {
+		if (cc->getLeft()) {
+			if (pc->getVelX() > -8.0) {
+				pc->setVelX(pc->getVelX() - speed);
+			}
 		}
 	}
-	if (cc->getRight()) {
-		if (pc->getVelX() < 8.0) {
-			pc->setVelX(pc->getVelX() + speed);
+	if (pc->getX() < m_width - 150) {
+		if (cc->getRight()) {
+
+			if (pc->getVelX() < 8.0) {
+				pc->setVelX(pc->getVelX() + speed);
+			}
 		}
 	}
 	if (cc->getJump() && pc->jumpNum < 2) {
@@ -699,7 +704,10 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 			}
 			movePlayer(cc, pc, tc);
 			setPosition(pc);  // Set the position after movement
-			pc->setVelY(pc->getVelY() + Friction.y);  // Friction
+			if (pc->getVelY() < 40)
+			{
+				pc->setVelY(pc->getVelY() + Friction.y);  // Friction
+			}
 		}
 		else if (tc->getTag() == "Player" && cc->getAlive() == false)
 		{
@@ -1241,4 +1249,10 @@ void PhysicsSystem::notifyAudioObservers(AudioObserver::SFX sfx)
 void PhysicsSystem::registerAudioObserver(AudioObserver* audioObserver)
 {
 	m_audioObservers.push_back(audioObserver);
+}
+
+void PhysicsSystem::recieveLevel(int width, int height)
+{
+	m_width = width;
+	m_height = height;
 }
