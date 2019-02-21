@@ -27,6 +27,7 @@ public:
 	AISystem();
 	void addEntity(Entity * e);
 	void update();
+	double getAngleToPlayer(c2v pos, std::pair<double, c2v> enemy);
 
 	std::pair<double, c2v> checkClosest(std::vector<std::pair<double, c2v>> distances, std::pair<double, c2v > real);
 	double distance(c2v  vecOne, c2v vecTwo);

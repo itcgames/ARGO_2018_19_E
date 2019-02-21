@@ -163,10 +163,14 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 				std::string val = rectCollision(cc->getCollider(), bullets->at(i)->collider);
 				c2v bPos = bullets->at(i)->m_spriteComponent->getPosition();
 				if (bPos.x > 2000 || bPos.x < -200 || bPos.y < -200 || bPos.y > 3000) {
+					Bullet * temp = bullets->at(i);
 					bullets->erase(bullets->begin() + i);
+					delete temp;
 				}
 				if (val != "none") {
+					Bullet * temp = bullets->at(i);
 					bullets->erase(bullets->begin() + i);
+					delete temp;
 					if (tag->getTag() == "AI_TAG") {
 						AIComponent * ai = (AIComponent*)entity->getCompByType("AI");
 
@@ -235,7 +239,9 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 					particle->setStyle(ParticleExample::SMOKE);
 					particle->setPosition(bullets->at(j)->m_spriteComponent->getPosition().x, bullets->at(j)->m_spriteComponent->getPosition().y);
 					m_particles.push_back(particle);
+					Bullet * temp = bullets->at(j);
 					bullets->erase(bullets->begin() + j);
+					delete temp;
 				}
 			}
 		}
@@ -270,7 +276,9 @@ void CollisionSystem::animateExplosion()
 		
 		if (m_particles[i]->count > 5)
 		{
+			ParticleExample * temp = m_particles.at(i);
 			m_particles.erase(m_particles.begin() + i);
+			delete temp;
 			m_particles.resize(m_particles.size());
 		}
 

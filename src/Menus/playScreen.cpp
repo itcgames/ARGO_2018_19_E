@@ -23,10 +23,14 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 
 	m_map->load("testlevel.tmx", renderer);
 
-	m_guns.push_back(new Gun(renderer, 1, 1500, 100));
-	m_guns.push_back(new Gun(renderer, 2, 1000, 100));
-	m_guns.push_back(new Gun(renderer, 3, 200, 100));
-	m_guns.push_back(new Gun(renderer, 4, 500, 100));
+	m_guns.push_back(new Gun(renderer, 1, 1500, 100,gunAmount));
+	gunAmount = gunAmount + 1;
+	m_guns.push_back(new Gun(renderer, 2, 1000, 100,gunAmount));
+	gunAmount = gunAmount + 1;
+	m_guns.push_back(new Gun(renderer, 3, 200, 100,gunAmount));
+	gunAmount = gunAmount + 1;
+	m_guns.push_back(new Gun(renderer, 4, 500, 100,gunAmount));
+	gunAmount = gunAmount + 1;
 
 	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
 	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
@@ -51,17 +55,13 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	
 	if (online) {
 
-		//Place player at the first available spawn point
-		for (int i = 0; i < m_map->getSpawnPoints().size(); i++)
+		if (m_map->getSpawnPoints().at(num - 1)->first == false)
 		{
-			if (m_map->getSpawnPoints().at(i)->first == false)
-			{
-				m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(i)->second.x, m_map->getSpawnPoints().at(i)->second.y, SDL_GameControllerOpen(0), num, Font));
-				m_leftHands.push_back(new Hand(m_renderer, 1, num));
-				m_rightHands.push_back(new Hand(m_renderer, 2, num));
-				m_map->getSpawnPoints().at(i)->first = true;
-				break;
-			}
+			m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(num - 1)->second.x, m_map->getSpawnPoints().at(num - 1)->second.y, SDL_GameControllerOpen(0), num, Font));
+			m_leftHands.push_back(new Hand(m_renderer, 1, num));
+			m_rightHands.push_back(new Hand(m_renderer, 2, num));
+			m_map->getSpawnPoints().at(num - 1)->first = true;
+		
 		}	
 
 		m_animationsSys.addEntity((Entity*)m_players[0]);
@@ -88,19 +88,30 @@ void PlayScreen::initialise(bool online, int size, int num) {
 		
 		if (num < size) {
 			for (int i = num + 1; i <= size; i++) {
-				Player * player = new  Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i, Font);
-				m_networkCharacters.push_back(player);
-				m_leftHands.push_back(new Hand(m_renderer, 1, i));
-				m_rightHands.push_back(new Hand(m_renderer, 2, i));
+				if (m_map->getSpawnPoints().at(i - 1)->first == false)
+				{
+					Player * player = new  Player(m_renderer, m_map->getSpawnPoints().at(i - 1)->second.x, m_map->getSpawnPoints().at(i - 1)->second.y, SDL_GameControllerOpen(i), i, Font);
+					m_networkCharacters.push_back(player);
+					m_leftHands.push_back(new Hand(m_renderer, 1, i));
+					m_rightHands.push_back(new Hand(m_renderer, 2, i));
+					m_map->getSpawnPoints().at(i - 1)->first = true;
+				}
+				
 			}
 		}
 
 		if (num > 1) {
 			for (int i = num - 1; i > 0; i--) { 
-				Player * player = new  Player(m_renderer, 600 + (100 * i), 200, SDL_GameControllerOpen(i), i, Font);
-				m_networkCharacters.push_back(player);
-				m_leftHands.push_back(new Hand(m_renderer, 1, i));
-				m_rightHands.push_back(new Hand(m_renderer, 2, i));
+				if (m_map->getSpawnPoints().at(i - 1)->first == false)
+				{
+					Player * player = new  Player(m_renderer, m_map->getSpawnPoints().at(i - 1)->second.x, m_map->getSpawnPoints().at(i - 1)->second.y, SDL_GameControllerOpen(i), i, Font);
+					m_networkCharacters.push_back(player);
+					m_leftHands.push_back(new Hand(m_renderer, 1, i));
+					m_rightHands.push_back(new Hand(m_renderer, 2, i));
+					m_map->getSpawnPoints().at(i - 1)->first = true;
+				}
+
+				
 			}
 		}
 
@@ -120,7 +131,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			{
 				if (m_map->getSpawnPoints().at(j)->first == false)
 				{
-					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y));
+					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, size));
 					m_map->getSpawnPoints().at(j)->first = true;
 					
 				}
@@ -129,6 +140,8 @@ void PlayScreen::initialise(bool online, int size, int num) {
 
 	}
 	else {
+
+		
 
 		for (int i = 0; i < SDL_NumJoysticks(); i++) 
 		{
@@ -142,24 +155,29 @@ void PlayScreen::initialise(bool online, int size, int num) {
 					m_leftHands.push_back(new Hand(m_renderer, 1, i));
 					m_rightHands.push_back(new Hand(m_renderer, 2, i));
 					m_map->getSpawnPoints().at(j)->first = true;
+					
 					break;
 				}
 			}
 		}
-
+		int noOfPlayers = SDL_NumJoysticks();
+		
 		for (int i = 0; i < (4 - SDL_NumJoysticks()); i++) 
 		{
 			for (int j = 0; j < m_map->getSpawnPoints().size(); j++)
 			{
 				if (m_map->getSpawnPoints().at(j)->first == false)
 				{
-					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y));
+					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, noOfPlayers));
 					m_leftHands.push_back(new Hand(m_renderer, 1, 4));
 					m_rightHands.push_back(new Hand(m_renderer, 2, 4));
 					m_map->getSpawnPoints().at(j)->first = true;
+					noOfPlayers += 1;
 				}
 			}
 		}
+
+		std::cout << noOfPlayers << std::endl;
 	}
 
 
@@ -314,6 +332,9 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 		p->render(m_renderer);
 	}
 	m_rs.render(m_renderer);
+	for (Player *p : m_players) {
+		p->renderMarker(m_renderer);
+	}
 	m_ps.bulletRender(m_renderer);
 	//m_animationsSys.render();
 	testLight->render(m_renderer);
@@ -342,7 +363,8 @@ void PlayScreen::spawnGuns() {
 
 		int gunType = (rand() % 4) + 1;
 		int gunX = (rand() % 1100) + 100;
-		Gun * gun = new Gun(m_renderer, gunType, gunX, -100);
+		Gun * gun = new Gun(m_renderer, gunType, gunX, -100,gunAmount);
+		gunAmount = gunAmount + 1;
 		m_rs.addEntity((Entity*)gun);
 		m_cs.addEntity((Entity*)gun);
 		m_ps.addEntity((Entity*)gun);
@@ -377,6 +399,7 @@ void PlayScreen::deleteGuns() {
 		}
 		delete gun;
 	}
+	m_gunCounter = 0;
 }
 
 bool PlayScreen::onlineRoundOver() {

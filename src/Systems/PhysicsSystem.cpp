@@ -148,7 +148,6 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 			if (tc->getSubTag() == "pistol" || tc->getSubTag() == "grenade")
 			{
 				pc->setY(ownerPosC->getY() + tc->getYOffset());
-				std::cout << "Pistol angle = " << tc->getAngle() << std::endl;
 				if (sc->m_flipValue == SDL_FLIP_NONE)
 				{
 
@@ -260,7 +259,7 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 		CollisionComponent * colisionc = (CollisionComponent*)entity->getCompByType("COLLISION");
-		if (tc->getTag() == "Gun" && tc->getGrabable() == true)
+		if (tc->getTag() == "Gun" && tc->getGrabable() == true && tc->getGrabbed() == false)
 		{
 			std::string val = rectCollision(colc->getCollider(), colisionc->getCollider());
 			if (val != "none")
@@ -269,8 +268,9 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 				{
 					colisionc->setH(0);
 					colisionc->setW(0);
-					setPlayerGunGot(tc->getSubTag(), tagc);
+					setPlayerGunGot(tc->getSubTag(), tagc,tc->getSubTag2());
 					tc->setGrabbed(true);
+					tc->setGrabable(false);
 				}
 			}
 		}
@@ -323,7 +323,7 @@ void PhysicsSystem::pickUpAgain(TagComponent * tc, SpriteComponent * sc, Collisi
 		}
 	}
 }
-void PhysicsSystem::setPlayerGunGot(std::string gun, TagComponent * tagC)
+void PhysicsSystem::setPlayerGunGot(std::string gun, TagComponent * tagC, std::string gunID)
 {
 	for (Entity * entity : m_entities) {
 
@@ -331,6 +331,7 @@ void PhysicsSystem::setPlayerGunGot(std::string gun, TagComponent * tagC)
 		if (tagC->getTag() == "Player")
 		{
 			tagC->setGunGot(gun);
+			tagC->setGunGotID(gunID);
 			tagC->setGotGunBool(true);
 			if (gun == "none")
 			{
@@ -340,6 +341,7 @@ void PhysicsSystem::setPlayerGunGot(std::string gun, TagComponent * tagC)
 		if (tc->getTag() == "Hand" && tc->getSubTag() == tagC->getSubTag())
 		{
 			tc->setGunGot(gun);
+			tc->setGunGotID(gunID);
 			tc->setGotGunBool(true);
 			if (gun == "none")
 			{
@@ -419,7 +421,7 @@ void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc, Collisi
 	// Start count to make gun grabable again.
 	ownerConC->setThrowGun(false);
 	// SET PLAYER GUN FUNCTION
-	setPlayerGunGot("none", ownerTagC);  // Fix tc here :)
+	setPlayerGunGot("none", ownerTagC,"0");  // Fix tc here :)
 }
 
 void PhysicsSystem::setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC) {
@@ -640,7 +642,7 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 				PositionComponent * gunPos = (PositionComponent*)entity->getCompByType("POSITION");
 				for (Entity * entity : m_entities) {
 					TagComponent * gunTag = (TagComponent*)entity->getCompByType("TAG");
-					if (tc->getGunGot() == gunTag->getSubTag())  // Finds which gun we have.
+					if (tc->getGunGotID() == gunTag->getSubTag2())  // Finds which gun we have.
 					{
 						gunPos = (PositionComponent*)entity->getCompByType("POSITION");
 						gunGotTag = gunTag;
@@ -702,12 +704,16 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 			{
 				throwGunFun(cc);
 			}
-			movePlayer(cc, pc, tc);
-			setPosition(pc);  // Set the position after movement
-			if (pc->getVelY() < 40)
+
+			if (tc->getSubTag2() != "AI_Player")
 			{
+				movePlayer(cc, pc, tc);
+				// Set the position after movement
 				pc->setVelY(pc->getVelY() + Friction.y);  // Friction
+				setPosition(pc);
 			}
+			
+
 		}
 		else if (tc->getTag() == "Player" && cc->getAlive() == false)
 		{
@@ -772,7 +778,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 
 		}
 
-		if (tc->getTag() == "AI_TAG")
+		if (tc->getSubTag2() == "AI_Player")
 		{
 			aiPositionX = pc->getX();
 			aiPositionY = pc->getY();
@@ -813,7 +819,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 		}
 
 
-		if (tc->getTag() == "AI_TAG")
+		if (tc->getSubTag2() == "AI_Player")
 		{
 			pc->setX(pc->getX() + pc->getVelX());
 			pc->setY(pc->getY() + pc->getVelY());
@@ -823,6 +829,10 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 }
 
 void PhysicsSystem::updateShooting(SDL_Renderer* renderer, ControlComponent* ownerConC) {
+	shotgunBullets.clear();
+	pistolBullets.clear();
+	juicerBullets.clear();
+
 	for (Entity * entity : m_entities) {
 
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
@@ -832,15 +842,24 @@ void PhysicsSystem::updateShooting(SDL_Renderer* renderer, ControlComponent* own
 		// Update all bullets constantly
 		if (tc->getSubTag() == "shotgun")
 		{
-			shotgunBullets = pc->bullets;
+			for (Bullet * b : pc->bullets)
+			{
+				shotgunBullets.push_back(b);
+			}
 		}
 		else if (tc->getSubTag() == "pistol")
 		{
-			pistolBullets = pc->bullets;
+			for (Bullet * b : pc->bullets)
+			{
+				pistolBullets.push_back(b);
+			}
 		}
 		else if (tc->getSubTag() == "juicer")
 		{
-			juicerBullets = pc->bullets;
+			for (Bullet * b : pc->bullets)
+			{
+				juicerBullets.push_back(b);
+			}
 		}
 		for (int i = 0; i < pc->bullets.size(); i++) {
 			pc->bullets.at(i)->m_ttl--;
@@ -918,7 +937,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 	for (Entity * entity : m_entities) {
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 
-		if (tc->getTag() == "Gun" && tagC->getGunGot() == tc->getSubTag())
+		if (tc->getTag() == "Gun" && tagC->getGunGotID() == tc->getSubTag2())
 		{
 
 			FactoryComponent * fc = (FactoryComponent*)entity->getCompByType("FACTORY");
@@ -966,11 +985,11 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 
 							if (sc->m_flipValue == SDL_FLIP_NONE)
 							{
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX(), pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 500)); // :)
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX(), pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100)); // :)
 							}
 							else {
 
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX() + 20, pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 500)); // :)
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX() + 20, pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100)); // :)
 							}
 						}
 

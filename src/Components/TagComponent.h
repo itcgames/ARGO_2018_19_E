@@ -82,6 +82,14 @@ public:
 	void setJuicerExplosionPos(c2v value) { juicerExplosionPos = value; };
 	c2v getJuicerExplosionPos() { return juicerExplosionPos; };
 
+	bool balloonDeflate = false;
+	void setBalloonDeflate(bool value) { balloonDeflate = value; };
+	bool getBalloonDeflate() { return balloonDeflate; };
+
+	std::string gunGotID = "0";
+	std::string getGunGotID() { return gunGotID; };
+	void setGunGotID(std::string value) { gunGotID = value; };
+
 private:
 	std::string subTag = "None";
 	std::string subTag2 = "None";

@@ -22,12 +22,13 @@ void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 {
 	
 	c2v vec = { 0.0f, 0.0f };
+	
 	for (Entity * entity : m_entities) {
 		
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
-		
-		
-		if (!ac->hasGun)
+		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
+
+		if (!tag->gotGunBool)
 		{
 			int count = 0;
 			ac->m_distances.assign(guns.size(), std::make_pair(0.0, vec));
@@ -140,6 +141,8 @@ void AISystem::update() {
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 		FState *state = (FState*)entity->getCompByType("STATE");
 		CollisionComponent *coll = (CollisionComponent*)entity->getCompByType("COLLISION");
+		TagComponent *tag = (TagComponent*)entity->getCompByType("TAG");
+		ControlComponent * con = (ControlComponent*)entity->getCompByType("CONTROL");
 
 		ac->curPosition.x = pc->getX();
 		ac->curPosition.y = pc->getY();
@@ -320,10 +323,22 @@ void AISystem::update() {
 			{
 				ac->jumping = true;
 			}
-			if (ac->closestEnemy.first < 30)
+
+			if (tag->gotGunBool)
 			{
-				ac->hasGun = true;
+				double desired = getAngleToPlayer(ac->curPosition, ac->closestEnemy);
+				con->setAngle(desired);
+				if (con->getAngle() == desired)
+				{
+					con->setFire(true);
+				}
+				else
+				{
+					con->setFire(false);
+				}
+				
 			}
+			
 			//if the gun is on the same level as the AI character
 			if (ac->curPosition.y + 50 > ac->closestEnemy.second.y && ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
 			{
@@ -356,6 +371,15 @@ void AISystem::update() {
 			}
 		}	
 	}
+}
+double AISystem::getAngleToPlayer(c2v pos , std::pair<double, c2v> enemy)
+{
+	auto hypot = enemy.first;
+	c2v dir = c2Sub(pos, enemy.second);
+	double angle;
+	
+	angle = atan2(dir.y, dir.x);
+	return (angle * 180 / 3.14159) - 90;
 }
 
 

@@ -35,9 +35,11 @@ void RestartSystem::reset(int level) {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 			tc->setGunGot("none");
 			tc->setGotGunBool(false);
+			tc->setBalloonDeflate(false);
 			control->setThrowGun(false);
 			control->setAlive(true);
 			control->setAngle(90);
+			
 		}
 		else if (tc->getTag() == "Hand") {
 			tc->setGunGot("none");
@@ -54,7 +56,7 @@ void RestartSystem::reset(int level) {
 				GrenadeComponent * grenade = (GrenadeComponent*)ent->getCompByType("GRENADE");
 				grenade->setArmed(false);
 				grenade->setExplode(false);
-				grenade->setTTL(300);
+				grenade->setTTL(200);
 			}
 		}
 	}

@@ -28,6 +28,6 @@ public:
 private:
 	bool m_armed = false;
 	bool m_explode = false;
-	int m_time2Live = 300;
+	int m_time2Live = 150;
 };
 #endif // !TAGCOMPONENT_H
