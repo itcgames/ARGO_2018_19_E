@@ -13,6 +13,10 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	m_audioObserver = new AudioObserver();
 	m_audioObserver->load();
 
+	m_camera = new Camera();
+	m_focusPoint = new SDL_Rect();
+	m_offset = new SDL_Rect();
+
 
 	m_backgroundSprite = new SpriteComponent(0, 0, 1920, 1080);
 	m_backgroundSprite->loadFromFile("assets/cybercity.png", renderer);
@@ -28,8 +32,6 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	m_guns.push_back(new Gun(renderer, 3, 200, 100));
 	m_guns.push_back(new Gun(renderer, 4, 500, 100));
 
-	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
-	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
 
 	for (Gun * g : m_guns) {
 		m_Gunents.push_back((Entity*)g);
@@ -253,6 +255,8 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
+
+	m_camera->focus()
 	//m_animationsSys.update();
 	checkRoundOver();
 	if (!(*online)) {

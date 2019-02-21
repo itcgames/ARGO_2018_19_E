@@ -22,6 +22,7 @@
 #include "../Light.h"
 
 #include "../ObserverPattern/AudioObserver.h"
+#include "../Camera.h"
 
 #include "../Client/Client.h"
 
@@ -47,6 +48,10 @@ public:
 
 	void deleteGuns();
 	void spawnGuns();
+
+	Camera* m_camera;
+	SDL_Rect* m_focusPoint;
+	SDL_Rect* m_offset;
 
 	std::vector<Hand *> m_leftHands;
 	std::vector<Hand *> m_rightHands;
@@ -75,10 +80,6 @@ public:
 	AnimationsSystem m_animationsSys;
 	RestartSystem m_restartSys;
 	NetworkSystem m_netSystem;
-	
-
-	SDL_Rect* m_camera;
-	c2v* m_cameraCentre;
 
 	MapLoader* m_map;
 
