@@ -259,7 +259,7 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 		CollisionComponent * colisionc = (CollisionComponent*)entity->getCompByType("COLLISION");
-		if (tc->getTag() == "Gun" && tc->getGrabable() == true)
+		if (tc->getTag() == "Gun" && tc->getGrabable() == true && tc->getGrabbed() == false)
 		{
 			std::string val = rectCollision(colc->getCollider(), colisionc->getCollider());
 			if (val != "none")
@@ -270,6 +270,7 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 					colisionc->setW(0);
 					setPlayerGunGot(tc->getSubTag(), tagc,tc->getSubTag2());
 					tc->setGrabbed(true);
+					tc->setGrabable(false);
 				}
 			}
 		}
