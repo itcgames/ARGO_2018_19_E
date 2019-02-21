@@ -220,7 +220,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 
 
 	m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getTiles(), m_map->getWidth(), m_map->getHeight());
-
+	m_ps.recieveLevel(m_map->getWidth(), m_map->getHeight());
 	m_ps.setRenderer(m_renderer);
 	m_grenadeSys.setRenderer(m_renderer);
 	m_collSys.setRenderer(m_renderer);

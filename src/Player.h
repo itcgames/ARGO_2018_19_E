@@ -53,4 +53,6 @@ private:
 	TTF_Font* Font;
 
 	float rumbleCount = 0;
+
+	
 };

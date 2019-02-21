@@ -4,6 +4,12 @@ ControlSystem::ControlSystem() {
 	//init();
 }
 
+void ControlSystem::recieveLevel(int width, int height)
+{
+	m_width = width;
+	m_height = height;
+}
+
 SDL_Haptic* ControlSystem::init(SDL_GameController* controller) {
 	//Initialization flag
 	bool success = true;
@@ -50,6 +56,7 @@ void ControlSystem::update(SDL_Event e) {
 
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
+		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 
 		if (tc->getTag() == "Player") {
 			if (!cc->m_init) {
@@ -73,13 +80,18 @@ void ControlSystem::update(SDL_Event e) {
 			cc->setLeft(false);
 		}
 
+		
+
 		if (StickX > JOYSTICK_DEAD_ZONE) {
 
-		cc->setRight(true);
+			cc->setRight(true);
+
 		}
 		else {
 			cc->setRight(false);
 		}
+		
+		
 		
 		if (leftX > JOYSTICK_DEAD_ZONE || leftX < -JOYSTICK_DEAD_ZONE ||
 			leftY > JOYSTICK_DEAD_ZONE || leftY < -JOYSTICK_DEAD_ZONE) {

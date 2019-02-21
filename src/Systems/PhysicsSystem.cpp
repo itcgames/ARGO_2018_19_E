@@ -577,14 +577,19 @@ void PhysicsSystem::movePlayer(ControlComponent * cc, PositionComponent *pc, Tag
 		speed = 0.5;
 		jumpSpeed = 10;
 	}
-	if (cc->getLeft()) {
-		if (pc->getVelX() > -8.0) {
-			pc->setVelX(pc->getVelX() - speed);
+	if (pc->getX() > 100) {
+		if (cc->getLeft()) {
+			if (pc->getVelX() > -8.0) {
+				pc->setVelX(pc->getVelX() - speed);
+			}
 		}
 	}
-	if (cc->getRight()) {
-		if (pc->getVelX() < 8.0) {
-			pc->setVelX(pc->getVelX() + speed);
+	if (pc->getX() < m_width - 150) {
+		if (cc->getRight()) {
+
+			if (pc->getVelX() < 8.0) {
+				pc->setVelX(pc->getVelX() + speed);
+			}
 		}
 	}
 	if (cc->getJump() && pc->jumpNum < 2) {
@@ -1244,4 +1249,10 @@ void PhysicsSystem::notifyAudioObservers(AudioObserver::SFX sfx)
 void PhysicsSystem::registerAudioObserver(AudioObserver* audioObserver)
 {
 	m_audioObservers.push_back(audioObserver);
+}
+
+void PhysicsSystem::recieveLevel(int width, int height)
+{
+	m_width = width;
+	m_height = height;
 }
