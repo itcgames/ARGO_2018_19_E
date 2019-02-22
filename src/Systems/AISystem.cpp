@@ -2,7 +2,7 @@
 
 AISystem::AISystem() {
 	fsm = new Animation();
-	std::cout << fsm->getCurrent() << std::endl;
+	//std::cout << fsm->getCurrent() << std::endl;
 }
 
 void AISystem::addEntity(Entity * e) {
