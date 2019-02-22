@@ -31,31 +31,97 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 			ease = 0.04;
 		}
 
-		//angle += angleDifference * ease;
+
 		angle += angleDifference;
 
 		// Code to snap to certain set rotations.
 		double snapAngle = angleTo + 90;
-		double deadSize = 20;
-		if (snapAngle <= 0 + deadSize || snapAngle >= 360 - deadSize)
+		double deadSize = 15;
+		double RotateAllowed = 45;
+
+		if (tc->getSubTag() == "juicer")
 		{
-			angle = 270;
+			RotateAllowed = 45;
+			// Cap rotation for juicer so cant shoot up and down
+			if (snapAngle <= 90 - RotateAllowed)
+			{
+				angle = 0 - RotateAllowed;
+			}
+			else if (snapAngle >= 90 + RotateAllowed && snapAngle < 180)
+			{
+				angle = 0 + RotateAllowed;
+			}
+			else if (snapAngle >= 270 + RotateAllowed)
+			{
+				angle = 180 + RotateAllowed;
+			}
+			else if (snapAngle <= 270 - RotateAllowed && snapAngle >= 180)
+			{
+				angle = 180 - RotateAllowed;
+			}
+
+			// Snap left,right,up,down
+
+			if (snapAngle >= 90 - deadSize && snapAngle <= 90 + deadSize)
+			{
+				angle = 0;
+			}
+			else if (snapAngle >= 270 - deadSize && snapAngle <= 270 + deadSize)
+			{
+				angle = 180;
+			}
 		}
-		else if (snapAngle >= 90 - deadSize && snapAngle <= 90 + deadSize)
+		else if (tc->getSubTag() == "shotgun")
 		{
-			angle = 0;
+			RotateAllowed = 55;
+			// Cap rotation for juicer so cant shoot up and down
+			if (snapAngle <= 90 - RotateAllowed)
+			{
+				angle = 0 - RotateAllowed;
+			}
+			else if (snapAngle >= 90 + RotateAllowed && snapAngle < 180)
+			{
+				angle = 0 + RotateAllowed;
+			}
+			else if (snapAngle >= 270 + RotateAllowed)
+			{
+				angle = 180 + RotateAllowed;
+			}
+			else if (snapAngle <= 270 - RotateAllowed && snapAngle >= 180)
+			{
+				angle = 180 - RotateAllowed;
+			}
+
+			// Snap left,right,up,down
+
+			if (snapAngle >= 90 - deadSize && snapAngle <= 90 + deadSize)
+			{
+				angle = 0;
+			}
+			else if (snapAngle >= 270 - deadSize && snapAngle <= 270 + deadSize)
+			{
+				angle = 180;
+			}
 		}
-		else if (snapAngle >= 180 - deadSize && snapAngle <= 180 + deadSize)
-		{
-			angle = 90;
-		}
-		else if (snapAngle >= 270 - deadSize && snapAngle <= 270 + deadSize)
-		{
-			angle = 180;
+		else {
+			if (snapAngle <= 0 + deadSize || snapAngle >= 360 - deadSize)
+			{
+				angle = 270;
+			}
+			else if (snapAngle >= 90 - deadSize && snapAngle <= 90 + deadSize)
+			{
+				angle = 0;
+			}
+			else if (snapAngle >= 180 - deadSize && snapAngle <= 180 + deadSize)
+			{
+				angle = 90;
+			}
+			else if (snapAngle >= 270 - deadSize && snapAngle <= 270 + deadSize)
+			{
+				angle = 180;
+			}
 		}
 
-
-		
 
 		ownerConC->setCurrentAngle(angle - 90);
 		tc->setAngle(angle);
@@ -385,16 +451,38 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 		}
 	}
 	else {
-		if (cc->getAngle() + 90 < 90)
+
+		if (tc->getSubTag2() == "AI_Player")
+
 		{
-			sc->m_flipValue = SDL_FLIP_HORIZONTAL;
-			left = false;
-			right = false;
+			//std::cout << "Angle = " << cc->getAngle() + 90 << std::endl;
+			if (cc->getAngle() + 90 > -90)  // Could be wrong
+			{
+
+				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+				left = false;
+				right = false;
+			}
+			else {
+				sc->m_flipValue = SDL_FLIP_NONE;
+				left = false;
+				right = false;
+			}
 		}
 		else {
-			sc->m_flipValue = SDL_FLIP_NONE;
-			left = false;
-			right = false;
+
+			if (cc->getAngle() + 90 < 90)  // Could be wrong
+			{
+
+				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+				left = false;
+				right = false;
+			}
+			else {
+				sc->m_flipValue = SDL_FLIP_NONE;
+				left = false;
+				right = false;
+			}
 		}
 	}
 }
@@ -409,8 +497,7 @@ void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc, Collisi
 	{
 		pc->setVelX(-tc->getXOffset() * 2);		
 		pc->setVelY(-15);
-		
-		
+
 	}
 	else if (tc->getSubTag() == "juicer")
 	{
@@ -542,12 +629,12 @@ void PhysicsSystem::setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc,
 	else if (tc->getSubTag2() == "left")
 	{
 
-		float radiusPump = 55 - (ownerPosC->getShotgunPumpCount());
+		float radiusPump = 45 - (ownerPosC->getJuicerCount());
 		float shotgunPumpRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180; // :)
 																					  //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 																					  //float shotgunTipY = 207.2 * (sin(shotgunRadAng));
 		float shotgunPumpX = radiusPump * (cos(shotgunPumpRadAng));
-		float shotgunPumpY = radiusPump * (sin(shotgunPumpRadAng));
+		float shotgunPumpY = radiusPump * (sin(shotgunPumpRadAng)) - 20;
 
 		sc->setRotation(((gunTagC->getAngle() - 90)*-1 - ownerPosC->getJuicerCount()) - 90); //rotate hand
 		if (sc->m_flipValue == SDL_FLIP_NONE)
@@ -649,7 +736,7 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 					TagComponent * gunTag = (TagComponent*)entity->getCompByType("TAG");
 					if (tc->getGunGotID() == gunTag->getSubTag2())  // Finds which gun we have.
 					{
-						std::cout << "TAG1 = " << tc->getTag() << "TAG2 = " << gunTag->getSubTag2() << "ID = " << tc->getGunGotID() << std::endl;
+						//std::cout << "TAG1 = " << tc->getTag() << "TAG2 = " << gunTag->getSubTag2() << "ID = " << tc->getGunGotID() << std::endl;
 						gunPos = (PositionComponent*)entity->getCompByType("POSITION");
 						gunGotTag = gunTag;
 					}
@@ -691,6 +778,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 		PositionComponent * ownerPosC = (PositionComponent*)entity->getCompByType("POSITION");
 		ControlComponent * ownerConC = (ControlComponent*)entity->getCompByType("CONTROL");
 		TagComponent * ownerTagC = (TagComponent*)entity->getCompByType("TAG");
+		SpriteComponent * ownerSpriteC = (SpriteComponent*)entity->getCompByType("SPRITE");
 
 
 		// check gun player collide
@@ -738,6 +826,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 					if (tc->getGunGotID() == currentGun) {
 						ownerPosC = (PositionComponent*)entity->getCompByType("POSITION");
 						ownerConC = (ControlComponent*)entity->getCompByType("CONTROL");
+						ownerSpriteC = (SpriteComponent*)entity->getCompByType("SPRITE");
 						ownerTagC = tc;
 					}
 				}
@@ -763,6 +852,16 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 				flipNone(sc);
 
 			}
+			if (tc->getGrabbed() == true) { // :)
+
+				sc->m_flipValue = ownerSpriteC->m_flipValue;
+
+			}
+		//	else if (tc->getGrabbed() == true) {
+
+				//flipNone(sc);
+
+			//}
 			if (tc->getGrabbed() != true)
 			{
 				if (pc->getVelY() < 8) {

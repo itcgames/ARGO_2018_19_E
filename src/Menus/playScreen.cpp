@@ -36,11 +36,8 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
 
 	for (Gun * g : m_guns) {
-		m_Gunents.push_back((Entity*)g);
-		
+		m_Gunents.push_back((Entity*)g);	
 	}
-
-
 }
 
 void PlayScreen::initialise(bool online, int size, int num) {
@@ -130,9 +127,11 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			{
 				if (m_map->getSpawnPoints().at(j)->first == false)
 				{
-					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, noOfPlayers));
-					m_leftHands.push_back(new Hand(m_renderer, 1, 4));
-					m_rightHands.push_back(new Hand(m_renderer, 2, 4));
+					AI * ai = new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, noOfPlayers);
+					m_playerents.push_back((Entity*)ai);
+					m_aiCharacters.push_back(ai);
+					m_leftHands.push_back(new Hand(m_renderer, 1, noOfPlayers));
+					m_rightHands.push_back(new Hand(m_renderer, 2, noOfPlayers));
 					m_map->getSpawnPoints().at(j)->first = true;
 					noOfPlayers += 1;
 				}
@@ -223,7 +222,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	SDL_RenderSetScale(m_renderer, 0.69, 0.5);
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
-	//m_ais.update();
+	m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
 	//m_animationsSys.update();
