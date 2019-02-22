@@ -4,8 +4,6 @@ AISystem::AISystem() {
 	fsm = new Animation();
 	//std::cout << fsm->getCurrent() << std::endl;
 
-	Line * line = new Line{0,0,0,0};
-	m_line.push_back(line);
 }
 
 void AISystem::addEntity(Entity * e) {
@@ -238,10 +236,7 @@ void AISystem::update() {
 				{
 					con->setFire(false);
 				}
-				m_line[0]->x1 = ac->curPosition.x;
-				m_line[0]->y1 = ac->curPosition.y;
-				m_line[0]->x2 = ac->closestEnemy.second.x;
-				m_line[0]->y2 = ac->closestEnemy.second.y;
+			
 				
 				
 			}
@@ -441,12 +436,3 @@ void AISystem::checkJumpPoints(AIComponent * ac, PositionComponent * pc)
 }
 
 
-
-void AISystem::renderLine(SDL_Renderer * renderer)
-{
-	for (int i = 0; i < m_line.size(); i++)
-	{
-		SDL_RenderDrawLine(renderer, m_line[i]->x1, m_line[i]->y1, m_line[i]->x2, m_line[i]->y2);
-	}
-	
-}

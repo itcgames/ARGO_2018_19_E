@@ -283,5 +283,5 @@ void AI::render(SDL_Renderer* renderer) {
 	m_spriteComponentRightFoot->render(renderer);
 
 
-	SDL_RenderDrawLine(renderer, m_line[i]->x1, m_line[i]->y1, m_line[i]->x2, m_line[i]->y2);
+	//SDL_RenderDrawLine(renderer, m_line[i]->x1, m_line[i]->y1, m_line[i]->x2, m_line[i]->y2);
 }

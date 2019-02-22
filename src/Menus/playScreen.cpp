@@ -138,7 +138,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			}
 		}
 
-		std::cout << noOfPlayers << std::endl;
+		//std::cout << noOfPlayers << std::endl;
 	}
 
 
@@ -304,7 +304,6 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 	testLight->render(m_renderer);
 	m_grenadeSys.render();
 	m_collSys.render();
-	m_ais.renderLine(m_renderer);
 	//m_emitter->update();
 	if (m_drawRoundText) {
 		SDL_RenderCopy(m_renderer, text, NULL, &renderQuad);
@@ -425,7 +424,7 @@ void PlayScreen::checkRoundOver() {
 	}
 	else {
 		int dead = 0;
-		std::cout << dead << std::endl;
+		//std::cout << dead << std::endl;
 		if (!m_multiplayer) {
 			Entity * ent = (Entity *)m_players[0];
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");

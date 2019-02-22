@@ -57,7 +57,6 @@ public:
 	std::string getHitFrom() { return hitFrom; }
 	void setHitFrom(std::string value) { hitFrom = value; }
 
-
 	std::vector<ParticleExample*> m_particleVector;
 
 	int m_playerNum;

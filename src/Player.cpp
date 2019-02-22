@@ -25,26 +25,26 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	m_marker = new SpriteComponent(0, 0, 100, 100);
 	if (index == 0)
 	{
-		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/head1.png", renderer);
-		m_marker->loadFromFile("assets/assets/art/character/finished_character_assets/marker.png", renderer);
+		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker.png", renderer);
 	}
 	else if (index == 1)
 	{
-		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/head2.png", renderer);
-		m_marker->loadFromFile("assets/assets/art/character/finished_character_assets/marker2.png", renderer);
+		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker2.png", renderer);
 	}
 	else if (index == 2)
 	{
-		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/head3.png", renderer);
-		m_marker->loadFromFile("assets/assets/art/character/finished_character_assets/marker3.png", renderer);
+		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker3.png", renderer);
 	}
 	else if (index == 3)
 	{
-		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/head4.png", renderer);
-		m_marker->loadFromFile("assets/assets/art/character/finished_character_assets/marker4.png", renderer);
+		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker4.png", renderer);
 	}
 	m_spriteComponentHead->setPosition(c2v{ x, y });
-	m_spriteComponentHead->setScale(c2v{ 0.5f, 0.68f });
+	m_spriteComponentHead->setScale(c2v{ 0.7f, 0.7f });
 
 
 	m_spriteComponentLeftFoot = new SpriteComponent(0, 0, 107, 91);
@@ -161,7 +161,7 @@ void Player::render(SDL_Renderer* renderer) {
 		{
 			if (totalHeadTime < 20)
 			{
-				totalHeadTime = totalHeadTime + 1;
+				totalHeadTime = totalHeadTime + 2;
 				if (headCount > 10)
 				{
 					animateHeadUp = false;
@@ -172,11 +172,11 @@ void Player::render(SDL_Renderer* renderer) {
 				}
 				if (animateHeadUp == true)
 				{
-					headCount = headCount + 1;
+					headCount = headCount + 2;
 				}
 				else if (animateHeadUp == false)
 				{
-					headCount = headCount - 1;
+					headCount = headCount - 2;
 
 				}
 			}
@@ -219,7 +219,7 @@ void Player::render(SDL_Renderer* renderer) {
 		m_spriteComponentRightFoot->m_flipValue = m_spriteComponent->m_flipValue;
 		if (m_spriteComponentHead->m_flipValue == SDL_FLIP_NONE)
 		{
-			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 10 + headCount / 2,positionComp->getY() - 75 + headCount });
+			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 10 + headCount / 2,positionComp->getY() - 60 + headCount });
 			m_spriteComponentHead->setRotation(-headCount);
 
 			m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount,positionComp->getY() + 52 });
@@ -229,7 +229,7 @@ void Player::render(SDL_Renderer* renderer) {
 			m_spriteComponentRightFoot->setRotation(runCount);
 		}
 		else {
-			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 20 - headCount / 2,positionComp->getY() - 75 + headCount });
+			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 20 - headCount / 2,positionComp->getY() - 60 + headCount });
 			m_spriteComponentHead->setRotation(headCount);
 
 			m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() - 20 + runCount,positionComp->getY() + 52 });  // (Position - player offset + animationCount)
