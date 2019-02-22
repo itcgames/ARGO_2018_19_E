@@ -284,7 +284,16 @@ double AISystem::getAngleToPlayer(c2v pos , std::pair<double, c2v> enemy)
 	double angle;
 	
 	angle = atan2(-dir.y, dir.x);
-	return (angle * 180 / 3.14159) - 90;
+	std::cout << "Angle = " << (angle * 180 / 3.14159) - 90 << std::endl;
+
+	if ((angle * 180 / 3.14159) <= 90 && (angle * 180 / 3.14159) >= -90)
+	{
+		return (angle * 180 / 3.14159) - 90;
+	}
+	else {
+		return (angle * 180 / 3.14159) + 270;
+	}
+
 }
 
 

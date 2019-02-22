@@ -37,26 +37,59 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 		// Code to snap to certain set rotations.
 		double snapAngle = angleTo + 90;
 		double deadSize = 15;
-		double juicerRotateAllowed = 45;
+		double RotateAllowed = 45;
 
 		if (tc->getSubTag() == "juicer")
 		{
+			RotateAllowed = 45;
 			// Cap rotation for juicer so cant shoot up and down
-			if (snapAngle <= 90 - juicerRotateAllowed)
+			if (snapAngle <= 90 - RotateAllowed)
 			{
-				angle = 0 - juicerRotateAllowed;
+				angle = 0 - RotateAllowed;
 			}
-			else if (snapAngle >= 90 + juicerRotateAllowed && snapAngle < 180)
+			else if (snapAngle >= 90 + RotateAllowed && snapAngle < 180)
 			{
-				angle = 0 + juicerRotateAllowed;
+				angle = 0 + RotateAllowed;
 			}
-			else if (snapAngle >= 270 + juicerRotateAllowed)
+			else if (snapAngle >= 270 + RotateAllowed)
 			{
-				angle = 180 + juicerRotateAllowed;
+				angle = 180 + RotateAllowed;
 			}
-			else if (snapAngle <= 270 - juicerRotateAllowed && snapAngle >= 180)
+			else if (snapAngle <= 270 - RotateAllowed && snapAngle >= 180)
 			{
-				angle = 180 - juicerRotateAllowed;
+				angle = 180 - RotateAllowed;
+			}
+
+			// Snap left,right,up,down
+
+			if (snapAngle >= 90 - deadSize && snapAngle <= 90 + deadSize)
+			{
+				angle = 0;
+			}
+			else if (snapAngle >= 270 - deadSize && snapAngle <= 270 + deadSize)
+			{
+				angle = 180;
+			}
+		}
+		else if (tc->getSubTag() == "shotgun")
+		{
+			RotateAllowed = 55;
+			// Cap rotation for juicer so cant shoot up and down
+			if (snapAngle <= 90 - RotateAllowed)
+			{
+				angle = 0 - RotateAllowed;
+			}
+			else if (snapAngle >= 90 + RotateAllowed && snapAngle < 180)
+			{
+				angle = 0 + RotateAllowed;
+			}
+			else if (snapAngle >= 270 + RotateAllowed)
+			{
+				angle = 180 + RotateAllowed;
+			}
+			else if (snapAngle <= 270 - RotateAllowed && snapAngle >= 180)
+			{
+				angle = 180 - RotateAllowed;
 			}
 
 			// Snap left,right,up,down
