@@ -380,7 +380,7 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 		}
 	}
 	else {
-		if (cc->getAngle() + 90 < 90)  // Could be wrong
+		if (cc->getAngle() + 90 < 90)
 		{
 			sc->m_flipValue = SDL_FLIP_HORIZONTAL;
 			left = false;
@@ -744,7 +744,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 					launchGun(pc, tc, colc, ownerConC, ownerTagC);
 				}
 			}
-			if (tc->getAngle() < 90 && tc->getGrabbed() == true) { // :)
+			if (tc->getAngle() < 90 && tc->getGrabbed() == true) {
 
 				flipHorizontal(sc);
 
