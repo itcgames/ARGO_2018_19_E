@@ -2,7 +2,7 @@
 
 AISystem::AISystem() {
 	fsm = new Animation();
-	std::cout << fsm->getCurrent() << std::endl;
+	//std::cout << fsm->getCurrent() << std::endl;
 }
 
 void AISystem::addEntity(Entity * e) {
@@ -27,7 +27,7 @@ void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 		
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
-
+		
 		if (!tag->gotGunBool)
 		{
 			int count = 0;
@@ -38,6 +38,7 @@ void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 			{
 				PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
 				ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
+				TagComponent * tC = (TagComponent*)entity->getCompByType("TAG");
 
 				m_position = c2v{ pos->getX(), pos->getY() };
 
@@ -45,6 +46,7 @@ void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 
 				vec.x = pos->getX();
 				vec.y = pos->getY();
+				
 
 				ac->m_distances[count].second = vec;
 
@@ -234,7 +236,7 @@ void AISystem::update() {
 			}
 
 			//if the gun isnt in the players current line of sight execute 
-			if (!ac->m_gunInSight)
+			if (!ac->m_gunInSight && !tag->gotGunBool)
 			{
 				if (ac->m_landed)
 				{
@@ -328,7 +330,10 @@ void AISystem::update() {
 			{
 				double desired = getAngleToPlayer(ac->curPosition, ac->closestEnemy);
 				con->setAngle(desired);
-				if (con->getAngle() == desired)
+				//tag->getPreviousAngle()
+				std::cout << "Angle = " << tag->getAngle() << std::endl;
+				std::cout << "Desired = " << desired << std::endl;
+				/*if (con->getAngle() == desired - 5)
 				{
 					con->setFire(true);
 				}
@@ -336,7 +341,7 @@ void AISystem::update() {
 				{
 					con->setFire(false);
 				}
-				
+				*/
 			}
 			
 			//if the gun is on the same level as the AI character
@@ -374,11 +379,11 @@ void AISystem::update() {
 }
 double AISystem::getAngleToPlayer(c2v pos , std::pair<double, c2v> enemy)
 {
-	auto hypot = enemy.first;
 	c2v dir = c2Sub(pos, enemy.second);
+	
 	double angle;
 	
-	angle = atan2(dir.y, dir.x);
+	angle = atan2(-dir.y, dir.x);
 	return (angle * 180 / 3.14159) - 90;
 }
 

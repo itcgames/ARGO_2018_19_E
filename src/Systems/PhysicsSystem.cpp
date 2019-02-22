@@ -380,16 +380,35 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 		}
 	}
 	else {
-		if (cc->getAngle() + 90 < 90)  // Could be wrong
+		if (tc->getSubTag2() == "AI_Player")
 		{
-			sc->m_flipValue = SDL_FLIP_HORIZONTAL;
-			left = false;
-			right = false;
+			//std::cout << "Angle = " << cc->getAngle() + 90 << std::endl;
+			if (cc->getAngle() + 90 > -90)  // Could be wrong
+			{
+
+				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+				left = false;
+				right = false;
+			}
+			else {
+				sc->m_flipValue = SDL_FLIP_NONE;
+				left = false;
+				right = false;
+			}
 		}
 		else {
-			sc->m_flipValue = SDL_FLIP_NONE;
-			left = false;
-			right = false;
+			if (cc->getAngle() + 90 < 90)  // Could be wrong
+			{
+
+				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
+				left = false;
+				right = false;
+			}
+			else {
+				sc->m_flipValue = SDL_FLIP_NONE;
+				left = false;
+				right = false;
+			}
 		}
 	}
 }
@@ -405,7 +424,7 @@ void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc, Collisi
 		pc->setVelX(-tc->getXOffset() * 2);		
 		pc->setVelY(-15);
 		
-		std::cout << "Y Offset = " << tc->getYOffset() << std::endl;
+		//std::cout << "Y Offset = " << tc->getYOffset() << std::endl;
 	}
 	else if (tc->getSubTag() == "juicer")
 	{
@@ -685,6 +704,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 		PositionComponent * ownerPosC = (PositionComponent*)entity->getCompByType("POSITION");
 		ControlComponent * ownerConC = (ControlComponent*)entity->getCompByType("CONTROL");
 		TagComponent * ownerTagC = (TagComponent*)entity->getCompByType("TAG");
+		SpriteComponent * ownerSpriteC = (SpriteComponent*)entity->getCompByType("SPRITE");
 
 
 		// check gun player collide
@@ -729,6 +749,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 					if (tc->getGunGot() == currentGun) {
 						ownerPosC = (PositionComponent*)entity->getCompByType("POSITION");
 						ownerConC = (ControlComponent*)entity->getCompByType("CONTROL");
+						ownerSpriteC = (SpriteComponent*)entity->getCompByType("SPRITE");
 						ownerTagC = tc;
 					}
 				}
@@ -754,6 +775,16 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 				flipNone(sc);
 
 			}
+			if (tc->getGrabbed() == true) { // :)
+
+				sc->m_flipValue = ownerSpriteC->m_flipValue;
+
+			}
+		//	else if (tc->getGrabbed() == true) {
+
+				//flipNone(sc);
+
+			//}
 			if (tc->getGrabbed() != true)
 			{
 				if (pc->getVelY() < 8) {
