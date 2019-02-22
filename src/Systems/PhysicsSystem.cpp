@@ -715,7 +715,10 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 			{
 				movePlayer(cc, pc, tc);
 				// Set the position after movement
-				pc->setVelY(pc->getVelY() + Friction.y);  // Friction
+				if (pc->getVelY() < 40)
+				{
+					pc->setVelY(pc->getVelY() + Friction.y);  // Friction
+				}
 				setPosition(pc);
 			}
 			
