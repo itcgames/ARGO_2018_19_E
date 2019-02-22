@@ -32,6 +32,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 		}
 
 		angle += angleDifference * ease;
+		ownerConC->setCurrentAngle(angle);
 		tc->setAngle(angle);
 
 		
