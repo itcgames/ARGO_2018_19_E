@@ -14,6 +14,8 @@ CreditScreen::CreditScreen(GameState * state, SDL_Renderer * renderer, TTF_Font*
 	creditStrings.push_back("Peter Daly");
 	creditStrings.push_back("Jemma Corrigan Coules ");
 	creditStrings.push_back("Stephen Kinsella");
+	creditStrings.push_back("                ");
+	creditStrings.push_back("Thanks for playing!");
 
 	for (int i = 0; i < creditStrings.size(); i++) {
 		textSurface = TTF_RenderText_Solid(Font, creditStrings.at(i).c_str(), textColor);
@@ -38,12 +40,20 @@ CreditScreen::CreditScreen(GameState * state, SDL_Renderer * renderer, TTF_Font*
 
 void CreditScreen::update() {
 	for (int i = 0; i < renderQuads.size(); i++) {
+		renderQuads.at(i)->w = renderQuads.at(i)->y ;
+		renderQuads.at(i)->x = 600 - (renderQuads.at(i)->w / 2);
 		renderQuads.at(i)->y -= 1;
+		if (renderQuads.at(i)->y < 0) {
+			renderQuads.at(i)->y = 650 + (4 * 150);
+		}
 	}
 
 	bool BButton = SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_B);
 
 	if (BButton) {
+		for (int i = 0; i < renderQuads.size(); i++) {
+			renderQuads.at(i)->y = 650 + (i * 150);
+		}
 		*m_currentGameState = GameState::Menu;
 	}
 }
