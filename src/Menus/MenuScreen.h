@@ -24,7 +24,7 @@ private:
 
 	std::string play_text = "(A) Play";
 	std::string online_text = "(X) Online";
-	std::string options_text = "(Y) Options";
+	std::string options_text = "(Y) Credits";
 	std::string exit_text = "(B) Exit";
 
 	std::string title_text = "UnPlayable";

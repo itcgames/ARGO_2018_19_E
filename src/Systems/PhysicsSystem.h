@@ -111,6 +111,5 @@ public:
 
 	int m_width;
 	int m_height;
-
 };
 #endif // !PHYSICSSYSTEM_H

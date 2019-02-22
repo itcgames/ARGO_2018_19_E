@@ -63,28 +63,6 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			m_map->getSpawnPoints().at(num - 1)->first = true;
 		
 		}	
-
-		m_animationsSys.addEntity((Entity*)m_players[0]);
-		m_hs.addEntity((Entity*)m_players[0]);
-		m_cs.addEntity((Entity*)m_players[0]);
-		m_rs.addEntity((Entity*)m_players[0]);
-		m_ps.addEntity((Entity*)m_players[0]);
-		m_restartSys.addEntity((Entity*)m_players[0]);
-		m_collSys.addEntity((Entity*)m_players[0]);
-
-		m_hs.addEntity((Entity*)m_leftHands[0]);
-		m_cs.addEntity((Entity*)m_leftHands[0]);
-		m_rs.addEntity((Entity*)m_leftHands[0]);
-		m_ps.addEntity((Entity*)m_leftHands[0]);
-		m_restartSys.addEntity((Entity*)m_leftHands[0]);
-		m_collSys.addEntity((Entity*)m_leftHands[0]);
-
-		m_hs.addEntity((Entity*)m_rightHands[0]);
-		m_cs.addEntity((Entity*)m_rightHands[0]);
-		m_rs.addEntity((Entity*)m_rightHands[0]);
-		m_ps.addEntity((Entity*)m_rightHands[0]);
-		m_restartSys.addEntity((Entity*)m_rightHands[0]);
-		m_collSys.addEntity((Entity*)m_rightHands[0]);
 		
 		if (num < size) {
 			for (int i = num + 1; i <= size; i++) {
@@ -124,24 +102,8 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			m_netSystem.addEntity((Entity*)net);
 			m_animationsSys.addEntity((Entity*)net);
 		}
-
-		for (int i = 0; i < (4 - size); i++) {
-
-			for (int j = 0; j < m_map->getSpawnPoints().size(); j++)
-			{
-				if (m_map->getSpawnPoints().at(j)->first == false)
-				{
-					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, size));
-					m_map->getSpawnPoints().at(j)->first = true;
-					
-				}
-			}
-		}
-
 	}
 	else {
-
-		
 
 		for (int i = 0; i < SDL_NumJoysticks(); i++) 
 		{
@@ -253,7 +215,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		initialise(*online, size, client->number);
 		m_startGame = false;
 	}
-	spawnGuns();
+	
 	m_cs.update(event);
 	m_collSys.update(m_map->getTiles());
 	m_ps.update(m_renderer);
@@ -266,24 +228,21 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_hs.update();
 	//m_animationsSys.update();
 	checkRoundOver();
-	if (!(*online)) {
-
-	}
-	else {
+	
+	if ((*online)) {
 		for (Entity * ent : m_netSystem.m_entities) {
 			
 			if (client->packet->message == 5) {
 				m_netSystem.update(client->packet);
 
 				client->receive();
-
 			}
-
 			
 		}
 		Entity * ent = (Entity*)m_players[0];
 		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
 		PositionComponent * pc = (PositionComponent*)ent->getCompByType("POSITION");
+		TagComponent * tc = (TagComponent*)ent->getCompByType("TAG");
 
 		Packet p;
 
@@ -295,7 +254,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		p.fire = cc->getFire();
 		p.gunAngle = cc->getAngle();
 		p.alive = cc->getAlive();
-		p.throwWeapon = cc->getThrowWeapon();
+		p.throwWeapon = tc->getGotGunBool();
 		p.position.x = pc->getX();
 		p.position.y = pc->getY();
 
@@ -320,6 +279,9 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		lastPacket.position.x = p.position.x;
 		lastPacket.position.y = p.position.y;
 	}
+	else {
+		spawnGuns();
+	}
 }
 
 void PlayScreen::render(SDL_Renderer * renderer) {
@@ -329,6 +291,9 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 		ai->render(m_renderer);
 	}
 	for (Player *p : m_players) {
+		p->render(m_renderer);
+	}
+	for (Player *p : m_networkCharacters) {
 		p->render(m_renderer);
 	}
 	m_rs.render(m_renderer);
@@ -419,7 +384,7 @@ bool PlayScreen::onlineRoundOver() {
 
 		}
 	}
-
+	
 	if (dead >= 3) {
 		if (!m_drawRoundText) {
 			initialiseText("Player Wins");
@@ -454,12 +419,13 @@ void PlayScreen::endRound() {
 
 void PlayScreen::checkRoundOver() {
 	bool roundEnd = false;
+	
 	if (*m_online) {
 		roundEnd = onlineRoundOver();
 	}
 	else {
 		int dead = 0;
-
+		std::cout << dead << std::endl;
 		if (!m_multiplayer) {
 			Entity * ent = (Entity *)m_players[0];
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
@@ -484,8 +450,8 @@ void PlayScreen::checkRoundOver() {
 		
 		for (AI * ai : m_aiCharacters) {
 			Entity * ent = (Entity *)ai;
-			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
-			if (!ai->m_alive) {
+			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+			if (!control->getAlive()) {
 				dead++;
 			}
 		}

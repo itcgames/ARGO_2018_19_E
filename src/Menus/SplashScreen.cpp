@@ -11,8 +11,6 @@ SplashScreen::SplashScreen(GameState * state, SDL_Renderer * renderer, TTF_Font*
 	int text_height = textSurface->h;
 	SDL_FreeSurface(textSurface);
 	renderQuad = { 150, 200, text_width, text_height };
-	
-
 }
 
 

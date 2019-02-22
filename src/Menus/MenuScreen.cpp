@@ -111,6 +111,7 @@ void MenuScreen::update(SDL_Window *window)
 	bool AButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_A);
 	bool BButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_B);
 	bool XButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_X);
+	bool YButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_Y);
 
 	if (AButton && !firstTime) {
 		firstTime = true;
@@ -121,6 +122,11 @@ void MenuScreen::update(SDL_Window *window)
 		firstTime = true;
 		buttonTimer = 0;
 		*m_currentGameState = GameState::Online;
+	}
+	else if (YButton && !firstTime) {
+		firstTime = true;
+		buttonTimer = 0;
+		*m_currentGameState = GameState::Credits;
 	}
 	else if (BButton && !firstTime) {
 		SDL_DestroyWindow(window);

@@ -32,6 +32,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 		}
 
 		angle += angleDifference * ease;
+		ownerConC->setCurrentAngle(angle);
 		tc->setAngle(angle);
 
 		
@@ -308,9 +309,9 @@ std::string PhysicsSystem::rectCollision(c2AABB A, c2AABB B)
 
 void PhysicsSystem::pickUpAgain(TagComponent * tc, SpriteComponent * sc, CollisionComponent * colisionc) {
 	// Increase grabable count to allow thrown gun to be picked up again.
-	if (tc->getGrabable() == false)
+	if (tc->getGrabable() == false && tc->getGrabbed() == false)
 	{
-		if (tc->getGrabableCount() > 30)
+		if (tc->getGrabableCount() > 10)
 		{
 			tc->setGrabable(true);
 			tc->setGrabableCount(0);
@@ -380,7 +381,7 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 		}
 	}
 	else {
-		if (cc->getAngle() + 90 < 90)  // Could be wrong
+		if (cc->getAngle() + 90 < 90)
 		{
 			sc->m_flipValue = SDL_FLIP_HORIZONTAL;
 			left = false;
@@ -621,14 +622,14 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 	for (Entity * entity : m_entities) {
 
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
-		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
-		CollisionComponent * colc = (CollisionComponent*)entity->getCompByType("COLLISION");
-		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
-		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
-		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
-		TagComponent * gunGotTag = (TagComponent*)entity->getCompByType("TAG");
 
 		if (tc->getTag() == "Hand" && tc->getSubTag() == ownerTagC->getSubTag()) {
+			ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
+			CollisionComponent * colc = (CollisionComponent*)entity->getCompByType("COLLISION");
+			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
+			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
+			AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
+			TagComponent * gunGotTag = (TagComponent*)entity->getCompByType("TAG");
 			if (tc->getGotGunBool() == true)
 			{
 				if (ownerConC->getAngle() + 90 < 90)
@@ -744,7 +745,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 					launchGun(pc, tc, colc, ownerConC, ownerTagC);
 				}
 			}
-			if (tc->getAngle() < 90 && tc->getGrabbed() == true) { // :)
+			if (tc->getAngle() < 90 && tc->getGrabbed() == true) {
 
 				flipHorizontal(sc);
 

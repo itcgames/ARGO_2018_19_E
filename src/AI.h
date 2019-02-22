@@ -37,7 +37,7 @@ private:
 	float newY = 0;
 	bool falling = false;
 
-
+	ControlComponent * control;
 
 	float rumbleCount = 0;
 };
