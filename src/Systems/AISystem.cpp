@@ -232,15 +232,15 @@ void AISystem::update() {
 
 				con->setAngle(desired);
 
-				/*if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
-				{*/
-				/*
+				if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
+				{
+				
 					con->setFire(true);
 				}
 				else
 				{
 					con->setFire(false);
-				}*/
+				}
 			
 				
 				
@@ -300,7 +300,7 @@ double AISystem::getAngleToPlayer(c2v pos , std::pair<double, c2v> enemy)
 	}
 	else {
 		double fixAngle = (angle * 180 / 3.14159) + 270;
-		if (fixAngle > 360)
+		if (fixAngle > 360)  // Math :)
 		{
 			return fixAngle - 360;
 		}
