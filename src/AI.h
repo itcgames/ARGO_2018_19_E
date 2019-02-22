@@ -20,7 +20,7 @@ private:
 	SpriteComponent* m_spriteComponentHead;
 	SpriteComponent* m_spriteComponentLeftFoot;
 	SpriteComponent* m_spriteComponentRightFoot;
-
+	RayCastComponent * m_rayCastComp;
 	int runCount = 0;
 	int fallCount = 0;
 	int headCount = 0;

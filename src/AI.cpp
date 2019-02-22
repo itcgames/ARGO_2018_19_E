@@ -34,6 +34,11 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 
 	m_spriteComponentHead->setColor(255, 255, 255);
 
+	//creating and adding ray cast for AI
+	m_rayCastComp = new RayCastComponent();
+	this->addComponent(m_rayCastComp);
+
+
 	this->addComponent(new FState());
 	this->addComponent(new HealthComponent(10));
 	TagComponent * tag = new TagComponent("Player");
@@ -277,4 +282,6 @@ void AI::render(SDL_Renderer* renderer) {
 	m_spriteComponentLeftFoot->render(renderer);
 	m_spriteComponentRightFoot->render(renderer);
 
+
+	//SDL_RenderDrawLine(renderer, m_line[i]->x1, m_line[i]->y1, m_line[i]->x2, m_line[i]->y2);
 }

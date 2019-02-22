@@ -34,13 +34,14 @@ void GrenadeSystem::update(std::vector<std::shared_ptr<Tile>> tiles, std::vector
 				Entity* ent = (Entity *)ai;
 				PositionComponent * aiPC = (PositionComponent*)ent->getCompByType("POSITION");
 				SpriteComponent * sc = (SpriteComponent*)ent->getCompByType("SPRITE");
+				ControlComponent * comp = (ControlComponent*)ent->getCompByType("CONTROL");
 				AIComponent * aiC = (AIComponent*)ent->getCompByType("AI");
 				if (dist(c2v{ aiPC->getX(), aiPC->getY() }, v2) < 300) {
 					aiPC->setVelX(2000 * (1 / (aiPC->getX() - v2.x)));
 					aiPC->setVelY(2000 * (1 / (aiPC->getY() - v2.y)));
 					sc->setRotation(90);
 					sc->setColor(255, 40, 40);
-					aiC->m_alive = false;
+					comp->setAlive(false);
 					sc->setBlendMode(SDL_BLENDMODE_ADD);
 				}
 			}
@@ -83,6 +84,7 @@ void GrenadeSystem::render()
 	}
 }
 
+
 float GrenadeSystem::dist(c2v v1, c2v v2) {
 	float dist = std::sqrt(((v1.x - v2.x) * (v1.x - v2.x)) + ((v1.y - v2.y) * (v1.y - v2.y)));
 	return dist;
@@ -117,6 +119,7 @@ void GrenadeSystem::animateExplosion()
 		m_count = 0;
 	}
 }
+
 
 void GrenadeSystem::setRenderer(SDL_Renderer * renderer)
 {

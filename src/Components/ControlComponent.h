@@ -57,14 +57,12 @@ public:
 	std::string getHitFrom() { return hitFrom; }
 	void setHitFrom(std::string value) { hitFrom = value; }
 
-	float currentAngle = 90;
-	void setCurrentAngle(float value) { currentAngle = value; };
-	float getCurrentAngle() { return currentAngle; };
-
-
 	std::vector<ParticleExample*> m_particleVector;
 
 	int m_playerNum;
+
+	float getCurrentAngle() { return m_currentAngle; }
+	void setCurrentAngle(float angle) { m_currentAngle = angle; }
 
 private:
 
@@ -79,5 +77,7 @@ private:
 	float m_gunAngle = 90.0f;
 
 	bool m_alive = true;
+
+	float m_currentAngle = 0.0f;
 };
 #endif // !CONTROLCOMPONENT_H

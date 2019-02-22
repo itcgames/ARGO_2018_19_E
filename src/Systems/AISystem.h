@@ -2,6 +2,7 @@
 #define AISYSTEM_H
 
 #include <iostream>
+#include <list>
 #include <vector>
 #include "../Entity.h"
 #include "../cute_c2.h"
@@ -25,30 +26,40 @@ class AISystem
 
 public:
 	AISystem();
+
+	void renderLine(SDL_Renderer * renderer);
 	void addEntity(Entity * e);
+	void receive(std::vector<Entity*> guns, std::vector<Entity*> players);
+	void recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints, std::vector<std::pair<c2v, std::string>> jumpPoints, std::vector<std::shared_ptr<Tile>> tiles, int width, int height);
 	void update();
+	void checkBoundaries(AIComponent * ac);
+	void calculateMovePoints(AIComponent * ac);
+	void setStartingDirection(AIComponent * ac);
+	void checkWalkPoints(AIComponent * AC, PositionComponent * pc);
+	void checkJumpPoints(AIComponent * AC, PositionComponent * pc);
+
 	double getAngleToPlayer(c2v pos, std::pair<double, c2v> enemy);
+	double distance(c2v  vecOne, c2v vecTwo);
+
 
 	std::pair<double, c2v> checkClosest(std::vector<std::pair<double, c2v>> distances, std::pair<double, c2v > real);
-	double distance(c2v  vecOne, c2v vecTwo);
 	std::pair<c2v, std::string> checkPoints(std::vector<std::pair<c2v, std::string>> walkpoints, PositionComponent* pc);
-	void receive(std::vector<Entity*> guns, std::vector<Entity*> players);
 
-	void recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints, std::vector<std::pair<c2v, std::string>> jumpPoints, std::vector<std::shared_ptr<Tile>> tiles, int width, int height);
-
-private:
-	
-	std::vector<std::pair<double, c2v>> m_dist;
-	
-	Animation *fsm;
-	c2v m_position;
-
+private:	
 	std::vector<std::pair<c2v, std::string>> m_pathPoints;
 	std::vector<std::pair<c2v, std::string>> m_jumpPoints;
+	std::vector<std::pair<double, c2v>> m_dist;
+	std::vector<std::shared_ptr<Tile>> m_tiles;
+
+
 	int m_height;
 	int m_width;
 
-	std::vector<std::shared_ptr<Tile>> m_tiles;
+
+	Animation *fsm;
+
+	std::vector<Line*> m_line;
+	c2v m_position;
 };
 
 
