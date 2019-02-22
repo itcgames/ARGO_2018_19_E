@@ -14,6 +14,7 @@
 #include "./Components/FactoryComponent.h"
 #include "./Components/StateComponent.h"
 #include "./Components/GrenadeComponent.h"
+#include "./Components/RayCastComponent.h"
 #include <SDL.h>
 
 class Entity

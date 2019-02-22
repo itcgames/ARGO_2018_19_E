@@ -37,6 +37,8 @@ public:
 		collider.max = c2v{ x + w, y + h };
 	}
 
+	
+
 	std::string m_tag = "COLLISION";
 
 	std::string getType() { return m_tag; }

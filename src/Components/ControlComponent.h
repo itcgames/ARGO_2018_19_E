@@ -62,6 +62,9 @@ public:
 
 	int m_playerNum;
 
+	float getCurrentAngle() { return m_currentAngle; }
+	void setCurrentAngle(float angle) { m_currentAngle = angle; }
+
 private:
 
 	bool m_left = false;
@@ -75,5 +78,7 @@ private:
 	float m_gunAngle = 90.0f;
 
 	bool m_alive = true;
+
+	float m_currentAngle = 0.0f;
 };
 #endif // !CONTROLCOMPONENT_H
