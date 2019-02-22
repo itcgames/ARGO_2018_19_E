@@ -139,7 +139,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			}
 		}
 
-		std::cout << noOfPlayers << std::endl;
+		//std::cout << noOfPlayers << std::endl;
 	}
 
 
@@ -223,7 +223,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	SDL_RenderSetScale(m_renderer, 0.69, 0.5);
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
-	m_ais.update();
+	//m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
 	//m_animationsSys.update();
@@ -425,7 +425,7 @@ void PlayScreen::checkRoundOver() {
 	}
 	else {
 		int dead = 0;
-		std::cout << dead << std::endl;
+		//std::cout << dead << std::endl;
 		if (!m_multiplayer) {
 			Entity * ent = (Entity *)m_players[0];
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");

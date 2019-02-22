@@ -57,6 +57,10 @@ public:
 	std::string getHitFrom() { return hitFrom; }
 	void setHitFrom(std::string value) { hitFrom = value; }
 
+	float currentAngle = 90;
+	void setCurrentAngle(float value) { currentAngle = value; };
+	float getCurrentAngle() { return currentAngle; };
+
 
 	std::vector<ParticleExample*> m_particleVector;
 

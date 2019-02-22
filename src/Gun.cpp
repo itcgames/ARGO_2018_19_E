@@ -33,11 +33,11 @@ Gun::Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos,int id)
 	}
 	else if (gunValue == 3)
 	{
-		m_spriteComponent = new SpriteComponent(0, 0, 142, 268);
+		m_spriteComponent = new SpriteComponent(0, 0, 100, 150);
 		m_spriteComponent->setPosition(c2v{ xPos, yPos });
-		m_spriteComponent->setScale(c2v{ 1.0f, 1.0f });
+		m_spriteComponent->setScale(c2v{ 2.0f, 2.0f });
 		this->addComponent(m_spriteComponent);
-		m_spriteComponent->loadFromFile("assets/JuiceBox.png", renderer);
+		m_spriteComponent->loadFromFile("assets/art/character/finished_character_assets/MiniGun.png", renderer);
 		m_tagComponent->setSubTag("juicer");
 		this->addComponent(new CollisionComponent(xPos, yPos, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 	}
