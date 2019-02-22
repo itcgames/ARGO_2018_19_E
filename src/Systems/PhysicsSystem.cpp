@@ -1065,7 +1065,7 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 }
 
 
-void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
+void PhysicsSystem::bulletRender(SDL_Renderer* renderer, Camera* camera) {
 
 
 	for (Entity * entity : m_entities) {
@@ -1091,21 +1091,21 @@ void PhysicsSystem::bulletRender(SDL_Renderer* renderer) {
 
 	for (int i = 0; i < shotgunBullets.size(); i++)
 	{
-		shotgunBullets[i]->render(renderer);
+		shotgunBullets[i]->render(renderer, camera);
 		// create a new particle system pointer
 
 
 	}
 	for (int i = 0; i < pistolBullets.size(); i++)
 	{
-		pistolBullets[i]->render(renderer);
+		pistolBullets[i]->render(renderer, camera);
 		// create a new particle system pointer
 
 
 	}
 	for (int i = 0; i < juicerBullets.size(); i++)
 	{
-		juicerBullets[i]->render(renderer);
+		juicerBullets[i]->render(renderer, camera);
 		// create a new particle system pointer
 
 

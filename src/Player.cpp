@@ -95,7 +95,7 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	this->addComponent(controlComp);
 	this->addComponent(new CollisionComponent(x, y, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }
-void Player::render(SDL_Renderer* renderer) {
+void Player::render(SDL_Renderer* renderer, Camera* camera) {
 
 	m_marker->setPosition(c2v{ m_spriteComponent->getPosition().x + 17 - (startBalloonCount * 40), m_spriteComponent->getPosition().y - 150 - startBalloonFlightCount });
 	m_marker->setScale(c2v{ 0.1f + startBalloonCount, 0.1f + startBalloonCount });
@@ -314,11 +314,24 @@ void Player::render(SDL_Renderer* renderer) {
 
 	
 	//std::cout << "Y = "<< positionComp->getVelY() << std::endl;
+	c2v* screenPos = new c2v{ m_spriteComponentHead->getPosition().x - camera->getCamera()->x, m_spriteComponentHead->getPosition().y - camera->getCamera()->y };
+	m_spriteComponentHead->setPosition(*screenPos);
 	m_spriteComponentHead->render(renderer);
+
+	screenPos->x = static_cast<float>(m_spriteComponentLeftFoot->getPosition().x - camera->getCamera()->x);
+	screenPos->y = static_cast<float>(m_spriteComponentLeftFoot->getPosition().y - camera->getCamera()->y);
+	m_spriteComponentLeftFoot->setPosition(*screenPos);
 	m_spriteComponentLeftFoot->render(renderer);
+
+	screenPos->x = static_cast<float>(m_spriteComponentRightFoot->getPosition().x - camera->getCamera()->x);
+	screenPos->y = static_cast<float>(m_spriteComponentRightFoot->getPosition().y - camera->getCamera()->y);
+	m_spriteComponentRightFoot->setPosition(*screenPos);
 	m_spriteComponentRightFoot->render(renderer);
+
+
 	m_marker->render(renderer);
 	SDL_RenderCopy(m_renderer, text, NULL, &renderQuad);
+	delete screenPos;
 }
 
 void Player::initialiseText(std::string message, int x, int y) {

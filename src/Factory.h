@@ -3,17 +3,16 @@
 #include <SDL.h>
 #include <vector>
 #include "Components/SpriteComponent.h"
+#include "Camera.h"
 
 
 class Bullet
 {
 public:
 	Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl);
-	~Bullet() {  
-		
-	}
+	~Bullet() {}
 	SpriteComponent* m_spriteComponent;
-	void render(SDL_Renderer* renderer);
+	void render(SDL_Renderer* renderer, Camera* camera);
 	float xVel;
 	float yVel;
 

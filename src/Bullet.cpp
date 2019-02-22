@@ -18,11 +18,18 @@ Bullet::Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, dou
 	collider.max = c2v{ xPos + m_spriteComponent->getWidth(), yPos + m_spriteComponent->getHeight() };
 }
 
-void Bullet::render(SDL_Renderer* renderer) {
-
-	m_spriteComponent->setPosition(c2v{ m_spriteComponent->getPosition().x + xVel / 5, m_spriteComponent->getPosition().y + yVel /5});
-	m_spriteComponent->render(renderer);
+void Bullet::render(SDL_Renderer* renderer, Camera* camera) {
 
 	collider.min = c2v{ m_spriteComponent->getPosition().x, m_spriteComponent->getPosition().y };
 	collider.max = c2v{ m_spriteComponent->getPosition().x + m_spriteComponent->getWidth(), m_spriteComponent->getPosition().y + m_spriteComponent->getHeight() };
+
+	c2v* screenPos = new c2v{ 0, 0 };
+	screenPos->x = m_spriteComponent->getPosition().x - camera->getCamera()->x;
+	screenPos->y = m_spriteComponent->getPosition().y - camera->getCamera()->y;
+
+	m_spriteComponent->setPosition(c2v{ screenPos->x + xVel / 5, screenPos->y + yVel / 5});
+	m_spriteComponent->render(renderer);
+
+	delete screenPos;
+	
 }

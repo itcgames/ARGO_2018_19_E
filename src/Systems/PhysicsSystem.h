@@ -25,7 +25,7 @@ public:
 	void addEntity(Entity * e);
 	void update(SDL_Renderer* renderer);
 	void bulletUpdate(SDL_Renderer* renderer);
-	void bulletRender(SDL_Renderer* renderer);
+	void bulletRender(SDL_Renderer* renderer, Camera* camera);
 	void receive(Entity * e);
 	double player1PositionX = 0;
 	double player1PositionY = 0;

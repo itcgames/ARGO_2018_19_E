@@ -170,7 +170,6 @@ void Game::render() {
 		break;
 	}
 	SDL_RenderPresent(m_renderer);
-
 }
 
 

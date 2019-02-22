@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <vector>
 #include "Components/SpriteComponent.h"
+#include "Camera.h"
 
 
 class AI : public Entity
@@ -11,7 +12,7 @@ public:
 	AI();
 	AI(SDL_Renderer* renderer,float xPos,float yPos);
 
-	void render(SDL_Renderer* renderer);
+	void render(SDL_Renderer* renderer, Camera* camera);
 private:
 	std::vector<Component*> m_components;
 	PositionComponent* positionComp;

@@ -4,6 +4,7 @@
 #include <vector>
 #include "Components/SpriteComponent.h"
 #include "Systems/ControlSystem.h"
+#include "Camera.h"
 
 #include <SDL_ttf.h>
 
@@ -14,7 +15,7 @@ public:
 	Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller, int index, TTF_Font* font);
 
 	void initialiseText(std::string message, int x, int y);
-	void render(SDL_Renderer* renderer);
+	void render(SDL_Renderer* renderer, Camera* camera);
 
 private:
 	float startBalloonCount = 0.0f;
