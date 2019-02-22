@@ -156,6 +156,11 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 				float y = temp->dRect.y;
 				float w = temp->dRect.w;
 				float h = temp->dRect.h;
+				
+				temp->position.x = x;
+				temp->position.y = y;
+				temp->width = w;
+				temp->height = h;
 
 				temp->collider = c2AABB{ c2v{x, y}, c2v{x + w, y + h} };
 

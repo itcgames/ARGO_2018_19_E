@@ -21,6 +21,9 @@ struct Tile
 	c2AABB collider;
 	int health;
 	bool dead;
+	c2v position;
+	int width;
+	int height;
 };
 
 class MapLoader

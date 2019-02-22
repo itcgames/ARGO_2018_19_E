@@ -17,6 +17,8 @@ void AISystem::recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints,
 	m_width = width;
 	m_height = height;
 	m_tiles = tiles;
+
+	
 }
 
 void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
@@ -65,18 +67,20 @@ void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 			{
 				PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
 				ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
+			
+				if (con->getAlive()) {
+					m_position = c2v{ pos->getX(), pos->getY() };
 
-				m_position = c2v{ pos->getX(), pos->getY() };
+					ac->m_distances[count].first = distance(ac->curPosition, m_position);
 
-				ac->m_distances[count].first = distance(ac->curPosition, m_position);
+					vec.x = pos->getX();
+					vec.y = pos->getY();
 
-				vec.x = pos->getX();
-				vec.y = pos->getY();
-
-				ac->m_distances[count].second = vec;
+					ac->m_distances[count].second = vec;
 
 
-				count++;
+					count++;
+				}
 			}
 		}
 	}
@@ -228,19 +232,23 @@ void AISystem::update() {
 
 				con->setAngle(desired);
 
-				if (con->getCurrentAngle() > desired - 10 && con->getCurrentAngle() < desired + 10)
-				{
+				/*if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
+				{*/
+				/*
 					con->setFire(true);
 				}
 				else
 				{
 					con->setFire(false);
-				}
+				}*/
 			
 				
 				
 			}
-			
+			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
+			rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
+
+
 			//if the gun is on the same level as the AI character
 			if (ac->curPosition.y + 50 > ac->closestEnemy.second.y && ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
 			{
@@ -436,3 +444,14 @@ void AISystem::checkJumpPoints(AIComponent * ac, PositionComponent * pc)
 }
 
 
+void AISystem::checkAllTiles(float x1, float y1, float x2, float y2, float rx, float ry, float rw, float rh)
+{
+
+	for (int i = 0; i < m_tiles.size(); i++) {
+
+		if (m_tiles.at(i)->dRect.x >= 0) {
+
+			
+		}
+	}
+}

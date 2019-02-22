@@ -37,6 +37,8 @@ public:
 	void setStartingDirection(AIComponent * ac);
 	void checkWalkPoints(AIComponent * AC, PositionComponent * pc);
 	void checkJumpPoints(AIComponent * AC, PositionComponent * pc);
+	void checkAllTiles(float x1, float y1, float x2, float y2, float rx, float ry, float rw, float rh);
+
 
 	double getAngleToPlayer(c2v pos, std::pair<double, c2v> enemy);
 	double distance(c2v  vecOne, c2v vecTwo);
