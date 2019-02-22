@@ -36,22 +36,57 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 
 		// Code to snap to certain set rotations.
 		double snapAngle = angleTo + 90;
-		double deadSize = 20;
-		if (snapAngle <= 0 + deadSize || snapAngle >= 360 - deadSize)
+		double deadSize = 15;
+		double juicerRotateAllowed = 45;
+
+		if (tc->getSubTag() == "juicer")
 		{
-			angle = 270;
+			// Cap rotation for juicer so cant shoot up and down
+			if (snapAngle <= 90 - juicerRotateAllowed)
+			{
+				angle = 0 - juicerRotateAllowed;
+			}
+			else if (snapAngle >= 90 + juicerRotateAllowed && snapAngle < 180)
+			{
+				angle = 0 + juicerRotateAllowed;
+			}
+			else if (snapAngle >= 270 + juicerRotateAllowed)
+			{
+				angle = 180 + juicerRotateAllowed;
+			}
+			else if (snapAngle <= 270 - juicerRotateAllowed && snapAngle >= 180)
+			{
+				angle = 180 - juicerRotateAllowed;
+			}
+
+			// Snap left,right,up,down
+
+			if (snapAngle >= 90 - deadSize && snapAngle <= 90 + deadSize)
+			{
+				angle = 0;
+			}
+			else if (snapAngle >= 270 - deadSize && snapAngle <= 270 + deadSize)
+			{
+				angle = 180;
+			}
 		}
-		else if (snapAngle >= 90 - deadSize && snapAngle <= 90 + deadSize)
-		{
-			angle = 0;
-		}
-		else if (snapAngle >= 180 - deadSize && snapAngle <= 180 + deadSize)
-		{
-			angle = 90;
-		}
-		else if (snapAngle >= 270 - deadSize && snapAngle <= 270 + deadSize)
-		{
-			angle = 180;
+		else {
+			if (snapAngle <= 0 + deadSize || snapAngle >= 360 - deadSize)
+			{
+				angle = 270;
+			}
+			else if (snapAngle >= 90 - deadSize && snapAngle <= 90 + deadSize)
+			{
+				angle = 0;
+			}
+			else if (snapAngle >= 180 - deadSize && snapAngle <= 180 + deadSize)
+			{
+				angle = 90;
+			}
+			else if (snapAngle >= 270 - deadSize && snapAngle <= 270 + deadSize)
+			{
+				angle = 180;
+			}
 		}
 
 
@@ -542,12 +577,12 @@ void PhysicsSystem::setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc,
 	else if (tc->getSubTag2() == "left")
 	{
 
-		float radiusPump = 55 - (ownerPosC->getShotgunPumpCount());
+		float radiusPump = 45 - (ownerPosC->getJuicerCount());
 		float shotgunPumpRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180; // :)
 																					  //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 																					  //float shotgunTipY = 207.2 * (sin(shotgunRadAng));
 		float shotgunPumpX = radiusPump * (cos(shotgunPumpRadAng));
-		float shotgunPumpY = radiusPump * (sin(shotgunPumpRadAng));
+		float shotgunPumpY = radiusPump * (sin(shotgunPumpRadAng)) - 20;
 
 		sc->setRotation(((gunTagC->getAngle() - 90)*-1 - ownerPosC->getJuicerCount()) - 90); //rotate hand
 		if (sc->m_flipValue == SDL_FLIP_NONE)
@@ -649,7 +684,7 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 					TagComponent * gunTag = (TagComponent*)entity->getCompByType("TAG");
 					if (tc->getGunGotID() == gunTag->getSubTag2())  // Finds which gun we have.
 					{
-						std::cout << "TAG1 = " << tc->getTag() << "TAG2 = " << gunTag->getSubTag2() << "ID = " << tc->getGunGotID() << std::endl;
+						//std::cout << "TAG1 = " << tc->getTag() << "TAG2 = " << gunTag->getSubTag2() << "ID = " << tc->getGunGotID() << std::endl;
 						gunPos = (PositionComponent*)entity->getCompByType("POSITION");
 						gunGotTag = gunTag;
 					}
