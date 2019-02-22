@@ -226,21 +226,21 @@ void AISystem::update() {
 
 			
 			//ai shooting entities
-			if (tag->gotGunBool)
+			if (tag->gotGunBool && !checkAllTiles(rayCast->getStartPosition().x, rayCast->getStartPosition().y, rayCast->getCastPosition().x, rayCast->getCastPosition().y))
 			{
 				double desired = getAngleToPlayer(ac->curPosition, ac->closestEnemy);
 
 				con->setAngle(desired);
 
-				/*if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
-				{*/
-				/*
+				if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
+				{
+				
 					con->setFire(true);
 				}
 				else
 				{
 					con->setFire(false);
-				}*/
+				}
 			
 				
 				
@@ -453,14 +453,43 @@ void AISystem::checkJumpPoints(AIComponent * ac, PositionComponent * pc)
 }
 
 
-void AISystem::checkAllTiles(float x1, float y1, float x2, float y2, float rx, float ry, float rw, float rh)
+bool AISystem::checkAllTiles(float x1, float y1, float x2, float y2)
 {
 
 	for (int i = 0; i < m_tiles.size(); i++) {
 
 		if (m_tiles.at(i)->dRect.x >= 0) {
+			float x = m_tiles.at(i)->position.x;
+			float y = m_tiles.at(i)->position.y;
+			float w = m_tiles.at(i)->width;
+			float h = m_tiles.at(i)->height;
 
-			
+			bool left = lineLine(x1, y1, x2, y2, x, y, x, y + h);
+			bool right = lineLine(x1, y1, x2, y2, x + w, y, x + w, y + h);
+			bool top = lineLine(x1, y1, x2, y2, x, y, x + w, y);
+			bool bottom = lineLine(x1, y1, x2, y2, x, y + h, x + w, y + h);
+
+			// if ANY of the above are true, the line
+			// has hit the rectangle
+			if (left || right || top || bottom) {
+				return true;
+			}
+			return false;
 		}
 	}
+}
+
+// LINE/LINE
+bool AISystem::lineLine(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
+
+	// calculate the direction of the lines
+	float uA = ((x4 - x3)*(y1 - y3) - (y4 - y3)*(x1 - x3)) / ((y4 - y3)*(x2 - x1) - (x4 - x3)*(y2 - y1));
+	float uB = ((x2 - x1)*(y1 - y3) - (y2 - y1)*(x1 - x3)) / ((y4 - y3)*(x2 - x1) - (x4 - x3)*(y2 - y1));
+
+	// if uA and uB are between 0-1, lines are colliding
+	if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
+
+		return true;
+	}
+	return false;
 }
