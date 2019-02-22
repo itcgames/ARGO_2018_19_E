@@ -715,7 +715,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 			{
 				movePlayer(cc, pc, tc);
 				// Set the position after movement
-				if (pc->getVelY() < 40)
+				if (pc->getVelY() < 40)  // Cap Y to stop falling through floor
 				{
 					pc->setVelY(pc->getVelY() + Friction.y);  // Friction
 				}
