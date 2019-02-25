@@ -80,7 +80,7 @@ public:
 	c2v lastPosition = { 0,0 };
 
 	bool m_landed;
-
+	bool detect = false;
 
 	std::vector<std::pair<double, c2v>> m_distances;
 

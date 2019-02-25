@@ -224,31 +224,37 @@ void AISystem::update() {
 				ac->jumping = true;
 			}
 
-			
+
 			//ai shooting entities
-			if (tag->gotGunBool && !checkAllTiles(rayCast->getStartPosition().x, rayCast->getStartPosition().y, rayCast->getCastPosition().x, rayCast->getCastPosition().y))
-			{
+			if (tag->gotGunBool)
+			{ 
 				double desired = getAngleToPlayer(ac->curPosition, ac->closestEnemy);
 
 				con->setAngle(desired);
 
-				if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
-				{
+				if (!checkAllTiles(rayCast->getStartPosition().x, rayCast->getStartPosition().y, rayCast->getCastPosition().x, rayCast->getCastPosition().y)) {
+
+					
+					
+					if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
+					{
+						ac->detect = true;
+						con->setFire(true);
+					}
+					else
+					{
+						con->setFire(false);
+					}	
+
+				}
 				
-					con->setFire(true);
-				}
-				else
-				{
-					con->setFire(false);
-				}
+
 			
-				
-				
 			}
+			
 			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
 			rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
-
-
+		
 			//if the gun is on the same level as the AI character
 			if (ac->curPosition.y + 50 > ac->closestEnemy.second.y && ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
 			{
@@ -458,28 +464,27 @@ bool AISystem::checkAllTiles(float x1, float y1, float x2, float y2)
 
 	for (int i = 0; i < m_tiles.size(); i++) {
 
-		if (m_tiles.at(i)->dRect.x >= 0) {
-			float x = m_tiles.at(i)->position.x;
-			float y = m_tiles.at(i)->position.y;
-			float w = m_tiles.at(i)->width;
-			float h = m_tiles.at(i)->height;
+	
+		float x = m_tiles.at(i)->position.x;
+		float y = m_tiles.at(i)->position.y;
+		float w = m_tiles.at(i)->width;
+		float h = m_tiles.at(i)->height;
 
-			bool left = lineLine(x1, y1, x2, y2, x, y, x, y + h);
-			bool right = lineLine(x1, y1, x2, y2, x + w, y, x + w, y + h);
-			bool top = lineLine(x1, y1, x2, y2, x, y, x + w, y);
-			bool bottom = lineLine(x1, y1, x2, y2, x, y + h, x + w, y + h);
+		bool left = lineLine(x1, y1, x2, y2, x, y, x, y + h);
+		bool right = lineLine(x1, y1, x2, y2, x + w, y, x + w, y + h);
+		bool top = lineLine(x1, y1, x2, y2, x, y, x + w, y);
+		bool bottom = lineLine(x1, y1, x2, y2, x, y + h, x + w, y + h);
 
-			// if ANY of the above are true, the line
-			// has hit the rectangle
-			if (left || right || top || bottom) {
-				return true;
-			}
-			return false;
-		}
+		// if ANY of the above are true, the line
+		// has hit the rectangle
+		if (left || right || top || bottom) {
+			return true;
+		}	
 	}
+	return false;
 }
 
-// LINE/LINE
+
 bool AISystem::lineLine(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
 
 	// calculate the direction of the lines
