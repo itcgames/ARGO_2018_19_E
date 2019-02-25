@@ -432,7 +432,7 @@ void PhysicsSystem::setPlayerGunGot(std::string gun, TagComponent * tagC, std::s
 //	player2PositionY = pc->getY();
 //}
 void PhysicsSystem::throwGunFun(ControlComponent * cc) {
-	cc->setThrowWeapon(false);
+	//cc->setThrowWeapon(false);
 	cc->setThrowGun(true);
 }
 void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, ControlComponent * cc, TagComponent * tc) {

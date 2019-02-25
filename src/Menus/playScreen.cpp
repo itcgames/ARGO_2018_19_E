@@ -271,15 +271,19 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	p.position.y = pc->getY();
 	p.level = randNum;
 
-	if (cc->getThrowWeapon()) {
+	if (p.throwWeapon && !lastPacket.throwWeapon) {
 		m_startThrow = true;
 		m_throwTimer = 0;
 	}
 
-	if (m_throwTimer < STOP_THROW && m_startThrow) {
-		m_throwTimer++;
-
+	if (m_startThrow && m_throwTimer < STOP_THROW) {
+		
 		p.throwWeapon = true;
+		cout << p.throwWeapon << endl;
+		m_throwTimer++;
+	}
+	else {
+		m_startThrow = false;
 	}
 
 	if (p.message != lastPacket.message || p.playerNum != lastPacket.playerNum ||
@@ -411,7 +415,7 @@ bool PlayScreen::onlineRoundOver() {
 		}
 	}
 	
-	if (dead >= (playerAmount - 1)) {
+	if (dead >= (playerAmount + 1)) {
 		if (!m_drawRoundText) {
 			initialiseText("Player Wins");
 			m_drawRoundText = true;
