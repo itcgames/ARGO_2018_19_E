@@ -86,6 +86,7 @@ void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 	}
 }
 
+
 std::pair<double,c2v> AISystem::checkClosest(std::vector<std::pair<double, c2v>> distances, std::pair<double, c2v > real)
 {
 
@@ -104,6 +105,7 @@ std::pair<double,c2v> AISystem::checkClosest(std::vector<std::pair<double, c2v>>
 	
 	return real;
 }
+
 
 std::pair<c2v, std::string> AISystem::checkPoints(std::vector<std::pair<c2v, std::string>> points, PositionComponent* pc)
 {
@@ -252,17 +254,6 @@ void AISystem::update() {
 					ac->detect = false;
 				}
 				
-			}
-			
-			if (ac->detect)
-			{
-				//ac->setRight(false);
-				//ac->setLeft(false);
-			}
-			else
-			{
-				ac->closestWalkPoint = checkPoints(ac->curWalkPoints, pc);
-				ac->closestJumpPoint = checkPoints(ac->curJumpPoints, pc);
 			}
 
 			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
