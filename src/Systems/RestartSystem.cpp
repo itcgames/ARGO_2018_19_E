@@ -28,6 +28,7 @@ void RestartSystem::reset(int level) {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 			tc->setGunGot("none");
 			tc->setGotGunBool(false);
+			tc->setGunGotID("0");
 			tc->setBalloonDeflate(false);
 			control->setThrowGun(false);
 			control->setAlive(true);
@@ -45,6 +46,7 @@ void RestartSystem::reset(int level) {
 			tc->setGrabable(true);
 			tc->setGrabbed(false);
 			tc->setGrabableCount(0);
+			
 			if (tc->getSubTag() == "grenade") {
 				GrenadeComponent * grenade = (GrenadeComponent*)ent->getCompByType("GRENADE");
 				grenade->setArmed(false);

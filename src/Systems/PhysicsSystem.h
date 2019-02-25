@@ -32,6 +32,8 @@ public:
 	double player2PositionX = 0;
 	double player2PositionY = 0;
 
+	int startRoundCount = 0;
+
 	double aiPositionX = 0;
 	double aiPositionY = 0;
 
