@@ -22,15 +22,8 @@ void NetworkSystem::update(Packet * p) {
 			cc->setThrowWeapon(p->throwWeapon);
 			cc->setJump(p->jump);
 			cc->setFire(p->fire);
-			cc->setLevel(p->level);
 			pc->setX(p->position.x);
 			pc->setY(p->position.y);
-		}
-
-		if (p->playerNum == 1) {
-			for (Entity * ent : m_entities) {
-				p->level;
-			}
 		}
 	}
 }
