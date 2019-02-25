@@ -7,6 +7,8 @@ PhysicsSystem::PhysicsSystem()
 	gunFriction.x = 0.97;
 	gunFriction.y = 0.96;
 
+	srand(1);
+
 }
 
 void PhysicsSystem::addEntity(Entity * e) {
@@ -1088,7 +1090,6 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 
 						for (int i = 0; i < 7; i++)
 						{
-
 							float random = rand() % 40 - 20;
 							float radAng = ((tc->getAngle()) + random) * 3.14159265359 / 180;  // :)
 							float radius = 10;
@@ -1153,8 +1154,8 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						tagC->setJuicerTipX(180 * (cos(juicerRadAng)));
 						tagC->setJuicerTipY(200 * (sin(juicerRadAng)));
 
-
 						float random = rand() % 30 - 15;
+						std::cout << "rand = " << random << std::endl;
 						float radAng = ((tc->getAngle()) + random) * 3.14159265359 / 180; // :)
 						float radius = 60;
 
