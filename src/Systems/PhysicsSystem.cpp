@@ -259,15 +259,16 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 			}
 			else if (tc->getSubTag() == "shotgun")
 			{
+				std::cout << "Shotgun Rotation = " << ownerPosC->getShotgunRotationCount() << std::endl;
 				pc->setY(ownerPosC->getY() - 55 + tc->getYOffset());
 				// Count for recoil animation
-				if (ownerPosC->getShotgunCount() < 20)
+				if (ownerPosC->getShotgunCount() < 15)
 				{
 					ownerPosC->setShotgunRotationCount(ownerPosC->getShotgunRotationCount() + 3);
 				}
-				else if (ownerPosC->getShotgunCount() < 40)
+				else
 				{
-					ownerPosC->setShotgunRotationCount(ownerPosC->getShotgunRotationCount() - 3);
+					ownerPosC->setShotgunRotationCount(ownerPosC->getShotgunRotationCount() - 1);
 					if (ownerPosC->getShotgunRotationCount() < 0)
 					{
 						ownerPosC->setShotgunRotationCount(0);
@@ -288,13 +289,12 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 
 				if (sc->m_flipValue == SDL_FLIP_NONE)
 				{
-					pc->setX(ownerPosC->getX() - tc->getXOffset() - (ownerPosC->getShotgunRotationCount() * 1.5));  // set gun position + offset for player centre - offset for angle
-																													//sc->rotate(firedCount);
-					sc->setRotation((ownerConC->getAngle())*-1 - ownerPosC->getShotgunRotationCount()); //rotate gun with recoil
+					pc->setX(ownerPosC->getX() + tc->getXOffset() - (ownerPosC->getShotgunRotationCount() * 1.5) + 50);
+					sc->setRotation(-(ownerConC->getAngle()) - ownerPosC->getShotgunRotationCount()); //rotate gun with recoil
 				}
 				else {
-					pc->setX(ownerPosC->getX() - tc->getXOffset() + (ownerPosC->getShotgunRotationCount() * 1.5));
-					sc->setRotation((ownerConC->getAngle())*-1 + ownerPosC->getShotgunRotationCount()); //rotate gun with recoil
+					pc->setX(ownerPosC->getX() - tc->getXOffset() + (ownerPosC->getShotgunRotationCount() * 1.5) - 20);
+					sc->setRotation(-(ownerConC->getAngle()) + ownerPosC->getShotgunRotationCount()); //rotate gun with recoil
 				}
 				double angleTo = ownerConC->getCurrentAngle();
 				double angleDifference = angleTo - tc->getPreviousAngle();
@@ -778,8 +778,7 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 void PhysicsSystem::update(SDL_Renderer* renderer) {
 
 	randomJuice = rand() % 30 - 15;
-	std::cout << "rand = " << randomJuice << std::endl;
-
+	
 	for (Entity * entity : m_entities) {
 
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
@@ -1035,6 +1034,8 @@ void PhysicsSystem::updateShooting(SDL_Renderer* renderer, ControlComponent* own
 						tc->setFiredBool(false);
 						pc->setFiredCount(0);
 						pc->setShotgunCount(0);
+						pc->setShotgunPumpCount(0);
+						pc->setShotgunRotationCount(0);
 					}
 				}
 				if (tc->getGunGot() == "juicer")
