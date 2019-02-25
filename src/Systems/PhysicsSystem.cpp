@@ -602,6 +602,39 @@ void PhysicsSystem::setHandOnPistol(SpriteComponent * sc, PositionComponent *pc,
 		handAngle = handAngle * -1;
 	}
 }
+void PhysicsSystem::setHandOnStabby(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, PositionComponent * ownerPosition, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC)
+{
+	double handAngle = gunTagC->getAngle(); // :)
+
+	if (sc->m_flipValue == SDL_FLIP_NONE)
+	{
+		sc->setRotation(((gunTagC->getAngle() - 90)*-1) + 90); //rotate hand
+	}
+	else {
+		sc->setRotation(((gunTagC->getAngle() - 90)*-1) - 90); //rotate hand
+	}
+
+	if (sc->m_flipValue == SDL_FLIP_HORIZONTAL)
+	{
+		if (handAngle < 0)
+		{
+			pc->setX(gunPosition->getX());
+			pc->setY(gunPosition->getY());
+		}
+		else {
+			pc->setX(gunPosition->getX());
+			pc->setY(gunPosition->getY());
+		}
+	}
+	else {
+		pc->setX(gunPosition->getX());
+		pc->setY(gunPosition->getY());
+	}
+	if (handAngle < 0)
+	{
+		handAngle = handAngle * -1;
+	}
+}
 void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, TagComponent * tc, PositionComponent * ownerPosC, ControlComponent * ownerConC, TagComponent * gunTagC)
 {
 	// 386
@@ -803,6 +836,10 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 				if (tc->getGunGot() == "pistol")
 				{
 					setHandOnPistol(sc, pc, cc, handOwnerPos, ownerConC, gunPos,gunGotTag); // Set hand on gun
+				}
+				else if (tc->getGunGot() == "stabbyboy")
+				{
+					setHandOnStabby(sc, pc, cc, handOwnerPos, ownerConC, gunPos, gunGotTag); // Set hand on gun
 				}
 				else if (tc->getGunGot() == "shotgun")
 				{
