@@ -44,7 +44,7 @@ void CreditScreen::update() {
 		renderQuads.at(i)->x = 600 - (renderQuads.at(i)->w / 2);
 		renderQuads.at(i)->y -= 1;
 		if (renderQuads.at(i)->y < 0) {
-			renderQuads.at(i)->y = 650 + (4 * 150);
+			renderQuads.at(i)->y = 850 + (4 * 150);
 		}
 	}
 
