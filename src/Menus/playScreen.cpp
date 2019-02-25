@@ -450,15 +450,15 @@ void PlayScreen::endRound() {
 		}
 		m_roundCounter = 0;
 		m_drawRoundText = false;
+		m_roundEnd = false;
 	}
 }
 
 
 void PlayScreen::checkRoundOver() {
-	bool roundEnd = false;
 	
-	if (*m_online) {
-		roundEnd = onlineRoundOver();
+	if (*m_online && !m_roundEnd) {
+		m_roundEnd = onlineRoundOver();
 	}
 	else {
 		int dead = 0;
@@ -471,7 +471,7 @@ void PlayScreen::checkRoundOver() {
 					initialiseText("AI Wins");
 					m_drawRoundText = true;
 				}
-				roundEnd = true;
+				m_roundEnd = true;
 
 			}
 		}
@@ -504,11 +504,11 @@ void PlayScreen::checkRoundOver() {
 				}
 				m_drawRoundText = true;
 			}
-			roundEnd = true;
+			m_roundEnd = true;
 		}
 	}
 
-	if (roundEnd) {
+	if (m_roundEnd) {
 		endRound();
 	}
 }
