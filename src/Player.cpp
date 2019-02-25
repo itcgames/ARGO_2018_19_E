@@ -10,6 +10,7 @@ Player::Player()
 Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller, int index, TTF_Font* font)
 
 {
+	m_index = index;
 	Font = font;
 	m_renderer = renderer;
 	//Set up Sprite component and add to entity component vector

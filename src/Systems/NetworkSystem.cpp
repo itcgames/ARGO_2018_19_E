@@ -19,14 +19,10 @@ void NetworkSystem::update(Packet * p) {
 			cc->setRight(p->right);
 			cc->setAngle(p->gunAngle);
 			cc->setAlive(p->alive);
-			if (p->throwWeapon) {
-				cc->setThrowWeapon(false);
-			}
-			else {
-				cc->setThrowWeapon(true);
-			}
+			cc->setThrowWeapon(p->throwWeapon);
 			cc->setJump(p->jump);
 			cc->setFire(p->fire);
+			cc->setLevel(p->level);
 			pc->setX(p->position.x);
 			pc->setY(p->position.y);
 		}

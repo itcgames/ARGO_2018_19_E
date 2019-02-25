@@ -250,6 +250,8 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 void PlayScreen::sendPacket(Entity * ent, Client * client) {
 
+	m_client = client;
+
 	ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
 	PositionComponent * pc = (PositionComponent*)ent->getCompByType("POSITION");
 	TagComponent * tc = (TagComponent*)ent->getCompByType("TAG");
@@ -267,6 +269,7 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	p.throwWeapon = cc->getThrowWeapon();
 	p.position.x = pc->getX();
 	p.position.y = pc->getY();
+	p.level = randNum;
 
 	if (cc->getThrowWeapon()) {
 		m_startThrow = true;
@@ -299,6 +302,7 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	lastPacket.throwWeapon = p.throwWeapon;
 	lastPacket.position.x = p.position.x;
 	lastPacket.position.y = p.position.y;
+	lastPacket.level = p.level;
 }
 
 void PlayScreen::render(SDL_Renderer * renderer) {
@@ -417,8 +421,26 @@ void PlayScreen::endRound() {
 
 	if (m_roundCounter > ROUND_OVER) {
 		deleteGuns();
-		int randNum = (rand() % 3) + 1;
+		
 		m_restartSys.reset(randNum);
+		if (*m_online && m_client->number != 1) {
+			for (Player * p : m_networkCharacters) {
+				Entity * ent = (Entity *)p;
+				ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+				if (p->m_index == 0) {
+					randNum = control->getLevel();
+				}
+			}
+			
+		}
+		else {
+			randNum = (rand() % 3) + 1;
+			Player * p = m_players[0];
+			Entity * ent = (Entity *)p;
+			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+			control->setLevel(randNum);
+		}
+		
 		if (randNum == 1) {
 			m_map->load("testlevel.tmx", m_renderer);
 		}

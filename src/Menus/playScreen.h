@@ -116,4 +116,8 @@ private:
 	bool m_startThrow = false;
 	int m_throwTimer = 0;
 	const int STOP_THROW = 4;
+
+	int randNum = 0;
+
+	Client * m_client;
 };
