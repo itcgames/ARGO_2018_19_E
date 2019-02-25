@@ -456,7 +456,14 @@ void PlayScreen::checkRoundOver() {
 		}
 		if (dead >= 3) {
 			if (!m_drawRoundText) {
-				initialiseText("Player Wins");
+				for (Player * p : m_players) {
+					Entity * ent = (Entity *)p;
+					ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+					TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
+					if (control->getAlive()) {
+						initialiseText(tag->getSubTag() + " Wins!");
+					}
+				}
 				m_drawRoundText = true;
 			}
 			roundEnd = true;

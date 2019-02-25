@@ -397,7 +397,7 @@ void PhysicsSystem::setPlayerGunGot(std::string gun, TagComponent * tagC, std::s
 	for (Entity * entity : m_entities) {
 
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
-		if (tagC->getTag() == "Player")
+		if (tagC->getTag() == "Player" && tagC->getGunGot() != gun)
 		{
 			tagC->setGunGot(gun);
 			tagC->setGunGotID(gunID);
@@ -1062,10 +1062,12 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						//tagC->setFiredBool(false);
 						tagC->setStartAnimating(true);
 
-						if (SDL_HapticRumblePlay(ownerConC->getHaptic(), 1, 300) != 0)
-
+						if (tagC->getSubTag2() != "AI_Player")
 						{
-							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+							if (SDL_HapticRumblePlay(ownerConC->getHaptic(), 1, 300) != 0)
+							{
+								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+							}
 						}
 
 						float shotgunRadAng = (tc->getAngle()) * 3.14159265359 / 180; // :)
@@ -1107,10 +1109,13 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						//tagC->setFiredBool(false);
 						tagC->setStartAnimating(true);
 
-						if (SDL_HapticRumblePlay(ownerConC->getHaptic(), .5, 100) != 0)
-
+						if (tagC->getSubTag2() != "AI_Player")
 						{
-							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+							if (SDL_HapticRumblePlay(ownerConC->getHaptic(), .5, 100) != 0)
+
+							{
+								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+							}
 						}
 
 						notifyAudioObservers(AudioObserver::SFX::PISTOL_SHOOT);
@@ -1125,9 +1130,12 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						//tagC->setFiredBool(false);
 						tagC->setStartAnimating(true);
 
-						if (SDL_HapticRumblePlay(ownerConC->getHaptic(), 1, 300) != 0)
+						if (tagC->getSubTag2() != "AI_Player")
 						{
-							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+							if (SDL_HapticRumblePlay(ownerConC->getHaptic(), 1, 300) != 0)
+							{
+								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+							}
 						}
 						float juicerRadAng = (tc->getAngle()) * 3.14159265359 / 180;  // :)
 																								  //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
@@ -1176,9 +1184,12 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						gc->setArmed(true);
 						launchGun(pc, tc, colc, ownerConC, tagC);
 
-						if (SDL_HapticRumblePlay(ownerConC->getHaptic(), .5, 100) != 0)
+						if (tagC->getSubTag2() != "AI_Player")
 						{
-							printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+							if (SDL_HapticRumblePlay(ownerConC->getHaptic(), .5, 100) != 0)
+							{
+								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
+							}
 						}
 
 						//notifyAudioObservers(AudioObserver::SFX::GRENADE_EXPLOSION);
