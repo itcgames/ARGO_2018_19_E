@@ -54,7 +54,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 
 		if (m_map->getSpawnPoints().at(num - 1)->first == false)
 		{
-			m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(num - 1)->second.x, m_map->getSpawnPoints().at(num - 1)->second.y, SDL_GameControllerOpen(0), num, Font));
+			m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(num - 1)->second.x, m_map->getSpawnPoints().at(num - 1)->second.y, SDL_GameControllerOpen(0), num - 1, Font));
 			m_leftHands.push_back(new Hand(m_renderer, 1, num));
 			m_rightHands.push_back(new Hand(m_renderer, 2, num));
 			m_map->getSpawnPoints().at(num - 1)->first = true;
@@ -65,7 +65,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			for (int i = num + 1; i <= size; i++) {
 				if (m_map->getSpawnPoints().at(i - 1)->first == false)
 				{
-					Player * player = new  Player(m_renderer, m_map->getSpawnPoints().at(i - 1)->second.x, m_map->getSpawnPoints().at(i - 1)->second.y, SDL_GameControllerOpen(i), i, Font);
+					Player * player = new  Player(m_renderer, m_map->getSpawnPoints().at(i - 1)->second.x, m_map->getSpawnPoints().at(i - 1)->second.y, SDL_GameControllerOpen(i), i - 1, Font);
 					m_networkCharacters.push_back(player);
 					m_leftHands.push_back(new Hand(m_renderer, 1, i));
 					m_rightHands.push_back(new Hand(m_renderer, 2, i));
@@ -79,7 +79,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			for (int i = num - 1; i > 0; i--) { 
 				if (m_map->getSpawnPoints().at(i - 1)->first == false)
 				{
-					Player * player = new  Player(m_renderer, m_map->getSpawnPoints().at(i - 1)->second.x, m_map->getSpawnPoints().at(i - 1)->second.y, SDL_GameControllerOpen(i), i, Font);
+					Player * player = new  Player(m_renderer, m_map->getSpawnPoints().at(i - 1)->second.x, m_map->getSpawnPoints().at(i - 1)->second.y, SDL_GameControllerOpen(i), i - 1, Font);
 					m_networkCharacters.push_back(player);
 					m_leftHands.push_back(new Hand(m_renderer, 1, i));
 					m_rightHands.push_back(new Hand(m_renderer, 2, i));
@@ -239,48 +239,66 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 			
 		}
 		Entity * ent = (Entity*)m_players[0];
-		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
-		PositionComponent * pc = (PositionComponent*)ent->getCompByType("POSITION");
-		TagComponent * tc = (TagComponent*)ent->getCompByType("TAG");
+		
 
-		Packet p;
-
-		p.message = 5;
-		p.playerNum = cc->m_playerNum;
-		p.left = cc->getLeft();
-		p.right = cc->getRight();
-		p.jump = cc->getJump();
-		p.fire = cc->getFire();
-		p.gunAngle = cc->getAngle();
-		p.alive = cc->getAlive();
-		p.throwWeapon = tc->getGotGunBool();
-		p.position.x = pc->getX();
-		p.position.y = pc->getY();
-
-		if (p.message != lastPacket.message || p.playerNum != lastPacket.playerNum ||
-			p.left != lastPacket.left || p.right != lastPacket.right || p.jump != lastPacket.jump ||
-			p.fire != lastPacket.fire || p.gunAngle != lastPacket.gunAngle || p.alive != lastPacket.alive ||
-			p.throwWeapon != lastPacket.throwWeapon || p.position.x != lastPacket.position.x || 
-			p.position.y != lastPacket.position.y) {
-
-			client->sendMessage(p);
-		}	
-
-		lastPacket.message = p.message;
-		lastPacket.playerNum = p.playerNum;
-		lastPacket.left = p.left;
-		lastPacket.right = p.right;
-		lastPacket.jump = p.jump;
-		lastPacket.fire = p.fire;
-		lastPacket.gunAngle = p.gunAngle;
-		lastPacket.alive = p.alive;
-		lastPacket.throwWeapon = p.throwWeapon;
-		lastPacket.position.x = p.position.x;
-		lastPacket.position.y = p.position.y;
+		sendPacket(ent, client);
 	}
 	else {
 		spawnGuns();
 	}
+}
+
+void PlayScreen::sendPacket(Entity * ent, Client * client) {
+
+	ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
+	PositionComponent * pc = (PositionComponent*)ent->getCompByType("POSITION");
+	TagComponent * tc = (TagComponent*)ent->getCompByType("TAG");
+
+	Packet p;
+
+	p.message = 5;
+	p.playerNum = cc->m_playerNum;
+	p.left = cc->getLeft();
+	p.right = cc->getRight();
+	p.jump = cc->getJump();
+	p.fire = cc->getFire();
+	p.gunAngle = cc->getAngle();
+	p.alive = cc->getAlive();
+	p.throwWeapon = tc->getGotGunBool();
+	p.position.x = pc->getX();
+	p.position.y = pc->getY();
+
+	if (cc->getThrowWeapon()) {
+		m_startThrow = true;
+		m_throwTimer = 0;
+	}
+
+	if (m_throwTimer < STOP_THROW && m_startThrow) {
+		m_throwTimer++;
+
+		p.throwWeapon = false;
+	}
+
+	if (p.message != lastPacket.message || p.playerNum != lastPacket.playerNum ||
+		p.left != lastPacket.left || p.right != lastPacket.right || p.jump != lastPacket.jump ||
+		p.fire != lastPacket.fire || p.gunAngle != lastPacket.gunAngle || p.alive != lastPacket.alive ||
+		p.throwWeapon != lastPacket.throwWeapon || p.position.x != lastPacket.position.x ||
+		p.position.y != lastPacket.position.y) {
+
+		client->sendMessage(p);
+	}
+
+	lastPacket.message = p.message;
+	lastPacket.playerNum = p.playerNum;
+	lastPacket.left = p.left;
+	lastPacket.right = p.right;
+	lastPacket.jump = p.jump;
+	lastPacket.fire = p.fire;
+	lastPacket.gunAngle = p.gunAngle;
+	lastPacket.alive = p.alive;
+	lastPacket.throwWeapon = p.throwWeapon;
+	lastPacket.position.x = p.position.x;
+	lastPacket.position.y = p.position.y;
 }
 
 void PlayScreen::render(SDL_Renderer * renderer) {
@@ -368,23 +386,23 @@ void PlayScreen::deleteGuns() {
 
 bool PlayScreen::onlineRoundOver() {
 	int dead = 0;
-	for (AI * ai : m_aiCharacters) {
-		Entity * ent = (Entity *)ai;
-		AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
-		if (!ai->m_alive) {
-			dead++;
-		}
-	}
+	int playerAmount = m_players.size() + m_networkCharacters.size();
 	for (Player * p : m_players) {
 		Entity * ent = (Entity *)p;
 		ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 		if (!control->getAlive()) {
 			dead++;
-
+		}
+	}
+	for (Player * p : m_networkCharacters) {
+		Entity * ent = (Entity *)p;
+		ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+		if (!control->getAlive()) {
+			dead++;
 		}
 	}
 	
-	if (dead >= 3) {
+	if (dead >= (playerAmount - 1)) {
 		if (!m_drawRoundText) {
 			initialiseText("Player Wins");
 			m_drawRoundText = true;
