@@ -4,8 +4,18 @@ Game* Game::s_pInstance = 0;
 
 Game::Game()
 {
+	
+	
+	//Initialize SDL
+	if (SDL_Init( SDL_INIT_GAMECONTROLLER | SDL_VIDEO_OPENGL | SDL_INIT_HAPTIC) | SDL_INIT_AUDIO < 0)
+	{
+		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+	}
+
+	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
+
 	m_window = SDL_CreateWindow("Entity Component Systems", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1200, 700, SDL_WINDOW_OPENGL);
-	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
 	m_screen = SDL_CreateRGBSurface(0, 1200, 700, 32,
 		0,
 		0,
@@ -13,13 +23,10 @@ Game::Game()
 		0);;
 
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
-	
-	//Initialize SDL
-	if (SDL_Init( SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC) | SDL_INIT_AUDIO < 0)
-	{
-		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-	}
 
+	if (SDL_OpenGL_Ext_Init() < 0) {
+		fprintf(stderr, "Error Initializing %s\n", SDL_GetError());
+	}
 
 	//Initialize SDL_mixer 
 	if(Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, NULL, 2048 ) < 0) 
@@ -71,6 +78,17 @@ Game::Game()
 	m_options = new OptionScreen();
 	
 	m_screenSize = { 0,0,1200,700 };	
+
+	if (SDL_OpenGL_Init_Orho(m_screenSize.w, m_screenSize.h) < 0) {
+		fprintf(stderr, "Error Initializing %s\n", SDL_GetError());
+	}
+
+	progID = SDL_OpenGL_CompileProgram("./src/Shaders/std.vertex", "./src/Shaders/bw.fragment");
+
+
+	frame = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888,
+		SDL_TEXTUREACCESS_TARGET, m_screenSize.w, m_screenSize.h);
+
 }
 
 Game::~Game()
@@ -140,8 +158,11 @@ void Game::render() {
 	{
 		SDL_Log("Could not create a renderer: %s", SDL_GetError());
 	}
+
+	SDL_SetRenderTarget(m_renderer, frame);
 	SDL_RenderClear(m_renderer);
-	SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
+
+	//SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
 
 	switch (*m_currentGameState)
 	{
@@ -170,7 +191,8 @@ void Game::render() {
 	default:
 		break;
 	}
-	SDL_RenderPresent(m_renderer);
+	//SDL_RenderPresent(m_renderer);
+	SDL_OpenGL_RenderFrame(m_window, m_renderer, frame, progID);
 
 }
 

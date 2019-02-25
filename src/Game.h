@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include <SDL_mixer.h>
+
 #include "./Systems/HealthSystem.h"
 #include "./Systems/ControlSystem.h"
 #include "./Systems/RenderSystem.h"
@@ -26,7 +27,9 @@
 
 #include "Menus/playScreen.h"
 
-
+#include "Debug.h"
+#include "SDL_OpenGL_Ext.h"
+#include "SDL_OpenGL_Impl.h"
 
 
 using namespace std;
@@ -64,6 +67,7 @@ public:
 	void setCameraCentre(float x, float y);
 	void setCameraPosition(int x, int y);*/
 	void initialiseText(std::string message);
+
 
 private:
 
@@ -119,6 +123,9 @@ private:
 	SDL_Rect renderQuad;
 	SDL_Color textColor = { 188, 110, 121, 255 };
 	SDL_Surface * textSurface = new SDL_Surface;
+
+	GLuint	progID;
+	SDL_Texture* frame;
 };
 
 

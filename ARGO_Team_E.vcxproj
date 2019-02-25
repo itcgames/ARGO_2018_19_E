@@ -120,7 +120,7 @@
       <AdditionalIncludeDirectories>$(SDL_IMAGE)\include;$(SDL_SDK)\include;$(SDL_MIXER)\include;$(TMX_SDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;libtmxlite-s-d.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;libtmxlite-s-d.lib;SDL2_ttf.lib;SDL2_mixer.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>$(TMX_SDK)\bin\DebugStatic;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
@@ -260,6 +260,7 @@
     <ClInclude Include="src\Components\StateComponent.h" />
     <ClInclude Include="src\Components\TagComponent.h" />
     <ClInclude Include="src\cute_c2.h" />
+    <ClInclude Include="src\Debug.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Factory.h" />
     <ClInclude Include="src\Game.h" />
@@ -281,6 +282,8 @@
     <ClInclude Include="src\Menus\State.h" />
     <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\SDL_OpenGL_Ext.h" />
+    <ClInclude Include="src\SDL_OpenGL_Impl.h" />
     <ClInclude Include="src\States\Attack.h" />
     <ClInclude Include="src\States\Dead.h" />
     <ClInclude Include="src\States\Idle.h" />
@@ -298,6 +301,11 @@
     <ClInclude Include="src\Systems\RenderSystem.h" />
     <ClInclude Include="src\Systems\RestartSystem.h" />
     <ClInclude Include="src\Systems\SoundSystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Shaders\bw.fragment" />
+    <None Include="src\Shaders\crt.fragment" />
+    <None Include="src\Shaders\std.vertex" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

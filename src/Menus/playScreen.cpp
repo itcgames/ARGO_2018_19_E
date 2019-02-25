@@ -302,7 +302,7 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 	}
 	m_ps.bulletRender(m_renderer);
 	//m_animationsSys.render();
-	testLight->render(m_renderer);
+	//testLight->render(m_renderer);
 	m_grenadeSys.render();
 	m_collSys.render();
 	//m_emitter->update();
