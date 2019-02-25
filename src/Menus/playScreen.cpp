@@ -280,12 +280,16 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_focusPoint = m_camera->focus(m_playerPositions);
 	m_camera->update(m_focusPoint);
 	if (m_focusPoint->w > 0) {
-		(SCREEN_WIDTH / m_focusPoint->w) > 1.0f ? ((m_screenScale < 1.0) ? m_screenScale += 0.01f : m_screenScale = 1.0f) : (m_screenScale > 0.5 ? m_screenScale -= 0.01f : m_screenScale = 0.5f);
+		(SCREEN_WIDTH / m_focusPoint->w) > 1.0f ? ((m_screenScale < 1.0f) ? m_screenScale += 0.01f : m_screenScale = 1.0f) : (m_screenScale > 0.55f ? m_screenScale -= 0.01f : m_screenScale = 0.55f);
 	}
+
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	m_playerPositions.push_back(c2v{ 0, 0 });
+	//}
 	
 	SDL_RenderSetScale(m_renderer, m_screenScale, m_screenScale);
 
-	//m_animationsSys.update();
 	checkRoundOver();
 	if (!(*online)) {
 

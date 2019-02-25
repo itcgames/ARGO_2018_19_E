@@ -15,13 +15,13 @@ void Camera:: update(SDL_Rect* focus)
 
 	//Set the Camera Bounding Box (this box is bound of GameObjects)
 	this->camera->x = (focus->x + focus->w / 2) - SCREEN_WIDTH / 2;
-	this->camera->y = (focus->y + focus->y / 2) - SCREEN_HEIGHT / 2;
+	this->camera->y = (focus->y + focus->h / 2) - SCREEN_HEIGHT / 2;
 
-	if (this->camera->x < 0) {
-		this->camera->x = 0;
+	if (this->camera->x < -300) {
+		this->camera->x = -300;
 	}
-	if (this->camera->y < 0) {
-		this->camera->y = 0;
+	if (this->camera->y < -300) {
+		this->camera->y = -300;
 	}
 	if (this->camera->x > this->camera->w) {
 		this->camera->x = LEVEL_WIDTH - this->camera->w;
