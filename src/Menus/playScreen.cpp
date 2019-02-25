@@ -428,22 +428,11 @@ void PlayScreen::endRound() {
 		deleteGuns();
 		
 		m_restartSys.reset(randNum);
-		if (*m_online && m_client->number != 1) {
-			for (Player * p : m_networkCharacters) {
-				Entity * ent = (Entity *)p;
-				ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
-				if (p->m_index == 0) {
-					randNum = control->getLevel();
-				}
-			}
-			
+		if (*m_online) {
+			randNum = 1;
 		}
 		else {
 			randNum = (rand() % 3) + 1;
-			Player * p = m_players[0];
-			Entity * ent = (Entity *)p;
-			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
-			control->setLevel(randNum);
 		}
 		
 		if (randNum == 1) {

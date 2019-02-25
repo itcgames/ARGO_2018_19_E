@@ -34,9 +34,6 @@ public:
 	bool getAlive() { return m_alive; }
 	void setAlive(bool alive) { m_alive = alive; }
 
-	int getLevel() { return m_level; }
-	void setLevel(int level) { m_level = level; }
-
 	SDL_GameController* gGameController = NULL;
 
 	SDL_Haptic * haptic;
@@ -82,7 +79,5 @@ private:
 	bool m_alive = true;
 
 	float m_currentAngle = 0.0f;
-
-	int m_level = -1;
 };
 #endif // !CONTROLCOMPONENT_H
