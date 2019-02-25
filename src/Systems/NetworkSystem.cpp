@@ -26,5 +26,11 @@ void NetworkSystem::update(Packet * p) {
 			pc->setX(p->position.x);
 			pc->setY(p->position.y);
 		}
+
+		if (p->playerNum == 1) {
+			for (Entity * ent : m_entities) {
+				p->level;
+			}
+		}
 	}
 }

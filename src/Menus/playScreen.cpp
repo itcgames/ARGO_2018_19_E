@@ -303,6 +303,11 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	lastPacket.position.x = p.position.x;
 	lastPacket.position.y = p.position.y;
 	lastPacket.level = p.level;
+
+	if (p.level != randNum) {
+		m_roundCounter = 100;
+		endRound();
+	}
 }
 
 void PlayScreen::render(SDL_Renderer * renderer) {
