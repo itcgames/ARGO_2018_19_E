@@ -87,7 +87,7 @@ public:
 	MapLoader* m_map;
 
 	int m_roundCounter = 0;
-	const int ROUND_OVER = 100.0f;
+	const int ROUND_OVER = 50.0f;
 	std::string round_text;
 	SDL_Texture* text;
 	SDL_Rect renderQuad;
@@ -108,6 +108,8 @@ public:
 	bool* m_online = false;
 
 	bool m_multiplayer = false;
+
+	bool m_roundEnd = false;
 
 private: 
 	int m_gunCounter = 0;
