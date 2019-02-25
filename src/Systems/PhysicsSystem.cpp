@@ -777,6 +777,9 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 
 void PhysicsSystem::update(SDL_Renderer* renderer) {
 
+	randomJuice = rand() % 30 - 15;
+	std::cout << "rand = " << randomJuice << std::endl;
+
 	for (Entity * entity : m_entities) {
 
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
@@ -1154,9 +1157,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						tagC->setJuicerTipX(180 * (cos(juicerRadAng)));
 						tagC->setJuicerTipY(200 * (sin(juicerRadAng)));
 
-						float random = rand() % 30 - 15;
-						std::cout << "rand = " << random << std::endl;
-						float radAng = ((tc->getAngle()) + random) * 3.14159265359 / 180; // :)
+						float radAng = ((tc->getAngle()) + randomJuice) * 3.14159265359 / 180; // :)
 						float radius = 60;
 
 
