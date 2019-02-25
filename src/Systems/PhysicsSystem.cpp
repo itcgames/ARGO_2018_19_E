@@ -721,7 +721,7 @@ void PhysicsSystem::movePlayer(ControlComponent * cc, PositionComponent *pc, Tag
 	if (tc->getGunGot() == "stabbyboy")
 	{
 		speed = 3.0;
-		jumpSpeed = 30;
+		jumpSpeed = 20;
 	}
 	if (pc->getX() > 100) {
 		if (cc->getLeft()) {
@@ -739,6 +739,13 @@ void PhysicsSystem::movePlayer(ControlComponent * cc, PositionComponent *pc, Tag
 		}
 	}
 	if (cc->getJump() && pc->jumpNum < 2) {
+		pc->setVelY(-jumpSpeed);
+		cc->setJump(false);
+		pc->m_allowedJump = false;
+		pc->jumpNum++;
+	}
+	else if (cc->getJump() && pc->jumpNum < 3 && tc->getGunGot() == "stabbyboy")
+	{
 		pc->setVelY(-jumpSpeed);
 		cc->setJump(false);
 		pc->m_allowedJump = false;
