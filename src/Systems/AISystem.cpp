@@ -226,7 +226,7 @@ void AISystem::update() {
 				ac->jumping = true;
 			}
 
-
+			ac->detect = tileCollision(rayCast->getStartPosition().x, rayCast->getStartPosition().y, rayCast->getCastPosition().x, rayCast->getCastPosition().y);
 			//ai shooting entities
 			if (tag->gotGunBool)
 			{ 
@@ -234,27 +234,26 @@ void AISystem::update() {
 
 				con->setAngle(desired);
 
-				if (!checkAllTiles(rayCast->getStartPosition().x, rayCast->getStartPosition().y, rayCast->getCastPosition().x, rayCast->getCastPosition().y)) {
+				if (!ac->detect) {
 
-					ac->detect = true;
+					if (ac->closestEnemy.first < 200)
+					{
+						ac->setLeft(false);
+						ac->setRight(false);
+					}
 					
 					if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
 					{
-						
 						con->setFire(true);
 					}
 					else
 					{
 						con->setFire(false);
 					}	
-
-				}
-				else
-				{
-					ac->detect = false;
 				}
 				
 			}
+
 
 			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
 			rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
@@ -462,7 +461,7 @@ void AISystem::checkJumpPoints(AIComponent * ac, PositionComponent * pc)
 }
 
 
-bool AISystem::checkAllTiles(float x1, float y1, float x2, float y2)
+bool AISystem::tileCollision(float x1, float y1, float x2, float y2)
 {
 
 	for (int i = 0; i < m_tiles.size(); i++) {
@@ -477,6 +476,10 @@ bool AISystem::checkAllTiles(float x1, float y1, float x2, float y2)
 		bool right = lineLine(x1, y1, x2, y2, x + w, y, x + w, y + h);
 		bool top = lineLine(x1, y1, x2, y2, x, y, x + w, y);
 		bool bottom = lineLine(x1, y1, x2, y2, x, y + h, x + w, y + h);
+		if (left) { std::cout << "left" << std::endl; }
+		if (right) { std::cout << "right" << std::endl; }
+		if (top) { std::cout << "top" << std::endl; }
+		if (bottom) { std::cout << "bottom" << std::endl; }
 
 		// if ANY of the above are true, the line
 		// has hit the rectangle
