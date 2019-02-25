@@ -78,7 +78,7 @@ public:
 	void flipHorizontal(SpriteComponent * sc);
 	void updateShooting(SDL_Renderer* renderer, ControlComponent * ownerConC);
 	void makeBullets(SDL_Renderer* renderer, TagComponent *tagC,ControlComponent *ownerConC);
-	void checkWeaponCollision(CollisionComponent * colc, TagComponent *tagC);
+	void checkWeaponCollision(CollisionComponent * colc, TagComponent *tagC, ControlComponent *ownerConC);
 	void setHands(PositionComponent *handOwnerPos, ControlComponent *handOwnerConC, TagComponent * ownerTagC);
 
 	

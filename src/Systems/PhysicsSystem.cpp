@@ -136,6 +136,10 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 		{
 			radius = 60;
 		}
+		if (tc->getSubTag() == "stabbyboy")
+		{
+			radius = 60;
+		}
 		else if (tc->getSubTag() == "shotgun")
 		{
 			radius = 30;
@@ -177,6 +181,14 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 			if (tc->getSubTag() == "pistol" || tc->getSubTag() == "grenade")
 			{
 				pc->setY(ownerPosC->getY() + tc->getYOffset());
+			}
+			if (tc->getSubTag() == "stabbyboy")
+			{
+				pc->setX(ownerPosC->getX() - tc->getXOffset() * 2);  // set gun position + offset for player centre - offset for angle
+			}
+			if (tc->getSubTag() == "stabbyboy")
+			{
+				pc->setY(ownerPosC->getY() + (tc->getYOffset() * 2) - 100);
 			}
 			else if (tc->getSubTag() == "shotgun")
 			{
@@ -223,6 +235,16 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 					double angleTo = ownerConC->getCurrentAngle();
 					double angleDifference = angleTo - tc->getPreviousAngle();
 					double ease = 0.04;
+					float previousAngle = tc->getPreviousAngle();
+					//tc->setPreviousAngle(previousAngle += angleDifference * ease);
+					tc->setPreviousAngle(previousAngle += angleDifference);
+					sc->setRotation(-tc->getPreviousAngle()); //rotate gun
+				}
+				else if (tc->getSubTag() == "stabbyboy")  // Slow down rotation for juicer balance
+				{
+					double angleTo = ownerConC->getCurrentAngle();
+					double angleDifference = angleTo - tc->getPreviousAngle();
+					double ease = 0.1;
 					float previousAngle = tc->getPreviousAngle();
 					//tc->setPreviousAngle(previousAngle += angleDifference * ease);
 					tc->setPreviousAngle(previousAngle += angleDifference);
@@ -333,12 +355,23 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 		//pc->setY(aiPositionY);
 	}
 }
-void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent * tagc) {
+void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent * tagc, ControlComponent * ownerConC) {
 	for (Entity * entity : m_entities) {
 
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 		CollisionComponent * colisionc = (CollisionComponent*)entity->getCompByType("COLLISION");
+		if (tc->getTag() == "Gun" && tc->getGrabable() == false && tc->getGrabbed() == true && tc->getSubTag() == "stabbyboy")
+		{
+			std::string val = rectCollision(colc->getCollider(), colisionc->getCollider());
+			if (val != "none")
+			{
+				if (tc->getSubTag2() != tagc->getGunGotID())
+				{
+					ownerConC->setAlive(false);
+				}
+			}
+		}
 		if (tc->getTag() == "Gun" && tc->getGrabable() == true && tc->getGrabbed() == false)
 		{
 			std::string val = rectCollision(colc->getCollider(), colisionc->getCollider());
@@ -346,8 +379,11 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 			{
 				if (tagc->getGunGot() == "none")
 				{
-					colisionc->setH(0);
-					colisionc->setW(0);
+					if (tc->getSubTag() != "stabbyboy")
+					{
+						colisionc->setH(0);
+						colisionc->setW(0);
+					}
 					setPlayerGunGot(tc->getSubTag(), tagc,tc->getSubTag2());
 					tc->setGrabbed(true);
 					tc->setGrabable(false);
@@ -682,6 +718,11 @@ void PhysicsSystem::movePlayer(ControlComponent * cc, PositionComponent *pc, Tag
 		speed = 0.5;
 		jumpSpeed = 10;
 	}
+	if (tc->getGunGot() == "stabbyboy")
+	{
+		speed = 3.0;
+		jumpSpeed = 30;
+	}
 	if (pc->getX() > 100) {
 		if (cc->getLeft()) {
 			if (pc->getVelX() > -8.0) {
@@ -800,7 +841,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 				{
 					handOwnerPosC = (PositionComponent*)entity->getCompByType("POSITION");
 					setHands(handOwnerPosC, ownerConC, ownerTagC);
-					checkWeaponCollision(colc, tc);
+					checkWeaponCollision(colc, tc,ownerConC);
 
 					if (tc->getGunGot() == "none")
 					{
