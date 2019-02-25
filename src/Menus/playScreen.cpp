@@ -38,6 +38,8 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	for (Gun * g : m_guns) {
 		m_Gunents.push_back((Entity*)g);	
 	}
+
+	m_BGRect.x = -2400; m_BGRect.y = 0; m_BGRect.w = 2400; m_BGRect.h = 1400;
 }
 
 void PlayScreen::initialise(bool online, int size, int num) {
@@ -219,7 +221,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_collSys.update(m_map->getTiles());
 	m_ps.update(m_renderer);
 	m_gunSys.update();
-	SDL_RenderSetScale(m_renderer, 0.69, 0.5);
+	SDL_RenderSetScale(m_renderer, m_windowScale.x, m_windowScale.y);
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
 	m_ais.update();
@@ -341,9 +343,12 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 	m_grenadeSys.render();
 	m_collSys.render();
 	//m_emitter->update();
+	SDL_SetRenderDrawColor(renderer, 183, 110, 121, 255);
+	SDL_RenderFillRect(renderer, &m_BGRect);
 	if (m_drawRoundText) {
 		SDL_RenderCopy(m_renderer, text, NULL, &renderQuad);
 	}
+	
 }
 
 void PlayScreen::initialiseText(std::string message) {
@@ -432,7 +437,9 @@ bool PlayScreen::onlineRoundOver() {
 
 void PlayScreen::endRound() {
 	m_roundCounter++;
-
+	m_BGRect.x += (1200.0 / 25);
+	
+	
 	if (m_roundCounter > ROUND_OVER) {
 		deleteGuns();
 		
@@ -457,6 +464,7 @@ void PlayScreen::endRound() {
 		m_drawRoundText = false;
 		m_roundEnd = false;
 		m_ps.startRoundCount = 0;
+		m_BGRect.x = -2400; m_BGRect.y = 0;
 	}
 }
 

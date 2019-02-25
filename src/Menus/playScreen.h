@@ -87,11 +87,11 @@ public:
 	MapLoader* m_map;
 
 	int m_roundCounter = 0;
-	const int ROUND_OVER = 50.0f;
+	const int ROUND_OVER = 100.0f;
 	std::string round_text;
 	SDL_Texture* text;
 	SDL_Rect renderQuad;
-	SDL_Color textColor = { 188, 110, 121, 255 };
+	SDL_Color textColor = { 211,211,211, 255 };
 	SDL_Surface * textSurface = new SDL_Surface;
 
 	bool m_drawRoundText = false;
@@ -119,7 +119,10 @@ private:
 	int m_throwTimer = 0;
 	const int STOP_THROW = 4;
 
+	c2v m_windowScale{ 0.69f, 0.5f };
 	int randNum = 0;
 
 	Client * m_client;
+
+	SDL_Rect m_BGRect;
 };
