@@ -225,6 +225,8 @@ void AISystem::update() {
 			{
 				ac->jumping = true;
 			}
+			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
+			rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
 
 			ac->detect = tileCollision(rayCast->getStartPosition().x, rayCast->getStartPosition().y, rayCast->getCastPosition().x, rayCast->getCastPosition().y);
 			//ai shooting entities
@@ -255,8 +257,7 @@ void AISystem::update() {
 			}
 
 
-			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
-			rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
+			
 		
 			//if the gun is on the same level as the AI character
 			if (ac->curPosition.y + 50 > ac->closestEnemy.second.y && ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
