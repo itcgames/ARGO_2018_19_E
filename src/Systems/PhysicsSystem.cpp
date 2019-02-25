@@ -775,178 +775,183 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 	}
 }
 
+
 void PhysicsSystem::update(SDL_Renderer* renderer) {
+		randomJuice = rand() % 30 - 15;
 
-	randomJuice = rand() % 30 - 15;
-	
-	for (Entity * entity : m_entities) {
+		for (Entity * entity : m_entities) {
 
-		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
-		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
-		CollisionComponent * colc = (CollisionComponent*)entity->getCompByType("COLLISION");
-		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
-		SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
-		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
+			TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
+			ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
+			CollisionComponent * colc = (CollisionComponent*)entity->getCompByType("COLLISION");
+			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
+			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
+			AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 
-		PositionComponent * ownerPosC = (PositionComponent*)entity->getCompByType("POSITION");
-		ControlComponent * ownerConC = (ControlComponent*)entity->getCompByType("CONTROL");
-		TagComponent * ownerTagC = (TagComponent*)entity->getCompByType("TAG");
-		SpriteComponent * ownerSpriteC = (SpriteComponent*)entity->getCompByType("SPRITE");
+			PositionComponent * ownerPosC = (PositionComponent*)entity->getCompByType("POSITION");
+			ControlComponent * ownerConC = (ControlComponent*)entity->getCompByType("CONTROL");
+			TagComponent * ownerTagC = (TagComponent*)entity->getCompByType("TAG");
+			SpriteComponent * ownerSpriteC = (SpriteComponent*)entity->getCompByType("SPRITE");
 
-
-		// check gun player collide
-		if (tc->getTag() == "Player" && cc->getAlive() == true)
-		{
-			handOwnerPosC = (PositionComponent*)entity->getCompByType("POSITION");
-			setHands(handOwnerPosC, ownerConC,ownerTagC);
-			checkWeaponCollision(colc,tc);
-
-			if (tc->getGunGot() == "none")
+			if (startRoundCount >= 2000)
 			{
-				tc->setGotGunBool(false);
-			}
-			playerFlip(pc, sc, cc, tc);  // Flip Player sprite when angle requires it.
-
-			if (cc->getThrowWeapon() == true && tc->getGotGunBool() == true)  // Check if x is pressed.
-			{
-				throwGunFun(cc);
-			}
-
-			if (tc->getSubTag2() != "AI_Player")
-			{
-				movePlayer(cc, pc, tc);
-				// Set the position after movement
-				if (pc->getVelY() < 40)  // Cap Y to stop falling through floor
+				// check gun player collide
+				if (tc->getTag() == "Player" && cc->getAlive() == true)
 				{
-					pc->setVelY(pc->getVelY() + Friction.y);  // Friction
+					handOwnerPosC = (PositionComponent*)entity->getCompByType("POSITION");
+					setHands(handOwnerPosC, ownerConC, ownerTagC);
+					checkWeaponCollision(colc, tc);
+
+					if (tc->getGunGot() == "none")
+					{
+						tc->setGotGunBool(false);
+					}
+					playerFlip(pc, sc, cc, tc);  // Flip Player sprite when angle requires it.
+
+					if (cc->getThrowWeapon() == true && tc->getGotGunBool() == true)  // Check if x is pressed.
+					{
+						throwGunFun(cc);
+					}
+
+					if (tc->getSubTag2() != "AI_Player")
+					{
+						movePlayer(cc, pc, tc);
+						// Set the position after movement
+						if (pc->getVelY() < 40)  // Cap Y to stop falling through floor
+						{
+							pc->setVelY(pc->getVelY() + Friction.y);  // Friction
+						}
+						setPosition(pc);
+					}
+
+
 				}
-				setPosition(pc);
-			}
-			
-
-		}
-		else if (tc->getTag() == "Player" && cc->getAlive() == false)
-		{
-			throwGunFun(cc);
-		}
-		if (tc->getTag() == "Gun")
-		{
-			std::string currentGun = tc->getSubTag2();
-			for (Entity * entity : m_entities) {
-				TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
-				if (tc->getTag() == "Player")
+				else if (tc->getTag() == "Player" && cc->getAlive() == false)
 				{
-					if (tc->getGunGotID() == currentGun) {
-						ownerPosC = (PositionComponent*)entity->getCompByType("POSITION");
-						ownerConC = (ControlComponent*)entity->getCompByType("CONTROL");
-						ownerSpriteC = (SpriteComponent*)entity->getCompByType("SPRITE");
-						ownerTagC = tc;
+					throwGunFun(cc);
+				}
+				if (tc->getSubTag2() == "AI_Player")
+				{
+					aiPositionX = pc->getX();
+					aiPositionY = pc->getY();
+
+
+					if (ac->getDoubleJump())
+					{
+						pc->setVelY(-30);
+						ac->setDoubleJump(false);
+					}
+
+					if (ac->getJump() && pc->jumpNum < 2) {
+						pc->setVelY(-20);
+						ac->setJump(false);
+						pc->m_allowedJump = false;
+						pc->jumpNum++;
+					}
+
+					if (ac->getLeft()) {
+						if (pc->getVelX() > -8.0) {
+							pc->setVelX(pc->getVelX() - 1.5);
+						}
+					}
+					if (ac->getRight()) {
+						if (pc->getVelX() < 8.0) {
+							pc->setVelX(pc->getVelX() + 1.5);
+						}
+					}
+
+					pc->setVelY(pc->getVelY() + Friction.y);
+
+				}
+				if (tc->getSubTag2() == "AI_Player")
+				{
+					pc->setX(pc->getX() + pc->getVelX());
+					pc->setY(pc->getY() + pc->getVelY());
+				}
+			}
+			else {
+				startRoundCount = startRoundCount + 1;
+			}
+			if (tc->getTag() == "Gun")
+			{
+				std::string currentGun = tc->getSubTag2();
+				for (Entity * entity : m_entities) {
+					TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
+					if (tc->getTag() == "Player")
+					{
+						if (tc->getGunGotID() == currentGun) {
+							ownerPosC = (PositionComponent*)entity->getCompByType("POSITION");
+							ownerConC = (ControlComponent*)entity->getCompByType("CONTROL");
+							ownerSpriteC = (SpriteComponent*)entity->getCompByType("SPRITE");
+							ownerTagC = tc;
+						}
 					}
 				}
-			}
 
-			updateShooting(renderer, ownerConC);
-			setGun(tc, cc, pc, sc, ownerPosC, ownerConC);
-			pickUpAgain(tc,sc,colc);
-			if (tc->getGrabbed() == true)
-			{
-				if (ownerConC->getThrowGun() == true)  // Check if a weapon wants to be thrown
+				updateShooting(renderer, ownerConC);
+				setGun(tc, cc, pc, sc, ownerPosC, ownerConC);
+				pickUpAgain(tc, sc, colc);
+				if (tc->getGrabbed() == true)
 				{
-					launchGun(pc, tc, colc, ownerConC, ownerTagC);
-				}
-			}
-			if (tc->getAngle() < 90 && tc->getGrabbed() == true) {
-
-				flipHorizontal(sc);
-
-			}
-			else if (tc->getGrabbed() == true) {
-
-				flipNone(sc);
-
-			}
-			if (tc->getGrabbed() == true) { // :)
-
-				sc->m_flipValue = ownerSpriteC->m_flipValue;
-
-			}
-		//	else if (tc->getGrabbed() == true) {
-
-				//flipNone(sc);
-
-			//}
-			if (tc->getGrabbed() != true)
-			{
-				if (pc->getVelY() < 8) {
-					pc->setVelY(pc->getVelY() + gunFriction.y);  // Friction so gun falls when not grabbed
-
-				}
-				setPosition(pc);
-			}
-			if (tc->getSubTag() == "grenade") {
-				GrenadeComponent * gc = (GrenadeComponent*)entity->getCompByType("GRENADE");
-
-				if (gc->getArmed()) {
-					m_grenadeColor += 0.05f;
-					//sc->setColor(255, 255, 100);
-					//sc->setAlpha(100);
-					gc->setTTL(gc->getTTL() - 1);
-					if (gc->getTTL() < 0) {
-						gc->setExplode(true);
+					if (ownerConC->getThrowGun() == true)  // Check if a weapon wants to be thrown
+					{
+						launchGun(pc, tc, colc, ownerConC, ownerTagC);
 					}
 				}
-			}
+				if (tc->getAngle() < 90 && tc->getGrabbed() == true) {
 
-		}
+					flipHorizontal(sc);
 
-		if (tc->getSubTag2() == "AI_Player")
-		{
-			aiPositionX = pc->getX();
-			aiPositionY = pc->getY();
-
-
-			if (ac->getDoubleJump())
-			{
-				pc->setVelY(-30);
-				ac->setDoubleJump(false);
-			}
-
-			if (ac->getJump() && pc->jumpNum < 2) {
-				pc->setVelY(-20);
-				ac->setJump(false);
-				pc->m_allowedJump = false;
-				pc->jumpNum++;
-			}
-
-			if (ac->getLeft()) {
-				if (pc->getVelX() > -8.0) {
-					pc->setVelX(pc->getVelX() - 1.5);
 				}
-			}
-			if (ac->getRight()) {
-				if (pc->getVelX() < 8.0) {
-					pc->setVelX(pc->getVelX() + 1.5);
+				else if (tc->getGrabbed() == true) {
+
+					flipNone(sc);
+
 				}
+				if (tc->getGrabbed() == true) { // :)
+
+					sc->m_flipValue = ownerSpriteC->m_flipValue;
+
+				}
+				//	else if (tc->getGrabbed() == true) {
+
+						//flipNone(sc);
+
+					//}
+				if (tc->getGrabbed() != true)
+				{
+					if (pc->getVelY() < 8) {
+						pc->setVelY(pc->getVelY() + gunFriction.y);  // Friction so gun falls when not grabbed
+
+					}
+					setPosition(pc);
+				}
+				if (tc->getSubTag() == "grenade") {
+					GrenadeComponent * gc = (GrenadeComponent*)entity->getCompByType("GRENADE");
+
+					if (gc->getArmed()) {
+						m_grenadeColor += 0.05f;
+						//sc->setColor(255, 255, 100);
+						//sc->setAlpha(100);
+						gc->setTTL(gc->getTTL() - 1);
+						if (gc->getTTL() < 0) {
+							gc->setExplode(true);
+						}
+					}
+				}
+
 			}
 
-			pc->setVelY(pc->getVelY() + Friction.y);
-
-		}
-		if (tc->getTag() != "Gun") {
-			pc->setVelX(pc->getVelX() * Friction.x);  // Friction
-		}
-		else {
-			pc->setVelX(pc->getVelX() * gunFriction.x);  // Friction
-		}
+			if (tc->getTag() != "Gun") {
+				pc->setVelX(pc->getVelX() * Friction.x);  // Friction
+			}
+			else {
+				pc->setVelX(pc->getVelX() * gunFriction.x);  // Friction
+			}
 
 
-		if (tc->getSubTag2() == "AI_Player")
-		{
-			pc->setX(pc->getX() + pc->getVelX());
-			pc->setY(pc->getY() + pc->getVelY());
-		}
 
-	}
+		}
 }
 
 void PhysicsSystem::updateShooting(SDL_Renderer* renderer, ControlComponent* ownerConC) {
