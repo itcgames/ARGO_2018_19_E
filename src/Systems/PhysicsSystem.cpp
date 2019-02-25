@@ -136,7 +136,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 		}
 		else if (tc->getSubTag() == "shotgun")
 		{
-			radius = 10;
+			radius = 30;
 		}
 		else if (tc->getSubTag() == "juicer")
 		{
@@ -156,6 +156,15 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 					pc->setX(ownerPosC->getX() - tc->getXOffset() - 80);  // set gun position + offset for player centre - offset for angle
 				}
 			}
+			else if (tc->getSubTag() == "shotgun"){
+				if (sc->m_flipValue == SDL_FLIP_NONE)
+				{
+					pc->setX(ownerPosC->getX() + tc->getXOffset() + 50);
+				}
+				else {
+					pc->setX(ownerPosC->getX() - tc->getXOffset() - 20);
+				}
+			}
 			else {
 				pc->setX(ownerPosC->getX() - tc->getXOffset());
 			}
@@ -169,7 +178,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 			}
 			else if (tc->getSubTag() == "shotgun")
 			{
-				pc->setY(ownerPosC->getY() - 70 + tc->getYOffset());
+				pc->setY(ownerPosC->getY() - 55 + tc->getYOffset());
 			}
 			else if (tc->getSubTag() == "juicer")
 			{
@@ -248,7 +257,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 			}
 			else if (tc->getSubTag() == "shotgun")
 			{
-				pc->setY(ownerPosC->getY() - 70 + tc->getYOffset());
+				pc->setY(ownerPosC->getY() - 55 + tc->getYOffset());
 				// Count for recoil animation
 				if (ownerPosC->getShotgunCount() < 20)
 				{
@@ -560,7 +569,7 @@ void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc
 	// 386
 	if (tc->getSubTag2() == "right")
 	{
-		float radiusHandle = 10;
+		float radiusHandle = 50;
 		float shotgunHandleRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180; // :)
 																						//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 																						//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
@@ -570,10 +579,10 @@ void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc
 		sc->setRotation((gunTagC->getAngle() - 90)*-1 - ownerPosC->getShotgunRotationCount()); //rotate hand
 		if (sc->m_flipValue == SDL_FLIP_NONE)
 		{
-			pc->setX(ownerPosC->getX() + shotgunHandleX - (ownerPosC->getShotgunRotationCount() * 1.5));
+			pc->setX(ownerPosC->getX() + 33 + shotgunHandleX - (ownerPosC->getShotgunRotationCount() * 1.5));
 		}
 		else {
-			pc->setX(ownerPosC->getX() + shotgunHandleX + (ownerPosC->getShotgunRotationCount() * 1.5));
+			pc->setX(ownerPosC->getX() - 33 + shotgunHandleX + (ownerPosC->getShotgunRotationCount() * 1.5));
 		}
 
 		//pc->setY(gunPositionY + (handAngle));
@@ -582,7 +591,7 @@ void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc
 	else if (tc->getSubTag2() == "left")
 	{
 
-		float radiusPump = 55 - (ownerPosC->getShotgunPumpCount() * 2.5);  // Change the radius so hand moves along radius line and looks like pumping
+		float radiusPump = 50 - (ownerPosC->getShotgunPumpCount() * 2.5);  // Change the radius so hand moves along radius line and looks like pumping
 		float shotgunPumpRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180;  // :)
 																					   //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 																					   //float shotgunTipY = 207.2 * (sin(shotgunRadAng));
@@ -592,10 +601,10 @@ void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc
 		sc->setRotation(((gunTagC->getAngle() + 90)*-1 - ownerPosC->getShotgunRotationCount()) - 90); //rotate hand
 		if (sc->m_flipValue == SDL_FLIP_NONE)
 		{
-			pc->setX(ownerPosC->getX() - shotgunPumpX - (ownerPosC->getShotgunRotationCount() * 1.5));
+			pc->setX(ownerPosC->getX() - (shotgunPumpX - 20) - (ownerPosC->getShotgunRotationCount() * 1.5));
 		}
 		else {
-			pc->setX(ownerPosC->getX() - shotgunPumpX + (ownerPosC->getShotgunRotationCount() * 1.5));
+			pc->setX(ownerPosC->getX() - (shotgunPumpX + 20) + (ownerPosC->getShotgunRotationCount() * 1.5));
 		}
 
 		//pc->setY(gunPositionY + (handAngle));
