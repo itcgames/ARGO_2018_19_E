@@ -308,7 +308,15 @@ double AISystem::getAngleToPlayer(c2v pos , std::pair<double, c2v> enemy)
 		return (angle * 180 / 3.14159) - 90;
 	}
 	else {
-		return (angle * 180 / 3.14159) + 270;
+		double fixAngle = (angle * 180 / 3.14159) + 270;
+		if (fixAngle > 360)  // Math :)
+		{
+			return fixAngle - 360;
+		}
+		else
+		{
+			return fixAngle;
+		}
 	}
 
 }
