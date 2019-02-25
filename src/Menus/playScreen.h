@@ -45,7 +45,7 @@ public:
 	void checkRoundOver();
 	bool onlineRoundOver();
 	void endRound();
-	void initialiseText(std::string message);
+	void initialiseText(std::string message, int index, int y);// SDL_Texture* texture, SDL_Rect* rect, int y);
 
 	int gunAmount = 1;
 
@@ -90,7 +90,10 @@ public:
 	const int ROUND_OVER = 100.0f;
 	std::string round_text;
 	SDL_Texture* text;
-	SDL_Rect renderQuad;
+	SDL_Rect* renderQuad;
+	std::string winner_text;
+	SDL_Texture* w_text;
+	SDL_Rect * winnerRenderQuad;
 	SDL_Color textColor = { 211,211,211, 255 };
 	SDL_Surface * textSurface = new SDL_Surface;
 
@@ -125,4 +128,7 @@ private:
 	Client * m_client;
 
 	SDL_Rect m_BGRect;
+
+	int m_timerCounter = 0;
+	int m_timer = 5;
 };

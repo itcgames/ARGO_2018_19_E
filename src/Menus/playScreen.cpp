@@ -346,19 +346,34 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 	SDL_SetRenderDrawColor(renderer, 183, 110, 121, 255);
 	SDL_RenderFillRect(renderer, &m_BGRect);
 	if (m_drawRoundText) {
-		SDL_RenderCopy(m_renderer, text, NULL, &renderQuad);
+		SDL_RenderCopy(m_renderer, text, NULL, renderQuad);
+		SDL_RenderCopy(m_renderer, w_text, NULL, winnerRenderQuad);
 	}
 	
 }
 
-void PlayScreen::initialiseText(std::string message) {
-	round_text = message;
-	textSurface = TTF_RenderText_Solid(Font, round_text.c_str(), textColor);
-	text = SDL_CreateTextureFromSurface(m_renderer, textSurface);
-	int text_width = textSurface->w;
-	int text_height = textSurface->h;
-	SDL_FreeSurface(textSurface);
-	renderQuad = { 150, 200, text_width, text_height };
+void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_Texture* texture, SDL_Rect* rect, int y) {
+	//round_text = message;
+	
+	if (index == 0) {
+		textSurface = TTF_RenderText_Solid(Font, message.c_str(), textColor);
+		text = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+		int text_width = textSurface->w;
+		int text_height = textSurface->h;
+		SDL_FreeSurface(textSurface);
+		renderQuad = new SDL_Rect{ 150, y, text_width, text_height };
+		renderQuad->x = 800 - (renderQuad->w / 2);
+	}
+	else {
+		textSurface = TTF_RenderText_Solid(Font, message.c_str(), textColor);
+		w_text = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+		int text_width = textSurface->w;
+		int text_height = textSurface->h;
+		SDL_FreeSurface(textSurface);
+		winnerRenderQuad = new SDL_Rect{ 150, y, text_width, text_height };
+		winnerRenderQuad->x = 900 - (winnerRenderQuad->w / 2);
+	}
+	
 }
 
 void PlayScreen::spawnGuns() {
@@ -427,7 +442,7 @@ bool PlayScreen::onlineRoundOver() {
 	
 	if (dead >= (playerAmount - 1)) {
 		if (!m_drawRoundText) {
-			initialiseText("Player Wins");
+			initialiseText("Player Wins", 1, 200);
 			m_drawRoundText = true;
 		}
 		return true;
@@ -438,6 +453,15 @@ bool PlayScreen::onlineRoundOver() {
 void PlayScreen::endRound() {
 	m_roundCounter++;
 	m_BGRect.x += (1200.0 / 25);
+
+
+	m_timerCounter++;
+	if (m_timerCounter > 20) {
+		m_timer--;
+		initialiseText(std::to_string(m_timer), 0, 700);
+		m_timerCounter = 0;
+	}
+	
 	
 	
 	if (m_roundCounter > ROUND_OVER) {
@@ -465,6 +489,8 @@ void PlayScreen::endRound() {
 		m_roundEnd = false;
 		m_ps.startRoundCount = 0;
 		m_BGRect.x = -2400; m_BGRect.y = 0;
+		m_timer = 5;
+		initialiseText(std::to_string(m_timer), 0, 700);
 	}
 }
 
@@ -482,7 +508,7 @@ void PlayScreen::checkRoundOver() {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 			if (!control->getAlive()) {
 				if (!m_drawRoundText) {
-					initialiseText("AI Wins");
+					initialiseText("AI Wins", 1, 200);
 					m_drawRoundText = true;
 				}
 				m_roundEnd = true;
@@ -513,7 +539,7 @@ void PlayScreen::checkRoundOver() {
 					ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 					TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
 					if (control->getAlive()) {
-						initialiseText(tag->getSubTag() + " Wins!");
+						initialiseText(tag->getSubTag() + " Wins!", 1, 200);
 					}
 				}
 				m_drawRoundText = true;
