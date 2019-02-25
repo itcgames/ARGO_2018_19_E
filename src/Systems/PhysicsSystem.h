@@ -35,6 +35,8 @@ public:
 	double aiPositionX = 0;
 	double aiPositionY = 0;
 
+	float randomJuice = 0;
+
 	//double gunPositionX = 0;
 	//double gunPositionY = 0;
 
