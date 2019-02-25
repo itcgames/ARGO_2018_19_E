@@ -32,6 +32,12 @@ void RestartSystem::reset(int level) {
 			control->setThrowGun(false);
 			control->setAlive(true);
 			control->setAngle(90);
+
+			if (tc->getSubTag2() == "AI_Player")
+			{
+				AIComponent * ac = (AIComponent*)ent->getCompByType("AI");
+				ac->set = false;
+			}
 			
 		}
 		else if (tc->getTag() == "Hand") {

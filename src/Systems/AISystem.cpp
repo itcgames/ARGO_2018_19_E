@@ -234,11 +234,11 @@ void AISystem::update() {
 
 				if (!checkAllTiles(rayCast->getStartPosition().x, rayCast->getStartPosition().y, rayCast->getCastPosition().x, rayCast->getCastPosition().y)) {
 
-					
+					ac->detect = true;
 					
 					if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
 					{
-						ac->detect = true;
+						
 						con->setFire(true);
 					}
 					else
@@ -247,13 +247,24 @@ void AISystem::update() {
 					}	
 
 				}
+				else
+				{
+					ac->detect = false;
+				}
 				
 			}
 			
 			if (ac->detect)
 			{
-				std::cout << "boom" << std::endl;
+				//ac->setRight(false);
+				//ac->setLeft(false);
 			}
+			else
+			{
+				ac->closestWalkPoint = checkPoints(ac->curWalkPoints, pc);
+				ac->closestJumpPoint = checkPoints(ac->curJumpPoints, pc);
+			}
+
 			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
 			rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
 		
