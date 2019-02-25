@@ -269,7 +269,8 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	p.throwWeapon = cc->getThrowWeapon();
 	p.position.x = pc->getX();
 	p.position.y = pc->getY();
-	p.level = randNum;
+
+	p.roundOver = m_roundEnd;
 
 	if (p.throwWeapon && !lastPacket.throwWeapon) {
 		m_startThrow = true;
@@ -306,11 +307,15 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	lastPacket.throwWeapon = p.throwWeapon;
 	lastPacket.position.x = p.position.x;
 	lastPacket.position.y = p.position.y;
-	lastPacket.level = p.level;
+	lastPacket.roundOver = p.roundOver;
 
-	if (p.level != randNum) {
-		m_roundCounter = 100;
-		endRound();
+	for (Player * p : m_networkCharacters) {
+		Entity * ent = (Entity*)p;
+		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
+
+		if (cc->getRoundOver()) {
+			m_roundEnd = true;
+		}
 	}
 }
 
