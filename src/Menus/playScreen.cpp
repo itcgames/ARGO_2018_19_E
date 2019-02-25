@@ -264,7 +264,7 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	p.fire = cc->getFire();
 	p.gunAngle = cc->getAngle();
 	p.alive = cc->getAlive();
-	p.throwWeapon = tc->getGotGunBool();
+	p.throwWeapon = cc->getThrowWeapon();
 	p.position.x = pc->getX();
 	p.position.y = pc->getY();
 
