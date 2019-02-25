@@ -415,7 +415,7 @@ bool PlayScreen::onlineRoundOver() {
 		}
 	}
 	
-	if (dead >= (playerAmount + 1)) {
+	if (dead >= (playerAmount - 1)) {
 		if (!m_drawRoundText) {
 			initialiseText("Player Wins");
 			m_drawRoundText = true;
