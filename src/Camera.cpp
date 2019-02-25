@@ -14,8 +14,8 @@ void Camera:: update(SDL_Rect* focus)
 {
 
 	//Set the Camera Bounding Box (this box is bound of GameObjects)
-	this->camera->x = (focus->x + focus->w / 2) - SCREEN_WIDTH / 2;
-	this->camera->y = (focus->y + focus->h / 2) - SCREEN_HEIGHT / 2;
+	this->camera->x = (focus->x) - SCREEN_WIDTH / 2;
+	this->camera->y = (focus->y) - SCREEN_HEIGHT / 2;
 
 	if (this->camera->x < -300) {
 		this->camera->x = -300;
@@ -41,10 +41,10 @@ SDL_Rect* Camera::focus(std::vector<c2v> playerPositions)
 
 	for (int i = 1; i < playerPositions.size(); i++)
 	{
-		(min_x > playerPositions.at(i).x) ? min_x = playerPositions.at(i).x : 0;
-		(max_x < playerPositions.at(i).x) ? max_x = playerPositions.at(i).x + 35 : 0;
-		(min_y > playerPositions.at(i).y) ? min_y = playerPositions.at(i).y : 0;
-		(max_y < playerPositions.at(i).y) ? max_y = playerPositions.at(i).y + 35 : 0;
+		(min_x > playerPositions.at(i).x) ? min_x = playerPositions.at(i).x : -150;
+		(max_x < playerPositions.at(i).x) ? max_x = playerPositions.at(i).x : SCREEN_WIDTH;
+		(min_y > playerPositions.at(i).y) ? min_y = playerPositions.at(i).y : -150;
+		(max_y < playerPositions.at(i).y) ? max_y = playerPositions.at(i).y : SCREEN_HEIGHT;
 	}
 
 	lookAt->x = min_x;

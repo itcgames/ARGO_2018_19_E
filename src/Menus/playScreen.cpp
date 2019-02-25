@@ -277,18 +277,22 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		entityIndex++;
 	}
 
-	m_focusPoint = m_camera->focus(m_playerPositions);
-	m_camera->update(m_focusPoint);
-	if (m_focusPoint->w > 0) {
-		(SCREEN_WIDTH / m_focusPoint->w) > 1.0f ? ((m_screenScale < 1.0f) ? m_screenScale += 0.01f : m_screenScale = 1.0f) : (m_screenScale > 0.55f ? m_screenScale -= 0.01f : m_screenScale = 0.55f);
-	}
-
-	//for (int i = 0; i < 4; i++)
+	//if (m_cameraCount > TIME_BETWEEN_CAMERA_CHANGES)
 	//{
-	//	m_playerPositions.push_back(c2v{ 0, 0 });
+		m_focusPoint = m_camera->focus(m_playerPositions);
+		m_camera->update(m_focusPoint);
+		m_cameraCount = 0;
 	//}
+
+	//if (m_focusPoint->w > 0) {
+	//	(SCREEN_WIDTH / m_focusPoint->w) > 1.0f ? ((m_screenScale < 1.0f) ? m_screenScale += 0.01f : m_screenScale = 1.0f) : (m_screenScale > 0.55f ? m_screenScale -= 0.01f : m_screenScale = 0.55f);
+	//}
+
+
+	m_cameraCount++;
+
 	
-	SDL_RenderSetScale(m_renderer, m_screenScale, m_screenScale);
+	SDL_RenderSetScale(m_renderer, 0.55f, 0.55f);
 
 	checkRoundOver();
 	if (!(*online)) {
@@ -471,6 +475,7 @@ void PlayScreen::endRound() {
 		m_drawRoundText = false;
 	}
 }
+
 
 
 void PlayScreen::checkRoundOver() {
