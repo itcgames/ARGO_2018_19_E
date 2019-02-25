@@ -41,6 +41,7 @@
     <ClCompile Include="src\Systems\RestartSystem.cpp" />
     <ClCompile Include="src\Systems\SoundSystem.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Components\FactoryComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Factory.h" />

@@ -6,6 +6,8 @@
 #include "../cute_c2.h"
 #include "../Factory.h"
 
+
+
 class PositionComponent : public Component
 {
 public:

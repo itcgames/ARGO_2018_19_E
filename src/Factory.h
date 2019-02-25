@@ -2,9 +2,10 @@
 #include <iostream>
 #include <SDL.h>
 #include <vector>
-#include "Components/SpriteComponent.h"
-#include "Camera.h"
 
+#include "Components/SpriteComponent.h"
+
+class Camera;
 
 class Bullet
 {

@@ -254,7 +254,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_collSys.update(m_map->getTiles());
 	m_ps.update(m_renderer);
 	m_gunSys.update();
-	SDL_RenderSetScale(m_renderer, 0.7, 0.5);
+	//SDL_RenderSetScale(m_renderer, 0.7, 0.5);
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
 	m_ais.update();
@@ -279,7 +279,11 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	m_focusPoint = m_camera->focus(m_playerPositions);
 	m_camera->update(m_focusPoint);
-	//SDL_RenderSetScale(m_renderer, 100 / m_focusPoint->x, 100 / m_focusPoint->y);
+	if (m_focusPoint->w > 0) {
+		(SCREEN_WIDTH / m_focusPoint->w) > 1.0f ? ((m_screenScale < 1.0) ? m_screenScale += 0.01f : m_screenScale = 1.0f) : (m_screenScale > 0.5 ? m_screenScale -= 0.01f : m_screenScale = 0.5f);
+	}
+	
+	SDL_RenderSetScale(m_renderer, m_screenScale, m_screenScale);
 
 	//m_animationsSys.update();
 	checkRoundOver();

@@ -50,6 +50,8 @@ public:
 	void deleteGuns();
 	void spawnGuns();
 
+	float m_screenScale = 1.0f;
+
 	Camera* m_camera;
 	SDL_Rect* m_focusPoint;
 	SDL_Rect* m_offset;

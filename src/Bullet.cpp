@@ -1,4 +1,5 @@
 #include "..\src\Factory.h"
+#include "Camera.h"
 
 
 Bullet::Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl)
