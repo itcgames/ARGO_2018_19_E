@@ -197,7 +197,6 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 			for (int j = 0; j < bullets->size(); j++) {
 				val = rectCollision(bullets->at(j)->collider, tiles.at(i)->collider);
 				if (val != "none") {
-
 					tiles.at(i)->health--;
 					if (tiles.at(i)->health <= 0) {
 						tiles.at(i)->dead = true;

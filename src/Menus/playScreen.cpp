@@ -36,11 +36,8 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
 
 	for (Gun * g : m_guns) {
-		m_Gunents.push_back((Entity*)g);
-		
+		m_Gunents.push_back((Entity*)g);	
 	}
-
-
 }
 
 void PlayScreen::initialise(bool online, int size, int num) {
@@ -130,16 +127,18 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			{
 				if (m_map->getSpawnPoints().at(j)->first == false)
 				{
-					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, noOfPlayers));
-					m_leftHands.push_back(new Hand(m_renderer, 1, 4));
-					m_rightHands.push_back(new Hand(m_renderer, 2, 4));
+					AI * ai = new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, noOfPlayers);
+					m_playerents.push_back((Entity*)ai);
+					m_aiCharacters.push_back(ai);
+					m_leftHands.push_back(new Hand(m_renderer, 1, noOfPlayers));
+					m_rightHands.push_back(new Hand(m_renderer, 2, noOfPlayers));
 					m_map->getSpawnPoints().at(j)->first = true;
 					noOfPlayers += 1;
 				}
 			}
 		}
 
-		std::cout << noOfPlayers << std::endl;
+		//std::cout << noOfPlayers << std::endl;
 	}
 
 
@@ -425,7 +424,7 @@ void PlayScreen::checkRoundOver() {
 	}
 	else {
 		int dead = 0;
-		std::cout << dead << std::endl;
+		//std::cout << dead << std::endl;
 		if (!m_multiplayer) {
 			Entity * ent = (Entity *)m_players[0];
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");

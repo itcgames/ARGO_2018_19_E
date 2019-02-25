@@ -122,6 +122,10 @@ void SpriteComponent::setAlpha(Uint8 alpha)
 {
 	SDL_SetTextureAlphaMod(m_texture, alpha);
 }
+void SpriteComponent::setTexture(SDL_Texture * texture)
+{
+	m_texture = texture;
+}
 
 void SpriteComponent::setPosition(c2v position)
 {

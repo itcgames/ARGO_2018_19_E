@@ -108,5 +108,6 @@
     <None Include="src\Shaders\bw.fragment" />
     <None Include="src\Shaders\crt.fragment" />
     <None Include="src\Shaders\std.vertex" />
+    <ClInclude Include="src\Components\RayCastComponent.h" />
   </ItemGroup>
 </Project>
