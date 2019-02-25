@@ -32,5 +32,7 @@ struct Packet
 
 	float gunAngle;
 
+	int level = -1;
+
 };
 #endif // !PACKAGE_H
