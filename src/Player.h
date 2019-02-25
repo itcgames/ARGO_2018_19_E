@@ -17,6 +17,8 @@ public:
 	void render(SDL_Renderer* renderer);
 	void renderMarker(SDL_Renderer* renderer);
 
+	int m_index = -1;
+
 private:
 	float startBalloonCount = 0.0f;
 	float totalBalloonCount = 0.0f;
