@@ -17,6 +17,8 @@ void AISystem::recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints,
 	m_width = width;
 	m_height = height;
 	m_tiles = tiles;
+
+	
 }
 
 void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
@@ -65,18 +67,20 @@ void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 			{
 				PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
 				ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
+			
+				if (con->getAlive()) {
+					m_position = c2v{ pos->getX(), pos->getY() };
 
-				m_position = c2v{ pos->getX(), pos->getY() };
+					ac->m_distances[count].first = distance(ac->curPosition, m_position);
 
-				ac->m_distances[count].first = distance(ac->curPosition, m_position);
+					vec.x = pos->getX();
+					vec.y = pos->getY();
 
-				vec.x = pos->getX();
-				vec.y = pos->getY();
-
-				ac->m_distances[count].second = vec;
+					ac->m_distances[count].second = vec;
 
 
-				count++;
+					count++;
+				}
 			}
 		}
 	}
@@ -222,14 +226,15 @@ void AISystem::update() {
 
 			
 			//ai shooting entities
-			if (tag->gotGunBool)
+			if (tag->gotGunBool && !checkAllTiles(rayCast->getStartPosition().x, rayCast->getStartPosition().y, rayCast->getCastPosition().x, rayCast->getCastPosition().y))
 			{
 				double desired = getAngleToPlayer(ac->curPosition, ac->closestEnemy);
 
 				con->setAngle(desired);
 
-				if (con->getCurrentAngle() > desired - 10 && con->getCurrentAngle() < desired + 10)
+				if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
 				{
+				
 					con->setFire(true);
 				}
 				else
@@ -240,7 +245,10 @@ void AISystem::update() {
 				
 				
 			}
-			
+			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
+			rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
+
+
 			//if the gun is on the same level as the AI character
 			if (ac->curPosition.y + 50 > ac->closestEnemy.second.y && ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
 			{
@@ -284,14 +292,21 @@ double AISystem::getAngleToPlayer(c2v pos , std::pair<double, c2v> enemy)
 	double angle;
 	
 	angle = atan2(-dir.y, dir.x);
-	std::cout << "Angle = " << (angle * 180 / 3.14159) - 90 << std::endl;
 
 	if ((angle * 180 / 3.14159) <= 90 && (angle * 180 / 3.14159) >= -90)
 	{
 		return (angle * 180 / 3.14159) - 90;
 	}
 	else {
-		return (angle * 180 / 3.14159) + 270;
+		double fixAngle = (angle * 180 / 3.14159) + 270;
+		if (fixAngle > 360)  // Math :)
+		{
+			return fixAngle - 360;
+		}
+		else
+		{
+			return fixAngle;
+		}
 	}
 
 }
@@ -445,3 +460,43 @@ void AISystem::checkJumpPoints(AIComponent * ac, PositionComponent * pc)
 }
 
 
+bool AISystem::checkAllTiles(float x1, float y1, float x2, float y2)
+{
+
+	for (int i = 0; i < m_tiles.size(); i++) {
+
+		if (m_tiles.at(i)->dRect.x >= 0) {
+			float x = m_tiles.at(i)->position.x;
+			float y = m_tiles.at(i)->position.y;
+			float w = m_tiles.at(i)->width;
+			float h = m_tiles.at(i)->height;
+
+			bool left = lineLine(x1, y1, x2, y2, x, y, x, y + h);
+			bool right = lineLine(x1, y1, x2, y2, x + w, y, x + w, y + h);
+			bool top = lineLine(x1, y1, x2, y2, x, y, x + w, y);
+			bool bottom = lineLine(x1, y1, x2, y2, x, y + h, x + w, y + h);
+
+			// if ANY of the above are true, the line
+			// has hit the rectangle
+			if (left || right || top || bottom) {
+				return true;
+			}
+			return false;
+		}
+	}
+}
+
+// LINE/LINE
+bool AISystem::lineLine(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
+
+	// calculate the direction of the lines
+	float uA = ((x4 - x3)*(y1 - y3) - (y4 - y3)*(x1 - x3)) / ((y4 - y3)*(x2 - x1) - (x4 - x3)*(y2 - y1));
+	float uB = ((x2 - x1)*(y1 - y3) - (y2 - y1)*(x1 - x3)) / ((y4 - y3)*(x2 - x1) - (x4 - x3)*(y2 - y1));
+
+	// if uA and uB are between 0-1, lines are colliding
+	if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
+
+		return true;
+	}
+	return false;
+}

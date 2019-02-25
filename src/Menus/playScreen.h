@@ -36,6 +36,8 @@ public:
 	void update(bool * online, SDL_Event event, int size, Client * client);
 	void render(SDL_Renderer * renderer);
 
+	void sendPacket(Entity * ent, Client * client);
+
 	void initialise(bool online, int size, int num);
 
 	AudioObserver* m_audioObserver;
@@ -111,4 +113,11 @@ private:
 	int m_gunCounter = 0;
 	const int SPAWN_NEW_GUN = 1000;
 
+	bool m_startThrow = false;
+	int m_throwTimer = 0;
+	const int STOP_THROW = 4;
+
+	int randNum = 0;
+
+	Client * m_client;
 };

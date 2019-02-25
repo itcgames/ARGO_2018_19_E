@@ -19,7 +19,7 @@ MenuScreen::MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Fon
 	
 	titletexture = init(menuFont, title_text, titletexture, titleRenderQuad, 200, 50);
 
-	m_texture = loadFromFile("banner.png", m_renderer);
+	m_texture = loadFromFile("assets/art/environment/banner2.png", m_renderer);
 
 	m_texture2 = loadFromFile("banner2.png", m_renderer);
 	
