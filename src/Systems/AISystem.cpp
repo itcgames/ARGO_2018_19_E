@@ -248,10 +248,12 @@ void AISystem::update() {
 
 				}
 				
-
-			
 			}
 			
+			if (ac->detect)
+			{
+				std::cout << "boom" << std::endl;
+			}
 			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
 			rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
 		
@@ -298,7 +300,6 @@ double AISystem::getAngleToPlayer(c2v pos , std::pair<double, c2v> enemy)
 	double angle;
 	
 	angle = atan2(-dir.y, dir.x);
-	std::cout << "Angle = " << (angle * 180 / 3.14159) - 90 << std::endl;
 
 	if ((angle * 180 / 3.14159) <= 90 && (angle * 180 / 3.14159) >= -90)
 	{

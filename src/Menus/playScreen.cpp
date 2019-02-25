@@ -276,7 +276,7 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	if (m_throwTimer < STOP_THROW && m_startThrow) {
 		m_throwTimer++;
 
-		p.throwWeapon = false;
+		p.throwWeapon = true;
 	}
 
 	if (p.message != lastPacket.message || p.playerNum != lastPacket.playerNum ||
