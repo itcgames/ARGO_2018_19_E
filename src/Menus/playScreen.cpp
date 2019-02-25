@@ -264,7 +264,7 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	p.fire = cc->getFire();
 	p.gunAngle = cc->getAngle();
 	p.alive = cc->getAlive();
-	p.throwWeapon = tc->getGotGunBool();
+	p.throwWeapon = cc->getThrowWeapon();
 	p.position.x = pc->getX();
 	p.position.y = pc->getY();
 
@@ -276,7 +276,7 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	if (m_throwTimer < STOP_THROW && m_startThrow) {
 		m_throwTimer++;
 
-		p.throwWeapon = false;
+		p.throwWeapon = true;
 	}
 
 	if (p.message != lastPacket.message || p.playerNum != lastPacket.playerNum ||
