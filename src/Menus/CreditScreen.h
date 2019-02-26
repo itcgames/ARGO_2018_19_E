@@ -16,6 +16,7 @@ public:
 
 	void update();
 	void render(SDL_Renderer * renderer);
+	SDL_Texture* loadFromFile(std::string path, SDL_Renderer* gRenderer);
 
 private:
 	GameState * m_currentGameState;
@@ -24,6 +25,14 @@ private:
 	SDL_Renderer *m_renderer;
 	vector<SDL_Texture*> textures;
 	vector<SDL_Rect*> renderQuads;
+
+	SDL_Texture* m_texture;
+
+	int m_width;
+	int m_height;
+
+	SDL_Rect* m_sRect = new SDL_Rect();
+	SDL_Rect* m_dRect = new SDL_Rect();
 
 	std::string exit_text = "(B) Exit";
 	SDL_Texture* exittexture;

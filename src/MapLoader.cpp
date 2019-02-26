@@ -172,15 +172,23 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 }
 
 
-void MapLoader::draw(SDL_Renderer* renderer)
+void MapLoader::draw(SDL_Renderer* renderer, Camera* camera)
 {
 	for (int i = 0; i < m_tiles.size(); i++)
 	{
-		SDL_RenderCopy(renderer, m_sprite->getTexture(), &m_tiles.at(i)->sRect, &m_tiles.at(i)->dRect);
+		SDL_Rect* screenPosition = new SDL_Rect();
+		screenPosition->x = m_tiles.at(i)->dRect.x - camera->getCamera()->x;
+		screenPosition->y = m_tiles.at(i)->dRect.y - camera->getCamera()->y;
+		screenPosition->w = m_tiles.at(i)->dRect.w;
+		screenPosition->h = m_tiles.at(i)->dRect.h;
+
+		SDL_RenderCopy(renderer, m_sprite->getTexture(), &m_tiles.at(i)->sRect, screenPosition);
 		if (m_tiles.at(i)->dead == true)
 		{
 			m_tiles.erase(m_tiles.begin() + i);
 		}
+
+		delete screenPosition;
 	}
 }
 

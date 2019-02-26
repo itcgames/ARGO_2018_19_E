@@ -27,7 +27,7 @@ Gun::Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos,int id)
 		m_spriteComponent->setPosition(c2v{ xPos, yPos });
 		m_spriteComponent->setScale(c2v{ 2.0f, 1.5f });
 		this->addComponent(m_spriteComponent);
-		m_spriteComponent->loadFromFile("assets/art/character/finished_character_assets/Shotgun.png", renderer);
+		m_spriteComponent->loadFromFile("assets/art/character/finished_character_assets/Shotgun3.png", renderer);
 		m_tagComponent->setSubTag("shotgun");
 		this->addComponent(new CollisionComponent(xPos, yPos, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 	}

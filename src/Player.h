@@ -4,17 +4,18 @@
 #include <vector>
 #include "Components/SpriteComponent.h"
 #include "Systems/ControlSystem.h"
+#include "Camera.h"
 
 #include <SDL_ttf.h>
 
-class Player : Entity
+class Player : public Entity
 {
 public:
 	Player();
 	Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller, int index, TTF_Font* font);
 
 	void initialiseText(std::string message, int x, int y);
-	void render(SDL_Renderer* renderer);
+	void render(SDL_Renderer* renderer, Camera* camera);
 	void renderMarker(SDL_Renderer* renderer);
 
 	int m_index = -1;
@@ -29,6 +30,7 @@ private:
 	SpriteComponent* m_spriteComponent;
 	SpriteComponent* m_spriteComponentHead;
 	SpriteComponent* m_spriteComponentHead2;
+	SpriteComponent* m_spriteComponentCrown;
 	SpriteComponent* m_spriteComponentLeftFoot;
 	SpriteComponent* m_spriteComponentRightFoot;
 	SpriteComponent* m_marker;

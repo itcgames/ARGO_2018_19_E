@@ -27,7 +27,8 @@ private:
 	std::string options_text = "(Y) Credits";
 	std::string exit_text = "(B) Exit";
 
-	std::string title_text = "UnPlayable";
+	std::string title_text = "Unplayable";
+
 	SDL_Renderer *m_renderer;
 
 	SDL_Texture* playtexture;
@@ -49,8 +50,8 @@ private:
 	SDL_Texture* m_drawTexture;
 	int m_width;
 	int m_height;
-	SDL_Rect* m_sRect;
-	SDL_Rect* m_dRect;
+	SDL_Rect* m_sRect = new SDL_Rect();
+	SDL_Rect* m_dRect = new SDL_Rect();
 
 	SDL_GameController* gGameController = NULL;
 
