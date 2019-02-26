@@ -2,11 +2,12 @@
 #include "Camera.h"
 
 
-Bullet::Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl)
+Bullet::Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl,SDL_Texture * bulletTexture)
 {
 	//Set up Sprite component and add to entity component vector
 	m_spriteComponent = new SpriteComponent(0, 0, 210, 295);
-	m_spriteComponent->loadFromFile("assets/bullet.png", renderer);
+	//m_spriteComponent->loadFromFile("assets/bullet.png", renderer);
+	m_spriteComponent->setTexture(bulletTexture, 94, 274);
 	m_spriteComponent->setPosition(c2v{ xPos, yPos });
 	m_spriteComponent->setScale(c2v{0.1f, 0.1f});
 	m_spriteComponent->setRotation(angle);

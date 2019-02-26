@@ -18,6 +18,8 @@ public:
 	std::vector<Entity *> m_entities;
 	void recieveLevel(int width, int height);
 
+	SpriteComponent * bulletTextureSpriteComp;
+
 	c2v Friction;
 	c2v gunFriction;
 	PhysicsSystem();
@@ -31,6 +33,8 @@ public:
 	double player1PositionY = 0;
 	double player2PositionX = 0;
 	double player2PositionY = 0;
+
+	bool bulletTextureLoaded = false;
 
 	int startRoundCount = 0;
 
