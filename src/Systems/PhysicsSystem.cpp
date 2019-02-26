@@ -367,8 +367,13 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 			if (val != "none")
 			{
 				if (tc->getSubTag2() != tagc->getGunGotID())
-				{
+				{					
+					if (ownerConC->getAlive() == true)
+					{
+						notifyAudioObservers(AudioObserver::SFX::SWORD_SLASH);
+					}
 					ownerConC->setAlive(false);
+
 				}
 			}
 		}
@@ -903,6 +908,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 
 					if (cc->getThrowWeapon() == true && tc->getGotGunBool() == true)  // Check if x is pressed.
 					{
+						notifyAudioObservers(AudioObserver::SFX::WEAPON_THROW);
 						throwGunFun(cc);
 					}
 
@@ -1153,6 +1159,18 @@ void PhysicsSystem::updateShooting(SDL_Renderer* renderer, ControlComponent* own
 	}
 }
 void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, ControlComponent* ownerConC) {
+	if (bulletTextureLoaded == false)
+	{
+		bulletTextureSpriteComp = new SpriteComponent(0, 0, 210, 295);
+		bulletTextureSpriteComp->loadFromFile("assets/bullet.png", renderer);
+		//m_spriteComponent->loadFromFile("assets/bullet.png", renderer);
+		//m_spriteComponent->setTexture(bulletTexture, 94, 274);
+		bulletTextureSpriteComp->setPosition(c2v{999999, 999999 });
+		bulletTextureSpriteComp->setScale(c2v{ 0.1f, 0.1f });
+		bulletTextureSpriteComp->setRotation(90);
+		bulletTextureLoaded = true;
+	}
+
 	for (Entity * entity : m_entities) {
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 
@@ -1205,11 +1223,11 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 
 							if (sc->m_flipValue == SDL_FLIP_NONE)
 							{
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX(), pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100)); // :)
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX(), pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100,bulletTextureSpriteComp->getTexture())); // :)
 							}
 							else {
 
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX() + 20, pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100)); // :)
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX() + 20, pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100, bulletTextureSpriteComp->getTexture())); // :)
 							}
 						}
 
@@ -1229,7 +1247,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						}
 
 						notifyAudioObservers(AudioObserver::SFX::PISTOL_SHOOT);
-						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(tc->getAngle() - 90), -tc->getXOffset(), tc->getYOffset(), 1000));  // :)
+						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(tc->getAngle() - 90), -tc->getXOffset(), tc->getYOffset(), 1000, bulletTextureSpriteComp->getTexture()));  // :)
 
 
 
@@ -1261,7 +1279,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						float juicerXOffset = radius * (cos(radAng));
 						float juicerYOffset = radius * (sin(radAng));
 
-						c2v vector = { -juicerXOffset,juicerYOffset };
+						c2v vector = { -juicerXOffset, juicerYOffset };
 						float mag = c2Len(vector);
 						float unitX = -juicerXOffset / mag;
 						float unitY = juicerYOffset / mag;
@@ -1269,7 +1287,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						if (sc->m_flipValue == SDL_FLIP_NONE)
 						{
 
-							pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 100) - tagC->getJuicerTipX() / 2, pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200)); // :)
+							pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 100) - tagC->getJuicerTipX() / 2, pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200, bulletTextureSpriteComp->getTexture())); // :)
 							float x = (pc->getX() + 100) - tagC->getJuicerTipX() / 2;
 							float y = pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140;
 							tagC->setJuicerExplosionPos(c2v{ x,y });
@@ -1279,12 +1297,13 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 							//pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 80) - tagC->getJuicerTipX() / 2, pc->getY() + tagC->getJuicerTipY() / 2 + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200)); // :)
 							//float x = (pc->getX() + 80) - tagC->getJuicerTipX() / 2;
 							//float y = pc->getY() + tagC->getJuicerTipY() / 2 + 140;
-							pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 100) - tagC->getJuicerTipX() / 2, pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200)); // :)
+							pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 100) - tagC->getJuicerTipX() / 2, pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200, bulletTextureSpriteComp->getTexture())); // :)
 							float x = (pc->getX() + 100) - tagC->getJuicerTipX() / 2;
 							float y = pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140;
 							tagC->setJuicerExplosionPos(c2v{ x, y });
 						}
 					}
+
 					else if (tagC->getGunGot() == "grenade")
 					{
 						GrenadeComponent * gc = (GrenadeComponent*)entity->getCompByType("GRENADE");
@@ -1315,7 +1334,6 @@ void PhysicsSystem::bulletUpdate(SDL_Renderer* renderer) {
 
 
 void PhysicsSystem::bulletRender(SDL_Renderer* renderer, Camera* camera) {
-
 
 	for (Entity * entity : m_entities) {
 

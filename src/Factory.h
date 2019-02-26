@@ -10,7 +10,7 @@ class Camera;
 class Bullet
 {
 public:
-	Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, float xOffset, float yOffset, int ttl);
+	Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl, SDL_Texture * bulletTexture);
 	~Bullet() {}
 	SpriteComponent* m_spriteComponent;
 	void render(SDL_Renderer* renderer, Camera* camera);
@@ -29,13 +29,13 @@ private:
 
 class Factory {
 public:
-	virtual Bullet* CreateBullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl) = 0;
+	virtual Bullet* CreateBullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl,SDL_Texture * bulletTexture) = 0;
 };
 
 class BulletFactory : public Factory {
 public:
 	BulletFactory() {}
-	Bullet * CreateBullet(SDL_Renderer* renderer, float xPos, float yPos,double angle, double xOffset, double yOffset, int ttl) {
-		return new Bullet(renderer,xPos,yPos,angle,xOffset,yOffset,ttl);
+	Bullet * CreateBullet(SDL_Renderer* renderer, float xPos, float yPos,double angle, double xOffset, double yOffset, int ttl, SDL_Texture * bulletTexture) {
+		return new Bullet(renderer,xPos,yPos,angle,xOffset,yOffset,ttl,bulletTexture);
 	}
 };
