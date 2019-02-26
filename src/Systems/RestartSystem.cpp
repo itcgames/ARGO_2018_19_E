@@ -8,13 +8,15 @@ void RestartSystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
-void RestartSystem::reset(int level) {
-	
+void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec) {
+	int count = 0;
+
 	for (Entity * ent : m_entities) {
 
 		TagComponent * tc = (TagComponent*)ent->getCompByType("TAG");
 		PositionComponent * pc = (PositionComponent*)ent->getCompByType("POSITION");
 		SpriteComponent * sc = (SpriteComponent*)ent->getCompByType("SPRITE");
+		AIComponent * ac = (AIComponent*)ent->getCompByType("AI");
 
 		pc->setVelX(0);
 		pc->setVelY(0);
@@ -32,11 +34,22 @@ void RestartSystem::reset(int level) {
 			control->setThrowGun(false);
 			control->setAlive(true);
 			control->setAngle(90);
-
+			
 			if (tc->getSubTag2() == "AI_Player")
 			{
-				AIComponent * ac = (AIComponent*)ent->getCompByType("AI");
+				
 				ac->set = false;
+				pc->setX(vec.at(count)->second.x);
+				pc->setY(vec.at(count)->second.y);
+				sc->setPosition(c2v{ vec.at(count)->second.x, vec.at(count)->second.y });
+				count++;
+			}
+			else
+			{
+				pc->setX(vec.at(count)->second.x);
+				pc->setY(vec.at(count)->second.y);
+				sc->setPosition(c2v{ vec.at(count)->second.x, vec.at(count)->second.y });
+				count++;
 			}
 			
 		}

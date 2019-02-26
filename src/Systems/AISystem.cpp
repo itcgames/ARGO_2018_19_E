@@ -215,12 +215,8 @@ void AISystem::update() {
 					
 				}
 			}
-			if (ac->closestEnemy.second.y < pc->getY())
-			{
-				ac->jumping = false;
-			}
-
-			//checks the ai jumping state
+		
+			
 			if (ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
 			{
 				ac->jumping = false;
@@ -232,12 +228,15 @@ void AISystem::update() {
 			
 			
 
+			
+			
+			
+			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
+			rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
+
 			//ai shooting entities
 			if (tag->gotGunBool)
 			{
-				rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
-				rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
-
 				ac->detect = tileCollision(rayCast->getStartPosition().x, rayCast->getStartPosition().y, rayCast->getCastPosition().x, rayCast->getCastPosition().y);
 
 				double desired = getAngleToPlayer(ac->curPosition, ac->closestEnemy);
@@ -254,22 +253,28 @@ void AISystem::update() {
 					{
 						con->setFire(false);
 					}	
+
+					if (ac->closestEnemy.first < 100)
+					{
+						ac->setLeft(false);
+						ac->setRight(false);
+					}
 				}	
 			}	
-		
-			//if the gun is on the same level as the AI character
+			
+				//if the gun is on the same level as the AI character
 			if (ac->curPosition.y + 50 > ac->closestEnemy.second.y && ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
 			{
 				ac->m_gunInSight = true;
 
 				if (ac->direction == "LEFT")
 				{
-					
+
 					if (ac->curPosition.x > ac->closestEnemy.second.x)
 					{
 						ac->setRight(false);
 						ac->setLeft(true);
-				
+
 					}
 				}
 
@@ -279,15 +284,17 @@ void AISystem::update() {
 					{
 						ac->setRight(true);
 						ac->setLeft(false);
-					
+
 					}
-				
-				}				
+
+				}
+
 			}
 			else
 			{
 				ac->m_gunInSight = false;
 			}
+			
 		}	
 	}
 }

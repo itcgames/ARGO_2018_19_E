@@ -432,14 +432,17 @@ void PlayScreen::endRound() {
 	if (m_roundCounter > ROUND_OVER) {
 		deleteGuns();
 		
-		m_restartSys.reset(randNum);
+		
+
 		if (*m_online) {
 			randNum = 1;
 		}
 		else {
-			randNum = (rand() % 3) + 1;
+			randNum = (rand() % 2) + 1;
 		}
+
 		
+
 		if (randNum == 1) {
 			m_map->load("testlevel.tmx", m_renderer);
 		}
@@ -447,11 +450,15 @@ void PlayScreen::endRound() {
 			m_map->load("level3.tmx", m_renderer);
 		}
 		else if (randNum == 3) {
-			m_map->load("level4.tmx", m_renderer);
+			m_map->load("level5.tmx", m_renderer);
 		}
 		m_roundCounter = 0;
 		m_drawRoundText = false;
 		m_roundEnd = false;
+
+		m_restartSys.reset(randNum, m_map->getSpawnPoints());
+		m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getTiles(), m_map->getWidth(), m_map->getHeight());
+		m_ps.recieveLevel(m_map->getWidth(), m_map->getHeight());
 	}
 }
 
