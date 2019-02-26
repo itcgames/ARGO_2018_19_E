@@ -17,6 +17,8 @@ public:
 	float xVel;
 	float yVel;
 
+	c2v getPosition();
+
 	c2AABB collider;
 
 	int m_ttl = 0;
@@ -24,6 +26,7 @@ public:
 private:
 	//std::vector<Component*> m_components;
 	//SpriteComponent* m_spriteComponent;
+	c2v m_pos;
 };
 
 
