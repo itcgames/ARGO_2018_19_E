@@ -230,6 +230,21 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_hs.update();
 	//m_animationsSys.update();
 	checkRoundOver();
+
+	if (m_roundEnd || m_ps.startRoundCount < 100) {
+		m_drawTimer = true;
+
+		m_timerCounter++;
+		if (m_timerCounter > 20) {
+			m_timer--;
+			initialiseText(std::to_string(m_timer), 0, 700);
+			m_timerCounter = 0;
+		}
+		
+	}
+	else {
+		m_drawTimer = false;
+	}
 	
 	if ((*online)) {
 		for (Entity * ent : m_netSystem.m_entities) {
@@ -347,8 +362,11 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 	SDL_SetRenderDrawColor(renderer, 183, 110, 121, 255);
 	SDL_RenderFillRect(renderer, &m_BGRect);
 	if (m_drawRoundText) {
-		SDL_RenderCopy(m_renderer, text, NULL, renderQuad);
+		
 		SDL_RenderCopy(m_renderer, w_text, NULL, winnerRenderQuad);
+	}
+	if (m_drawTimer) {
+		SDL_RenderCopy(m_renderer, text, NULL, renderQuad);
 	}
 	
 }
@@ -446,6 +464,8 @@ bool PlayScreen::onlineRoundOver() {
 			initialiseText("Player Wins", 1, 200);
 			m_drawRoundText = true;
 		}
+		if(m_timer < 5)
+			m_timer = 10;
 		return true;
 	}
 	return false;
@@ -455,16 +475,6 @@ void PlayScreen::endRound() {
 	m_roundCounter++;
 	m_BGRect.x += (1200.0 / 25);
 
-
-	m_timerCounter++;
-	if (m_timerCounter > 20) {
-		m_timer--;
-		initialiseText(std::to_string(m_timer), 0, 700);
-		m_timerCounter = 0;
-	}
-	
-	
-	
 	if (m_roundCounter > ROUND_OVER) {
 		deleteGuns();
 		
@@ -490,7 +500,7 @@ void PlayScreen::endRound() {
 		m_roundEnd = false;
 		m_ps.startRoundCount = 0;
 		m_BGRect.x = -2400; m_BGRect.y = 0;
-		m_timer = 5;
+		
 		initialiseText(std::to_string(m_timer), 0, 700);
 	}
 }
@@ -512,6 +522,8 @@ void PlayScreen::checkRoundOver() {
 					initialiseText("AI Wins", 1, 200);
 					m_drawRoundText = true;
 				}
+				if (m_timer < 5)
+					m_timer = 10;
 				m_roundEnd = true;
 
 			}
@@ -546,6 +558,8 @@ void PlayScreen::checkRoundOver() {
 				m_drawRoundText = true;
 			}
 			m_roundEnd = true;
+			if (m_timer < 5)
+				m_timer = 10;
 		}
 	}
 
