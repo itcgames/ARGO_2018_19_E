@@ -281,7 +281,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 			}
 			else if (tc->getSubTag() == "shotgun")
 			{
-				std::cout << "Shotgun Rotation = " << ownerPosC->getShotgunRotationCount() << std::endl;
+			
 				pc->setY(ownerPosC->getY() - 55 + tc->getYOffset());
 				// Count for recoil animation
 				if (ownerPosC->getShotgunCount() < 15)
@@ -502,7 +502,7 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 		if (tc->getSubTag2() == "AI_Player")
 
 		{
-			//std::cout << "Angle = " << cc->getAngle() + 90 << std::endl;
+		
 			if (cc->getAngle() + 90 > -90)  // Could be wrong
 			{
 
@@ -606,6 +606,18 @@ void PhysicsSystem::setHandOnStabby(SpriteComponent * sc, PositionComponent *pc,
 {
 	double handAngle = gunTagC->getAngle(); // :)
 
+	if (handAngle <= 0) // Make hands look right for top left
+	{
+		handAngle = handAngle + 270;
+	}
+
+	float radiusHandle = 50;
+	float HandleRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180; // :)
+																			 //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
+																			 //float shotgunTipY = 207.2 * (sin(shotgunRadAng));
+	float HandleX = radiusHandle * (cos(HandleRadAng));
+	float HandleY = radiusHandle * (sin(HandleRadAng));
+	
 	if (sc->m_flipValue == SDL_FLIP_NONE)
 	{
 		sc->setRotation(((gunTagC->getAngle() - 90)*-1) + 90); //rotate hand
@@ -616,19 +628,14 @@ void PhysicsSystem::setHandOnStabby(SpriteComponent * sc, PositionComponent *pc,
 
 	if (sc->m_flipValue == SDL_FLIP_HORIZONTAL)
 	{
-		if (handAngle < 0)
-		{
-			pc->setX(gunPosition->getX());
-			pc->setY(gunPosition->getY());
-		}
-		else {
-			pc->setX(gunPosition->getX());
-			pc->setY(gunPosition->getY());
-		}
+
+			pc->setX(ownerPosition->getX() - HandleX);
+			pc->setY(ownerPosition->getY() + HandleY + (handAngle / 10));
+		
 	}
 	else {
-		pc->setX(gunPosition->getX());
-		pc->setY(gunPosition->getY());
+		pc->setX(ownerPosition->getX() - HandleX);
+		pc->setY(ownerPosition->getY() + HandleY + (handAngle / 10));
 	}
 	if (handAngle < 0)
 	{
@@ -863,6 +870,7 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 
 void PhysicsSystem::update(SDL_Renderer* renderer) {
 		randomJuice = rand() % 30 - 15;
+		startRoundCount = startRoundCount + 1;
 
 		for (Entity * entity : m_entities) {
 
@@ -878,7 +886,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 			TagComponent * ownerTagC = (TagComponent*)entity->getCompByType("TAG");
 			SpriteComponent * ownerSpriteC = (SpriteComponent*)entity->getCompByType("SPRITE");
 
-			if (startRoundCount >= 2000)
+			if (startRoundCount >= 100)
 			{
 				// check gun player collide
 				if (tc->getTag() == "Player" && cc->getAlive() == true)
@@ -954,9 +962,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 					pc->setY(pc->getY() + pc->getVelY());
 				}
 			}
-			else {
-				startRoundCount = startRoundCount + 1;
-			}
+
 			if (tc->getTag() == "Gun")
 			{
 				std::string currentGun = tc->getSubTag2();
