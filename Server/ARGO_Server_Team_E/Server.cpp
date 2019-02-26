@@ -112,10 +112,20 @@ void Server::loop() {
 					}
 				}
 				if (packet.message == 3) {
-					int index = m_players[port];
-					m_players[port] = 0;
+
+					int index = 0;
+
+					for (auto it = m_players.begin(); it != m_players.end(); it++) {
+						if (it->first == port) {
+							m_players.erase(it);
+							break;
+						}
+						index++;
+					}
+ 					
 					playerNum--;
-					m_clients.erase(m_clients.begin() + (index - 1));
+					m_clients.erase(m_clients.begin() + index);
+					
 				}
 			}
 

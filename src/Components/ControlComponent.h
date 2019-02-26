@@ -34,6 +34,9 @@ public:
 	bool getAlive() { return m_alive; }
 	void setAlive(bool alive) { m_alive = alive; }
 
+	bool getRoundOver() { return m_roundOver; }
+	void setRoundOver(bool roundOver) { m_roundOver = roundOver; }
+
 	SDL_GameController* gGameController = NULL;
 
 	SDL_Haptic * haptic;
@@ -79,5 +82,7 @@ private:
 	bool m_alive = true;
 
 	float m_currentAngle = 0.0f;
+
+	bool m_roundOver = false;
 };
 #endif // !CONTROLCOMPONENT_H

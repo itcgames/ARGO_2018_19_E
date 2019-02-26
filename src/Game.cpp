@@ -193,7 +193,6 @@ void Game::render() {
 	}
 	//SDL_RenderPresent(m_renderer);
 	SDL_OpenGL_RenderFrame(m_window, m_renderer, frame, progID);
-
 }
 
 
