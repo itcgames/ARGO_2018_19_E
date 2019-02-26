@@ -117,6 +117,8 @@ public:
 
 	bool m_roundEnd = false;
 
+	bool m_drawTimer = false;
+
 private: 
 	int m_gunCounter = 0;
 	const int SPAWN_NEW_GUN = 1000;
