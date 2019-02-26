@@ -37,6 +37,7 @@ void RestartSystem::reset(int level) {
 		}
 		else if (tc->getTag() == "Hand") {
 			tc->setGunGot("none");
+			tc->setGunGotID("0");
 			tc->setGotGunBool(false);
 		}
 		else if (tc->getTag() == "Gun") {

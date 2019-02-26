@@ -23,6 +23,7 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	this->addComponent(m_spriteComponent);
 
 	m_spriteComponentHead = new SpriteComponent(0, 0, 330, 330);
+	m_spriteComponentCrown= new SpriteComponent(0, 0, 404, 255);
 	m_spriteComponentHead2 = new SpriteComponent(0, 0, 330, 330);
 	m_marker = new SpriteComponent(0, 0, 100, 100);
 	if (index == 0)
@@ -34,20 +35,29 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	else if (index == 1)
 	{
 		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+		m_spriteComponentHead2->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadNinja.png", renderer);
 		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker2.png", renderer);
 	}
 	else if (index == 2)
 	{
 		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+		m_spriteComponentHead2->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadNinja.png", renderer);
 		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker3.png", renderer);
 	}
 	else if (index == 3)
 	{
 		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+		m_spriteComponentHead2->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadNinja.png", renderer);
 		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker4.png", renderer);
 	}
+
+	m_spriteComponentCrown->loadFromFile("assets/art/character/finished_character_assets/crown.png", renderer);
+
 	m_spriteComponentHead->setPosition(c2v{ x, y });
 	m_spriteComponentHead->setScale(c2v{ 0.7f, 0.7f });
+
+	m_spriteComponentCrown->setPosition(c2v{ x, y });
+	m_spriteComponentCrown->setScale(c2v{ 0.2f, 0.2f });
 
 	m_spriteComponentHead2->setPosition(c2v{ x, y });
 	m_spriteComponentHead2->setScale(c2v{ 0.7f, 0.7f });
@@ -64,6 +74,7 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	m_spriteComponentRightFoot->setScale(c2v{ 0.5f, 0.5f });
 
 	m_spriteComponentHead->setColor(255, 255, 255);
+	m_spriteComponentCrown->setColor(255, 255, 255);
 	m_spriteComponentHead2->setColor(255, 255, 255);
 	m_marker->setPosition(c2v{ x, y - 150});
 	m_marker->setScale(c2v{ 0.1f, 0.1f });
@@ -141,9 +152,11 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
 			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
 			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10, m_spriteComponentHead->getPosition().y - 10 });
+			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x - 10, m_spriteComponentCrown->getPosition().y - 10 });
 			m_spriteComponentHead2->setPosition(c2v{ m_spriteComponentHead2->getPosition().x + 10, m_spriteComponentHead2->getPosition().y - 10 });
 
 			m_spriteComponentHead->rotate(3);
+			m_spriteComponentCrown->rotate(3);
 			m_spriteComponentHead2->rotate(3);
 			m_spriteComponentLeftFoot->rotate(3);
 			m_spriteComponentRightFoot->rotate(3);
@@ -154,8 +167,11 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x + 10, m_spriteComponentRightFoot->getPosition().y + 10 });
 			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x - 10, m_spriteComponentHead->getPosition().y - 10 });
 			m_spriteComponentHead2->setPosition(c2v{ m_spriteComponentHead2->getPosition().x - 10, m_spriteComponentHead2->getPosition().y - 10 });
+			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + 10, m_spriteComponentCrown->getPosition().y - 10 });
+
 
 			m_spriteComponentHead->rotate(-3);
+			m_spriteComponentCrown->rotate(-3);
 			m_spriteComponentHead2->rotate(-3);
 			m_spriteComponentLeftFoot->rotate(-3);
 			m_spriteComponentRightFoot->rotate(-3);
@@ -226,13 +242,16 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 
 		}
 		m_spriteComponentHead->m_flipValue = m_spriteComponent->m_flipValue;
+		m_spriteComponentCrown->m_flipValue = m_spriteComponent->m_flipValue;
 		m_spriteComponentHead2->m_flipValue = m_spriteComponent->m_flipValue;
 		m_spriteComponentLeftFoot->m_flipValue = m_spriteComponent->m_flipValue;
 		m_spriteComponentRightFoot->m_flipValue = m_spriteComponent->m_flipValue;
 		if (m_spriteComponentHead->m_flipValue == SDL_FLIP_NONE)
 		{
 			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 10 + headCount / 2,positionComp->getY() - 60 + headCount });
+			m_spriteComponentCrown->setPosition(c2v{ positionComp->getX() - 45 + headCount / 2,positionComp->getY() - 100 + headCount });
 			m_spriteComponentHead2->setPosition(c2v{ positionComp->getX() - 10 + headCount / 2,positionComp->getY() - 60 + headCount });
+			m_spriteComponentCrown->setRotation(-headCount - 20);
 			m_spriteComponentHead->setRotation(-headCount);
 			m_spriteComponentHead2->setRotation(-headCount);
 
@@ -245,7 +264,9 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 		}
 		else {
 			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 20 - headCount / 2,positionComp->getY() - 60 + headCount });
+			m_spriteComponentCrown->setPosition(c2v{ positionComp->getX() + 15 - headCount / 2,positionComp->getY() - 100 + headCount });
 			m_spriteComponentHead2->setPosition(c2v{ positionComp->getX() - 20 - headCount / 2,positionComp->getY() - 60 + headCount });
+			m_spriteComponentCrown->setRotation(headCount + 20);
 			m_spriteComponentHead->setRotation(headCount);
 			m_spriteComponentHead2->setRotation(headCount);
 
@@ -351,6 +372,10 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 	m_spriteComponentHead->setPosition(*screenPos);
 	m_spriteComponentHead2->setPosition(*screenPos);
 	m_spriteComponentHead->render(renderer);
+
+	screenPos = new c2v{ m_spriteComponentCrown->getPosition().x - camera->getCamera()->x, m_spriteComponentCrown->getPosition().y - camera->getCamera()->y };
+	m_spriteComponentCrown->setPosition(*screenPos);
+	m_spriteComponentCrown->render(renderer);
 
 	screenPos->x = static_cast<float>(m_spriteComponentLeftFoot->getPosition().x - camera->getCamera()->x);
 	screenPos->y = static_cast<float>(m_spriteComponentLeftFoot->getPosition().y - camera->getCamera()->y);

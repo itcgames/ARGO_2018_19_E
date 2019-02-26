@@ -36,10 +36,11 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 2, 1000, 100,gunAmount));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 5, 200, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 5, 300, 100,gunAmount));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 4, 500, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 3, 700, 100,gunAmount));
 	gunAmount = gunAmount + 1;
+
 
 
 
@@ -256,9 +257,9 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	//if (m_cameraCount > TIME_BETWEEN_CAMERA_CHANGES)
 	//{
-	m_focusPoint = m_camera->focus(m_playerPositions);
-	m_camera->update(m_focusPoint);
-	m_cameraCount = 0;
+	//m_focusPoint = m_camera->focus(m_playerPositions);
+	//m_camera->update(m_focusPoint);
+	//m_cameraCount = 0;
 	//}
 
 	//if (m_focusPoint->w > 0) {
