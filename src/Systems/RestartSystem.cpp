@@ -30,6 +30,7 @@ void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec) {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 			tc->setGunGot("none");
 			tc->setGotGunBool(false);
+			tc->setGunGotID("0");
 			tc->setBalloonDeflate(false);
 			control->setThrowGun(false);
 			control->setAlive(true);
@@ -64,6 +65,7 @@ void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec) {
 			tc->setGrabable(true);
 			tc->setGrabbed(false);
 			tc->setGrabableCount(0);
+			
 			if (tc->getSubTag() == "grenade") {
 				GrenadeComponent * grenade = (GrenadeComponent*)ent->getCompByType("GRENADE");
 				grenade->setArmed(false);

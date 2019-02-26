@@ -67,7 +67,11 @@ public:
 	//@param rotationAmount: amount to add to the rotation angle each time the function is called.
 	void rotate(int rotationAmount);
 
-	void setTexture(SDL_Texture * texture);
+	//Function to set a texture that is already loaded rather than loading one with the loadFromFile() function
+	//\param texture: pointer to SDL_Texture
+	//\param width: width of the texture
+	//\param height: height of the texture
+	void setTexture(SDL_Texture* texture, int width, int height);
 
 	//Functions for getting properties of a sprite after transformations have been applied
 	c2v getPosition();

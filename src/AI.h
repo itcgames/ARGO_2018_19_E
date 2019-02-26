@@ -3,15 +3,16 @@
 #include <SDL.h>
 #include <vector>
 #include "Components/SpriteComponent.h"
+#include "Camera.h"
 
 
-class AI : Entity
+class AI : public Entity
 {
 public:
 	AI();
 	AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers);
 
-	void render(SDL_Renderer* renderer);
+	void render(SDL_Renderer* renderer, Camera* camera);
 private:
 	std::vector<Component*> m_components;
 	PositionComponent* positionComp;
@@ -21,7 +22,7 @@ private:
 	SpriteComponent* m_spriteComponentLeftFoot;
 	SpriteComponent* m_spriteComponentRightFoot;
 	RayCastComponent * m_rayCastComp;
-	int runCount = 0;
+	float runCount = 0;
 	int fallCount = 0;
 	int headCount = 0;
 	int totalHeadTime = 0;

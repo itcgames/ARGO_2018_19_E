@@ -14,6 +14,7 @@
 #include "../Systems/AnimationsSystem.h"
 #include "../Systems/NetworkSystem.h"
 
+#include "../Entity.h"
 #include "../Player.h"
 #include "../Hand.h"
 #include "../AI.h"
@@ -22,6 +23,7 @@
 #include "../Light.h"
 
 #include "../ObserverPattern/AudioObserver.h"
+#include "../Camera.h"
 
 #include "../Client/Client.h"
 
@@ -45,12 +47,17 @@ public:
 	void checkRoundOver();
 	bool onlineRoundOver();
 	void endRound();
-	void initialiseText(std::string message);
+	void initialiseText(std::string message, int index, int y);// SDL_Texture* texture, SDL_Rect* rect, int y);
 
 	int gunAmount = 1;
 
 	void deleteGuns();
 	void spawnGuns();
+
+	Camera* m_camera;
+	SDL_Rect* m_focusPoint;
+	SDL_Rect* m_offset;
+	std::vector<c2v> m_playerPositions;
 
 	std::vector<Hand *> m_leftHands;
 	std::vector<Hand *> m_rightHands;
@@ -64,7 +71,10 @@ public:
 
 	Light* testLight;
 
-	SpriteComponent * m_backgroundSprite;
+	SpriteComponent * m_backgroundSpriteOne;
+	SpriteComponent * m_backgroundSpriteTwo;
+	SpriteComponent * m_backgroundSpriteThree;
+	SpriteComponent * m_currentLevel;
 
 	HealthSystem m_hs;
 	ControlSystem m_cs;
@@ -79,19 +89,18 @@ public:
 	AnimationsSystem m_animationsSys;
 	RestartSystem m_restartSys;
 	NetworkSystem m_netSystem;
-	
-
-	SDL_Rect* m_camera;
-	c2v* m_cameraCentre;
 
 	MapLoader* m_map;
 
 	int m_roundCounter = 0;
-	const int ROUND_OVER = 50.0f;
+	const int ROUND_OVER = 100;
 	std::string round_text;
 	SDL_Texture* text;
-	SDL_Rect renderQuad;
-	SDL_Color textColor = { 188, 110, 121, 255 };
+	SDL_Rect* renderQuad;
+	std::string winner_text;
+	SDL_Texture* w_text;
+	SDL_Rect * winnerRenderQuad;
+	SDL_Color textColor = { 211,211,211, 255 };
 	SDL_Surface * textSurface = new SDL_Surface;
 
 	bool m_drawRoundText = false;
@@ -111,15 +120,27 @@ public:
 
 	bool m_roundEnd = false;
 
+	bool m_drawTimer = false;
+
 private: 
 	int m_gunCounter = 0;
 	const int SPAWN_NEW_GUN = 1000;
+	float m_screenScale = 1.0f;
+
+	int m_cameraCount = 0;
+	const int TIME_BETWEEN_CAMERA_CHANGES = 36;
 
 	bool m_startThrow = false;
 	int m_throwTimer = 0;
 	const int STOP_THROW = 4;
 
+	c2v m_windowScale{ 0.69f, 0.5f };
 	int randNum = 0;
 
 	Client * m_client;
+
+	SDL_Rect m_BGRect;
+
+	int m_timerCounter = 0;
+	int m_timer = 5;
 };

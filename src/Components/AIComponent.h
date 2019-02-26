@@ -15,10 +15,8 @@ class AIComponent : public Component
 
 public:
 
-	AIComponent(int speed) : m_speed(speed) { closestWalkPoint = std::make_pair(c2v{ 0,0 }, "LEFT"); }
+	AIComponent() {  closestWalkPoint = std::make_pair(c2v{ 0,0 }, "LEFT"); }
 
-	int getSpeed() { return m_speed; }
-	void setSpeed(int speed) { m_speed = speed; }
 
 	std::string m_tag = "AI";
 

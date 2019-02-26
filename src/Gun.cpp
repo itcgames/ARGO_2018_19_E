@@ -52,6 +52,16 @@ Gun::Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos,int id)
 		this->addComponent(new CollisionComponent(xPos, yPos, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 		this->addComponent(new GrenadeComponent());
 	}
+	else if (gunValue == 5)
+	{
+		m_spriteComponent = new SpriteComponent(0, 0, 12, 136);
+		m_spriteComponent->setPosition(c2v{ xPos, yPos });
+		m_spriteComponent->setScale(c2v{ 2.0f, 2.0f });
+		this->addComponent(m_spriteComponent);
+		m_spriteComponent->loadFromFile("assets/art/character/finished_character_assets/Katana.png", renderer);
+		m_tagComponent->setSubTag("stabbyboy");
+		this->addComponent(new CollisionComponent(xPos, yPos, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
+	}
 
 	this->addComponent(new PositionComponent(xPos, yPos));
 	this->addComponent(new ControlComponent());

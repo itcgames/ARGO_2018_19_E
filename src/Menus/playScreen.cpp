@@ -13,11 +13,32 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	m_audioObserver = new AudioObserver();
 	m_audioObserver->load();
 
+	m_camera = new Camera();
+	m_focusPoint = new SDL_Rect();
+	m_offset = new SDL_Rect();
 
-	m_backgroundSprite = new SpriteComponent(0, 0, 1920, 1080);
-	m_backgroundSprite->loadFromFile("assets/cybercity.png", renderer);
-	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
-	m_backgroundSprite->setScale(c2v{ 1.5f, 1.6f });
+
+	m_backgroundSpriteOne = new SpriteComponent(0, 0, 1920, 1080);
+	m_backgroundSpriteOne->loadFromFile("assets/art/environment/Cyber_Background_3_FINAL.png", renderer);
+	m_backgroundSpriteOne->setPosition(c2v{ 0.0f, 0.0f });
+	m_backgroundSpriteOne->setScale(c2v{ 1.5f, 1.6f });
+
+	m_backgroundSpriteTwo = new SpriteComponent(0, 0, 1920, 1080);
+	m_backgroundSpriteTwo->loadFromFile("assets/art/environment/Game_BG_1.png", renderer);
+	m_backgroundSpriteTwo->setPosition(c2v{ 0.0f, 0.0f });
+	m_backgroundSpriteTwo->setScale(c2v{ 1.5f, 1.6f });
+
+	m_backgroundSpriteThree = new SpriteComponent(0, 0, 1920, 1080);
+	m_backgroundSpriteThree->loadFromFile("assets/art/environment/Background_4_FINAL.png", renderer);
+	m_backgroundSpriteThree->setPosition(c2v{ 0.0f, 0.0f });
+	m_backgroundSpriteThree->setScale(c2v{ 1.5f, 1.6f });
+
+
+	m_currentLevel = m_backgroundSpriteOne;
+	for (int i = 0; i < 4; i++)
+	{
+		m_playerPositions.push_back(c2v{ 0, 0 });
+	}
 
 	m_map = new MapLoader();
 
@@ -27,17 +48,18 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 2, 1000, 100,gunAmount));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 3, 200, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 5, 200, 100,gunAmount));
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 4, 500, 100,gunAmount));
 	gunAmount = gunAmount + 1;
 
-	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
-	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
+
 
 	for (Gun * g : m_guns) {
 		m_Gunents.push_back((Entity*)g);	
 	}
+
+	m_BGRect.x = -2400; m_BGRect.y = 0; m_BGRect.w = 2400; m_BGRect.h = 1400;
 }
 
 void PlayScreen::initialise(bool online, int size, int num) {
@@ -220,14 +242,64 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_collSys.update(m_map->getTiles());
 	m_ps.update(m_renderer);
 	m_gunSys.update();
-	SDL_RenderSetScale(m_renderer, 0.69, 0.5);
+
+	SDL_RenderSetScale(m_renderer, m_windowScale.x, m_windowScale.y);
+
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
 	m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
-	//m_animationsSys.update();
+
+
+	int entityIndex = 0;
+	for(int i = 0; i < m_players.size(); i++)
+	{
+		PositionComponent* pc = (PositionComponent*)m_players.at(i)->getCompByType("POSITION");
+		m_playerPositions.at(i) = c2v{ pc->getX(), pc->getY() };
+		entityIndex++;
+	}
+
+	for (int i = 0; i < m_aiCharacters.size(); i++)
+	{
+		PositionComponent* pc = (PositionComponent*)m_aiCharacters.at(i)->getCompByType("POSITION");
+		m_playerPositions.at(entityIndex) = c2v{ pc->getX(), pc->getY() };
+		entityIndex++;
+	}
+
+	//if (m_cameraCount > TIME_BETWEEN_CAMERA_CHANGES)
+	//{
+	//m_focusPoint = m_camera->focus(m_playerPositions);
+	//m_camera->update(m_focusPoint);
+	m_cameraCount = 0;
+	//}
+
+	//if (m_focusPoint->w > 0) {
+	//	(SCREEN_WIDTH / m_focusPoint->w) > 1.0f ? ((m_screenScale < 1.0f) ? m_screenScale += 0.01f : m_screenScale = 1.0f) : (m_screenScale > 0.55f ? m_screenScale -= 0.01f : m_screenScale = 0.55f);
+	//}
+
+
+	m_cameraCount++;
+
+	
+	SDL_RenderSetScale(m_renderer, 0.55f, 0.55f);
+
 	checkRoundOver();
+
+	if (m_roundEnd || m_ps.startRoundCount < 100) {
+		m_drawTimer = true;
+
+		m_timerCounter++;
+		if (m_timerCounter > 20) {
+			m_timer--;
+			initialiseText(std::to_string(m_timer), 0, 700);
+			m_timerCounter = 0;
+		}
+		
+	}
+	else {
+		m_drawTimer = false;
+	}
 	
 	if ((*online)) {
 		for (Entity * ent : m_netSystem.m_entities) {
@@ -270,7 +342,8 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	p.throwWeapon = cc->getThrowWeapon();
 	p.position.x = pc->getX();
 	p.position.y = pc->getY();
-	p.level = randNum;
+
+	p.roundOver = m_roundEnd;
 
 	if (p.throwWeapon && !lastPacket.throwWeapon) {
 		m_startThrow = true;
@@ -307,49 +380,78 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	lastPacket.throwWeapon = p.throwWeapon;
 	lastPacket.position.x = p.position.x;
 	lastPacket.position.y = p.position.y;
-	lastPacket.level = p.level;
+	lastPacket.roundOver = p.roundOver;
 
-	if (p.level != randNum) {
-		m_roundCounter = 100;
-		endRound();
+	for (Player * p : m_networkCharacters) {
+		Entity * ent = (Entity*)p;
+		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
+
+		if (cc->getRoundOver()) {
+			m_roundEnd = true;
+		}
 	}
 }
 
 void PlayScreen::render(SDL_Renderer * renderer) {
-	m_backgroundSprite->render(m_renderer);
-	m_map->draw(m_renderer);
+	m_currentLevel->render(m_renderer);
+	m_map->draw(m_renderer, m_camera);
 	for (AI * ai : m_aiCharacters) {
-		ai->render(m_renderer);
+		ai->render(m_renderer, m_camera);
 	}
 	for (Player *p : m_players) {
-		p->render(m_renderer);
+		p->render(m_renderer, m_camera);
 	}
+
+	m_rs.render(m_renderer, m_camera);
+	m_ps.bulletRender(m_renderer, m_camera);
+
 	for (Player *p : m_networkCharacters) {
-		p->render(m_renderer);
+		p->render(m_renderer, m_camera);
 	}
-	m_rs.render(m_renderer);
+	m_rs.render(m_renderer, m_camera);
 	for (Player *p : m_players) {
 		p->renderMarker(m_renderer);
 	}
-	m_ps.bulletRender(m_renderer);
+
 	//m_animationsSys.render();
 	testLight->render(m_renderer);
 	m_grenadeSys.render();
 	m_collSys.render();
 	//m_emitter->update();
+	SDL_SetRenderDrawColor(renderer, 183, 110, 121, 255);
+	SDL_RenderFillRect(renderer, &m_BGRect);
 	if (m_drawRoundText) {
-		SDL_RenderCopy(m_renderer, text, NULL, &renderQuad);
+		
+		SDL_RenderCopy(m_renderer, w_text, NULL, winnerRenderQuad);
 	}
+	if (m_drawTimer) {
+		SDL_RenderCopy(m_renderer, text, NULL, renderQuad);
+	}
+	
 }
 
-void PlayScreen::initialiseText(std::string message) {
-	round_text = message;
-	textSurface = TTF_RenderText_Solid(Font, round_text.c_str(), textColor);
-	text = SDL_CreateTextureFromSurface(m_renderer, textSurface);
-	int text_width = textSurface->w;
-	int text_height = textSurface->h;
-	SDL_FreeSurface(textSurface);
-	renderQuad = { 150, 200, text_width, text_height };
+void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_Texture* texture, SDL_Rect* rect, int y) {
+	//round_text = message;
+	
+	if (index == 0) {
+		textSurface = TTF_RenderText_Solid(Font, message.c_str(), textColor);
+		text = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+		int text_width = textSurface->w;
+		int text_height = textSurface->h;
+		SDL_FreeSurface(textSurface);
+		renderQuad = new SDL_Rect{ 150, y, text_width, text_height };
+		renderQuad->x = 800 - (renderQuad->w / 2);
+	}
+	else {
+		textSurface = TTF_RenderText_Solid(Font, message.c_str(), textColor);
+		w_text = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+		int text_width = textSurface->w;
+		int text_height = textSurface->h;
+		SDL_FreeSurface(textSurface);
+		winnerRenderQuad = new SDL_Rect{ 150, y, text_width, text_height };
+		winnerRenderQuad->x = 900 - (winnerRenderQuad->w / 2);
+	}
+	
 }
 
 void PlayScreen::spawnGuns() {
@@ -418,9 +520,11 @@ bool PlayScreen::onlineRoundOver() {
 	
 	if (dead >= (playerAmount - 1)) {
 		if (!m_drawRoundText) {
-			initialiseText("Player Wins");
+			initialiseText("Player Wins", 1, 200);
 			m_drawRoundText = true;
 		}
+		if(m_timer < 5)
+			m_timer = 10;
 		return true;
 	}
 	return false;
@@ -428,6 +532,7 @@ bool PlayScreen::onlineRoundOver() {
 
 void PlayScreen::endRound() {
 	m_roundCounter++;
+	m_BGRect.x += (1200.0 / 25);
 
 	if (m_roundCounter > ROUND_OVER) {
 		deleteGuns();
@@ -438,19 +543,22 @@ void PlayScreen::endRound() {
 			randNum = 1;
 		}
 		else {
-			randNum = (rand() % 2) + 1;
+			randNum = (rand() % 3) + 1;
 		}
 
 		
 
 		if (randNum == 1) {
 			m_map->load("testlevel.tmx", m_renderer);
+			m_currentLevel = m_backgroundSpriteOne;
 		}
 		else if (randNum == 2) {
 			m_map->load("level3.tmx", m_renderer);
+			m_currentLevel = m_backgroundSpriteTwo;
 		}
 		else if (randNum == 3) {
 			m_map->load("level5.tmx", m_renderer);
+			m_currentLevel = m_backgroundSpriteThree;
 		}
 		m_roundCounter = 0;
 		m_drawRoundText = false;
@@ -459,8 +567,12 @@ void PlayScreen::endRound() {
 		m_restartSys.reset(randNum, m_map->getSpawnPoints());
 		m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getTiles(), m_map->getWidth(), m_map->getHeight());
 		m_ps.recieveLevel(m_map->getWidth(), m_map->getHeight());
+		m_ps.startRoundCount = 0;
+		m_BGRect.x = -2400; m_BGRect.y = 0;
+		initialiseText(std::to_string(m_timer), 0, 700);
 	}
 }
+
 
 
 void PlayScreen::checkRoundOver() {
@@ -475,9 +587,11 @@ void PlayScreen::checkRoundOver() {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 			if (!control->getAlive()) {
 				if (!m_drawRoundText) {
-					initialiseText("AI Wins");
+					initialiseText("AI Wins", 1, 200);
 					m_drawRoundText = true;
 				}
+				if (m_timer < 5)
+					m_timer = 10;
 				m_roundEnd = true;
 
 			}
@@ -506,12 +620,14 @@ void PlayScreen::checkRoundOver() {
 					ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 					TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
 					if (control->getAlive()) {
-						initialiseText(tag->getSubTag() + " Wins!");
+						initialiseText(tag->getSubTag() + " Wins!", 1, 200);
 					}
 				}
 				m_drawRoundText = true;
 			}
 			m_roundEnd = true;
+			if (m_timer < 5)
+				m_timer = 10;
 		}
 	}
 
