@@ -22,7 +22,6 @@ void RestartSystem::reset(int level) {
 		pc->setY(pc->startY);
 		sc->setRotation(0);
 		sc->setPosition(c2v{pc->startX, pc->startY});
-
 	
 		if (tc->getTag() == "Player") {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");

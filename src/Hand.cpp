@@ -26,19 +26,19 @@ Hand::Hand(SDL_Renderer* renderer,int handValue,int index)
 	}
 	if (index == 0)
 	{
-		m_tagComponent->setSubTag("Player1");
+		m_tagComponent->setSubTag("Player 1");
 	}
 	else if (index == 1)
 	{
-		m_tagComponent->setSubTag("Player2");
+		m_tagComponent->setSubTag("Player 2");
 	}
 	else if (index == 2)
 	{
-		m_tagComponent->setSubTag("Player3");
+		m_tagComponent->setSubTag("Player 3");
 	}
 	else if (index == 3)
 	{
-		m_tagComponent->setSubTag("Player4");
+		m_tagComponent->setSubTag("Player 4");
 	}
 	else {
 		m_tagComponent->setSubTag("AIPlayer");
