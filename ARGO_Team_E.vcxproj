@@ -256,6 +256,7 @@
     <ClInclude Include="src\Components\FactoryComponent.h" />
     <ClInclude Include="src\Components\GrenadeComponent.h" />
     <ClInclude Include="src\Components\GunComponent.h" />
+    <ClInclude Include="src\Components\RayCastComponent.h" />
     <ClInclude Include="src\Components\SoundComponent.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\Components\HealthComponents.h" />

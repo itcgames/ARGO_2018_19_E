@@ -10,6 +10,7 @@ Player::Player()
 Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* controller, int index, TTF_Font* font)
 
 {
+	m_index = index;
 	Font = font;
 	m_renderer = renderer;
 	//Set up Sprite component and add to entity component vector
@@ -22,24 +23,34 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	this->addComponent(m_spriteComponent);
 
 	m_spriteComponentHead = new SpriteComponent(0, 0, 330, 330);
+	m_spriteComponentHead2 = new SpriteComponent(0, 0, 330, 330);
+	m_marker = new SpriteComponent(0, 0, 100, 100);
 	if (index == 0)
 	{
-		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/headGuy.png", renderer);
+		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+		m_spriteComponentHead2->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadNinja.png", renderer);
+		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker.png", renderer);
 	}
 	else if (index == 1)
 	{
-		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/headGuy2.png", renderer);
+		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker2.png", renderer);
 	}
 	else if (index == 2)
 	{
-		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/headGuy3.png", renderer);
+		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker3.png", renderer);
 	}
 	else if (index == 3)
 	{
-		m_spriteComponentHead->loadFromFile("assets/assets/art/character/finished_character_assets/headGuy4.png", renderer);
+		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker4.png", renderer);
 	}
 	m_spriteComponentHead->setPosition(c2v{ x, y });
-	m_spriteComponentHead->setScale(c2v{ 0.2f, 0.28f });
+	m_spriteComponentHead->setScale(c2v{ 0.7f, 0.7f });
+
+	m_spriteComponentHead2->setPosition(c2v{ x, y });
+	m_spriteComponentHead2->setScale(c2v{ 0.7f, 0.7f });
 
 
 	m_spriteComponentLeftFoot = new SpriteComponent(0, 0, 107, 91);
@@ -53,15 +64,13 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	m_spriteComponentRightFoot->setScale(c2v{ 0.5f, 0.5f });
 
 	m_spriteComponentHead->setColor(255, 255, 255);
-
-	m_marker = new SpriteComponent(0, 0, 100, 100);
-	m_marker->loadFromFile("assets/marker.png", renderer);
+	m_spriteComponentHead2->setColor(255, 255, 255);
 	m_marker->setPosition(c2v{ x, y - 150});
 	m_marker->setScale(c2v{ 0.1f, 0.1f });
 
 
 	this->addComponent(new HealthComponent(10));
-	TagComponent * tag = new TagComponent("Player");
+	tag = new TagComponent("Player");
 	if (index == 0)
 	{
 		tag->setSubTag("Player1");
@@ -97,14 +106,28 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 }
 void Player::render(SDL_Renderer* renderer, Camera* camera) {
 
-	m_marker->setPosition(c2v{ m_spriteComponent->getPosition().x + 17 - (startBalloonCount * 40), m_spriteComponent->getPosition().y - 150 - startBalloonFlightCount });
+	m_marker->setPosition(c2v{ m_spriteComponent->getPosition().x + 17 - (startBalloonCount * 40), m_spriteComponent->getPosition().y - 30});
 	m_marker->setScale(c2v{ 0.1f + startBalloonCount, 0.1f + startBalloonCount });
-	if (startBalloonCount < 0.8)
+
+	if (totalBalloonCount > 2.0)
 	{
-		startBalloonCount = startBalloonCount + 0.01;
+		tag->setBalloonDeflate(true);
+		totalBalloonCount = 0;
+	}
+	if (tag->getBalloonDeflate() == false)
+	{
+		if (startBalloonCount < 0.8)
+		{
+			startBalloonCount = startBalloonCount + 0.03;
+		}
+
+		totalBalloonCount = totalBalloonCount + 0.02;
 	}
 	else {
-		startBalloonFlightCount = startBalloonFlightCount + 5;
+		if (startBalloonCount >= -0.1)
+		{
+			startBalloonCount = startBalloonCount - 0.03;
+		}
 	}
 
 	renderQuad.x = m_marker->getPosition().x + (startBalloonCount * 40);
@@ -118,8 +141,10 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
 			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
 			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10, m_spriteComponentHead->getPosition().y - 10 });
+			m_spriteComponentHead2->setPosition(c2v{ m_spriteComponentHead2->getPosition().x + 10, m_spriteComponentHead2->getPosition().y - 10 });
 
 			m_spriteComponentHead->rotate(3);
+			m_spriteComponentHead2->rotate(3);
 			m_spriteComponentLeftFoot->rotate(3);
 			m_spriteComponentRightFoot->rotate(3);
 		}
@@ -128,8 +153,10 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x - 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
 			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x + 10, m_spriteComponentRightFoot->getPosition().y + 10 });
 			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x - 10, m_spriteComponentHead->getPosition().y - 10 });
+			m_spriteComponentHead2->setPosition(c2v{ m_spriteComponentHead2->getPosition().x - 10, m_spriteComponentHead2->getPosition().y - 10 });
 
 			m_spriteComponentHead->rotate(-3);
+			m_spriteComponentHead2->rotate(-3);
 			m_spriteComponentLeftFoot->rotate(-3);
 			m_spriteComponentRightFoot->rotate(-3);
 		}
@@ -145,7 +172,7 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 		{
 			if (totalHeadTime < 20)
 			{
-				totalHeadTime = totalHeadTime + 1;
+				totalHeadTime = totalHeadTime + 2;
 				if (headCount > 10)
 				{
 					animateHeadUp = false;
@@ -156,11 +183,11 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 				}
 				if (animateHeadUp == true)
 				{
-					headCount = headCount + 1;
+					headCount = headCount + 2;
 				}
 				else if (animateHeadUp == false)
 				{
-					headCount = headCount - 1;
+					headCount = headCount - 2;
 
 				}
 			}
@@ -199,12 +226,16 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 
 		}
 		m_spriteComponentHead->m_flipValue = m_spriteComponent->m_flipValue;
+		m_spriteComponentHead2->m_flipValue = m_spriteComponent->m_flipValue;
 		m_spriteComponentLeftFoot->m_flipValue = m_spriteComponent->m_flipValue;
 		m_spriteComponentRightFoot->m_flipValue = m_spriteComponent->m_flipValue;
 		if (m_spriteComponentHead->m_flipValue == SDL_FLIP_NONE)
 		{
-			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 10 + headCount / 2,positionComp->getY() - 75 + headCount });
+			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 10 + headCount / 2,positionComp->getY() - 60 + headCount });
+			m_spriteComponentHead2->setPosition(c2v{ positionComp->getX() - 10 + headCount / 2,positionComp->getY() - 60 + headCount });
 			m_spriteComponentHead->setRotation(-headCount);
+			m_spriteComponentHead2->setRotation(-headCount);
+
 
 			m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount,positionComp->getY() + 52 });
 			m_spriteComponentLeftFoot->setRotation(-runCount);
@@ -213,8 +244,10 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 			m_spriteComponentRightFoot->setRotation(runCount);
 		}
 		else {
-			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 20 - headCount / 2,positionComp->getY() - 75 + headCount });
+			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() - 20 - headCount / 2,positionComp->getY() - 60 + headCount });
+			m_spriteComponentHead2->setPosition(c2v{ positionComp->getX() - 20 - headCount / 2,positionComp->getY() - 60 + headCount });
 			m_spriteComponentHead->setRotation(headCount);
+			m_spriteComponentHead2->setRotation(headCount);
 
 			m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() - 20 + runCount,positionComp->getY() + 52 });  // (Position - player offset + animationCount)
 			m_spriteComponentLeftFoot->setRotation(-runCount);
@@ -316,11 +349,21 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 	//std::cout << "Y = "<< positionComp->getVelY() << std::endl;
 	c2v* screenPos = new c2v{ m_spriteComponentHead->getPosition().x - camera->getCamera()->x, m_spriteComponentHead->getPosition().y - camera->getCamera()->y };
 	m_spriteComponentHead->setPosition(*screenPos);
+	m_spriteComponentHead2->setPosition(*screenPos);
 	m_spriteComponentHead->render(renderer);
 
 	screenPos->x = static_cast<float>(m_spriteComponentLeftFoot->getPosition().x - camera->getCamera()->x);
 	screenPos->y = static_cast<float>(m_spriteComponentLeftFoot->getPosition().y - camera->getCamera()->y);
 	m_spriteComponentLeftFoot->setPosition(*screenPos);
+
+	
+	if (tag->getGunGot() == "stabbyboy")
+	{
+		m_spriteComponentHead2->render(renderer);
+	}
+	else {
+		m_spriteComponentHead->render(renderer);
+	}
 	m_spriteComponentLeftFoot->render(renderer);
 
 	screenPos->x = static_cast<float>(m_spriteComponentRightFoot->getPosition().x - camera->getCamera()->x);
@@ -328,10 +371,12 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 	m_spriteComponentRightFoot->setPosition(*screenPos);
 	m_spriteComponentRightFoot->render(renderer);
 
+	delete screenPos;
+}
+void Player::renderMarker(SDL_Renderer* renderer) {
 
 	m_marker->render(renderer);
 	SDL_RenderCopy(m_renderer, text, NULL, &renderQuad);
-	delete screenPos;
 }
 
 void Player::initialiseText(std::string message, int x, int y) {

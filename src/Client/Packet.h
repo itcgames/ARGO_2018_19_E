@@ -32,5 +32,7 @@ struct Packet
 
 	float gunAngle;
 
+	bool roundOver;
+
 };
 #endif // !PACKAGE_H

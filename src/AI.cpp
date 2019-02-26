@@ -5,7 +5,7 @@ AI::AI()
 }
 
 
-AI::AI(SDL_Renderer* renderer,float xPos,float yPos)
+AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 {
 	//Set up Sprite component and add to entity component vector
 	oldY = 0;
@@ -34,10 +34,42 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos)
 
 	m_spriteComponentHead->setColor(255, 255, 255);
 
+	//creating and adding ray cast for AI
+	m_rayCastComp = new RayCastComponent();
+	this->addComponent(m_rayCastComp);
+
+
 	this->addComponent(new FState());
 	this->addComponent(new HealthComponent(10));
-	this->addComponent(new TagComponent("AI_TAG"));
-	this->addComponent(new ControlComponent());
+	TagComponent * tag = new TagComponent("Player");
+	if (noOfPlayers == 0)
+	{
+		tag->setSubTag("Player1");
+		tag->setSubTag2("AI_Player");
+		
+	}
+	else if (noOfPlayers == 1)
+	{
+		tag->setSubTag("Player2");
+		tag->setSubTag2("AI_Player");
+		
+	}
+	else if (noOfPlayers == 2)
+	{
+		tag->setSubTag("Player3");
+		tag->setSubTag2("AI_Player");
+		
+	}
+	else if (noOfPlayers == 3)
+	{
+		tag->setSubTag("Player4");
+		tag->setSubTag2("AI_Player");
+		
+	}
+
+	this->addComponent(tag);
+	control = new ControlComponent();
+	this->addComponent(control);
 	controlComp = new AIComponent(10);
 	this->addComponent(controlComp);
 	positionComp = new PositionComponent(xPos, yPos);
@@ -46,8 +78,8 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos)
 }
 void AI::render(SDL_Renderer* renderer, Camera* camera) {
 
-	if (controlComp->m_alive == false) {
-		if (controlComp->hitFromRight == true)
+	if (!control->getAlive()) {
+		if (control->getHitFrom() == "right")
 		{
 			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
 			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
@@ -57,7 +89,7 @@ void AI::render(SDL_Renderer* renderer, Camera* camera) {
 			m_spriteComponentLeftFoot->rotate(3);
 			m_spriteComponentRightFoot->rotate(3);
 		}
-		else if (controlComp->hitFromLeft == true)
+		else if (control->getHitFrom() == "left")
 		{
 			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x - 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
 			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x + 10, m_spriteComponentRightFoot->getPosition().y + 10 });
@@ -67,12 +99,22 @@ void AI::render(SDL_Renderer* renderer, Camera* camera) {
 			m_spriteComponentLeftFoot->rotate(-3);
 			m_spriteComponentRightFoot->rotate(-3);
 		}
+		else
+		{
+			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
+			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
+			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10, m_spriteComponentHead->getPosition().y - 10 });
+
+			m_spriteComponentHead->rotate(3);
+			m_spriteComponentLeftFoot->rotate(3);
+			m_spriteComponentRightFoot->rotate(3);
+		}
 
 		controlComp->setRight(false);
 		controlComp->setLeft(false);
 
 	}
-	else if (controlComp->m_alive == true)
+	else if (control->getAlive())
 	{
 		// Animation loop for head when hitting ground
 		if (animateHead == true)
@@ -259,5 +301,9 @@ void AI::render(SDL_Renderer* renderer, Camera* camera) {
 	m_spriteComponentRightFoot->render(renderer);
 
 	delete screenPos;
+
+
+
+	SDL_RenderDrawLine(renderer, m_rayCastComp->getStartPosition().x, m_rayCastComp->getStartPosition().y, m_rayCastComp->getCastPosition().x, m_rayCastComp->getCastPosition().y);
 
 }

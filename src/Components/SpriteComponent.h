@@ -67,7 +67,6 @@ public:
 	//@param rotationAmount: amount to add to the rotation angle each time the function is called.
 	void rotate(int rotationAmount);
 
-
 	//Function to set a texture that is already loaded rather than loading one with the loadFromFile() function
 	//\param texture: pointer to SDL_Texture
 	//\param width: width of the texture

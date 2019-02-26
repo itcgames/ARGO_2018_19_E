@@ -23,21 +23,17 @@ void RestartSystem::reset(int level) {
 		sc->setRotation(0);
 		sc->setPosition(c2v{pc->startX, pc->startY});
 
-		if (tc->getTag() == "AI_TAG") {
-			AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
-			ai->m_alive = true;
-			ai->set = false;
-			ai->hasGun = false;
-			sc->setColor(255, 255, 255);
-			
-		}
-		else if (tc->getTag() == "Player") {
+	
+		if (tc->getTag() == "Player") {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 			tc->setGunGot("none");
 			tc->setGotGunBool(false);
+			tc->setGunGotID("0");
+			tc->setBalloonDeflate(false);
 			control->setThrowGun(false);
 			control->setAlive(true);
 			control->setAngle(90);
+			
 		}
 		else if (tc->getTag() == "Hand") {
 			tc->setGunGot("none");
@@ -50,6 +46,7 @@ void RestartSystem::reset(int level) {
 			tc->setGrabable(true);
 			tc->setGrabbed(false);
 			tc->setGrabableCount(0);
+			
 			if (tc->getSubTag() == "grenade") {
 				GrenadeComponent * grenade = (GrenadeComponent*)ent->getCompByType("GRENADE");
 				grenade->setArmed(false);

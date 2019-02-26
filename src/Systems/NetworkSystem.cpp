@@ -22,6 +22,7 @@ void NetworkSystem::update(Packet * p) {
 			cc->setThrowWeapon(p->throwWeapon);
 			cc->setJump(p->jump);
 			cc->setFire(p->fire);
+			cc->setRoundOver(p->roundOver);
 			pc->setX(p->position.x);
 			pc->setY(p->position.y);
 		}

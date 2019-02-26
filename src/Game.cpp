@@ -50,6 +50,12 @@ Game::Game()
 		// handle error
 	}
 
+	TTF_Font* creditsFont = TTF_OpenFont("arial.ttf", 100);
+	if (!creditsFont) {
+		printf("TTF_OpenFont: %s\n", TTF_GetError());
+		// handle error
+	}
+
 	TTF_Font* menuFont = TTF_OpenFont("arial.ttf", 30);
 	if (!menuFont) {
 		printf("TTF_OpenFont: %s\n", TTF_GetError());
@@ -57,20 +63,14 @@ Game::Game()
 	}
 	m_client = new Client("149.153.106.155", 54000);
 	setUpController();
+	m_creditsScreen = new CreditScreen(m_currentGameState, m_renderer, creditsFont, menuFont, gGameController);
 	m_playScreen = new PlayScreen(m_renderer, Font);
 	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
 	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont, gGameController);
 	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client, m_online);
 	m_options = new OptionScreen();
-	m_credits = new CreditScreen();
-
-	m_screenSize = { 0,0,1200,700 };	
-
-
 	
-
-
-
+	m_screenSize = { 0,0,1200,700 };	
 }
 
 Game::~Game()
@@ -126,6 +126,7 @@ void Game::update() {
 		m_playScreen->update(m_online, event, m_onlineScreen->m_lobbySize, m_client);
 		break;
 	case GameState::Credits:
+		m_creditsScreen->update();
 		break;
 	default:
 		break;
@@ -164,7 +165,7 @@ void Game::render() {
 		
 		break;
 	case GameState::Credits:
-		m_credits->render(m_renderer);
+		m_creditsScreen->render(m_renderer);
 		break;
 	default:
 		break;

@@ -16,18 +16,25 @@ public:
 
 	void initialiseText(std::string message, int x, int y);
 	void render(SDL_Renderer* renderer, Camera* camera);
+	void renderMarker(SDL_Renderer* renderer);
+
+	int m_index = -1;
 
 private:
 	float startBalloonCount = 0.0f;
-	float startBalloonFlightCount = 0.0f;
+	float totalBalloonCount = 0.0f;
+	bool balloonDeflate = false;
 	std::vector<Component*> m_components;
 	PositionComponent* positionComp;
 	ControlComponent* controlComp;
 	SpriteComponent* m_spriteComponent;
 	SpriteComponent* m_spriteComponentHead;
+	SpriteComponent* m_spriteComponentHead2;
 	SpriteComponent* m_spriteComponentLeftFoot;
 	SpriteComponent* m_spriteComponentRightFoot;
 	SpriteComponent* m_marker;
+
+	TagComponent * tag;
 
 	int runCount = 0;
 	int fallCount = 0;

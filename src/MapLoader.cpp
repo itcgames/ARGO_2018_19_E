@@ -79,7 +79,6 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 
 				if (layer->getName() == "JumpPoints")
 				{
-					std::cout << object.getName() << std::endl;
 					c2v position = c2v{ object.getPosition().x, object.getPosition().y };
 					std::string name = object.getName();
 					m_jumpPointVector.push_back(std::make_pair(position, name));
@@ -87,7 +86,6 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 
 				if (layer->getName() == "WalkPoints")
 				{
-					std::cout << object.getName() << std::endl;
 					c2v position = c2v{ object.getPosition().x, object.getPosition().y };
 					std::string name = object.getName();
 					m_walkPointVector.push_back(std::make_pair(position, name));
@@ -158,6 +156,11 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 				float y = temp->dRect.y;
 				float w = temp->dRect.w;
 				float h = temp->dRect.h;
+				
+				temp->position.x = x;
+				temp->position.y = y;
+				temp->width = w;
+				temp->height = h;
 
 				temp->collider = c2AABB{ c2v{x, y}, c2v{x + w, y + h} };
 
