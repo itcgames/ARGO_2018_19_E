@@ -72,7 +72,10 @@ public:
 
 	Light* testLight;
 
-	SpriteComponent * m_backgroundSprite;
+	SpriteComponent * m_backgroundSpriteOne;
+	SpriteComponent * m_backgroundSpriteTwo;
+	SpriteComponent * m_backgroundSpriteThree;
+	SpriteComponent * m_currentLevel;
 
 	HealthSystem m_hs;
 	ControlSystem m_cs;
@@ -91,7 +94,7 @@ public:
 	MapLoader* m_map;
 
 	int m_roundCounter = 0;
-	const int ROUND_OVER = 100.0f;
+	const int ROUND_OVER = 100;
 	std::string round_text;
 	SDL_Texture* text;
 	SDL_Rect* renderQuad;

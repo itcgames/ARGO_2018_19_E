@@ -2,7 +2,7 @@
 #include "Camera.h"
 
 
-Bullet::Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl)
+Bullet::Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, float xOffset, float yOffset, int ttl)
 {
 	//Set up Sprite component and add to entity component vector
 	m_spriteComponent = new SpriteComponent(0, 0, 210, 295);

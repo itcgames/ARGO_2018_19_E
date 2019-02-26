@@ -617,7 +617,7 @@ void PhysicsSystem::setHandOnStabby(SpriteComponent * sc, PositionComponent *pc,
 	}
 
 	float radiusHandle = 50;
-	float HandleRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180; // :)
+	float HandleRadAng = (gunTagC->getAngle()) * 3.14159265359f / 180.0f; // :)
 																			 //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 																			 //float shotgunTipY = 207.2 * (sin(shotgunRadAng));
 	float HandleX = radiusHandle * (cos(HandleRadAng));
@@ -653,7 +653,7 @@ void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc
 	if (tc->getSubTag2() == "right")
 	{
 		float radiusHandle = 50;
-		float shotgunHandleRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180; // :)
+		float shotgunHandleRadAng = (gunTagC->getAngle()) * 3.14159265359f / 180.0f; // :)
 																						//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 																						//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
 		float shotgunHandleX = radiusHandle * (cos(shotgunHandleRadAng));
@@ -674,7 +674,7 @@ void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc
 	else if (tc->getSubTag2() == "left")
 	{
 
-		float radiusPump = 50 - (ownerPosC->getShotgunPumpCount() * 2.5);  // Change the radius so hand moves along radius line and looks like pumping
+		float radiusPump = 50 - (ownerPosC->getShotgunPumpCount() * 2.5f);  // Change the radius so hand moves along radius line and looks like pumping
 		float shotgunPumpRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180;  // :)
 																					   //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 																					   //float shotgunTipY = 207.2 * (sin(shotgunRadAng));
@@ -721,7 +721,7 @@ void PhysicsSystem::setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc,
 	else if (tc->getSubTag2() == "left")
 	{
 
-		float radiusPump = 45 - (ownerPosC->getJuicerCount());
+		float radiusPump = 45.0f - (ownerPosC->getJuicerCount());
 		float shotgunPumpRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180; // :)
 																					  //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 																					  //float shotgunTipY = 207.2 * (sin(shotgunRadAng));

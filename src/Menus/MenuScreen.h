@@ -14,7 +14,7 @@ public:
 
 	void update(SDL_Window *window);
 	void render(SDL_Renderer* renderer);
-
+	void resetMenu();
 	SDL_Texture* loadFromFile(std::string path, SDL_Renderer* gRenderer);
 	void freeTexture();
 
@@ -47,17 +47,29 @@ private:
 
 	SDL_Texture* m_texture;
 	SDL_Texture* m_texture2;
+	SDL_Texture* m_texture3;
 	SDL_Texture* m_drawTexture;
 	int m_width;
 	int m_height;
-	SDL_Rect* m_sRect = new SDL_Rect();
-	SDL_Rect* m_dRect = new SDL_Rect();
+
+	int m_width2;
+	int m_height2;
+	SDL_Rect* m_sRect;
+	SDL_Rect* m_dRect;
+
+	bool m_used = false;
+	SDL_Rect * m_sRectangle;
+	SDL_Rect * m_dRectangle;
 
 	SDL_GameController* gGameController = NULL;
 
 	bool firstTime = true;
-
+	bool m_startTransition = false;
+	bool m_startInTransition = true;
+	double transitionTimer = 0;
+	std::string lastButton = "";
 	int buttonTimer = 0;
 	int setSecondTime = 60;
+	int count = 0;
 };
 

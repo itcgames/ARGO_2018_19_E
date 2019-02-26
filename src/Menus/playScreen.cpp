@@ -20,11 +20,23 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 	m_offset = new SDL_Rect();
 
 
-	m_backgroundSprite = new SpriteComponent(0, 0, 1920, 1080);
-	m_backgroundSprite->loadFromFile("assets/cybercity.png", renderer);
-	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
-	m_backgroundSprite->setScale(c2v{ 1.5f, 1.6f });
+	m_backgroundSpriteOne = new SpriteComponent(0, 0, 1920, 1080);
+	m_backgroundSpriteOne->loadFromFile("assets/art/environment/Cyber_Background_3_FINAL.png", renderer);
+	m_backgroundSpriteOne->setPosition(c2v{ 0.0f, 0.0f });
+	m_backgroundSpriteOne->setScale(c2v{ 1.5f, 1.6f });
 
+	m_backgroundSpriteTwo = new SpriteComponent(0, 0, 1920, 1080);
+	m_backgroundSpriteTwo->loadFromFile("assets/art/environment/Game_BG_1.png", renderer);
+	m_backgroundSpriteTwo->setPosition(c2v{ 0.0f, 0.0f });
+	m_backgroundSpriteTwo->setScale(c2v{ 1.5f, 1.6f });
+
+	m_backgroundSpriteThree = new SpriteComponent(0, 0, 1920, 1080);
+	m_backgroundSpriteThree->loadFromFile("assets/art/environment/Background_4_FINAL.png", renderer);
+	m_backgroundSpriteThree->setPosition(c2v{ 0.0f, 0.0f });
+	m_backgroundSpriteThree->setScale(c2v{ 1.5f, 1.6f });
+
+
+	m_currentLevel = m_backgroundSpriteOne;
 	for (int i = 0; i < 4; i++)
 	{
 		m_playerPositions.push_back(c2v{ 0, 0 });
@@ -217,6 +229,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	m_grenadeSys.setRenderer(m_renderer);
 	m_collSys.setRenderer(m_renderer);
 	m_animationsSys.setRenderer(m_renderer);
+
 }
 
 void PlayScreen::update(bool * online, SDL_Event event, int size, Client * client) {
@@ -237,7 +250,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
-	//m_ais.update();
+	m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
 
@@ -402,7 +415,7 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 }
 
 void PlayScreen::render(SDL_Renderer * renderer) {
-	m_backgroundSprite->render(m_renderer);
+	m_currentLevel->render(m_renderer);
 	m_map->draw(m_renderer, m_camera);
 	for (AI * ai : m_aiCharacters) {
 		ai->render(m_renderer, m_camera);
@@ -546,29 +559,38 @@ void PlayScreen::endRound() {
 	if (m_roundCounter > ROUND_OVER) {
 		deleteGuns();
 		
-		m_restartSys.reset(randNum);
+		
+
 		if (*m_online) {
 			randNum = 1;
 		}
 		else {
 			randNum = (rand() % 3) + 1;
 		}
+
 		
+
 		if (randNum == 1) {
 			m_map->load("testlevel.tmx", m_renderer);
+			m_currentLevel = m_backgroundSpriteOne;
 		}
 		else if (randNum == 2) {
 			m_map->load("level3.tmx", m_renderer);
+			m_currentLevel = m_backgroundSpriteTwo;
 		}
 		else if (randNum == 3) {
-			m_map->load("level4.tmx", m_renderer);
+			m_map->load("level5.tmx", m_renderer);
+			m_currentLevel = m_backgroundSpriteThree;
 		}
 		m_roundCounter = 0;
 		m_drawRoundText = false;
 		m_roundEnd = false;
+
+		m_restartSys.reset(randNum, m_map->getSpawnPoints());
+		m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getTiles(), m_map->getWidth(), m_map->getHeight());
+		m_ps.recieveLevel(m_map->getWidth(), m_map->getHeight());
 		m_ps.startRoundCount = 0;
 		m_BGRect.x = -2400; m_BGRect.y = 0;
-		
 		initialiseText(std::to_string(m_timer), 0, 700);
 
 		if (m_gameOver) {
@@ -592,7 +614,6 @@ void PlayScreen::checkRoundOver() {
 	}
 	else {
 		int dead = 0;
-		//std::cout << dead << std::endl;
 		if (!m_multiplayer) {
 			Entity * ent = (Entity *)m_players[0];
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
