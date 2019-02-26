@@ -28,7 +28,8 @@ void Bullet::render(SDL_Renderer* renderer, Camera* camera) {
 	screenPos->x = m_spriteComponent->getPosition().x - camera->getCamera()->x;
 	screenPos->y = m_spriteComponent->getPosition().y - camera->getCamera()->y;
 
-	m_spriteComponent->setPosition(c2v{screenPos->x, screenPos->y});
+	m_spriteComponent->setPosition(c2v{ m_spriteComponent->getPosition().x + xVel / 5, m_spriteComponent->getPosition().y + yVel / 5 });
+	//m_spriteComponent->setPosition(*screenPos);
 	m_spriteComponent->render(renderer);
 	delete screenPos;
 	

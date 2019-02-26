@@ -51,6 +51,7 @@ private:
 	SDL_Texture* m_drawTexture;
 	int m_width;
 	int m_height;
+
 	int m_width2;
 	int m_height2;
 	SDL_Rect* m_sRect;

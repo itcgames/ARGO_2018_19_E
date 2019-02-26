@@ -1,10 +1,12 @@
 #include "playScreen.h"
 
-PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
+PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font) {
 
 	Font = font;
 
 	m_renderer = renderer;
+
+	m_currentGameState = state;
 
 	testLight = new Light(c2v{ 0.0f, 300.0f }, 5, 22, 130, renderer);
 	testLight->setPosition(c2v{ 400.0f, 0.0f });
@@ -48,10 +50,11 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 2, 1000, 100,gunAmount));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 5, 200, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 5, 300, 100,gunAmount));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 4, 500, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 3, 700, 100,gunAmount));
 	gunAmount = gunAmount + 1;
+
 
 
 
@@ -271,7 +274,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	//{
 	//m_focusPoint = m_camera->focus(m_playerPositions);
 	//m_camera->update(m_focusPoint);
-	m_cameraCount = 0;
+	//m_cameraCount = 0;
 	//}
 
 	//if (m_focusPoint->w > 0) {
@@ -319,6 +322,25 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	else {
 		spawnGuns();
 	}
+
+	if (!(*online) && !m_gameOver) {
+		for (Player * p : m_players) {
+			Entity * ent = (Entity *)p;
+			TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
+			if (tag->getScore() >= 5) {
+				endRound();
+				initialiseText(tag->getSubTag(), 1, 200);
+				m_gameOver = true;
+			}
+		}
+		
+	}
+
+	if (m_gameOver) {
+		initialiseText("Victory", 0, 500);
+		endRound();
+	}
+	
 }
 
 void PlayScreen::sendPacket(Entity * ent, Client * client) {
@@ -570,10 +592,20 @@ void PlayScreen::endRound() {
 		m_ps.startRoundCount = 0;
 		m_BGRect.x = -2400; m_BGRect.y = 0;
 		initialiseText(std::to_string(m_timer), 0, 700);
+
+		if (m_gameOver) {
+			*m_currentGameState = GameState::Menu;
+
+			for (Player * p : m_players) {
+				Entity * ent = (Entity *)p;
+				TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
+				tag->setScore(0);
+			}
+			SDL_RenderSetScale(m_renderer, 1.0f, 1.0f);
+			m_gameOver = false;
+		}
 	}
 }
-
-
 
 void PlayScreen::checkRoundOver() {
 	
@@ -620,6 +652,7 @@ void PlayScreen::checkRoundOver() {
 					ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 					TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
 					if (control->getAlive()) {
+						tag->setScore(tag->getScore() + 1);
 						initialiseText(tag->getSubTag() + " Wins!", 1, 200);
 					}
 				}
