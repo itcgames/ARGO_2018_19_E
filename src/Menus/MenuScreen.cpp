@@ -21,7 +21,7 @@ MenuScreen::MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Fon
 
 	m_texture = loadFromFile("assets/art/environment/banner2.1.png", m_renderer);
 
-	m_texture2 = loadFromFile("assets/art/environment/banner2.1.png", m_renderer);
+	m_texture2 = loadFromFile("assets/art/environment/banner1.png", m_renderer);
 	
 	m_texture3 = loadFromFile("assets/art/environment/MainMenu.png", m_renderer);
 	m_drawTexture = m_texture;
