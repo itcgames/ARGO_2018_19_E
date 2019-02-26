@@ -28,11 +28,12 @@
 #include "../Client/Client.h"
 
 #include <SDL_ttf.h>
+#include "state.h"
 
 class PlayScreen 
 {
 public:
-	PlayScreen(SDL_Renderer * renderer, TTF_Font* font);
+	PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font);
 	~PlayScreen() {}
 
 	void update(bool * online, SDL_Event event, int size, Client * client);
@@ -140,4 +141,8 @@ private:
 
 	int m_timerCounter = 0;
 	int m_timer = 5;
+
+	GameState * m_currentGameState;
+
+	bool m_gameOver = false;
 };

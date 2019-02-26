@@ -90,9 +90,14 @@ public:
 	std::string getGunGotID() { return gunGotID; };
 	void setGunGotID(std::string value) { gunGotID = value; };
 
+	void setScore(int score) { m_score = score; }
+	int getScore() { return m_score; }
+
 private:
 	std::string subTag = "None";
 	std::string subTag2 = "None";
 	std::string tag;
+
+	int m_score = 0;
 };
 #endif // !TAGCOMPONENT_H

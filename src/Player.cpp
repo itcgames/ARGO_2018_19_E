@@ -73,22 +73,22 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	tag = new TagComponent("Player");
 	if (index == 0)
 	{
-		tag->setSubTag("Player1");
+		tag->setSubTag("Player 1");
 		initialiseText(std::to_string(index + 1), m_marker->getPosition().x, m_marker->getPosition().y);
 	}
 	else if (index == 1)
 	{
-		tag->setSubTag("Player2");
+		tag->setSubTag("Player 2");
 		initialiseText(std::to_string(index + 1), m_marker->getPosition().x, m_marker->getPosition().y);
 	}
 	else if (index == 2)
 	{
-		tag->setSubTag("Player3");
+		tag->setSubTag("Player 3");
 		initialiseText(std::to_string(index + 1), m_marker->getPosition().x, m_marker->getPosition().y);
 	}
 	else if (index == 3)
 	{
-		tag->setSubTag("Player4");
+		tag->setSubTag("Player 4");
 		initialiseText(std::to_string(index + 1), m_marker->getPosition().x, m_marker->getPosition().y);
 	}
 	else {
