@@ -99,6 +99,16 @@ void AI::render(SDL_Renderer* renderer) {
 			m_spriteComponentLeftFoot->rotate(-3);
 			m_spriteComponentRightFoot->rotate(-3);
 		}
+		else
+		{
+			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
+			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
+			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10, m_spriteComponentHead->getPosition().y - 10 });
+
+			m_spriteComponentHead->rotate(3);
+			m_spriteComponentLeftFoot->rotate(3);
+			m_spriteComponentRightFoot->rotate(3);
+		}
 
 		controlComp->setRight(false);
 		controlComp->setLeft(false);

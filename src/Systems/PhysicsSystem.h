@@ -68,6 +68,7 @@ public:
 	void setHandOnGun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC, PositionComponent * gunPosition);
 	void setPlayerGunGot(std::string gun, TagComponent *tagC, std::string gunID);
 	void setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,PositionComponent *ownerPosC, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC);
+	void setHandOnStabby(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, PositionComponent *ownerPosC, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC);
 	void setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC);
 	void setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc,TagComponent * tc, PositionComponent *ownerPosC, ControlComponent * ownerConC, TagComponent * gunTagC);
 	void setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, TagComponent * tc, PositionComponent *ownerPosC, ControlComponent * ownerConC, TagComponent * gunTagC);
@@ -78,7 +79,7 @@ public:
 	void flipHorizontal(SpriteComponent * sc);
 	void updateShooting(SDL_Renderer* renderer, ControlComponent * ownerConC);
 	void makeBullets(SDL_Renderer* renderer, TagComponent *tagC,ControlComponent *ownerConC);
-	void checkWeaponCollision(CollisionComponent * colc, TagComponent *tagC);
+	void checkWeaponCollision(CollisionComponent * colc, TagComponent *tagC, ControlComponent *ownerConC);
 	void setHands(PositionComponent *handOwnerPos, ControlComponent *handOwnerConC, TagComponent * ownerTagC);
 
 	

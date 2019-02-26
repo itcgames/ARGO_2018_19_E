@@ -27,10 +27,11 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 2, 1000, 100,gunAmount));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 3, 200, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 5, 200, 100,gunAmount));
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 4, 500, 100,gunAmount));
 	gunAmount = gunAmount + 1;
+
 
 	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
 	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
@@ -224,7 +225,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	SDL_RenderSetScale(m_renderer, m_windowScale.x, m_windowScale.y);
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
-	m_ais.update();
+	//m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
 	//m_animationsSys.update();
