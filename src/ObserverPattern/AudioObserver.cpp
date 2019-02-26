@@ -43,6 +43,11 @@ void AudioObserver::onNotify(SFX sfx)
 	case AudioObserver::SHOTGUN_SHOOT:
 		Mix_PlayChannel(-1, m_shotgunShoot, 0);
 		break;
+	case AudioObserver::SWORD_SLASH:
+		Mix_PlayChannel(-1, m_swordSlash, 0);
+		break;
+	case AudioObserver::WEAPON_THROW:
+		Mix_PlayChannel(-1, m_weaponThrow, 0);
 	default:
 		break;
 	}
@@ -55,6 +60,9 @@ void AudioObserver::load()
 	m_pistolPickup = Mix_LoadWAV("assets/sfx/pistolPickup.wav");
 	m_grenadeExplosion = Mix_LoadWAV("assets/sfx/grenadeExplosion.wav");
 	m_shotgunShoot = Mix_LoadWAV("assets/sfx/shotgunShoot.wav");
+	m_swordSlash = Mix_LoadWAV("assets/sfx/swordSlash.wav");
+	m_weaponThrow = Mix_LoadWAV("assets/sfx/weaponThrow.wav");
 	
 	m_bgm1 = Mix_LoadMUS("assets/sfx/bgm1.wav");
+	Mix_VolumeMusic(25);
 }

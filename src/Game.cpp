@@ -70,11 +70,18 @@ Game::Game()
 	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client, m_online);
 	m_options = new OptionScreen();
 	
-	m_screenSize = { 0,0,1200,700 };	
+	m_screenSize = { 0,0,1200,700 };
 }
 
 Game::~Game()
 {
+}
+
+void Game::fullScreenToggle(SDL_Window* Window) {
+	Uint32 FullscreenFlag = SDL_WINDOW_FULLSCREEN;
+	bool IsFullscreen = SDL_GetWindowFlags(Window) & FullscreenFlag;
+	SDL_SetWindowFullscreen(Window, IsFullscreen ? 0 : FullscreenFlag);
+	SDL_ShowCursor(IsFullscreen);
 }
 
 void Game::run()
@@ -107,6 +114,14 @@ void Game::run()
 void Game::update() {
 	SDL_PollEvent(&event);
 	m_client->receive();
+
+	m_toggleCounter++;
+	if (m_menu->m_toggleFS && m_toggleCounter > ALLOW_TOGGLE) {
+		fullScreenToggle(m_window);
+		m_menu->m_toggleFS = false;
+		m_toggleCounter = 0;
+	}
+
 	switch (*m_currentGameState)
 	{
 	case GameState::None:
@@ -115,6 +130,7 @@ void Game::update() {
 		m_splash->update();
 		break;
 	case GameState::Menu:
+		
 		m_menu->update(m_window);
 		break;
 	case GameState::Online:

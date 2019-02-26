@@ -3,6 +3,7 @@
 
 
 Bullet::Bullet(SDL_Renderer* renderer, float xPos, float yPos, double angle, double xOffset, double yOffset, int ttl,SDL_Texture * bulletTexture)
+
 {
 	//Set up Sprite component and add to entity component vector
 	m_spriteComponent = new SpriteComponent(0, 0, 210, 295);

@@ -17,13 +17,13 @@ public:
 	float getY() { return y; }
 
 	void setX(float x) { this->x = x; }
-	void setY(int y) { this->y = y; }
+	void setY(float y) { this->y = y; }
 
 	float getW() { return w; }
 	float getH() { return h; }
 
 	void setW(float w) { this->w = w; }
-	void setH(int h) { this->h = h; }
+	void setH(float h) { this->h = h; }
 
 	void setColliding(bool coll) { this->m_colliding = coll; }
 	bool getColliding() { return m_colliding; }

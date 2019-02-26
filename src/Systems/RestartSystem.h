@@ -15,7 +15,7 @@ class RestartSystem
 public:
 	RestartSystem();
 	void addEntity(Entity * e);
-	void reset(int level);
+	void reset(int level, std::vector<std::pair<bool, c2v>*>  vec);
 
 	std::vector<Entity *> m_entities;
 private:

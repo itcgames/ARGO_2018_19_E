@@ -52,9 +52,6 @@ public:
 
 	int gunAmount = 1;
 
-	void deleteGuns();
-	void spawnGuns();
-
 	Camera* m_camera;
 	SDL_Rect* m_focusPoint;
 	SDL_Rect* m_offset;
@@ -72,7 +69,10 @@ public:
 
 	Light* testLight;
 
-	SpriteComponent * m_backgroundSprite;
+	SpriteComponent * m_backgroundSpriteOne;
+	SpriteComponent * m_backgroundSpriteTwo;
+	SpriteComponent * m_backgroundSpriteThree;
+	SpriteComponent * m_currentLevel;
 
 	HealthSystem m_hs;
 	ControlSystem m_cs;
@@ -91,7 +91,7 @@ public:
 	MapLoader* m_map;
 
 	int m_roundCounter = 0;
-	const int ROUND_OVER = 100.0f;
+	const int ROUND_OVER = 100;
 	std::string round_text;
 	SDL_Texture* text;
 	SDL_Rect* renderQuad;
@@ -121,8 +121,7 @@ public:
 	bool m_drawTimer = false;
 
 private: 
-	int m_gunCounter = 0;
-	const int SPAWN_NEW_GUN = 1000;
+
 	float m_screenScale = 1.0f;
 
 	int m_cameraCount = 0;

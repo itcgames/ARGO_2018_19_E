@@ -13,6 +13,7 @@ class OnlineScreen : State
 {
 public:
 	OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Font, SDL_GameController* controller, Client * client, bool * online);
+	SDL_Texture* loadFromFile(std::string path, SDL_Renderer* gRenderer);
 	~OnlineScreen();
 
 	void update();
@@ -23,6 +24,7 @@ public:
 	void removeMember();
 
 	SDL_Texture* init(TTF_Font* Font, std::string & text, SDL_Texture* texture, SDL_Rect & quad, int x, int y, SDL_Color color);
+	void resetMenu();
 
 	Client * m_client;
 
@@ -64,5 +66,20 @@ private:
 
 	int responseTimer = 0;
 	int NO_RESPONSE = 12000;
+
+
+	SDL_Texture* m_texture;
+	int m_width;
+	int m_height;
+
+	SDL_Rect * m_sRectangle;
+	SDL_Rect * m_dRectangle;
+
+	bool inAnimation = true;
+	bool outAnimation = false;
+
+	double animationTimer = 0;
+
+	std::string lastButton = "";
 };
 
