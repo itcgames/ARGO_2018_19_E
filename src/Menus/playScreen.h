@@ -14,6 +14,7 @@
 #include "../Systems/AnimationsSystem.h"
 #include "../Systems/NetworkSystem.h"
 
+#include "../Entity.h"
 #include "../Player.h"
 #include "../Hand.h"
 #include "../AI.h"
@@ -22,6 +23,7 @@
 #include "../Light.h"
 
 #include "../ObserverPattern/AudioObserver.h"
+#include "../Camera.h"
 
 #include "../Client/Client.h"
 
@@ -52,6 +54,11 @@ public:
 	void deleteGuns();
 	void spawnGuns();
 
+	Camera* m_camera;
+	SDL_Rect* m_focusPoint;
+	SDL_Rect* m_offset;
+	std::vector<c2v> m_playerPositions;
+
 	std::vector<Hand *> m_leftHands;
 	std::vector<Hand *> m_rightHands;
 	std::vector<Player *> m_players;
@@ -79,10 +86,6 @@ public:
 	AnimationsSystem m_animationsSys;
 	RestartSystem m_restartSys;
 	NetworkSystem m_netSystem;
-	
-
-	SDL_Rect* m_camera;
-	c2v* m_cameraCentre;
 
 	MapLoader* m_map;
 
@@ -119,6 +122,10 @@ public:
 private: 
 	int m_gunCounter = 0;
 	const int SPAWN_NEW_GUN = 1000;
+	float m_screenScale = 1.0f;
+
+	int m_cameraCount = 0;
+	const int TIME_BETWEEN_CAMERA_CHANGES = 36;
 
 	bool m_startThrow = false;
 	int m_throwTimer = 0;

@@ -27,7 +27,8 @@ private:
 	std::string options_text = "(Y) Credits";
 	std::string exit_text = "(B) Exit";
 
-	std::string title_text = "UnPlayable";
+	std::string title_text = "Unplayable";
+
 	SDL_Renderer *m_renderer;
 
 	SDL_Texture* playtexture;

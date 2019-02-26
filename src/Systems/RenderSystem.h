@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "../Entity.h"
+#include "../Camera.h"
 #include <SDL_image.h>
 #include <string>
 
@@ -14,7 +15,7 @@ class RenderSystem
 public:
 	RenderSystem();
 	void addEntity(Entity * e);
-	void render(SDL_Renderer* renderer);
+	void render(SDL_Renderer* renderer, Camera* camera);
 
 	std::vector<Entity *> m_entities;
 private:

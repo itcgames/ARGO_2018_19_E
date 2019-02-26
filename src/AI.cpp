@@ -76,7 +76,7 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 	this->addComponent(positionComp);
 	this->addComponent(new CollisionComponent(xPos, yPos, m_spriteComponent->getWidth(), m_spriteComponent->getHeight()));
 }
-void AI::render(SDL_Renderer* renderer) {
+void AI::render(SDL_Renderer* renderer, Camera* camera) {
 
 	if (!control->getAlive()) {
 		if (control->getHitFrom() == "right")
@@ -286,12 +286,24 @@ void AI::render(SDL_Renderer* renderer) {
 	}
 	
 
-
-	//std::cout << "Y = "<< positionComp->getVelY() << std::endl;
+	c2v* screenPos = new c2v{ m_spriteComponentHead->getPosition().x - camera->getCamera()->x, m_spriteComponentHead->getPosition().y - camera->getCamera()->y };
+	m_spriteComponentHead->setPosition(*screenPos);
 	m_spriteComponentHead->render(renderer);
+
+	screenPos->x = static_cast<float>(m_spriteComponentLeftFoot->getPosition().x - camera->getCamera()->x);
+	screenPos->y = static_cast<float>(m_spriteComponentLeftFoot->getPosition().y - camera->getCamera()->y);
+	m_spriteComponentLeftFoot->setPosition(*screenPos);
 	m_spriteComponentLeftFoot->render(renderer);
+
+	screenPos->x = static_cast<float>(m_spriteComponentRightFoot->getPosition().x - camera->getCamera()->x);
+	screenPos->y = static_cast<float>(m_spriteComponentRightFoot->getPosition().y - camera->getCamera()->y);
+	m_spriteComponentRightFoot->setPosition(*screenPos);
 	m_spriteComponentRightFoot->render(renderer);
+
+	delete screenPos;
+
 
 
 	SDL_RenderDrawLine(renderer, m_rayCastComp->getStartPosition().x, m_rayCastComp->getStartPosition().y, m_rayCastComp->getCastPosition().x, m_rayCastComp->getCastPosition().y);
+
 }
