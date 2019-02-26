@@ -28,6 +28,7 @@ private:
 	ControlComponent* controlComp;
 	SpriteComponent* m_spriteComponent;
 	SpriteComponent* m_spriteComponentHead;
+	SpriteComponent* m_spriteComponentHead2;
 	SpriteComponent* m_spriteComponentLeftFoot;
 	SpriteComponent* m_spriteComponentRightFoot;
 	SpriteComponent* m_marker;
