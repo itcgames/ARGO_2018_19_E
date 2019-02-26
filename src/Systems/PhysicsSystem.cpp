@@ -367,8 +367,13 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 			if (val != "none")
 			{
 				if (tc->getSubTag2() != tagc->getGunGotID())
-				{
+				{					
+					if (ownerConC->getAlive() == true)
+					{
+						notifyAudioObservers(AudioObserver::SFX::SWORD_SLASH);
+					}
 					ownerConC->setAlive(false);
+
 				}
 			}
 		}
@@ -903,6 +908,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 
 					if (cc->getThrowWeapon() == true && tc->getGotGunBool() == true)  // Check if x is pressed.
 					{
+						notifyAudioObservers(AudioObserver::SFX::WEAPON_THROW);
 						throwGunFun(cc);
 					}
 
@@ -1261,7 +1267,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						float juicerXOffset = radius * (cos(radAng));
 						float juicerYOffset = radius * (sin(radAng));
 
-						c2v vector = { -juicerXOffset,juicerYOffset };
+						c2v vector = { -juicerXOffset, juicerYOffset };
 						float mag = c2Len(vector);
 						float unitX = -juicerXOffset / mag;
 						float unitY = juicerYOffset / mag;
@@ -1285,6 +1291,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 							tagC->setJuicerExplosionPos(c2v{ x, y });
 						}
 					}
+
 					else if (tagC->getGunGot() == "grenade")
 					{
 						GrenadeComponent * gc = (GrenadeComponent*)entity->getCompByType("GRENADE");
