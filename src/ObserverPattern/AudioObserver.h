@@ -37,7 +37,6 @@ private:
 	Mix_Chunk* m_grenadeExplosion = NULL;
 	Mix_Chunk* m_minigunShoot = NULL;
 	Mix_Chunk* m_shotgunShoot = NULL;
-	Mix_Chunk* m_shotgunRechamber = NULL;
 	Mix_Chunk* m_swordSlash = NULL;
 	Mix_Chunk* m_weaponThrow = NULL;
 	Mix_Music* m_bgm1 = NULL;
