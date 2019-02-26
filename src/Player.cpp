@@ -16,11 +16,8 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	//Set up Sprite component and add to entity component vector
 	oldY = 0;
 	m_spriteComponent = new SpriteComponent(0, 0, 67, 150);
-	m_spriteComponent->loadFromFile("assets/bodyTall.png", renderer);
-	m_spriteComponent->setPosition(c2v{ x, y });
-	m_spriteComponent->setScale(c2v{0.5f, 0.5f});
-	m_spriteComponent->setColor(255, 255, 0);
-	this->addComponent(m_spriteComponent);
+	
+	
 
 	m_spriteComponentHead = new SpriteComponent(0, 0, 330, 330);
 	m_spriteComponentCrown= new SpriteComponent(0, 0, 404, 255);
@@ -31,24 +28,28 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
 		m_spriteComponentHead2->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadNinja.png", renderer);
 		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker.png", renderer);
+		m_spriteComponent->loadFromFile("assets/art/character/RedBody.png", renderer);
 	}
 	else if (index == 1)
 	{
 		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
 		m_spriteComponentHead2->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadNinja.png", renderer);
 		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker2.png", renderer);
+		m_spriteComponent->loadFromFile("assets/art/character/BlueBody.png", renderer);
 	}
 	else if (index == 2)
 	{
 		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
 		m_spriteComponentHead2->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadNinja.png", renderer);
 		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker3.png", renderer);
+		m_spriteComponent->loadFromFile("assets/art/character/YellowBody.png", renderer);
 	}
 	else if (index == 3)
 	{
 		m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
 		m_spriteComponentHead2->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadNinja.png", renderer);
 		m_marker->loadFromFile("assets/art/character/finished_character_assets/marker4.png", renderer);
+		m_spriteComponent->loadFromFile("assets/art/character/PinkBody.png", renderer);
 	}
 
 	m_spriteComponentCrown->loadFromFile("assets/art/character/finished_character_assets/crown.png", renderer);
@@ -79,6 +80,10 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	m_marker->setPosition(c2v{ x, y - 150});
 	m_marker->setScale(c2v{ 0.1f, 0.1f });
 
+	m_spriteComponent->setPosition(c2v{ x, y });
+	m_spriteComponent->setScale(c2v{ 0.5f, 0.5f });
+	m_spriteComponent->setColor(255, 255, 0);
+	this->addComponent(m_spriteComponent);
 
 	this->addComponent(new HealthComponent(10));
 	tag = new TagComponent("Player");
@@ -373,9 +378,14 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 	m_spriteComponentHead2->setPosition(*screenPos);
 	m_spriteComponentHead->render(renderer);
 
+	
 	screenPos = new c2v{ m_spriteComponentCrown->getPosition().x - camera->getCamera()->x, m_spriteComponentCrown->getPosition().y - camera->getCamera()->y };
 	m_spriteComponentCrown->setPosition(*screenPos);
-	m_spriteComponentCrown->render(renderer);
+	
+	if (tag->getLeader())
+	{
+		m_spriteComponentCrown->render(renderer);
+	}
 
 	screenPos->x = static_cast<float>(m_spriteComponentLeftFoot->getPosition().x - camera->getCamera()->x);
 	screenPos->y = static_cast<float>(m_spriteComponentLeftFoot->getPosition().y - camera->getCamera()->y);

@@ -338,6 +338,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		
 	}
 
+
 	if (m_gameOver) {
 		initialiseText("Victory", 0, 500);
 		endRound();
@@ -556,6 +557,7 @@ void PlayScreen::endRound() {
 			}
 			SDL_RenderSetScale(m_renderer, 1.0f, 1.0f);
 			m_gameOver = false;
+			highest = 0;
 		}
 	}
 }
@@ -600,13 +602,13 @@ void PlayScreen::checkRoundOver() {
 		}
 		if (dead >= 3) {
 			if (!m_drawRoundText) {
-				for (Player * p : m_players) {
-					Entity * ent = (Entity *)p;
+				for (Entity * ent : m_playerents) {
 					ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 					TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
 					if (control->getAlive()) {
 						tag->setScore(tag->getScore() + 1);
 						initialiseText(tag->getSubTag() + " Wins!", 1, 200);
+						checkScore();
 					}
 				}
 				m_drawRoundText = true;
@@ -619,5 +621,24 @@ void PlayScreen::checkRoundOver() {
 
 	if (m_roundEnd) {
 		endRound();
+	}
+}
+
+void PlayScreen::checkScore()
+{
+	for (Entity * ent : m_playerents) {
+		TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
+
+		
+		if (tag->getScore() >= highest)
+		{
+			highest = tag->getScore();
+			tag->setLeader(true);
+		}
+		else
+		{
+			tag->setLeader(false);
+		}
+
 	}
 }

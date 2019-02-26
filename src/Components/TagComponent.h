@@ -93,11 +93,14 @@ public:
 	void setScore(int score) { m_score = score; }
 	int getScore() { return m_score; }
 
+	void setLeader(bool leader) { m_leader = leader; }
+	bool getLeader() { return m_leader; }
 private:
 	std::string subTag = "None";
 	std::string subTag2 = "None";
 	std::string tag;
 
 	int m_score = 0;
+	bool m_leader = false;
 };
 #endif // !TAGCOMPONENT_H
