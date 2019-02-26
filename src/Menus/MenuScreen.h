@@ -49,8 +49,8 @@ private:
 	SDL_Texture* m_drawTexture;
 	int m_width;
 	int m_height;
-	SDL_Rect* m_sRect;
-	SDL_Rect* m_dRect;
+	SDL_Rect* m_sRect = new SDL_Rect();
+	SDL_Rect* m_dRect = new SDL_Rect();
 
 	SDL_GameController* gGameController = NULL;
 
