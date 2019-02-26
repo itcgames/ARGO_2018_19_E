@@ -68,6 +68,8 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 void PlayScreen::initialise(bool online, int size, int num) {
 	*m_online = online;
 
+	m_audioObserver->StartBGM(0);
+
 	if (SDL_NumJoysticks() >= 2) {
 		m_multiplayer = true;
 	}
