@@ -13,11 +13,20 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	m_audioObserver = new AudioObserver();
 	m_audioObserver->load();
 
+	m_camera = new Camera();
+	m_focusPoint = new SDL_Rect();
+	m_offset = new SDL_Rect();
+
 
 	m_backgroundSprite = new SpriteComponent(0, 0, 1920, 1080);
 	m_backgroundSprite->loadFromFile("assets/cybercity.png", renderer);
 	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
 	m_backgroundSprite->setScale(c2v{ 1.5f, 1.6f });
+
+	for (int i = 0; i < 4; i++)
+	{
+		m_playerPositions.push_back(c2v{ 0, 0 });
+	}
 
 	m_map = new MapLoader();
 
@@ -27,20 +36,18 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 2, 1000, 100,gunAmount));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 3, 200, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 5, 200, 100,gunAmount));
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 4, 500, 100,gunAmount));
 	gunAmount = gunAmount + 1;
 
-	m_camera = new SDL_Rect{ 0, 0, 1200, 700 };
-	m_cameraCentre = new c2v{ static_cast<float>(m_camera->x + m_camera->w / 2), static_cast<float>(m_camera->y + m_camera->h / 2) };
+
 
 	for (Gun * g : m_guns) {
-		m_Gunents.push_back((Entity*)g);
-		
+		m_Gunents.push_back((Entity*)g);	
 	}
 
-
+	m_BGRect.x = -2400; m_BGRect.y = 0; m_BGRect.w = 2400; m_BGRect.h = 1400;
 }
 
 void PlayScreen::initialise(bool online, int size, int num) {
@@ -57,7 +64,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 
 		if (m_map->getSpawnPoints().at(num - 1)->first == false)
 		{
-			m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(num - 1)->second.x, m_map->getSpawnPoints().at(num - 1)->second.y, SDL_GameControllerOpen(0), num, Font));
+			m_players.push_back(new Player(m_renderer, m_map->getSpawnPoints().at(num - 1)->second.x, m_map->getSpawnPoints().at(num - 1)->second.y, SDL_GameControllerOpen(0), num - 1, Font));
 			m_leftHands.push_back(new Hand(m_renderer, 1, num));
 			m_rightHands.push_back(new Hand(m_renderer, 2, num));
 			m_map->getSpawnPoints().at(num - 1)->first = true;
@@ -68,7 +75,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			for (int i = num + 1; i <= size; i++) {
 				if (m_map->getSpawnPoints().at(i - 1)->first == false)
 				{
-					Player * player = new  Player(m_renderer, m_map->getSpawnPoints().at(i - 1)->second.x, m_map->getSpawnPoints().at(i - 1)->second.y, SDL_GameControllerOpen(i), i, Font);
+					Player * player = new  Player(m_renderer, m_map->getSpawnPoints().at(i - 1)->second.x, m_map->getSpawnPoints().at(i - 1)->second.y, SDL_GameControllerOpen(i), i - 1, Font);
 					m_networkCharacters.push_back(player);
 					m_leftHands.push_back(new Hand(m_renderer, 1, i));
 					m_rightHands.push_back(new Hand(m_renderer, 2, i));
@@ -82,7 +89,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			for (int i = num - 1; i > 0; i--) { 
 				if (m_map->getSpawnPoints().at(i - 1)->first == false)
 				{
-					Player * player = new  Player(m_renderer, m_map->getSpawnPoints().at(i - 1)->second.x, m_map->getSpawnPoints().at(i - 1)->second.y, SDL_GameControllerOpen(i), i, Font);
+					Player * player = new  Player(m_renderer, m_map->getSpawnPoints().at(i - 1)->second.x, m_map->getSpawnPoints().at(i - 1)->second.y, SDL_GameControllerOpen(i), i - 1, Font);
 					m_networkCharacters.push_back(player);
 					m_leftHands.push_back(new Hand(m_renderer, 1, i));
 					m_rightHands.push_back(new Hand(m_renderer, 2, i));
@@ -130,16 +137,18 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			{
 				if (m_map->getSpawnPoints().at(j)->first == false)
 				{
-					m_aiCharacters.push_back(new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, noOfPlayers));
-					m_leftHands.push_back(new Hand(m_renderer, 1, 4));
-					m_rightHands.push_back(new Hand(m_renderer, 2, 4));
+					AI * ai = new AI(m_renderer, m_map->getSpawnPoints().at(j)->second.x, m_map->getSpawnPoints().at(j)->second.y, noOfPlayers);
+					m_playerents.push_back((Entity*)ai);
+					m_aiCharacters.push_back(ai);
+					m_leftHands.push_back(new Hand(m_renderer, 1, noOfPlayers));
+					m_rightHands.push_back(new Hand(m_renderer, 2, noOfPlayers));
 					m_map->getSpawnPoints().at(j)->first = true;
 					noOfPlayers += 1;
 				}
 			}
 		}
 
-		std::cout << noOfPlayers << std::endl;
+		//std::cout << noOfPlayers << std::endl;
 	}
 
 
@@ -215,18 +224,53 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		initialise(*online, size, client->number);
 		m_startGame = false;
 	}
-	spawnGuns();
+	
 	m_cs.update(event);
 	m_collSys.update(m_map->getTiles());
 	m_ps.update(m_renderer);
 	m_gunSys.update();
-	SDL_RenderSetScale(m_renderer, 0.69, 0.5);
+
+	SDL_RenderSetScale(m_renderer, m_windowScale.x, m_windowScale.y);
+
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
-	m_ais.update();
+	//m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
-	//m_animationsSys.update();
+
+
+	int entityIndex = 0;
+	for(int i = 0; i < m_players.size(); i++)
+	{
+		PositionComponent* pc = (PositionComponent*)m_players.at(i)->getCompByType("POSITION");
+		m_playerPositions.at(i) = c2v{ pc->getX(), pc->getY() };
+		entityIndex++;
+	}
+
+	for (int i = 0; i < m_aiCharacters.size(); i++)
+	{
+		PositionComponent* pc = (PositionComponent*)m_aiCharacters.at(i)->getCompByType("POSITION");
+		m_playerPositions.at(entityIndex) = c2v{ pc->getX(), pc->getY() };
+		entityIndex++;
+	}
+
+	//if (m_cameraCount > TIME_BETWEEN_CAMERA_CHANGES)
+	//{
+	m_focusPoint = m_camera->focus(m_playerPositions);
+	m_camera->update(m_focusPoint);
+	m_cameraCount = 0;
+	//}
+
+	//if (m_focusPoint->w > 0) {
+	//	(SCREEN_WIDTH / m_focusPoint->w) > 1.0f ? ((m_screenScale < 1.0f) ? m_screenScale += 0.01f : m_screenScale = 1.0f) : (m_screenScale > 0.55f ? m_screenScale -= 0.01f : m_screenScale = 0.55f);
+	//}
+
+
+	m_cameraCount++;
+
+	
+	SDL_RenderSetScale(m_renderer, 0.55f, 0.55f);
+
 	checkRoundOver();
 	
 	if ((*online)) {
@@ -240,81 +284,143 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 			
 		}
 		Entity * ent = (Entity*)m_players[0];
+		
+
+		sendPacket(ent, client);
+	}
+	else {
+		spawnGuns();
+	}
+}
+
+void PlayScreen::sendPacket(Entity * ent, Client * client) {
+
+	m_client = client;
+
+	ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
+	PositionComponent * pc = (PositionComponent*)ent->getCompByType("POSITION");
+	TagComponent * tc = (TagComponent*)ent->getCompByType("TAG");
+
+	Packet p;
+
+	p.message = 5;
+	p.playerNum = cc->m_playerNum;
+	p.left = cc->getLeft();
+	p.right = cc->getRight();
+	p.jump = cc->getJump();
+	p.fire = cc->getFire();
+	p.gunAngle = cc->getAngle();
+	p.alive = cc->getAlive();
+	p.throwWeapon = cc->getThrowWeapon();
+	p.position.x = pc->getX();
+	p.position.y = pc->getY();
+
+	p.roundOver = m_roundEnd;
+
+	if (p.throwWeapon && !lastPacket.throwWeapon) {
+		m_startThrow = true;
+		m_throwTimer = 0;
+	}
+
+	if (m_startThrow && m_throwTimer < STOP_THROW) {
+		
+		p.throwWeapon = true;
+		cout << p.throwWeapon << endl;
+		m_throwTimer++;
+	}
+	else {
+		m_startThrow = false;
+	}
+
+	if (p.message != lastPacket.message || p.playerNum != lastPacket.playerNum ||
+		p.left != lastPacket.left || p.right != lastPacket.right || p.jump != lastPacket.jump ||
+		p.fire != lastPacket.fire || p.gunAngle != lastPacket.gunAngle || p.alive != lastPacket.alive ||
+		p.throwWeapon != lastPacket.throwWeapon || p.position.x != lastPacket.position.x ||
+		p.position.y != lastPacket.position.y) {
+
+		client->sendMessage(p);
+	}
+
+	lastPacket.message = p.message;
+	lastPacket.playerNum = p.playerNum;
+	lastPacket.left = p.left;
+	lastPacket.right = p.right;
+	lastPacket.jump = p.jump;
+	lastPacket.fire = p.fire;
+	lastPacket.gunAngle = p.gunAngle;
+	lastPacket.alive = p.alive;
+	lastPacket.throwWeapon = p.throwWeapon;
+	lastPacket.position.x = p.position.x;
+	lastPacket.position.y = p.position.y;
+	lastPacket.roundOver = p.roundOver;
+
+	for (Player * p : m_networkCharacters) {
+		Entity * ent = (Entity*)p;
 		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
-		PositionComponent * pc = (PositionComponent*)ent->getCompByType("POSITION");
 
-		Packet p;
-
-		p.message = 5;
-		p.playerNum = cc->m_playerNum;
-		p.left = cc->getLeft();
-		p.right = cc->getRight();
-		p.jump = cc->getJump();
-		p.fire = cc->getFire();
-		p.gunAngle = cc->getAngle();
-		p.alive = cc->getAlive();
-		p.throwWeapon = cc->getThrowWeapon();
-		p.position.x = pc->getX();
-		p.position.y = pc->getY();
-
-		if (p.message != lastPacket.message || p.playerNum != lastPacket.playerNum ||
-			p.left != lastPacket.left || p.right != lastPacket.right || p.jump != lastPacket.jump ||
-			p.fire != lastPacket.fire || p.gunAngle != lastPacket.gunAngle || p.alive != lastPacket.alive ||
-			p.throwWeapon != lastPacket.throwWeapon || p.position.x != lastPacket.position.x || 
-			p.position.y != lastPacket.position.y) {
-
-			client->sendMessage(p);
-		}	
-
-		lastPacket.message = p.message;
-		lastPacket.playerNum = p.playerNum;
-		lastPacket.left = p.left;
-		lastPacket.right = p.right;
-		lastPacket.jump = p.jump;
-		lastPacket.fire = p.fire;
-		lastPacket.gunAngle = p.gunAngle;
-		lastPacket.alive = p.alive;
-		lastPacket.throwWeapon = p.throwWeapon;
-		lastPacket.position.x = p.position.x;
-		lastPacket.position.y = p.position.y;
+		if (cc->getRoundOver()) {
+			m_roundEnd = true;
+		}
 	}
 }
 
 void PlayScreen::render(SDL_Renderer * renderer) {
 	m_backgroundSprite->render(m_renderer);
-	m_map->draw(m_renderer);
+	m_map->draw(m_renderer, m_camera);
 	for (AI * ai : m_aiCharacters) {
-		ai->render(m_renderer);
+		ai->render(m_renderer, m_camera);
 	}
 	for (Player *p : m_players) {
-		p->render(m_renderer);
+		p->render(m_renderer, m_camera);
 	}
+
+	m_rs.render(m_renderer, m_camera);
+	m_ps.bulletRender(m_renderer, m_camera);
+
 	for (Player *p : m_networkCharacters) {
-		p->render(m_renderer);
+		p->render(m_renderer, m_camera);
 	}
-	m_rs.render(m_renderer);
+	m_rs.render(m_renderer, m_camera);
 	for (Player *p : m_players) {
 		p->renderMarker(m_renderer);
 	}
-	m_ps.bulletRender(m_renderer);
+
 	//m_animationsSys.render();
 	testLight->render(m_renderer);
 	m_grenadeSys.render();
 	m_collSys.render();
 	//m_emitter->update();
+	SDL_SetRenderDrawColor(renderer, 183, 110, 121, 255);
+	SDL_RenderFillRect(renderer, &m_BGRect);
 	if (m_drawRoundText) {
-		SDL_RenderCopy(m_renderer, text, NULL, &renderQuad);
+		SDL_RenderCopy(m_renderer, text, NULL, renderQuad);
+		SDL_RenderCopy(m_renderer, w_text, NULL, winnerRenderQuad);
 	}
+	
 }
 
-void PlayScreen::initialiseText(std::string message) {
-	round_text = message;
-	textSurface = TTF_RenderText_Solid(Font, round_text.c_str(), textColor);
-	text = SDL_CreateTextureFromSurface(m_renderer, textSurface);
-	int text_width = textSurface->w;
-	int text_height = textSurface->h;
-	SDL_FreeSurface(textSurface);
-	renderQuad = { 150, 200, text_width, text_height };
+void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_Texture* texture, SDL_Rect* rect, int y) {
+	//round_text = message;
+	
+	if (index == 0) {
+		textSurface = TTF_RenderText_Solid(Font, message.c_str(), textColor);
+		text = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+		int text_width = textSurface->w;
+		int text_height = textSurface->h;
+		SDL_FreeSurface(textSurface);
+		renderQuad = new SDL_Rect{ 150, y, text_width, text_height };
+		renderQuad->x = 800 - (renderQuad->w / 2);
+	}
+	else {
+		textSurface = TTF_RenderText_Solid(Font, message.c_str(), textColor);
+		w_text = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+		int text_width = textSurface->w;
+		int text_height = textSurface->h;
+		SDL_FreeSurface(textSurface);
+		winnerRenderQuad = new SDL_Rect{ 150, y, text_width, text_height };
+		winnerRenderQuad->x = 900 - (winnerRenderQuad->w / 2);
+	}
+	
 }
 
 void PlayScreen::spawnGuns() {
@@ -365,25 +471,25 @@ void PlayScreen::deleteGuns() {
 
 bool PlayScreen::onlineRoundOver() {
 	int dead = 0;
-	for (AI * ai : m_aiCharacters) {
-		Entity * ent = (Entity *)ai;
-		AIComponent * ai = (AIComponent*)ent->getCompByType("AI");
-		if (!ai->m_alive) {
-			dead++;
-		}
-	}
+	int playerAmount = m_players.size() + m_networkCharacters.size();
 	for (Player * p : m_players) {
 		Entity * ent = (Entity *)p;
 		ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 		if (!control->getAlive()) {
 			dead++;
-
+		}
+	}
+	for (Player * p : m_networkCharacters) {
+		Entity * ent = (Entity *)p;
+		ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+		if (!control->getAlive()) {
+			dead++;
 		}
 	}
 	
-	if (dead >= 3) {
+	if (dead >= (playerAmount - 1)) {
 		if (!m_drawRoundText) {
-			initialiseText("Player Wins");
+			initialiseText("Player Wins", 1, 200);
 			m_drawRoundText = true;
 		}
 		return true;
@@ -393,11 +499,29 @@ bool PlayScreen::onlineRoundOver() {
 
 void PlayScreen::endRound() {
 	m_roundCounter++;
+	m_BGRect.x += (1200.0 / 25);
 
+
+	m_timerCounter++;
+	if (m_timerCounter > 20) {
+		m_timer--;
+		initialiseText(std::to_string(m_timer), 0, 700);
+		m_timerCounter = 0;
+	}
+	
+	
+	
 	if (m_roundCounter > ROUND_OVER) {
 		deleteGuns();
-		int randNum = (rand() % 3) + 1;
+		
 		m_restartSys.reset(randNum);
+		if (*m_online) {
+			randNum = 1;
+		}
+		else {
+			randNum = (rand() % 3) + 1;
+		}
+		
 		if (randNum == 1) {
 			m_map->load("testlevel.tmx", m_renderer);
 		}
@@ -409,28 +533,33 @@ void PlayScreen::endRound() {
 		}
 		m_roundCounter = 0;
 		m_drawRoundText = false;
+		m_roundEnd = false;
+		m_ps.startRoundCount = 0;
+		m_BGRect.x = -2400; m_BGRect.y = 0;
+		m_timer = 5;
+		initialiseText(std::to_string(m_timer), 0, 700);
 	}
 }
 
 
+
 void PlayScreen::checkRoundOver() {
-	bool roundEnd = false;
 	
-	if (*m_online) {
-		roundEnd = onlineRoundOver();
+	if (*m_online && !m_roundEnd) {
+		m_roundEnd = onlineRoundOver();
 	}
 	else {
 		int dead = 0;
-		std::cout << dead << std::endl;
+		//std::cout << dead << std::endl;
 		if (!m_multiplayer) {
 			Entity * ent = (Entity *)m_players[0];
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 			if (!control->getAlive()) {
 				if (!m_drawRoundText) {
-					initialiseText("AI Wins");
+					initialiseText("AI Wins", 1, 200);
 					m_drawRoundText = true;
 				}
-				roundEnd = true;
+				m_roundEnd = true;
 
 			}
 		}
@@ -453,14 +582,21 @@ void PlayScreen::checkRoundOver() {
 		}
 		if (dead >= 3) {
 			if (!m_drawRoundText) {
-				initialiseText("Player Wins");
+				for (Player * p : m_players) {
+					Entity * ent = (Entity *)p;
+					ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+					TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
+					if (control->getAlive()) {
+						initialiseText(tag->getSubTag() + " Wins!", 1, 200);
+					}
+				}
 				m_drawRoundText = true;
 			}
-			roundEnd = true;
+			m_roundEnd = true;
 		}
 	}
 
-	if (roundEnd) {
+	if (m_roundEnd) {
 		endRound();
 	}
 }

@@ -76,6 +76,15 @@ bool SpriteComponent::loadFromFile(std::string path, SDL_Renderer* gRenderer)
 	return m_texture != NULL;
 }
 
+void SpriteComponent::setTexture(SDL_Texture* texture, int width, int height)
+{
+	m_texture = texture;
+	m_width = width;
+	m_height = height;
+	m_scaledWidth = m_width * m_scale.x;
+	m_scaledHeight = m_height * m_scale.y;
+}
+
 void SpriteComponent::render(SDL_Renderer* gRenderer)
 {
 	//Sort out rectangles.
@@ -122,6 +131,7 @@ void SpriteComponent::setAlpha(Uint8 alpha)
 {
 	SDL_SetTextureAlphaMod(m_texture, alpha);
 }
+
 
 void SpriteComponent::setPosition(c2v position)
 {
@@ -178,6 +188,8 @@ int SpriteComponent::getHeight()
 	m_scaledHeight = m_height * m_scale.y;
 	return m_scaledHeight;
 }
+
+
 
 SDL_Texture* SpriteComponent::getTexture()
 {

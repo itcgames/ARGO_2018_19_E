@@ -79,7 +79,6 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 
 				if (layer->getName() == "JumpPoints")
 				{
-					std::cout << object.getName() << std::endl;
 					c2v position = c2v{ object.getPosition().x, object.getPosition().y };
 					std::string name = object.getName();
 					m_jumpPointVector.push_back(std::make_pair(position, name));
@@ -87,7 +86,6 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 
 				if (layer->getName() == "WalkPoints")
 				{
-					std::cout << object.getName() << std::endl;
 					c2v position = c2v{ object.getPosition().x, object.getPosition().y };
 					std::string name = object.getName();
 					m_walkPointVector.push_back(std::make_pair(position, name));
@@ -158,6 +156,11 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 				float y = temp->dRect.y;
 				float w = temp->dRect.w;
 				float h = temp->dRect.h;
+				
+				temp->position.x = x;
+				temp->position.y = y;
+				temp->width = w;
+				temp->height = h;
 
 				temp->collider = c2AABB{ c2v{x, y}, c2v{x + w, y + h} };
 
@@ -169,15 +172,23 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 }
 
 
-void MapLoader::draw(SDL_Renderer* renderer)
+void MapLoader::draw(SDL_Renderer* renderer, Camera* camera)
 {
 	for (int i = 0; i < m_tiles.size(); i++)
 	{
-		SDL_RenderCopy(renderer, m_sprite->getTexture(), &m_tiles.at(i)->sRect, &m_tiles.at(i)->dRect);
+		SDL_Rect* screenPosition = new SDL_Rect();
+		screenPosition->x = m_tiles.at(i)->dRect.x - camera->getCamera()->x;
+		screenPosition->y = m_tiles.at(i)->dRect.y - camera->getCamera()->y;
+		screenPosition->w = m_tiles.at(i)->dRect.w;
+		screenPosition->h = m_tiles.at(i)->dRect.h;
+
+		SDL_RenderCopy(renderer, m_sprite->getTexture(), &m_tiles.at(i)->sRect, screenPosition);
 		if (m_tiles.at(i)->dead == true)
 		{
 			m_tiles.erase(m_tiles.begin() + i);
 		}
+
+		delete screenPosition;
 	}
 }
 

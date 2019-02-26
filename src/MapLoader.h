@@ -7,6 +7,7 @@
 #include <SDL.h>
 #include <iostream>
 
+#include "Camera.h"
 #include "tmxlite/Map.hpp"
 #include "tmxlite/Layer.hpp"
 #include "tmxlite/TileLayer.hpp"
@@ -21,6 +22,9 @@ struct Tile
 	c2AABB collider;
 	int health;
 	bool dead;
+	c2v position;
+	int width;
+	int height;
 };
 
 class MapLoader
@@ -28,7 +32,7 @@ class MapLoader
 public:
 	MapLoader();
 	void load(const std::string& path, SDL_Renderer* renderer);
-	void draw(SDL_Renderer* renderer);
+	void draw(SDL_Renderer* renderer, Camera* camera);
 
 	std::vector<std::shared_ptr<Tile>> getTiles() { return m_tiles; }
 

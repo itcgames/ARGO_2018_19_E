@@ -19,7 +19,7 @@ MenuScreen::MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Fon
 	
 	titletexture = init(menuFont, title_text, titletexture, titleRenderQuad, 200, 50);
 
-	m_texture = loadFromFile("banner.png", m_renderer);
+	m_texture = loadFromFile("assets/art/environment/banner2.png", m_renderer);
 
 	m_texture2 = loadFromFile("banner2.png", m_renderer);
 	
@@ -111,6 +111,7 @@ void MenuScreen::update(SDL_Window *window)
 	bool AButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_A);
 	bool BButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_B);
 	bool XButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_X);
+	bool YButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_Y);
 
 	if (AButton && !firstTime) {
 		firstTime = true;
@@ -121,6 +122,11 @@ void MenuScreen::update(SDL_Window *window)
 		firstTime = true;
 		buttonTimer = 0;
 		*m_currentGameState = GameState::Online;
+	}
+	else if (YButton && !firstTime) {
+		firstTime = true;
+		buttonTimer = 0;
+		*m_currentGameState = GameState::Credits;
 	}
 	else if (BButton && !firstTime) {
 		SDL_DestroyWindow(window);

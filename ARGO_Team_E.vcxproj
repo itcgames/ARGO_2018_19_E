@@ -202,8 +202,10 @@
     <ClCompile Include="src\AI.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Bullet.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Client\Client.cpp" />
     <ClCompile Include="src\Components\AIComponent.cpp" />
+    <ClCompile Include="src\Components\FactoryComponent.cpp" />
     <ClCompile Include="src\Components\SpriteComponent.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Gun.cpp" />
@@ -243,6 +245,7 @@
     <ClInclude Include="Factory.h" />
     <ClInclude Include="src\AI.h" />
     <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Client\Client.h" />
     <ClInclude Include="src\Client\Packet.h" />
     <ClInclude Include="src\Components\AIComponent.h" />
@@ -253,6 +256,7 @@
     <ClInclude Include="src\Components\FactoryComponent.h" />
     <ClInclude Include="src\Components\GrenadeComponent.h" />
     <ClInclude Include="src\Components\GunComponent.h" />
+    <ClInclude Include="src\Components\RayCastComponent.h" />
     <ClInclude Include="src\Components\SoundComponent.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\Components\HealthComponents.h" />

@@ -100,6 +100,7 @@ private:
 	CreditScreen * m_credits;
 	OnlineScreen * m_onlineScreen;
 	PlayScreen * m_playScreen;
+	CreditScreen * m_creditsScreen;
 	SDL_Rect m_screenSize;
 
 	void setUpController();

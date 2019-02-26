@@ -2,7 +2,8 @@
 
 AISystem::AISystem() {
 	fsm = new Animation();
-	std::cout << fsm->getCurrent() << std::endl;
+	//std::cout << fsm->getCurrent() << std::endl;
+
 }
 
 void AISystem::addEntity(Entity * e) {
@@ -16,6 +17,8 @@ void AISystem::recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints,
 	m_width = width;
 	m_height = height;
 	m_tiles = tiles;
+
+	
 }
 
 void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
@@ -27,7 +30,7 @@ void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 		
 		AIComponent * ac = (AIComponent*)entity->getCompByType("AI");
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
-
+		
 		if (!tag->gotGunBool)
 		{
 			int count = 0;
@@ -38,6 +41,7 @@ void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 			{
 				PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
 				ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
+				TagComponent * tC = (TagComponent*)entity->getCompByType("TAG");
 
 				m_position = c2v{ pos->getX(), pos->getY() };
 
@@ -45,6 +49,7 @@ void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 
 				vec.x = pos->getX();
 				vec.y = pos->getY();
+				
 
 				ac->m_distances[count].second = vec;
 
@@ -62,18 +67,20 @@ void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 			{
 				PositionComponent  * pos = (PositionComponent*)(*e)->getCompByType("POSITION");
 				ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
+			
+				if (con->getAlive()) {
+					m_position = c2v{ pos->getX(), pos->getY() };
 
-				m_position = c2v{ pos->getX(), pos->getY() };
+					ac->m_distances[count].first = distance(ac->curPosition, m_position);
 
-				ac->m_distances[count].first = distance(ac->curPosition, m_position);
+					vec.x = pos->getX();
+					vec.y = pos->getY();
 
-				vec.x = pos->getX();
-				vec.y = pos->getY();
-
-				ac->m_distances[count].second = vec;
+					ac->m_distances[count].second = vec;
 
 
-				count++;
+					count++;
+				}
 			}
 		}
 	}
@@ -143,7 +150,10 @@ void AISystem::update() {
 		CollisionComponent *coll = (CollisionComponent*)entity->getCompByType("COLLISION");
 		TagComponent *tag = (TagComponent*)entity->getCompByType("TAG");
 		ControlComponent * con = (ControlComponent*)entity->getCompByType("CONTROL");
+		RayCastComponent * rayCast = (RayCastComponent*)entity->getCompByType("Ray");
 
+
+		//allows the ai to know its own current position
 		ac->curPosition.x = pc->getX();
 		ac->curPosition.y = pc->getY();
 
@@ -151,7 +161,7 @@ void AISystem::update() {
 
 			ac->newYVel = pc->getVelY();
 
-			//checks if the AI is on the ground 
+			//checks if the ai has landed
 			if (ac->newYVel != ac->oldYVel)
 			{
 				ac->m_landed = false;
@@ -163,32 +173,10 @@ void AISystem::update() {
 			}
 			 
 			// boundary detection on the right and the left of the screen 
-			if (ac->curPosition.x >= m_width - 50)
-			{
-				ac->setLeft(true);
-				ac->setRight(false);
-			}
-			if (ac->curPosition.x <= 0)
-			{
-				ac->setLeft(false);
-				ac->setRight(true);
-			}
+			checkBoundaries(ac);
+			
 			//sets the initial direction in which the AI will move
-			if (!ac->set)
-			{
-				ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
-				
-				if (ac->closestEnemy.second.x > ac->curPosition.x)
-				{
-					ac->setLeft(true);
-				}
-				else
-				{
-					ac->setRight(true);
-				}
-
-				ac->set = true;
-			}
+			setStartingDirection(ac);
 
 			//sets the closest target position
 			ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
@@ -203,30 +191,10 @@ void AISystem::update() {
 				ac->direction = "LEFT";
 			}
 
-			//only executes if the ai is landed
+			
 			if (ac->m_landed) {
 
-				//clears the vectors
-				ac->curWalkPoints.clear();
-				ac->curJumpPoints.clear();
-
-				//checks if the node positions are on the players current level
-				for (int i = 0; i < m_pathPoints.size(); i++)
-				{
-					if (m_pathPoints[i].first.y > ac->curPosition.y && m_pathPoints[i].first.y < ac->curPosition.y + 100)
-					{
-						ac->curWalkPoints.push_back(m_pathPoints[i]);
-					}
-				}
-
-				for (int i = 0; i < m_jumpPoints.size(); i++)
-				{
-					if (m_jumpPoints[i].first.y > ac->curPosition.y && m_jumpPoints[i].first.y < ac->curPosition.y + 100)
-					{
-						ac->curJumpPoints.push_back(m_jumpPoints[i]);
-					}
-				}
-
+				calculateMovePoints(ac);
 				//sets the closest walk and double jump points
 				ac->closestWalkPoint = checkPoints(ac->curWalkPoints, pc);
 				ac->closestJumpPoint = checkPoints(ac->curJumpPoints, pc);
@@ -240,77 +208,9 @@ void AISystem::update() {
 				{
 					ac->lastPosition = ac->curPosition;
 
-					if (ac->curPosition.x < ac->closestWalkPoint.first.x + 5 && ac->curPosition.x > ac->closestWalkPoint.first.x - 5)
-					{
-						if (ac->closestWalkPoint.second == "LEFT" && ac->jumping)
-						{
-							ac->setLeft(true);
-							ac->setRight(false);
-
-							if (pc->getVelX() < -7.8)
-							{
-								ac->setJump(true);
-							}
-							else
-							{
-								pc->setVelX(-8);
-								ac->setJump(true);
-							}
-
-						}
-
-						if (ac->closestWalkPoint.second == "RIGHT" && ac->jumping)
-						{
-							ac->setLeft(false);
-							ac->setRight(true);
-
-							if (pc->getVelX() > 7.8)
-							{
-								ac->setJump(true);
-							}
-							else
-							{
-								pc->setVelX(8);
-								ac->setJump(true);
-							}
-						}
-					}
-					if (ac->curPosition.x < ac->closestJumpPoint.first.x + 5 && ac->curPosition.x > ac->closestJumpPoint.first.x - 5)
-					{
-						if (ac->closestJumpPoint.second == "DOUBLERIGHT" && ac->jumping)
-						{
-							ac->setLeft(false);
-							ac->setRight(true);
-
-							if (pc->getVelX() > 7.8)
-							{
-								ac->setDoubleJump(true);
-						
-							}
-							else
-							{
-								pc->setVelX(8);
-								ac->setDoubleJump(true);
-							
-							}
-						}
-
-						if (ac->closestJumpPoint.second == "DOUBLELEFT" && ac->jumping)
-						{
-							ac->setLeft(true);
-							ac->setRight(false);
-
-							if (pc->getVelX() < -7.8)
-							{
-								ac->setDoubleJump(true);
-							}
-							else
-							{
-								pc->setVelX(-8);
-								ac->setDoubleJump(true);
-							}
-						}
-					}
+					checkWalkPoints(ac, pc);
+					checkJumpPoints(ac, pc);
+					
 				}
 			}
 
@@ -324,21 +224,31 @@ void AISystem::update() {
 				ac->jumping = true;
 			}
 
-			if (tag->gotGunBool)
+			
+			//ai shooting entities
+			if (tag->gotGunBool && !checkAllTiles(rayCast->getStartPosition().x, rayCast->getStartPosition().y, rayCast->getCastPosition().x, rayCast->getCastPosition().y))
 			{
 				double desired = getAngleToPlayer(ac->curPosition, ac->closestEnemy);
+
 				con->setAngle(desired);
-				if (con->getAngle() == desired)
+
+				if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
 				{
+				
 					con->setFire(true);
 				}
 				else
 				{
 					con->setFire(false);
 				}
+			
+				
 				
 			}
-			
+			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
+			rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
+
+
 			//if the gun is on the same level as the AI character
 			if (ac->curPosition.y + 50 > ac->closestEnemy.second.y && ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
 			{
@@ -354,6 +264,7 @@ void AISystem::update() {
 				
 					}
 				}
+
 				if (ac->direction == "RIGHT" && ac->curPosition.x < ac->closestEnemy.second.x)
 				{
 					if (ac->curPosition.x < ac->closestEnemy.second.x)
@@ -372,14 +283,32 @@ void AISystem::update() {
 		}	
 	}
 }
+
+
 double AISystem::getAngleToPlayer(c2v pos , std::pair<double, c2v> enemy)
 {
-	auto hypot = enemy.first;
 	c2v dir = c2Sub(pos, enemy.second);
+	
 	double angle;
 	
-	angle = atan2(dir.y, dir.x);
-	return (angle * 180 / 3.14159) - 90;
+	angle = atan2(-dir.y, dir.x);
+
+	if ((angle * 180 / 3.14159) <= 90 && (angle * 180 / 3.14159) >= -90)
+	{
+		return (angle * 180 / 3.14159) - 90;
+	}
+	else {
+		double fixAngle = (angle * 180 / 3.14159) + 270;
+		if (fixAngle > 360)  // Math :)
+		{
+			return fixAngle - 360;
+		}
+		else
+		{
+			return fixAngle;
+		}
+	}
+
 }
 
 
@@ -389,7 +318,185 @@ double AISystem::distance(c2v  vecOne, c2v vecTwo)
 }
 
 
+void AISystem::calculateMovePoints(AIComponent * ac)
+{
+	//clears the vectors
+	ac->curWalkPoints.clear();
+	ac->curJumpPoints.clear();
+
+	//checks if the node positions are on the players current level
+	for (int i = 0; i < m_pathPoints.size(); i++)
+	{
+		if (m_pathPoints[i].first.y > ac->curPosition.y && m_pathPoints[i].first.y < ac->curPosition.y + 100)
+		{
+			ac->curWalkPoints.push_back(m_pathPoints[i]);
+		}
+	}
+
+	for (int i = 0; i < m_jumpPoints.size(); i++)
+	{
+		if (m_jumpPoints[i].first.y > ac->curPosition.y && m_jumpPoints[i].first.y < ac->curPosition.y + 100)
+		{
+			ac->curJumpPoints.push_back(m_jumpPoints[i]);
+		}
+	}
+
+}
 
 
+void AISystem::checkBoundaries(AIComponent * ac)
+{
+	if (ac->curPosition.x >= m_width - 50)
+	{
+		ac->setLeft(true);
+		ac->setRight(false);
+	}
+	if (ac->curPosition.x <= 0)
+	{
+		ac->setLeft(false);
+		ac->setRight(true);
+	}
+}
 
 
+void AISystem::setStartingDirection(AIComponent * ac)
+{
+	if (!ac->set)
+	{
+		ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
+
+		if (ac->closestEnemy.second.x > ac->curPosition.x)
+		{
+			ac->setLeft(true);
+		}
+		else
+		{
+			ac->setRight(true);
+		}
+
+		ac->set = true;
+	}
+}
+
+
+void AISystem::checkWalkPoints(AIComponent * ac, PositionComponent * pc)
+{
+	if (ac->curPosition.x < ac->closestWalkPoint.first.x + 5 && ac->curPosition.x > ac->closestWalkPoint.first.x - 5)
+	{
+		if (ac->closestWalkPoint.second == "LEFT" && ac->jumping)
+		{
+			ac->setLeft(true);
+			ac->setRight(false);
+
+			if (pc->getVelX() < -7.8)
+			{
+				ac->setJump(true);
+			}
+			else
+			{
+				pc->setVelX(-8);
+				ac->setJump(true);
+			}
+
+		}
+
+		if (ac->closestWalkPoint.second == "RIGHT" && ac->jumping)
+		{
+			ac->setLeft(false);
+			ac->setRight(true);
+
+			if (pc->getVelX() > 7.8)
+			{
+				ac->setJump(true);
+			}
+			else
+			{
+				pc->setVelX(8);
+				ac->setJump(true);
+			}
+		}
+	}
+}
+
+
+void AISystem::checkJumpPoints(AIComponent * ac, PositionComponent * pc)
+{
+	if (ac->curPosition.x < ac->closestJumpPoint.first.x + 5 && ac->curPosition.x > ac->closestJumpPoint.first.x - 5)
+	{
+		if (ac->closestJumpPoint.second == "DOUBLERIGHT" && ac->jumping)
+		{
+			ac->setLeft(false);
+			ac->setRight(true);
+
+			if (pc->getVelX() > 7.8)
+			{
+				ac->setDoubleJump(true);
+
+			}
+			else
+			{
+				pc->setVelX(8);
+				ac->setDoubleJump(true);
+
+			}
+		}
+
+		if (ac->closestJumpPoint.second == "DOUBLELEFT" && ac->jumping)
+		{
+			ac->setLeft(true);
+			ac->setRight(false);
+
+			if (pc->getVelX() < -7.8)
+			{
+				ac->setDoubleJump(true);
+			}
+			else
+			{
+				pc->setVelX(-8);
+				ac->setDoubleJump(true);
+			}
+		}
+	}
+}
+
+
+bool AISystem::checkAllTiles(float x1, float y1, float x2, float y2)
+{
+
+	for (int i = 0; i < m_tiles.size(); i++) {
+
+		if (m_tiles.at(i)->dRect.x >= 0) {
+			float x = m_tiles.at(i)->position.x;
+			float y = m_tiles.at(i)->position.y;
+			float w = m_tiles.at(i)->width;
+			float h = m_tiles.at(i)->height;
+
+			bool left = lineLine(x1, y1, x2, y2, x, y, x, y + h);
+			bool right = lineLine(x1, y1, x2, y2, x + w, y, x + w, y + h);
+			bool top = lineLine(x1, y1, x2, y2, x, y, x + w, y);
+			bool bottom = lineLine(x1, y1, x2, y2, x, y + h, x + w, y + h);
+
+			// if ANY of the above are true, the line
+			// has hit the rectangle
+			if (left || right || top || bottom) {
+				return true;
+			}
+			return false;
+		}
+	}
+}
+
+// LINE/LINE
+bool AISystem::lineLine(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
+
+	// calculate the direction of the lines
+	float uA = ((x4 - x3)*(y1 - y3) - (y4 - y3)*(x1 - x3)) / ((y4 - y3)*(x2 - x1) - (x4 - x3)*(y2 - y1));
+	float uB = ((x2 - x1)*(y1 - y3) - (y2 - y1)*(x1 - x3)) / ((y4 - y3)*(x2 - x1) - (x4 - x3)*(y2 - y1));
+
+	// if uA and uB are between 0-1, lines are colliding
+	if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
+
+		return true;
+	}
+	return false;
+}

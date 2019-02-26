@@ -40,6 +40,8 @@
     <ClCompile Include="src\Systems\RenderSystem.cpp" />
     <ClCompile Include="src\Systems\RestartSystem.cpp" />
     <ClCompile Include="src\Systems\SoundSystem.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Components\FactoryComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Factory.h" />
@@ -100,5 +102,10 @@
     <ClInclude Include="src\Systems\RenderSystem.h" />
     <ClInclude Include="src\Systems\RestartSystem.h" />
     <ClInclude Include="src\Systems\SoundSystem.h" />
+<<<<<<< HEAD
+    <ClInclude Include="src\Camera.h" />
+=======
+    <ClInclude Include="src\Components\RayCastComponent.h" />
+>>>>>>> c4b7be9047a972f513e30aa1d6bcc8ba3bbdeaaf
   </ItemGroup>
 </Project>
