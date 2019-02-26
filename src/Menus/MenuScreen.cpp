@@ -145,6 +145,8 @@ void MenuScreen::update(SDL_Window *window)
 	bool BButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_B);
 	bool XButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_X);
 	bool YButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_Y);
+	bool StartButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_START);
+
 
 	if (m_startInTransition)
 	{
@@ -180,6 +182,11 @@ void MenuScreen::update(SDL_Window *window)
 		}
 		else if (BButton && !firstTime) {
 			SDL_DestroyWindow(window);
+		}
+		else if (StartButton && !firstTime) {
+			firstTime = true;
+			buttonTimer = 0;
+			m_toggleFS = true;
 		}
 	}
 

@@ -52,9 +52,6 @@ public:
 
 	int gunAmount = 1;
 
-	void deleteGuns();
-	void spawnGuns();
-
 	Camera* m_camera;
 	SDL_Rect* m_focusPoint;
 	SDL_Rect* m_offset;
@@ -124,8 +121,7 @@ public:
 	bool m_drawTimer = false;
 
 private: 
-	int m_gunCounter = 0;
-	const int SPAWN_NEW_GUN = 1000;
+
 	float m_screenScale = 1.0f;
 
 	int m_cameraCount = 0;

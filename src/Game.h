@@ -46,6 +46,7 @@ public:
 	void setGameState(GameState gameState);
 
 	SDL_Renderer * getScreen() const { return m_renderer; }
+	void fullScreenToggle(SDL_Window* Window);
 
 	static Game* Instance()
 	{
@@ -119,6 +120,9 @@ private:
 	SDL_Rect renderQuad;
 	SDL_Color textColor = { 188, 110, 121, 255 };
 	SDL_Surface * textSurface = new SDL_Surface;
+
+	int m_toggleCounter = 0;
+	const int ALLOW_TOGGLE = 100.0f;
 };
 
 

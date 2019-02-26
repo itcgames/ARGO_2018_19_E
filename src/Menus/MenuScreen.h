@@ -19,6 +19,8 @@ public:
 	void freeTexture();
 
 	SDL_Texture* init(TTF_Font* Font, std::string & text, SDL_Texture* texture, SDL_Rect & quad, int x, int y);
+
+	bool m_toggleFS = false;
 private:
 	GameState * m_currentGameState;
 

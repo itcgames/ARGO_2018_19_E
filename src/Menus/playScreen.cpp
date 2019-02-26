@@ -272,9 +272,9 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	//if (m_cameraCount > TIME_BETWEEN_CAMERA_CHANGES)
 	//{
-	//m_focusPoint = m_camera->focus(m_playerPositions);
-	//m_camera->update(m_focusPoint);
-	//m_cameraCount = 0;
+	m_focusPoint = m_camera->focus(m_playerPositions);
+	m_camera->update(m_focusPoint);
+	m_cameraCount = 0;
 	//}
 
 	//if (m_focusPoint->w > 0) {
@@ -319,9 +319,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 		sendPacket(ent, client);
 	}
-	else {
-		spawnGuns();
-	}
+	
 
 	if (!(*online) && !m_gameOver) {
 		for (Player * p : m_players) {
@@ -476,52 +474,6 @@ void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_T
 	
 }
 
-void PlayScreen::spawnGuns() {
-	m_gunCounter++;
-
-	if (m_gunCounter > SPAWN_NEW_GUN) {
-
-		int gunType = (rand() % 4) + 1;
-		int gunX = (rand() % 1100) + 100;
-		Gun * gun = new Gun(m_renderer, gunType, gunX, -100,gunAmount);
-		gunAmount = gunAmount + 1;
-		m_rs.addEntity((Entity*)gun);
-		m_cs.addEntity((Entity*)gun);
-		m_ps.addEntity((Entity*)gun);
-		m_gunSys.addEntity((Entity*)gun);
-		m_collSys.addEntity((Entity*)gun);
-		m_restartSys.addEntity((Entity*)gun);
-		Entity* ent = (Entity*)gun;
-		TagComponent* tc = (TagComponent*)ent->getCompByType("TAG");
-		if (tc->getSubTag() == "grenade") {
-			m_grenadeSys.addEntity((Entity*)gun);
-		}
-		m_guns.push_back(gun);
-		m_gunCounter = 0;
-	}
-}
-
-void PlayScreen::deleteGuns() {
-	while (m_guns.size() > 4) {
-		Gun* gun = m_guns.back();
-		m_guns.pop_back();
-		m_restartSys.m_entities.pop_back();
-		m_gunSys.m_entities.pop_back();
-		m_cs.m_entities.pop_back();
-		m_ps.m_entities.pop_back();
-		m_rs.m_entities.pop_back();
-		m_collSys.m_entities.pop_back();
-
-		Entity* ent = (Entity*)gun;
-		TagComponent* tc = (TagComponent*)ent->getCompByType("TAG");
-		if (tc->getSubTag() == "grenade") {
-			m_grenadeSys.m_entities.pop_back();
-		}
-		delete gun;
-	}
-	m_gunCounter = 0;
-}
-
 bool PlayScreen::onlineRoundOver() {
 	int dead = 0;
 	int playerAmount = m_players.size() + m_networkCharacters.size();
@@ -557,9 +509,6 @@ void PlayScreen::endRound() {
 	m_BGRect.x += (1200.0 / 25);
 
 	if (m_roundCounter > ROUND_OVER) {
-		deleteGuns();
-		
-		
 
 		if (*m_online) {
 			randNum = 1;
