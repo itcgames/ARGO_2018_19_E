@@ -239,7 +239,6 @@ void MenuScreen::update(SDL_Window *window)
 		*m_currentGameState = GameState::Credits;
 	}
 	
-	std::cout << transitionTimer << std::endl;
 }
 
 

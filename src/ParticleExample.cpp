@@ -503,6 +503,68 @@ void ParticleExample::setStyle(PatticleStyle style)
         break;
     }
 
+	case ParticleExample::BLOOD:
+	{
+		initWithTotalParticles(700);
+
+		// duration
+		_duration = 0.1f;
+
+		setEmitterMode(Mode::GRAVITY);
+
+		// Gravity Mode: gravity
+		setGravity(Vec2(0, 0));
+
+		// Gravity Mode: speed of particles
+		setSpeed(-70);
+		setSpeedVar(40);
+
+		// Gravity Mode: radial
+		setRadialAccel(0);
+		setRadialAccelVar(0);
+
+		// Gravity Mode: tangential
+		setTangentialAccel(0);
+		setTangentialAccelVar(0);
+
+		// angle
+		_angle = 90;
+		_angleVar = 360;
+
+		// life of particles
+		_life = 5.0f;
+		_lifeVar = 2;
+
+		// size, in pixels
+		_startSize = 15.0f;
+		_startSizeVar = 10.0f;
+		_endSize = START_SIZE_EQUAL_TO_END_SIZE;
+
+		// emits per second
+		_emissionRate = _totalParticles / _duration;
+	
+		// color of particles
+		_startColor.r = 0.721f;
+		_startColor.g = 0.231f;
+		_startColor.b = 0.117f;
+		_startColor.a = 0.4f;
+		_startColorVar.r = 0.f;
+		_startColorVar.g = 0.f;
+		_startColorVar.b = 0.f;
+		_startColorVar.a = 0.f;
+		_endColor.r = 0.0f;
+		_endColor.g = 0.0f;
+		_endColor.b = 0.0f;
+		_endColor.a = 1.0f;
+		_endColorVar.r = 0.0f;
+		_endColorVar.g = 0.0f;
+		_endColorVar.b = 0.0f;
+		_endColorVar.a = 0.0f;
+
+		_posVar = { 0, 0 };
+		break;
+	}
+
 	case ParticleExample::GRENADE:
 	{
 		initWithTotalParticles(700);

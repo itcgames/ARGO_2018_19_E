@@ -565,11 +565,11 @@ void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc, Collisi
 	// Start count to make gun grabable again.
 	ownerConC->setThrowGun(false);
 	// SET PLAYER GUN FUNCTION
-	setPlayerGunGot("none", ownerTagC,"0");  // Fix tc here :)
+	setPlayerGunGot("none", ownerTagC,"0");
 }
 
 void PhysicsSystem::setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC) {
-	double handAngle = gunTagC->getAngle();  // :)
+	double handAngle = gunTagC->getAngle();
 
 	sc->setRotation(gunTagC->getAngle()*-1); //rotate hand
 	pc->setX(gunPosition->getX());
@@ -906,10 +906,16 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 					}
 					playerFlip(pc, sc, cc, tc);  // Flip Player sprite when angle requires it.
 
+					//if (cc->getThrowWeapon() == true && tc->getGotGunBool() == true)  // Check if x is pressed.
 					if (cc->getThrowWeapon() == true && tc->getGotGunBool() == true)  // Check if x is pressed.
 					{
 						notifyAudioObservers(AudioObserver::SFX::WEAPON_THROW);
 						throwGunFun(cc);
+					}
+					else if (cc->getThrowWeapon() == true) {
+						tc->setGotGunBool(false);
+						tc->setGunGotID("0");
+						tc->setGunGot("none");
 					}
 
 					if (tc->getSubTag2() != "AI_Player")
@@ -924,10 +930,6 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 					}
 
 
-				}
-				else if (tc->getTag() == "Player" && cc->getAlive() == false)
-				{
-					throwGunFun(cc);
 				}
 				if (tc->getSubTag2() == "AI_Player")
 				{
@@ -962,13 +964,17 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 					pc->setVelY(pc->getVelY() + Friction.y);
 
 				}
+				else if (tc->getTag() == "Player" && cc->getAlive() == false)
+				{
+					throwGunFun(cc);
+				}
+
 				if (tc->getSubTag2() == "AI_Player")
 				{
 					pc->setX(pc->getX() + pc->getVelX());
 					pc->setY(pc->getY() + pc->getVelY());
 				}
 			}
-
 			if (tc->getTag() == "Gun")
 			{
 				std::string currentGun = tc->getSubTag2();
@@ -1307,9 +1313,8 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 					else if (tagC->getGunGot() == "grenade")
 					{
 						GrenadeComponent * gc = (GrenadeComponent*)entity->getCompByType("GRENADE");
-						ownerConC->setThrowGun(true);
 						gc->setArmed(true);
-						launchGun(pc, tc, colc, ownerConC, tagC);
+						throwGunFun(ownerConC);
 
 						if (tagC->getSubTag2() != "AI_Player")
 						{

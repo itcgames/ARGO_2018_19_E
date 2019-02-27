@@ -8,6 +8,7 @@ void RestartSystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
+
 void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec, bool online, int clientNum, int size) {
 	
 	int count = 0;
@@ -35,6 +36,7 @@ void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec, bo
 			control->setThrowGun(false);
 			control->setAlive(true);
 			control->setAngle(90);
+			control->isDead = false;
 		}
 
 		if (!online) {
@@ -48,7 +50,7 @@ void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec, bo
 				sc->setPosition(c2v{ vec.at(count)->second.x, vec.at(count)->second.y });
 				count++;
 			}
-			else
+			else if (tc->getTag() == "Player")	
 			{
 				pc->setX(vec.at(count)->second.x);
 				pc->setY(vec.at(count)->second.y);

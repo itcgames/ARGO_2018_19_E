@@ -64,7 +64,7 @@ Game::Game()
 	m_client = new Client("149.153.106.155", 54000);
 	setUpController();
 	m_creditsScreen = new CreditScreen(m_currentGameState, m_renderer, creditsFont, menuFont, gGameController);
-	m_playScreen = new PlayScreen(m_currentGameState, m_renderer, Font);
+	m_playScreen = new PlayScreen(m_currentGameState, m_renderer, Font, gGameController);
 	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
 	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont, gGameController);
 	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client, m_online);

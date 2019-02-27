@@ -20,6 +20,7 @@ public:
         SPIRAL,
 		DIRT,
         EXPLOSION,
+		BLOOD,
         SMOKE,
         SNOW,
         RAIN,

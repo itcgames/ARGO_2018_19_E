@@ -10,6 +10,11 @@ void ControlSystem::recieveLevel(int width, int height)
 	m_height = height;
 }
 
+void ControlSystem::removeEntity(int index)
+{
+	m_entities.erase(m_entities.begin() + index);
+}
+
 SDL_Haptic* ControlSystem::init(SDL_GameController* controller) {
 	//Initialization flag
 	bool success = true;
@@ -112,6 +117,7 @@ void ControlSystem::setButtons(ControlComponent * cc) {
 	bool AButton = SDL_GameControllerGetButton(cc->gGameController, SDL_CONTROLLER_BUTTON_A);
 	bool XButton = SDL_GameControllerGetButton(cc->gGameController, SDL_CONTROLLER_BUTTON_X);
 	
+
 	//int leftX = SDL_GameControllerGetAxis(gGameController, SDL_CONTROLLER_AXIS_RIGHTX);
 	int RT = SDL_GameControllerGetAxis(cc->gGameController, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
 	
@@ -122,6 +128,9 @@ void ControlSystem::setButtons(ControlComponent * cc) {
 	else {
 		cc->setFire(false);
 	}
+
+	
+	
 
 	if (AButton) {
 		if (cc->aIndex == 0)

@@ -10,6 +10,13 @@ void AISystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
+
+void AISystem::removeEntity(int index)
+{
+	m_entities.pop_back();
+}
+
+
 void AISystem::recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints, std::vector<std::pair<c2v, std::string>> jumpPoints, std::vector<std::shared_ptr<Tile>> tiles, int width, int height)
 {
 	m_pathPoints = walkpoints;
@@ -20,6 +27,7 @@ void AISystem::recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints,
 
 	
 }
+
 
 void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 {
@@ -138,7 +146,6 @@ std::pair<c2v, std::string> AISystem::checkPoints(std::vector<std::pair<c2v, std
 void AISystem::update() {
 
 	
-	
 	int speed = 0;
 	int x = 0;
 	int y = 0;
@@ -216,14 +223,26 @@ void AISystem::update() {
 				}
 			}
 		
-			
-			if (ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
-			{
-				ac->jumping = false;
+			if (!tag->getGotGunBool()) {
+				if (ac->curPosition.y + 20 < ac->closestEnemy.second.y + 200 && ac->m_landed)
+				{
+					ac->jumping = false;
+				}
+				else
+				{
+					ac->jumping = true;
+				}
 			}
 			else
 			{
-				ac->jumping = true;
+				if (ac->curPosition.y <= ac->closestEnemy.second.y)
+				{
+					ac->jumping = false;
+				}
+				else
+				{
+					ac->jumping = true;
+				}
 			}
 			
 			
@@ -241,11 +260,6 @@ void AISystem::update() {
 
 				if (!ac->detect) 
 				{
-					
-					ac->setRight(false);
-					ac->setLeft(false);
-					
-					
 					if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
 					{
 						con->setFire(true);
@@ -257,42 +271,45 @@ void AISystem::update() {
 				}
 			}	
 			
-				//if the gun is on the same level as the AI character
-			if (!tag->gotGunBool) {
-				if (ac->curPosition.y + 50 > ac->closestEnemy.second.y && ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
+			//if the gun is on the same level as the AI character
+			if (ac->curPosition.y + 50 > ac->closestEnemy.second.y && ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
+			{
+				ac->m_gunInSight = true;
+
+				if (ac->direction == "LEFT")
 				{
-					ac->m_gunInSight = true;
 
-					if (ac->direction == "LEFT")
+					if (ac->curPosition.x > ac->closestEnemy.second.x)
 					{
+						ac->setRight(false);
+						ac->setLeft(true);
 
-						if (ac->curPosition.x > ac->closestEnemy.second.x)
-						{
-							ac->setRight(false);
-							ac->setLeft(true);
-
-						}
 					}
+				}
 
-					if (ac->direction == "RIGHT" && ac->curPosition.x < ac->closestEnemy.second.x)
+				if (ac->direction == "RIGHT" && ac->curPosition.x < ac->closestEnemy.second.x)
+				{
+					if (ac->curPosition.x < ac->closestEnemy.second.x)
 					{
-						if (ac->curPosition.x < ac->closestEnemy.second.x)
-						{
-							ac->setRight(true);
-							ac->setLeft(false);
-
-						}
+						ac->setRight(true);
+						ac->setLeft(false);
 
 					}
 
 				}
-				else
-				{
-					ac->m_gunInSight = false;
-				}
+
+			}
+			else
+			{
+				ac->m_gunInSight = false;
 			}
 			
-		}	
+		}
+		else
+		{
+			con->setFire(false);
+		
+		}
 	}
 }
 

@@ -85,27 +85,37 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	m_spriteComponent->setColor(255, 255, 0);
 	this->addComponent(m_spriteComponent);
 
+	controlComp = new ControlComponent();
+
 	this->addComponent(new HealthComponent(10));
 	tag = new TagComponent("Player");
 	if (index == 0)
 	{
 		tag->setSubTag("Player 1");
 		initialiseText(std::to_string(index + 1), m_marker->getPosition().x, m_marker->getPosition().y);
+		tag->setID(index);
+		controlComp->isPlayer = true;
 	}
 	else if (index == 1)
 	{
 		tag->setSubTag("Player 2");
 		initialiseText(std::to_string(index + 1), m_marker->getPosition().x, m_marker->getPosition().y);
+		tag->setID(index);
+		controlComp->isPlayer = true;
 	}
 	else if (index == 2)
 	{
 		tag->setSubTag("Player 3");
 		initialiseText(std::to_string(index + 1), m_marker->getPosition().x, m_marker->getPosition().y);
+		tag->setID(index);
+		controlComp->isPlayer = true;
 	}
 	else if (index == 3)
 	{
 		tag->setSubTag("Player 4");
 		initialiseText(std::to_string(index + 1), m_marker->getPosition().x, m_marker->getPosition().y);
+		tag->setID(index);
+		controlComp->isPlayer = true;
 	}
 	else {
 		tag->setSubTag("AIPlayer");
@@ -114,7 +124,7 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 
 	positionComp = new PositionComponent(x, y);
 	this->addComponent(positionComp);
-	controlComp = new ControlComponent();
+	
 	controlComp->gGameController = controller;
 	controlComp->m_playerNum = index;
 	this->addComponent(controlComp);
@@ -180,6 +190,21 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 			m_spriteComponentHead2->rotate(-3);
 			m_spriteComponentLeftFoot->rotate(-3);
 			m_spriteComponentRightFoot->rotate(-3);
+		}
+		else
+		{
+			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
+			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
+			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10, m_spriteComponentHead->getPosition().y - 10 });
+			m_spriteComponentHead2->setPosition(c2v{ m_spriteComponentHead2->getPosition().x - 10, m_spriteComponentHead2->getPosition().y - 10 });
+			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + 10, m_spriteComponentCrown->getPosition().y - 10 });
+
+
+			m_spriteComponentHead->rotate(3);
+			m_spriteComponentCrown->rotate(3);
+			m_spriteComponentHead2->rotate(3);
+			m_spriteComponentLeftFoot->rotate(3);
+			m_spriteComponentRightFoot->rotate(3);
 		}
 
 		controlComp->setRight(false);

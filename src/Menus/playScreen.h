@@ -33,7 +33,7 @@
 class PlayScreen 
 {
 public:
-	PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font);
+	PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font, SDL_GameController * controller);
 	~PlayScreen() {}
 
 	void update(bool * online, SDL_Event event, int size, Client * client);
@@ -121,6 +121,12 @@ public:
 
 	bool m_drawTimer = false;
 
+	SpriteComponent * m_grenadeSpriteComponent;
+	SpriteComponent * m_stabbyboySpriteComponent;
+	SpriteComponent * m_juicerSpriteComponent;
+	SpriteComponent * m_shotgunSpriteComponent;
+	SpriteComponent * m_pistolSpriteComponent;
+
 private: 
 
 	float m_screenScale = 1.0f;
@@ -148,4 +154,10 @@ private:
 
 	int highest = 0;
 	bool m_restart = false;
+
+	SDL_GameController * m_gameController;
+
+	bool firstTime = true;
+	int buttonTimer = 0;
+	bool m_pressed = false;
 };

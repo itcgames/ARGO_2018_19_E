@@ -141,8 +141,8 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 
 				temp->sRect.w = m_tileWidth;
 				temp->sRect.h = m_tileHeight;
-				temp->sRect.x = (currentGID % m_map.getTilesets().at(0).getColumnCount() - 1) * m_tileWidth;
-				temp->sRect.y = (currentGID / m_map.getTilesets().at(0).getColumnCount()) * m_tileHeight;
+				temp->sRect.x = (currentGID % m_map.getTilesets().at(0).getColumnCount()) * m_tileWidth;
+				temp->sRect.y = (currentGID / m_map.getTilesets().at(0).getColumnCount() - 1) * m_tileHeight;
 
 				temp->dead = false;
 				temp->health = 10;

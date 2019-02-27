@@ -34,6 +34,9 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 
 	m_spriteComponentHead->setColor(255, 255, 255);
 
+	control = new ControlComponent();
+	this->addComponent(control);
+
 	//creating and adding ray cast for AI
 	m_rayCastComp = new RayCastComponent();
 	this->addComponent(m_rayCastComp);
@@ -46,6 +49,7 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 	{
 		tag->setSubTag("Player 1");
 		tag->setSubTag2("AI_Player");
+		
 		
 	}
 	else if (noOfPlayers == 1)
@@ -68,8 +72,6 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 	}
 
 	this->addComponent(tag);
-	control = new ControlComponent();
-	this->addComponent(control);
 	controlComp = new AIComponent();
 	this->addComponent(controlComp);
 	positionComp = new PositionComponent(xPos, yPos);

@@ -67,6 +67,10 @@ public:
 	float getCurrentAngle() { return m_currentAngle; }
 	void setCurrentAngle(float angle) { m_currentAngle = angle; }
 
+	bool isDead = false;
+
+	bool isPlayer = false;
+	bool swap = false;
 private:
 
 	bool m_left = false;
