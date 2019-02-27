@@ -86,7 +86,7 @@ private:
 	Light* testLight;
 	AudioObserver* m_audioObserver;
 
-	SpriteComponent* m_backgroundSprite;
+	SDL_Texture* vignettetexture;
 
 	HealthSystem m_hs;
 	ControlSystem m_cs;
@@ -123,6 +123,9 @@ private:
 
 	int m_toggleCounter = 0;
 	const int ALLOW_TOGGLE = 100.0f;
+
+	bool m_startPlay;
+	bool fScreen = false;
 };
 
 

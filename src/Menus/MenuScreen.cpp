@@ -101,7 +101,7 @@ SDL_Texture* MenuScreen::loadFromFile(std::string path, SDL_Renderer* gRenderer)
 			//Get image dimensions
 			if (count < 2)
 			{
-				m_width2 = loadedSurface->w + 300;
+				m_width2 = loadedSurface->w + 400;
 				m_height2 = loadedSurface->h;
 			}
 			else
