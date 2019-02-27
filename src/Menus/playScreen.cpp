@@ -328,6 +328,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		if (m_timerCounter > 20) {
 			m_timer--;
 			initialiseText(std::to_string(m_timer), 0, 700);
+			renderQuad->x = 1000;
 			m_timerCounter = 0;
 		}
 		
@@ -369,6 +370,8 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	if (m_gameOver) {
 		initialiseText("Victory", 0, 500);
+		renderQuad->x = 600;
+
 		endRound();
 	}
 	
@@ -489,7 +492,7 @@ void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_T
 		int text_height = textSurface->h;
 		SDL_FreeSurface(textSurface);
 		renderQuad = new SDL_Rect{ 150, y, text_width, text_height };
-		renderQuad->x = 800 - (renderQuad->w / 2);
+		//renderQuad->x = 800 - (renderQuad->w / 2);
 	}
 	else {
 		textSurface = TTF_RenderText_Solid(Font, message.c_str(), textColor);
@@ -498,7 +501,7 @@ void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_T
 		int text_height = textSurface->h;
 		SDL_FreeSurface(textSurface);
 		winnerRenderQuad = new SDL_Rect{ 150, y, text_width, text_height };
-		winnerRenderQuad->x = 900 - (winnerRenderQuad->w / 2);
+		//winnerRenderQuad->x = 900 - (winnerRenderQuad->w / 2);
 	}
 	
 }
@@ -523,8 +526,10 @@ bool PlayScreen::onlineRoundOver() {
 	
 	if (dead >= (playerAmount - 1)) {
 		if (!m_drawRoundText) {
-			initialiseText("Player Wins", 1, 200);
-			m_drawRoundText = true;
+		initialiseText("Player Wins", 1, 200);
+		winnerRenderQuad->x = 150;
+
+		m_drawRoundText = true;
 		}
 		if(m_timer < 5)
 			m_timer = 10;
@@ -570,7 +575,7 @@ void PlayScreen::endRound() {
 		m_ps.startRoundCount = 0;
 		m_BGRect.x = -2400; m_BGRect.y = 0;
 		initialiseText(std::to_string(m_timer), 0, 700);
-
+		renderQuad->x = 1000;
 		if (m_gameOver) {
 			*m_currentGameState = GameState::Menu;
 
@@ -600,6 +605,8 @@ void PlayScreen::checkRoundOver() {
 			if (!control->getAlive()) {
 				if (!m_drawRoundText) {
 					initialiseText("AI Wins", 1, 200);
+					winnerRenderQuad->x = 600;
+
 					m_drawRoundText = true;
 				}
 				if (m_timer < 5)
@@ -633,6 +640,7 @@ void PlayScreen::checkRoundOver() {
 					if (control->getAlive()) {
 						tag->setScore(tag->getScore() + 1);
 						initialiseText(tag->getSubTag() + " Wins!", 1, 200);
+						winnerRenderQuad->x = 150;
 						checkScore();
 					}
 				}
