@@ -28,7 +28,6 @@
 #include "Menus/playScreen.h"
 
 #include "Debug.h"
-#include "SDL_OpenGL_Ext.h"
 #include "SDL_OpenGL_Impl.h"
 
 
@@ -126,10 +125,15 @@ private:
 	SDL_Surface * textSurface = new SDL_Surface;
 
 	GLuint	progID;
+	GLuint	progID2;
 	SDL_Texture* frame;
+	SDL_Texture* screen_frame;
 
 	int m_toggleCounter = 0;
 	const int ALLOW_TOGGLE = 100.0f;
+
+	bool m_startPlay;
+
 };
 
 

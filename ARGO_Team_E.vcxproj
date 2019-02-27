@@ -293,6 +293,7 @@
     <ClInclude Include="src\States\Idle.h" />
     <ClInclude Include="src\States\SearchEntity.h" />
     <ClInclude Include="src\States\SearchGun.h" />
+    <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\Systems\AISystem.h" />
     <ClInclude Include="src\Systems\AnimationsSystem.h" />
     <ClInclude Include="src\Systems\CollisionSystem.h" />
@@ -305,10 +306,13 @@
     <ClInclude Include="src\Systems\RenderSystem.h" />
     <ClInclude Include="src\Systems\RestartSystem.h" />
     <ClInclude Include="src\Systems\SoundSystem.h" />
+    <ClInclude Include="src\UtilityTimer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Shaders\bw.fragment" />
     <None Include="src\Shaders\crt.fragment" />
+    <None Include="src\Shaders\curve.fragment" />
+    <None Include="src\Shaders\mario.fragment" />
     <None Include="src\Shaders\std.vertex" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -20,9 +20,13 @@ public:
 	void update(SDL_Rect* focus);
 	SDL_Rect* focus(std::vector<c2v> playerPositions);
 	SDL_Rect* getCamera() { return this->camera; }
-private:
+
 	SDL_Rect* camera;
+
 	SDL_Rect* lookAt;
+private:
+	
+	
 
 	int min_x;
 	int min_y;

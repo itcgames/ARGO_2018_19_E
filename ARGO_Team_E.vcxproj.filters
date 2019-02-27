@@ -105,15 +105,18 @@
     <ClInclude Include="src\Debug.h" />
     <ClInclude Include="src\SDL_OpenGL_Ext.h" />
     <ClInclude Include="src\SDL_OpenGL_Impl.h" />
+    <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\UtilityTimer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Components\RayCastComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Shaders\bw.fragment" />
     <None Include="src\Shaders\crt.fragment" />
+    <None Include="src\Shaders\curve.fragment" />
+    <None Include="src\Shaders\mario.fragment" />
     <None Include="src\Shaders\std.vertex" />
-
-    <ClInclude Include="src\Camera.h" />
-
-    <ClInclude Include="src\Components\RayCastComponent.h" />
-
   </ItemGroup>
 </Project>

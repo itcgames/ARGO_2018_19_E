@@ -6,13 +6,12 @@
 
 static GLuint SDL_OpenGL_CompileShader(const char* src, GLuint type) {
 
-	glLoadIdentity();
-
 	GLint isCompiled = GL_FALSE;	// Shader Compiled
 	GLuint result = glCreateShader(type);
 
 	glShaderSource(result, 1, &src, NULL);
 	glCompileShader(result);
+
 
 	//Check is Shader Compiled
 #if defined DEBUG
@@ -52,76 +51,74 @@ static GLuint SDL_OpenGL_CompileShader(const char* src, GLuint type) {
 	return result;
 }
 
-static void SDL_OpenGL_RenderFrame(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* frame, GLuint progID) {
+
+static SDL_Texture* screen_frame;
+
+static void SDL_OpenGL_Apply_Frame_FX(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* level_frame, SDL_Texture* screen_frame, SDL_Rect* camera, GLuint progID) {
 
 #if defined DEBUG
 	//DEBUG_MSG("Rendering to Backbuffer and applying Shader");
 #endif
 
-	int w, h;
-	SDL_QueryTexture(frame, NULL, NULL, &w, &h);
-
-	SDL_Rect target;
-	target.x = 0;
-	target.y = 0;
-	target.w = w;
-	target.h = h;
-
 	// ******************************************************************
 	// Filling backbuffer and swapping
 	// ******************************************************************
 
-	SDL_SetRenderTarget(renderer, NULL);
+	// Copy the Level Frame enclosed by camera into screen frame
+	SDL_SetRenderTarget(renderer, screen_frame);
 	SDL_RenderClear(renderer);
 
-	SDL_GL_BindTexture(frame, NULL, NULL);
+	SDL_RenderCopy(renderer, level_frame, camera, NULL);
+
+
+	// Apply the Shader
+
+	SDL_SetRenderTarget(renderer, NULL);
+	SDL_RenderClear(renderer);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	SDL_RenderCopy(renderer, screen_frame, camera, camera);
 
 	if (progID != 0) {
 		glUseProgram(progID);
 	}
 
 	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f((GLfloat)target.x, (GLfloat)target.y, 0.0f);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f((GLfloat)target.w, (GLfloat)target.y, 0.0f);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f((GLfloat)target.x, (GLfloat)target.h, 0.0f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f((GLfloat)target.w, (GLfloat)target.h, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(0.0f, 0.0f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(1.0f, 0.0f, 0.0f);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(0.0f, 1.0f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(1.0f, 1.0f, 0.0f);
 	glEnd();
-
 
 	if (progID != 0) {
 		glUseProgram(progID);
 	}
 
-	SDL_GL_SwapWindow(window);
-
 }
 
-static int SDL_OpenGL_Init_Orho(int screen_width, int screen_height)
+static void SDL_OpenGL_Init_Ortho(int screen_width, int screen_height)
 {
-	GLint result = GL_FALSE;
-
 	GLdouble aspect;
-
-	glViewport(0, 0, screen_width, screen_height);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClearDepth(1.0);
+	glClearDepth(1.0); 
 	glDepthFunc(GL_LESS);
 	glShadeModel(GL_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-
 	aspect = (GLdouble)screen_width / screen_height;
 	glOrtho(-3.0, 3.0, -3.0 / aspect, 3.0 / aspect, 0.0, 1.0);
-
 	glMatrixMode(GL_MODELVIEW);
-
-	result = GL_TRUE;
-
-	return result;
 }
 
 static GLuint SDL_OpenGL_CompileProgram(const char* vertex_shader, const char* fragment_shader) {

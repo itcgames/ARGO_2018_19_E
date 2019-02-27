@@ -43,7 +43,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Game);
+	*m_currentGameState = (GameState::Menu);
 
 
 
@@ -77,22 +77,19 @@ Game::Game()
 	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client, m_online);
 	m_options = new OptionScreen();
 	
-<<<<<<< HEAD
 	m_screenSize = { 0,0,1200,700 };	
 
-	if (SDL_OpenGL_Init_Orho(m_screenSize.w, m_screenSize.h) < 0) {
-		fprintf(stderr, "Error Initializing %s\n", SDL_GetError());
-	}
+	SDL_OpenGL_Init_Ortho(m_screenSize.w, m_screenSize.h);
 
-	progID = SDL_OpenGL_CompileProgram("./src/Shaders/std.vertex", "./src/Shaders/bw.fragment");
-
+	progID = SDL_OpenGL_CompileProgram("./src/Shaders/std.vertex", "./src/Shaders/curve.fragment");
+	progID2 = SDL_OpenGL_CompileProgram("","");
 
 	frame = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888,
 		SDL_TEXTUREACCESS_TARGET, m_screenSize.w, m_screenSize.h);
 
-=======
-	m_screenSize = { 0,0,1200,700 };
->>>>>>> 62c2fc9aa7507ecc5fdee3267a0126bff24feeff
+	screen_frame = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888,
+		SDL_TEXTUREACCESS_TARGET, m_screenSize.w, m_screenSize.h);
+
 }
 
 Game::~Game()
@@ -178,11 +175,12 @@ void Game::render() {
 	{
 		SDL_Log("Could not create a renderer: %s", SDL_GetError());
 	}
+	
+	SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
 
 	SDL_SetRenderTarget(m_renderer, frame);
 	SDL_RenderClear(m_renderer);
-
-	//SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
+	m_startPlay = false;
 
 	switch (*m_currentGameState)
 	{
@@ -202,6 +200,7 @@ void Game::render() {
 		m_options->render(m_renderer);
 		break;
 	case GameState::Game:
+		m_startPlay = true;
 		m_playScreen->render(m_renderer);
 		
 		break;
@@ -212,7 +211,11 @@ void Game::render() {
 		break;
 	}
 	//SDL_RenderPresent(m_renderer);
-	SDL_OpenGL_RenderFrame(m_window, m_renderer, frame, progID);
+	SDL_OpenGL_Apply_Frame_FX(m_window, m_renderer, frame, screen_frame, m_playScreen->m_camera->lookAt, progID);
+
+	SDL_GL_SwapWindow(m_window);
+
+	
 }
 
 
