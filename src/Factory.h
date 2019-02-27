@@ -20,10 +20,13 @@ public:
 	c2AABB collider;
 
 	int m_ttl = 0;
+	c2v getPosition() { return m_pos; }
+	void setPosition(c2v pos) { m_pos = pos; }
 
 private:
 	//std::vector<Component*> m_components;
 	//SpriteComponent* m_spriteComponent;
+	c2v m_pos;
 };
 
 
