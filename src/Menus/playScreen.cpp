@@ -419,6 +419,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	if (m_restart)
 	{
+		std::random_shuffle(m_map->getSpawnPoints().begin(), m_map->getSpawnPoints().end());
 		m_restartSys.reset(randNum, m_map->getSpawnPoints(), *online, client->number, size);
 		m_restart = false;
 	}

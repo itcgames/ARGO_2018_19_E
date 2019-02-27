@@ -38,7 +38,7 @@ public:
 
 	std::vector<std::pair<c2v, std::string>> getWalkPoints() { return m_walkPointVector; }
 	std::vector<std::pair<c2v, std::string>> getJumpPoints() { return m_jumpPointVector; }
-	std::vector <std::pair<bool, c2v>*> getSpawnPoints() { return m_spawnPointVector; }
+	std::vector <std::pair<bool, c2v>*>& getSpawnPoints() { return m_spawnPointVector; }
 
 	int getWidth();
 	int getHeight();
