@@ -181,6 +181,21 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 			m_spriteComponentLeftFoot->rotate(-3);
 			m_spriteComponentRightFoot->rotate(-3);
 		}
+		else
+		{
+			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
+			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
+			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10, m_spriteComponentHead->getPosition().y - 10 });
+			m_spriteComponentHead2->setPosition(c2v{ m_spriteComponentHead2->getPosition().x - 10, m_spriteComponentHead2->getPosition().y - 10 });
+			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + 10, m_spriteComponentCrown->getPosition().y - 10 });
+
+
+			m_spriteComponentHead->rotate(3);
+			m_spriteComponentCrown->rotate(3);
+			m_spriteComponentHead2->rotate(3);
+			m_spriteComponentLeftFoot->rotate(3);
+			m_spriteComponentRightFoot->rotate(3);
+		}
 
 		controlComp->setRight(false);
 		controlComp->setLeft(false);

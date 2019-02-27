@@ -118,7 +118,7 @@ void OnlineScreen::update() {
 		removeMember();
 	}
 
-	if (m_strings.size() > 1) {
+	if (m_strings.size() > 0) {
 		m_ready2Play = true;
 		if (AButton) {
 			m_joined = false;
@@ -127,14 +127,16 @@ void OnlineScreen::update() {
 			lastButton = "A";
 			m_client->sendMessage(m_pack);
 			*m_online = true;
-			outAnimation = true;
+			*m_currentGameState = GameState::Game;
+			//outAnimation = true;
 			m_lobbySize = m_strings.size();
 		}
 		else if (m_client->m_startGame) {
 			m_joined = false;
 			*m_online = true;
-			outAnimation = true;
-			lastButton = "A";
+			*m_currentGameState = GameState::Game;
+			//outAnimation = true;
+			//lastButton = "A";
 			m_lobbySize = m_strings.size();
 		}
 	}

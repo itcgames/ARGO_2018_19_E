@@ -46,13 +46,39 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 
 	m_map->load("testlevel.tmx", renderer);
 
-	m_guns.push_back(new Gun(renderer, 1, 1500, 100,gunAmount));
+	m_pistolSpriteComponent = new SpriteComponent(0, 0, 210, 295);
+	m_pistolSpriteComponent->setPosition(c2v{ 999999, 999999 });
+	m_pistolSpriteComponent->setScale(c2v{ 0.2f, 0.2f });
+	m_pistolSpriteComponent->loadFromFile("assets/pistol.png", renderer);
+
+	m_shotgunSpriteComponent = new SpriteComponent(0, 0, 27, 133);
+	m_shotgunSpriteComponent->setPosition(c2v{ 999999, 999999 });
+	m_shotgunSpriteComponent->setScale(c2v{ 2.0f, 1.5f });
+	m_shotgunSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/Shotgun3.png", renderer);
+
+	m_juicerSpriteComponent = new SpriteComponent(0, 0, 100, 150);
+	m_juicerSpriteComponent->setPosition(c2v{ 999999, 999999 });
+	m_juicerSpriteComponent->setScale(c2v{ 2.0f, 2.0f });
+	m_juicerSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/MiniGun.png", renderer);
+
+	m_stabbyboySpriteComponent = new SpriteComponent(0, 0, 12, 136);
+	m_stabbyboySpriteComponent->setPosition(c2v{ 999999, 999999 });
+	m_stabbyboySpriteComponent->setScale(c2v{ 2.0f, 2.0f });
+	m_stabbyboySpriteComponent->loadFromFile("assets/art/character/finished_character_assets/Katana.png", renderer);
+
+	m_grenadeSpriteComponent = new SpriteComponent(0, 0, 150, 200);
+	m_grenadeSpriteComponent->setPosition(c2v{ 999999,999999 });
+	m_grenadeSpriteComponent->setScale(c2v{ 0.2f, 0.2f });
+	m_grenadeSpriteComponent->loadFromFile("assets/grenade.png", renderer);
+
+
+	m_guns.push_back(new Gun(renderer, 1, 1500, 100,gunAmount,m_pistolSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 2, 1000, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 3, 1000, 100,gunAmount, m_juicerSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 5, 300, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 2, 300, 100,gunAmount, m_shotgunSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 3, 700, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 5, 700, 100,gunAmount, m_stabbyboySpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
 
 
@@ -252,7 +278,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
-	m_ais.update();
+	//m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
 
@@ -274,9 +300,11 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	//if (m_cameraCount > TIME_BETWEEN_CAMERA_CHANGES)
 	//{
-	m_focusPoint = m_camera->focus(m_playerPositions);
-	m_camera->update(m_focusPoint);
-	m_cameraCount = 0;
+
+	//m_focusPoint = m_camera->focus(m_playerPositions);
+	//m_camera->update(m_focusPoint);
+	//m_cameraCount = 0;
+
 	//}
 
 	//if (m_focusPoint->w > 0) {
@@ -408,10 +436,6 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	for (Player * p : m_networkCharacters) {
 		Entity * ent = (Entity*)p;
 		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
-
-		if (cc->getRoundOver()) {
-			m_roundEnd = true;
-		}
 	}
 }
 
@@ -554,6 +578,7 @@ void PlayScreen::endRound() {
 				tag->setScore(0);
 			}
 			SDL_RenderSetScale(m_renderer, 1.0f, 1.0f);
+			m_timer = 5;
 			m_gameOver = false;
 			highest = 0;
 		}
