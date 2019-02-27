@@ -99,7 +99,6 @@ void OnlineScreen::update() {
 		m_pack.message = 3;
 		m_pack.playerNum = m_client->number;
 		m_client->sendMessage(m_pack);
-		//*m_currentGameState = GameState::Menu;
 		lastButton = "B";
 		outAnimation = true;
 		m_firstRunThrough = false;
@@ -124,17 +123,15 @@ void OnlineScreen::update() {
 			m_joined = false;
 			m_pack.message = 4;
 			m_pack.playerNum = m_client->number;
-			lastButton = "A";
 			m_client->sendMessage(m_pack);
 			*m_online = true;
-			outAnimation = true;
+			*m_currentGameState = GameState::Game;
 			m_lobbySize = m_strings.size();
 		}
 		else if (m_client->m_startGame) {
 			m_joined = false;
 			*m_online = true;
-			outAnimation = true;
-			lastButton = "A";
+			*m_currentGameState = GameState::Game;
 			m_lobbySize = m_strings.size();
 		}
 	}

@@ -2,7 +2,7 @@
 
 AISystem::AISystem() {
 	fsm = new Animation();
-	//std::cout << fsm->getCurrent() << std::endl;
+	std::cout << fsm->getCurrent() << std::endl;
 
 }
 
@@ -227,10 +227,6 @@ void AISystem::update() {
 			}
 			
 			
-
-			
-			
-			
 			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
 			rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
 
@@ -245,6 +241,11 @@ void AISystem::update() {
 
 				if (!ac->detect) 
 				{
+					
+					ac->setRight(false);
+					ac->setLeft(false);
+					
+					
 					if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
 					{
 						con->setFire(true);
@@ -253,46 +254,42 @@ void AISystem::update() {
 					{
 						con->setFire(false);
 					}	
-
-					if (ac->closestEnemy.first < 100)
-					{
-						ac->setLeft(false);
-						ac->setRight(false);
-					}
-				}	
+				}
 			}	
 			
 				//if the gun is on the same level as the AI character
-			if (ac->curPosition.y + 50 > ac->closestEnemy.second.y && ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
-			{
-				ac->m_gunInSight = true;
-
-				if (ac->direction == "LEFT")
+			if (!tag->gotGunBool) {
+				if (ac->curPosition.y + 50 > ac->closestEnemy.second.y && ac->curPosition.y + 50 < ac->closestEnemy.second.y + 200 && ac->m_landed)
 				{
+					ac->m_gunInSight = true;
 
-					if (ac->curPosition.x > ac->closestEnemy.second.x)
+					if (ac->direction == "LEFT")
 					{
-						ac->setRight(false);
-						ac->setLeft(true);
 
-					}
-				}
+						if (ac->curPosition.x > ac->closestEnemy.second.x)
+						{
+							ac->setRight(false);
+							ac->setLeft(true);
 
-				if (ac->direction == "RIGHT" && ac->curPosition.x < ac->closestEnemy.second.x)
-				{
-					if (ac->curPosition.x < ac->closestEnemy.second.x)
-					{
-						ac->setRight(true);
-						ac->setLeft(false);
-
+						}
 					}
 
-				}
+					if (ac->direction == "RIGHT" && ac->curPosition.x < ac->closestEnemy.second.x)
+					{
+						if (ac->curPosition.x < ac->closestEnemy.second.x)
+						{
+							ac->setRight(true);
+							ac->setLeft(false);
 
-			}
-			else
-			{
-				ac->m_gunInSight = false;
+						}
+
+					}
+
+				}
+				else
+				{
+					ac->m_gunInSight = false;
+				}
 			}
 			
 		}	
@@ -490,10 +487,6 @@ bool AISystem::tileCollision(float x1, float y1, float x2, float y2)
 		bool right = lineLine(x1, y1, x2, y2, x + w, y, x + w, y + h);
 		bool top = lineLine(x1, y1, x2, y2, x, y, x + w, y);
 		bool bottom = lineLine(x1, y1, x2, y2, x, y + h, x + w, y + h);
-		if (left) { std::cout << "left" << std::endl; }
-		if (right) { std::cout << "right" << std::endl; }
-		if (top) { std::cout << "top" << std::endl; }
-		if (bottom) { std::cout << "bottom" << std::endl; }
 
 		// if ANY of the above are true, the line
 		// has hit the rectangle

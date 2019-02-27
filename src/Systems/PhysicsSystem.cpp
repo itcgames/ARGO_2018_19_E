@@ -756,7 +756,7 @@ void PhysicsSystem::setHandNormal(SpriteComponent * sc, PositionComponent *pc, P
 }
 void PhysicsSystem::movePlayer(ControlComponent * cc, PositionComponent *pc, TagComponent *tc) {
 	float speed = 1.5;
-	float jumpSpeed = 20;
+	float jumpSpeed = 21;
 
 	if (tc->getGunGot() == "juicer")
 	{
@@ -942,7 +942,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 					}
 
 					if (ac->getJump() && pc->jumpNum < 2) {
-						pc->setVelY(-20);
+						pc->setVelY(-21);
 						ac->setJump(false);
 						pc->m_allowedJump = false;
 						pc->jumpNum++;

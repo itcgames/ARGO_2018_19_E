@@ -15,7 +15,7 @@ class RestartSystem
 public:
 	RestartSystem();
 	void addEntity(Entity * e);
-	void reset(int level, std::vector<std::pair<bool, c2v>*>  vec);
+	void reset(int level, std::vector<std::pair<bool, c2v>*>  vec, bool online, int clientNum, int size);
 
 	std::vector<Entity *> m_entities;
 private:

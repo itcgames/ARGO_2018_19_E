@@ -147,4 +147,5 @@ private:
 	bool m_gameOver = false;
 
 	int highest = 0;
+	bool m_restart = false;
 };

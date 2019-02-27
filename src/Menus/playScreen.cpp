@@ -274,8 +274,8 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	//if (m_cameraCount > TIME_BETWEEN_CAMERA_CHANGES)
 	//{
-	m_focusPoint = m_camera->focus(m_playerPositions);
-	m_camera->update(m_focusPoint);
+	//m_focusPoint = m_camera->focus(m_playerPositions);
+	//m_camera->update(m_focusPoint);
 	m_cameraCount = 0;
 	//}
 
@@ -336,6 +336,11 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		
 	}
 
+	if (m_restart)
+	{
+		m_restartSys.reset(randNum, m_map->getSpawnPoints(), *online, client->number, size);
+		m_restart = false;
+	}
 
 	if (m_gameOver) {
 		initialiseText("Victory", 0, 500);
@@ -410,7 +415,7 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
 
 		if (cc->getRoundOver()) {
-			m_roundEnd = true;
+			//m_roundEnd = true;
 		}
 	}
 }
@@ -538,7 +543,7 @@ void PlayScreen::endRound() {
 		m_drawRoundText = false;
 		m_roundEnd = false;
 
-		m_restartSys.reset(randNum, m_map->getSpawnPoints());
+		m_restart = true;
 		m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getTiles(), m_map->getWidth(), m_map->getHeight());
 		m_ps.recieveLevel(m_map->getWidth(), m_map->getHeight());
 		m_ps.startRoundCount = 0;
@@ -600,7 +605,8 @@ void PlayScreen::checkRoundOver() {
 		}
 		if (dead >= 3) {
 			if (!m_drawRoundText) {
-				for (Entity * ent : m_playerents) {
+				for (Player * p : m_players) {
+					Entity * ent = (Entity *)p;
 					ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 					TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
 					if (control->getAlive()) {

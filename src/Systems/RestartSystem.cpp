@@ -8,7 +8,8 @@ void RestartSystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
-void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec) {
+void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec, bool online, int clientNum, int size) {
+	
 	int count = 0;
 
 	for (Entity * ent : m_entities) {
@@ -24,7 +25,7 @@ void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec) {
 		pc->setY(pc->startY);
 		sc->setRotation(0);
 		sc->setPosition(c2v{pc->startX, pc->startY});
-	
+
 		if (tc->getTag() == "Player") {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 			tc->setGunGot("none");
@@ -34,10 +35,13 @@ void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec) {
 			control->setThrowGun(false);
 			control->setAlive(true);
 			control->setAngle(90);
-			
+		}
+
+		if (!online) {
+
 			if (tc->getSubTag2() == "AI_Player")
 			{
-				
+
 				ac->set = false;
 				pc->setX(vec.at(count)->second.x);
 				pc->setY(vec.at(count)->second.y);
@@ -51,14 +55,47 @@ void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec) {
 				sc->setPosition(c2v{ vec.at(count)->second.x, vec.at(count)->second.y });
 				count++;
 			}
-			
 		}
-		else if (tc->getTag() == "Hand") {
+		else
+		{
+			if (vec.at(clientNum - 1)->first == false)
+			{
+				pc->setX(vec.at(clientNum - 1)->second.x);
+				pc->setY(vec.at(clientNum - 1)->second.y);
+				sc->setPosition(c2v{ vec.at(clientNum - 1)->second.x, vec.at(clientNum - 1)->second.y });
+				vec.at(clientNum - 1)->first = true;
+			}
+			if (clientNum < size) {
+				for (int i = clientNum + 1; i <= size; i++) {
+					if (vec.at(i - 1)->first == false)
+					{
+						pc->setX(vec.at(i - 1)->second.x);
+						pc->setY(vec.at(i - 1)->second.y);
+						sc->setPosition(c2v{ vec.at(i - 1)->second.x, vec.at(clientNum - 1)->second.y });
+						vec.at(i - 1)->first = true;
+					}
+				}
+			}
+
+			if (clientNum > 1) {
+				for (int i = clientNum - 1; i > 0; i--) {
+					if (vec.at(i - 1)->first == false)
+					{
+						pc->setX(vec.at(i - 1)->second.x);
+						pc->setY(vec.at(i - 1)->second.y);
+						sc->setPosition(c2v{ vec.at(i - 1)->second.x, vec.at(clientNum - 1)->second.y });
+						vec.at(i - 1)->first = true;
+					}
+				}
+			}
+		}
+		
+		if (tc->getTag() == "Hand") {
 			tc->setGunGot("none");
 			tc->setGunGotID("0");
 			tc->setGotGunBool(false);
 		}
-		else if (tc->getTag() == "Gun") {
+		if (tc->getTag() == "Gun") {
 			CollisionComponent * colisionc = (CollisionComponent*)ent->getCompByType("COLLISION");
 			colisionc->setW(sc->getWidth());
 			colisionc->setH(sc->getHeight());
