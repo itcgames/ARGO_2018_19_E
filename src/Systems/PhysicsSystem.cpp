@@ -1357,7 +1357,7 @@ void PhysicsSystem::bulletRender(SDL_Renderer* renderer, Camera* camera) {
 						gunPos = (PositionComponent*)entity->getCompByType("POSITION");
 					}
 				}
-				animateExplosion(renderer, tc, gunPos);
+				animateExplosion(renderer, tc, gunPos, camera);
 			}
 		}
 	}
@@ -1402,9 +1402,11 @@ void PhysicsSystem::setRenderer(SDL_Renderer * renderer)
 
 }
 
-void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc, PositionComponent * pc)
+void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc, PositionComponent * pc, Camera* camera)
 {
 	m_count++;
+
+	c2v* screenPos = new c2v{ 0, 0 };
 
 	if (tc->getGunGot() == "pistol")
 	{
@@ -1417,11 +1419,15 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
-			p->setPosition(pc->getX() - 15, pc->getY());
+			screenPos->x = (pc->getX() - 15) - camera->getCamera()->x;
+			screenPos->y = pc->getY() - camera->getCamera()->y;
+			p->setPosition((int)screenPos->x, (int)screenPos->y);
 		}
 		else
 		{
-			p->setPosition(pc->getX() + 60, pc->getY() + 10);
+			screenPos->x = (pc->getX() + 60) - camera->getCamera()->x;
+			screenPos->y = (pc->getY() + 10) - camera->getCamera()->y;
+			p->setPosition((int)screenPos->x, (int)screenPos->y);
 
 		}
 
@@ -1441,16 +1447,20 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
-			flash->setPosition(pc->getX() - tc->getShotgunTipX() + 20, pc->getY() + tc->getShotgunTipY());
+			screenPos->x = (pc->getX() - tc->getShotgunTipX() + 20) - camera->getCamera()->x;
+			screenPos->y = (pc->getY() + tc->getShotgunTipY()) - camera->getCamera()->y;
+			flash->setPosition((int)screenPos->x, (int)screenPos->y);
 
 
 			//pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70
 		}
 		else
 		{
-			flash->setPosition(pc->getX() - tc->getShotgunTipX(), pc->getY() + tc->getShotgunTipY());
 
+			screenPos->x = (pc->getX() - tc->getShotgunTipX()) - camera->getCamera()->x;
+			screenPos->y = (pc->getY() + tc->getShotgunTipY()) - camera->getCamera()->y;
 
+			flash->setPosition((int)screenPos->x, (int)screenPos->y);
 			//pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70
 		}
 
@@ -1472,11 +1482,15 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
-			flash->setPosition(tc->getJuicerExplosionPos().x, tc->getJuicerExplosionPos().y);
+			screenPos->x = tc->getJuicerExplosionPos().x - camera->getCamera()->x;
+			screenPos->y = tc->getJuicerExplosionPos().y - camera->getCamera()->y;
+			flash->setPosition((int)screenPos->x, (int)screenPos->y);
 		}
 		else
 		{
-			flash->setPosition(tc->getJuicerExplosionPos().x, tc->getJuicerExplosionPos().y);
+			screenPos->x = tc->getJuicerExplosionPos().x - camera->getCamera()->x;
+			screenPos->y = tc->getJuicerExplosionPos().y - camera->getCamera()->y;
+			flash->setPosition((int)screenPos->x, (int)screenPos->y);
 		}
 
 		flash->update();
@@ -1507,6 +1521,9 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 
 		tc->setStartAnimating(false);
 	}
+	
+	//free resource used by screenPos vector.
+	delete screenPos;
 }
 
 void PhysicsSystem::notifyAudioObservers(AudioObserver::SFX sfx)
