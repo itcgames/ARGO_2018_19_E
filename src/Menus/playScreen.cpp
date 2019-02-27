@@ -436,10 +436,6 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	for (Player * p : m_networkCharacters) {
 		Entity * ent = (Entity*)p;
 		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
-
-		if (cc->getRoundOver()) {
-			m_roundEnd = true;
-		}
 	}
 }
 
@@ -582,6 +578,7 @@ void PlayScreen::endRound() {
 				tag->setScore(0);
 			}
 			SDL_RenderSetScale(m_renderer, 1.0f, 1.0f);
+			m_timer = 5;
 			m_gameOver = false;
 			highest = 0;
 		}
