@@ -22,7 +22,7 @@ private:
 	SpriteComponent* m_spriteComponentLeftFoot;
 	SpriteComponent* m_spriteComponentRightFoot;
 	RayCastComponent * m_rayCastComp;
-	int runCount = 0;
+	float runCount = 0;
 	int fallCount = 0;
 	int headCount = 0;
 	int totalHeadTime = 0;

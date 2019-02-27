@@ -18,7 +18,7 @@ public:
 
 
 	void setX(float x) { this->x = x; }
-	void setY(int y) { this->y = y; }
+	void setY(float y) { this->y = y; }
 
 	float getVelX() { return vel.x; }
 	float getVelY() { return vel.y; }

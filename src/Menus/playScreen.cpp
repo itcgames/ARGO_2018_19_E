@@ -1,10 +1,12 @@
 #include "playScreen.h"
 
-PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
+PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font) {
 
 	Font = font;
 
 	m_renderer = renderer;
+
+	m_currentGameState = state;
 
 	testLight = new Light(c2v{ 0.0f, 300.0f }, 5, 22, 130, renderer);
 	testLight->setPosition(c2v{ 400.0f, 0.0f });
@@ -18,11 +20,23 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 	m_offset = new SDL_Rect();
 
 
-	m_backgroundSprite = new SpriteComponent(0, 0, 1920, 1080);
-	m_backgroundSprite->loadFromFile("assets/cybercity.png", renderer);
-	m_backgroundSprite->setPosition(c2v{ 0.0f, 0.0f });
-	m_backgroundSprite->setScale(c2v{ 1.5f, 1.6f });
+	m_backgroundSpriteOne = new SpriteComponent(0, 0, 1920, 1080);
+	m_backgroundSpriteOne->loadFromFile("assets/art/environment/Cyber_Background_3_FINAL.png", renderer);
+	m_backgroundSpriteOne->setPosition(c2v{ 0.0f, 0.0f });
+	m_backgroundSpriteOne->setScale(c2v{ 1.5f, 1.6f });
 
+	m_backgroundSpriteTwo = new SpriteComponent(0, 0, 1920, 1080);
+	m_backgroundSpriteTwo->loadFromFile("assets/art/environment/Game_BG_1.png", renderer);
+	m_backgroundSpriteTwo->setPosition(c2v{ 0.0f, 0.0f });
+	m_backgroundSpriteTwo->setScale(c2v{ 1.5f, 1.6f });
+
+	m_backgroundSpriteThree = new SpriteComponent(0, 0, 1920, 1080);
+	m_backgroundSpriteThree->loadFromFile("assets/art/environment/Background_4_FINAL.png", renderer);
+	m_backgroundSpriteThree->setPosition(c2v{ 0.0f, 0.0f });
+	m_backgroundSpriteThree->setScale(c2v{ 1.5f, 1.6f });
+
+
+	m_currentLevel = m_backgroundSpriteOne;
 	for (int i = 0; i < 4; i++)
 	{
 		m_playerPositions.push_back(c2v{ 0, 0 });
@@ -32,14 +46,41 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 
 	m_map->load("testlevel.tmx", renderer);
 
-	m_guns.push_back(new Gun(renderer, 1, 1500, 100,gunAmount));
+	m_pistolSpriteComponent = new SpriteComponent(0, 0, 210, 295);
+	m_pistolSpriteComponent->setPosition(c2v{ 999999, 999999 });
+	m_pistolSpriteComponent->setScale(c2v{ 0.2f, 0.2f });
+	m_pistolSpriteComponent->loadFromFile("assets/pistol.png", renderer);
+
+	m_shotgunSpriteComponent = new SpriteComponent(0, 0, 27, 133);
+	m_shotgunSpriteComponent->setPosition(c2v{ 999999, 999999 });
+	m_shotgunSpriteComponent->setScale(c2v{ 2.0f, 1.5f });
+	m_shotgunSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/Shotgun3.png", renderer);
+
+	m_juicerSpriteComponent = new SpriteComponent(0, 0, 100, 150);
+	m_juicerSpriteComponent->setPosition(c2v{ 999999, 999999 });
+	m_juicerSpriteComponent->setScale(c2v{ 2.0f, 2.0f });
+	m_juicerSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/MiniGun.png", renderer);
+
+	m_stabbyboySpriteComponent = new SpriteComponent(0, 0, 12, 136);
+	m_stabbyboySpriteComponent->setPosition(c2v{ 999999, 999999 });
+	m_stabbyboySpriteComponent->setScale(c2v{ 2.0f, 2.0f });
+	m_stabbyboySpriteComponent->loadFromFile("assets/art/character/finished_character_assets/Katana.png", renderer);
+
+	m_grenadeSpriteComponent = new SpriteComponent(0, 0, 150, 200);
+	m_grenadeSpriteComponent->setPosition(c2v{ 999999,999999 });
+	m_grenadeSpriteComponent->setScale(c2v{ 0.2f, 0.2f });
+	m_grenadeSpriteComponent->loadFromFile("assets/grenade.png", renderer);
+
+
+	m_guns.push_back(new Gun(renderer, 1, 1500, 100,gunAmount,m_pistolSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 2, 1000, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 3, 1000, 100,gunAmount, m_juicerSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 5, 200, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 2, 300, 100,gunAmount, m_shotgunSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 4, 500, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 5, 700, 100,gunAmount, m_stabbyboySpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
+
 
 
 
@@ -52,6 +93,8 @@ PlayScreen::PlayScreen(SDL_Renderer * renderer, TTF_Font* font) {
 
 void PlayScreen::initialise(bool online, int size, int num) {
 	*m_online = online;
+
+	m_audioObserver->StartBGM(0);
 
 	if (SDL_NumJoysticks() >= 2) {
 		m_multiplayer = true;
@@ -214,6 +257,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	m_grenadeSys.setRenderer(m_renderer);
 	m_collSys.setRenderer(m_renderer);
 	m_animationsSys.setRenderer(m_renderer);
+
 }
 
 void PlayScreen::update(bool * online, SDL_Event event, int size, Client * client) {
@@ -256,9 +300,11 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	//if (m_cameraCount > TIME_BETWEEN_CAMERA_CHANGES)
 	//{
-	m_focusPoint = m_camera->focus(m_playerPositions);
-	m_camera->update(m_focusPoint);
-	m_cameraCount = 0;
+
+	//m_focusPoint = m_camera->focus(m_playerPositions);
+	//m_camera->update(m_focusPoint);
+	//m_cameraCount = 0;
+
 	//}
 
 	//if (m_focusPoint->w > 0) {
@@ -303,9 +349,27 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 		sendPacket(ent, client);
 	}
-	else {
-		spawnGuns();
+	
+
+	if (!(*online) && !m_gameOver) {
+		for (Player * p : m_players) {
+			Entity * ent = (Entity *)p;
+			TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
+			if (tag->getScore() >= 5) {
+				endRound();
+				initialiseText(tag->getSubTag(), 1, 200);
+				m_gameOver = true;
+			}
+		}
+		
 	}
+
+
+	if (m_gameOver) {
+		initialiseText("Victory", 0, 500);
+		endRound();
+	}
+	
 }
 
 void PlayScreen::sendPacket(Entity * ent, Client * client) {
@@ -372,15 +436,11 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	for (Player * p : m_networkCharacters) {
 		Entity * ent = (Entity*)p;
 		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
-
-		if (cc->getRoundOver()) {
-			m_roundEnd = true;
-		}
 	}
 }
 
 void PlayScreen::render(SDL_Renderer * renderer) {
-	m_backgroundSprite->render(m_renderer);
+	m_currentLevel->render(m_renderer);
 	m_map->draw(m_renderer, m_camera);
 	for (AI * ai : m_aiCharacters) {
 		ai->render(m_renderer, m_camera);
@@ -441,52 +501,6 @@ void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_T
 	
 }
 
-void PlayScreen::spawnGuns() {
-	m_gunCounter++;
-
-	if (m_gunCounter > SPAWN_NEW_GUN) {
-
-		int gunType = (rand() % 4) + 1;
-		int gunX = (rand() % 1100) + 100;
-		Gun * gun = new Gun(m_renderer, gunType, gunX, -100,gunAmount);
-		gunAmount = gunAmount + 1;
-		m_rs.addEntity((Entity*)gun);
-		m_cs.addEntity((Entity*)gun);
-		m_ps.addEntity((Entity*)gun);
-		m_gunSys.addEntity((Entity*)gun);
-		m_collSys.addEntity((Entity*)gun);
-		m_restartSys.addEntity((Entity*)gun);
-		Entity* ent = (Entity*)gun;
-		TagComponent* tc = (TagComponent*)ent->getCompByType("TAG");
-		if (tc->getSubTag() == "grenade") {
-			m_grenadeSys.addEntity((Entity*)gun);
-		}
-		m_guns.push_back(gun);
-		m_gunCounter = 0;
-	}
-}
-
-void PlayScreen::deleteGuns() {
-	while (m_guns.size() > 4) {
-		Gun* gun = m_guns.back();
-		m_guns.pop_back();
-		m_restartSys.m_entities.pop_back();
-		m_gunSys.m_entities.pop_back();
-		m_cs.m_entities.pop_back();
-		m_ps.m_entities.pop_back();
-		m_rs.m_entities.pop_back();
-		m_collSys.m_entities.pop_back();
-
-		Entity* ent = (Entity*)gun;
-		TagComponent* tc = (TagComponent*)ent->getCompByType("TAG");
-		if (tc->getSubTag() == "grenade") {
-			m_grenadeSys.m_entities.pop_back();
-		}
-		delete gun;
-	}
-	m_gunCounter = 0;
-}
-
 bool PlayScreen::onlineRoundOver() {
 	int dead = 0;
 	int playerAmount = m_players.size() + m_networkCharacters.size();
@@ -522,36 +536,54 @@ void PlayScreen::endRound() {
 	m_BGRect.x += (1200.0 / 25);
 
 	if (m_roundCounter > ROUND_OVER) {
-		deleteGuns();
-		
-		m_restartSys.reset(randNum);
+
 		if (*m_online) {
 			randNum = 1;
 		}
 		else {
 			randNum = (rand() % 3) + 1;
 		}
+
 		
+
 		if (randNum == 1) {
 			m_map->load("testlevel.tmx", m_renderer);
+			m_currentLevel = m_backgroundSpriteOne;
 		}
 		else if (randNum == 2) {
 			m_map->load("level3.tmx", m_renderer);
+			m_currentLevel = m_backgroundSpriteTwo;
 		}
 		else if (randNum == 3) {
-			m_map->load("level4.tmx", m_renderer);
+			m_map->load("level5.tmx", m_renderer);
+			m_currentLevel = m_backgroundSpriteThree;
 		}
 		m_roundCounter = 0;
 		m_drawRoundText = false;
 		m_roundEnd = false;
+
+		m_restartSys.reset(randNum, m_map->getSpawnPoints());
+		m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getTiles(), m_map->getWidth(), m_map->getHeight());
+		m_ps.recieveLevel(m_map->getWidth(), m_map->getHeight());
 		m_ps.startRoundCount = 0;
 		m_BGRect.x = -2400; m_BGRect.y = 0;
-		
 		initialiseText(std::to_string(m_timer), 0, 700);
+
+		if (m_gameOver) {
+			*m_currentGameState = GameState::Menu;
+
+			for (Player * p : m_players) {
+				Entity * ent = (Entity *)p;
+				TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
+				tag->setScore(0);
+			}
+			SDL_RenderSetScale(m_renderer, 1.0f, 1.0f);
+			m_timer = 5;
+			m_gameOver = false;
+			highest = 0;
+		}
 	}
 }
-
-
 
 void PlayScreen::checkRoundOver() {
 	
@@ -560,7 +592,6 @@ void PlayScreen::checkRoundOver() {
 	}
 	else {
 		int dead = 0;
-		//std::cout << dead << std::endl;
 		if (!m_multiplayer) {
 			Entity * ent = (Entity *)m_players[0];
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
@@ -594,12 +625,13 @@ void PlayScreen::checkRoundOver() {
 		}
 		if (dead >= 3) {
 			if (!m_drawRoundText) {
-				for (Player * p : m_players) {
-					Entity * ent = (Entity *)p;
+				for (Entity * ent : m_playerents) {
 					ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 					TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
 					if (control->getAlive()) {
+						tag->setScore(tag->getScore() + 1);
 						initialiseText(tag->getSubTag() + " Wins!", 1, 200);
+						checkScore();
 					}
 				}
 				m_drawRoundText = true;
@@ -612,5 +644,24 @@ void PlayScreen::checkRoundOver() {
 
 	if (m_roundEnd) {
 		endRound();
+	}
+}
+
+void PlayScreen::checkScore()
+{
+	for (Entity * ent : m_playerents) {
+		TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
+
+		
+		if (tag->getScore() >= highest)
+		{
+			highest = tag->getScore();
+			tag->setLeader(true);
+		}
+		else
+		{
+			tag->setLeader(false);
+		}
+
 	}
 }

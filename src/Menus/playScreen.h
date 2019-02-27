@@ -28,11 +28,12 @@
 #include "../Client/Client.h"
 
 #include <SDL_ttf.h>
+#include "state.h"
 
 class PlayScreen 
 {
 public:
-	PlayScreen(SDL_Renderer * renderer, TTF_Font* font);
+	PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font);
 	~PlayScreen() {}
 
 	void update(bool * online, SDL_Event event, int size, Client * client);
@@ -40,6 +41,7 @@ public:
 
 	void sendPacket(Entity * ent, Client * client);
 
+	void checkScore();
 	void initialise(bool online, int size, int num);
 
 	AudioObserver* m_audioObserver;
@@ -50,9 +52,6 @@ public:
 	void initialiseText(std::string message, int index, int y);// SDL_Texture* texture, SDL_Rect* rect, int y);
 
 	int gunAmount = 1;
-
-	void deleteGuns();
-	void spawnGuns();
 
 	Camera* m_camera;
 	SDL_Rect* m_focusPoint;
@@ -71,7 +70,10 @@ public:
 
 	Light* testLight;
 
-	SpriteComponent * m_backgroundSprite;
+	SpriteComponent * m_backgroundSpriteOne;
+	SpriteComponent * m_backgroundSpriteTwo;
+	SpriteComponent * m_backgroundSpriteThree;
+	SpriteComponent * m_currentLevel;
 
 	HealthSystem m_hs;
 	ControlSystem m_cs;
@@ -90,7 +92,7 @@ public:
 	MapLoader* m_map;
 
 	int m_roundCounter = 0;
-	const int ROUND_OVER = 100.0f;
+	const int ROUND_OVER = 100;
 	std::string round_text;
 	SDL_Texture* text;
 	SDL_Rect* renderQuad;
@@ -119,9 +121,14 @@ public:
 
 	bool m_drawTimer = false;
 
+	SpriteComponent * m_grenadeSpriteComponent;
+	SpriteComponent * m_stabbyboySpriteComponent;
+	SpriteComponent * m_juicerSpriteComponent;
+	SpriteComponent * m_shotgunSpriteComponent;
+	SpriteComponent * m_pistolSpriteComponent;
+
 private: 
-	int m_gunCounter = 0;
-	const int SPAWN_NEW_GUN = 1000;
+
 	float m_screenScale = 1.0f;
 
 	int m_cameraCount = 0;
@@ -140,4 +147,10 @@ private:
 
 	int m_timerCounter = 0;
 	int m_timer = 5;
+
+	GameState * m_currentGameState;
+
+	bool m_gameOver = false;
+
+	int highest = 0;
 };

@@ -37,7 +37,7 @@ public:
 	void setStartingDirection(AIComponent * ac);
 	void checkWalkPoints(AIComponent * AC, PositionComponent * pc);
 	void checkJumpPoints(AIComponent * AC, PositionComponent * pc);
-	bool checkAllTiles(float x1, float y1, float x2, float y2);
+	bool tileCollision(float x1, float y1, float x2, float y2);
 	bool lineLine(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4);
 
 	double getAngleToPlayer(c2v pos, std::pair<double, c2v> enemy);

@@ -8,7 +8,7 @@
 #include "ControlSystem.h"
 #include "../ObserverPattern/Subject.h"
 #include "../ObserverPattern/AudioObserver.h"
-
+#include "../Camera.h"
 #include "../ParticleExample.h"
 
 
@@ -17,6 +17,8 @@ class PhysicsSystem : Subject
 public:
 	std::vector<Entity *> m_entities;
 	void recieveLevel(int width, int height);
+
+	SpriteComponent * bulletTextureSpriteComp;
 
 	c2v Friction;
 	c2v gunFriction;
@@ -31,6 +33,8 @@ public:
 	double player1PositionY = 0;
 	double player2PositionX = 0;
 	double player2PositionY = 0;
+
+	bool bulletTextureLoaded = false;
 
 	int startRoundCount = 0;
 
@@ -55,7 +59,7 @@ public:
 	std::vector<Bullet*> pistolBullets;
 	std::vector<Bullet*> juicerBullets;
 	std::vector<Bullet*> shotgunBullets;
-	void animateExplosion(SDL_Renderer * renderer, TagComponent * tc,PositionComponent * pc);
+	void animateExplosion(SDL_Renderer * renderer, TagComponent * tc,PositionComponent * pc, Camera* camera);
 
 
 	void setGun(TagComponent *tc,ControlComponent *cc,PositionComponent *pc,SpriteComponent *sc, PositionComponent *ownerPosC, ControlComponent * ownerConC);

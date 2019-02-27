@@ -49,6 +49,7 @@ public:
 	void setGameState(GameState gameState);
 
 	SDL_Renderer * getScreen() const { return m_renderer; }
+	void fullScreenToggle(SDL_Window* Window);
 
 	static Game* Instance()
 	{
@@ -126,6 +127,9 @@ private:
 
 	GLuint	progID;
 	SDL_Texture* frame;
+
+	int m_toggleCounter = 0;
+	const int ALLOW_TOGGLE = 100.0f;
 };
 
 

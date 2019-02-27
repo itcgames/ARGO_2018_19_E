@@ -44,25 +44,25 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 	TagComponent * tag = new TagComponent("Player");
 	if (noOfPlayers == 0)
 	{
-		tag->setSubTag("Player1");
+		tag->setSubTag("Player 1");
 		tag->setSubTag2("AI_Player");
 		
 	}
 	else if (noOfPlayers == 1)
 	{
-		tag->setSubTag("Player2");
+		tag->setSubTag("Player 2");
 		tag->setSubTag2("AI_Player");
 		
 	}
 	else if (noOfPlayers == 2)
 	{
-		tag->setSubTag("Player3");
+		tag->setSubTag("Player 3");
 		tag->setSubTag2("AI_Player");
 		
 	}
 	else if (noOfPlayers == 3)
 	{
-		tag->setSubTag("Player4");
+		tag->setSubTag("Player 4");
 		tag->setSubTag2("AI_Player");
 		
 	}
@@ -70,7 +70,7 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 	this->addComponent(tag);
 	control = new ControlComponent();
 	this->addComponent(control);
-	controlComp = new AIComponent(10);
+	controlComp = new AIComponent();
 	this->addComponent(controlComp);
 	positionComp = new PositionComponent(xPos, yPos);
 	this->addComponent(positionComp);
@@ -304,6 +304,6 @@ void AI::render(SDL_Renderer* renderer, Camera* camera) {
 
 
 
-	SDL_RenderDrawLine(renderer, m_rayCastComp->getStartPosition().x, m_rayCastComp->getStartPosition().y, m_rayCastComp->getCastPosition().x, m_rayCastComp->getCastPosition().y);
+	//SDL_RenderDrawLine(renderer, m_rayCastComp->getStartPosition().x, m_rayCastComp->getStartPosition().y, m_rayCastComp->getCastPosition().x, m_rayCastComp->getCastPosition().y);
 
 }

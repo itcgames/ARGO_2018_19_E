@@ -15,25 +15,37 @@ MenuScreen::MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Fon
 	optiontexture = init(Font, options_text, optiontexture, optionRenderQuad, 720, 600);
 	exittexture = init(Font, exit_text, exittexture, exitRenderQuad, 1055, 600);
 
-	TTF_Font* menuFont = TTF_OpenFont("arial.ttf", 150);
+	TTF_Font* menuFont = TTF_OpenFont("zorque.ttf", 150);
 	
 	titletexture = init(menuFont, title_text, titletexture, titleRenderQuad, 200, 50);
 
-	m_texture = loadFromFile("assets/art/environment/banner2.png", m_renderer);
+	m_texture = loadFromFile("assets/art/environment/banner2.1.png", m_renderer);
 
-	m_texture2 = loadFromFile("banner2.png", m_renderer);
+	m_texture2 = loadFromFile("assets/art/environment/banner1.png", m_renderer);
 	
-
+	m_texture3 = loadFromFile("assets/art/environment/MainMenu.png", m_renderer);
 	m_drawTexture = m_texture;
+	
+	m_sRectangle = new SDL_Rect;
+	m_dRectangle = new SDL_Rect;
+	m_sRectangle->x = 0;
+	m_sRectangle->y = 0;
+	m_sRectangle->w = 1200;
+	m_sRectangle->h = 700;
+	m_dRectangle->x = 0;
+	m_dRectangle->y = -700;
+
 
 	m_sRect = new SDL_Rect;
 	m_dRect = new SDL_Rect;
 	m_sRect->x = 0;
 	m_sRect->y = 0;
 	m_sRect->w = 0;
-	m_sRect->h = 198;
+	m_sRect->h = 240;
 	m_dRect->x = 0;
-	m_dRect->y = 300;
+	m_dRect->y = -480;
+
+	
 }
 
 SDL_Texture* MenuScreen::init(TTF_Font* Font, std::string & text, SDL_Texture* texture, SDL_Rect & quad, int x, int y) {
@@ -87,14 +99,23 @@ SDL_Texture* MenuScreen::loadFromFile(std::string path, SDL_Renderer* gRenderer)
 		else
 		{
 			//Get image dimensions
-			m_width = loadedSurface->w + 300;
-			m_height = loadedSurface->h;
+			if (count < 2)
+			{
+				m_width2 = loadedSurface->w + 300;
+				m_height2 = loadedSurface->h;
+			}
+			else
+			{
+				m_width = loadedSurface->w;
+				m_height = loadedSurface->h;
+			}
+			
 		}
 
 		//Get rid of old loaded surface
 		SDL_FreeSurface(loadedSurface);
 	}
-
+	count++;
 	
 	return newTexture;
 }
@@ -105,6 +126,18 @@ MenuScreen::~MenuScreen()
 
 }
 
+void MenuScreen::resetMenu()
+{
+	firstTime = true;
+	lastButton = "";
+	transitionTimer = 0;
+	buttonTimer = 0;
+	m_startTransition = false;
+	m_startInTransition = true;
+	m_dRect->y = -480;
+	m_dRectangle->y = -700;
+}
+
 
 void MenuScreen::update(SDL_Window *window)
 {
@@ -112,33 +145,58 @@ void MenuScreen::update(SDL_Window *window)
 	bool BButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_B);
 	bool XButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_X);
 	bool YButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_Y);
+	bool StartButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_START);
 
-	if (AButton && !firstTime) {
-		firstTime = true;
-		buttonTimer = 0;
-		*m_currentGameState = GameState::Game;
+
+	if (m_startInTransition)
+	{
+		m_dRect->y += 10;
+		m_dRectangle->y += 10;
+
+		if (m_dRectangle->y >= 0)
+		{
+			m_startInTransition = false;
+			m_dRectangle->y = 0;
+			m_dRect->y = 240;
+		}
 	}
-	else if (XButton && !firstTime) {
-		firstTime = true;
-		buttonTimer = 0;
-		*m_currentGameState = GameState::Online;
-	}
-	else if (YButton && !firstTime) {
-		firstTime = true;
-		buttonTimer = 0;
-		*m_currentGameState = GameState::Credits;
-	}
-	else if (BButton && !firstTime) {
-		SDL_DestroyWindow(window);
+	if (!m_startInTransition) {
+		if (AButton && !firstTime) {
+			firstTime = true;
+			buttonTimer = 0;
+			m_startTransition = true;
+			lastButton = "A";
+			//*m_currentGameState = GameState::Game;
+		}
+		else if (XButton && !firstTime) {
+			firstTime = true;
+			buttonTimer = 0;
+			m_startTransition = true;
+			lastButton = "X";
+		}
+		else if (YButton && !firstTime) {
+			firstTime = true;
+			buttonTimer = 0;
+			m_startTransition = true;
+			lastButton = "Y";
+		}
+		else if (BButton && !firstTime) {
+			SDL_DestroyWindow(window);
+		}
+		else if (StartButton && !firstTime) {
+			firstTime = true;
+			buttonTimer = 0;
+			m_toggleFS = true;
+		}
 	}
 
 	buttonTimer++;
 
-	if(buttonTimer > setSecondTime)
+	if (buttonTimer > setSecondTime)
 		firstTime = false;
 
 	if (m_drawTexture == m_texture) {
-		
+
 		if (m_sRect->w < 940) {
 			m_sRect->w += 3;
 		}
@@ -148,7 +206,7 @@ void MenuScreen::update(SDL_Window *window)
 		}
 	}
 	else {
-		
+
 		if (m_sRect->x > 0) {
 			m_sRect->x -= 3;
 		}
@@ -157,22 +215,44 @@ void MenuScreen::update(SDL_Window *window)
 			m_drawTexture = m_texture;
 		}
 	}
+
+	if (m_startTransition)
+	{
+		m_dRect->y -= 10;
+		m_dRectangle->y -= 10;
+		transitionTimer++;
+	}
+
+	if (transitionTimer > 100 && lastButton == "A")
+	{
+		resetMenu();
+		*m_currentGameState = GameState::Game;
+	}
+	else if (transitionTimer > 100 && lastButton == "X")
+	{
+		resetMenu();
+		*m_currentGameState = GameState::Online;
+	}
+	else if (transitionTimer > 100 && lastButton == "Y")
+	{
+		resetMenu();
+		*m_currentGameState = GameState::Credits;
+	}
+	
+	std::cout << transitionTimer << std::endl;
 }
 
 
 void MenuScreen::render(SDL_Renderer * renderer)
 {
-	SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
-	SDL_RenderCopy(renderer, playtexture, NULL, &playRenderQuad);
-	SDL_RenderCopy(renderer, onlinetexture, NULL, &onlineRenderQuad);
-	SDL_RenderCopy(renderer, optiontexture, NULL, &optionRenderQuad);
-	SDL_RenderCopy(renderer, exittexture, NULL, &exitRenderQuad);
-	SDL_RenderCopy(renderer, titletexture, NULL, &titleRenderQuad);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-	m_dRect->w = m_width;
-	m_dRect->h = m_height;
+	m_dRectangle->w = m_width;
+	m_dRectangle->h = m_height;
+	SDL_RenderCopyEx(renderer, m_texture3, m_sRectangle, m_dRectangle, 0, NULL, SDL_FLIP_NONE);
 
-	//std::cout << "X= " << m_centre.x << "Y= " << m_centre.y << std::endl;
-	SDL_RenderCopyEx(renderer,   m_drawTexture, m_sRect, m_dRect, 0, NULL, SDL_FLIP_NONE);
+	m_dRect->w = m_width2;
+	m_dRect->h = m_height2;
+	SDL_RenderCopyEx(renderer, m_drawTexture, m_sRect, m_dRect, 0, NULL, SDL_FLIP_NONE);
 
 }

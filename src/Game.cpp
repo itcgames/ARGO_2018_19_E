@@ -43,7 +43,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Menu);
+	*m_currentGameState = (GameState::Game);
 
 
 
@@ -71,12 +71,13 @@ Game::Game()
 	m_client = new Client("149.153.106.155", 54000);
 	setUpController();
 	m_creditsScreen = new CreditScreen(m_currentGameState, m_renderer, creditsFont, menuFont, gGameController);
-	m_playScreen = new PlayScreen(m_renderer, Font);
+	m_playScreen = new PlayScreen(m_currentGameState, m_renderer, Font);
 	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
 	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont, gGameController);
 	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client, m_online);
 	m_options = new OptionScreen();
 	
+<<<<<<< HEAD
 	m_screenSize = { 0,0,1200,700 };	
 
 	if (SDL_OpenGL_Init_Orho(m_screenSize.w, m_screenSize.h) < 0) {
@@ -89,10 +90,20 @@ Game::Game()
 	frame = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888,
 		SDL_TEXTUREACCESS_TARGET, m_screenSize.w, m_screenSize.h);
 
+=======
+	m_screenSize = { 0,0,1200,700 };
+>>>>>>> 62c2fc9aa7507ecc5fdee3267a0126bff24feeff
 }
 
 Game::~Game()
 {
+}
+
+void Game::fullScreenToggle(SDL_Window* Window) {
+	Uint32 FullscreenFlag = SDL_WINDOW_FULLSCREEN;
+	bool IsFullscreen = SDL_GetWindowFlags(Window) & FullscreenFlag;
+	SDL_SetWindowFullscreen(Window, IsFullscreen ? 0 : FullscreenFlag);
+	SDL_ShowCursor(IsFullscreen);
 }
 
 void Game::run()
@@ -125,6 +136,14 @@ void Game::run()
 void Game::update() {
 	SDL_PollEvent(&event);
 	m_client->receive();
+
+	m_toggleCounter++;
+	if (m_menu->m_toggleFS && m_toggleCounter > ALLOW_TOGGLE) {
+		fullScreenToggle(m_window);
+		m_menu->m_toggleFS = false;
+		m_toggleCounter = 0;
+	}
+
 	switch (*m_currentGameState)
 	{
 	case GameState::None:
@@ -133,6 +152,7 @@ void Game::update() {
 		m_splash->update();
 		break;
 	case GameState::Menu:
+		
 		m_menu->update(m_window);
 		break;
 	case GameState::Online:
