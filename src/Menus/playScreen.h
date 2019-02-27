@@ -41,6 +41,7 @@ public:
 
 	void sendPacket(Entity * ent, Client * client);
 
+	void checkScore();
 	void initialise(bool online, int size, int num);
 
 	AudioObserver* m_audioObserver;
@@ -144,4 +145,6 @@ private:
 	GameState * m_currentGameState;
 
 	bool m_gameOver = false;
+
+	int highest = 0;
 };
