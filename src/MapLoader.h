@@ -39,6 +39,7 @@ public:
 	std::vector<std::pair<c2v, std::string>> getWalkPoints() { return m_walkPointVector; }
 	std::vector<std::pair<c2v, std::string>> getJumpPoints() { return m_jumpPointVector; }
 	std::vector <std::pair<bool, c2v>*> getSpawnPoints() { return m_spawnPointVector; }
+	std::vector<std::pair<c2v, std::string>*> getGunPoints() { return m_gunPointVector; }
 
 	int getWidth();
 	int getHeight();
@@ -59,6 +60,8 @@ private:
 	//.first is a bool to check if the spawn point has been occupied
 	//.second is a c2v of x and y points
 	std::vector<std::pair<bool, c2v>*> m_spawnPointVector;
+	//Container of points for guns to spawn, loaded uniquely with each level.
+	std::vector<std::pair<c2v, std::string>*> m_gunPointVector;
 
 	std::vector<std::shared_ptr<Tile>> m_tiles;
 	

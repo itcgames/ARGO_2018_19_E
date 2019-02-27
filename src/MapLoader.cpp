@@ -55,15 +55,25 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 	}
 
 	int spawnPointVectorSize = m_spawnPointVector.size();
+	
+	for (int i = 0; i < spawnPointVectorSize; i++)
 	{
-		for (int i = 0; i < spawnPointVectorSize; i++)
+		if (!m_spawnPointVector.empty())
 		{
-			if (!m_spawnPointVector.empty())
-			{
-				m_spawnPointVector.pop_back();
-			}
+			m_spawnPointVector.pop_back();
 		}
 	}
+	
+
+	int gunPointVectorSize = m_gunPointVector.size();
+	for (int i = 0; i < gunPointVectorSize; i++)
+	{
+		if (!m_gunPointVector.empty())
+		{
+			m_gunPointVector.pop_back();
+		}
+	}
+
 
 	auto& map_layers = m_map.getLayers();
 	for (auto& layer : map_layers)
@@ -97,6 +107,12 @@ void MapLoader::load(const std::string& path, SDL_Renderer* renderer)
 				{
 					c2v position = c2v{ object.getPosition().x, object.getPosition().y };
 					m_spawnPointVector.push_back(new std::pair<bool, c2v>(false, position));
+				}
+
+				if (layer->getName() == "GunPoints")
+				{
+					c2v position = c2v{ object.getPosition().x, object.getPosition().y };
+					m_gunPointVector.push_back(new std::pair<c2v, std::string>(position, object.getName()));
 				}
 				
 			}
