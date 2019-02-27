@@ -433,8 +433,10 @@ void PhysicsSystem::pickUpAgain(TagComponent * tc, SpriteComponent * sc, Collisi
 	{
 		if (tc->getGrabableCount() > 10)
 		{
+
 			tc->setGrabable(true);
 			tc->setGrabableCount(0);
+		
 			colisionc->setW(sc->getWidth());
 			colisionc->setH(sc->getHeight());
 		}
@@ -930,6 +932,10 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 					}
 
 
+				}
+				else if (tc->getTag() == "Player" && cc->getAlive() == false)
+				{
+					throwGunFun(cc);
 				}
 				if (tc->getSubTag2() == "AI_Player")
 				{

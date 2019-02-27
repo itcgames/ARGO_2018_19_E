@@ -278,7 +278,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
-	//m_ais.update();
+    //m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
 
@@ -301,9 +301,9 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	//if (m_cameraCount > TIME_BETWEEN_CAMERA_CHANGES)
 	//{
 
-	//m_focusPoint = m_camera->focus(m_playerPositions);
-	//m_camera->update(m_focusPoint);
-	//m_cameraCount = 0;
+	m_focusPoint = m_camera->focus(m_playerPositions);
+	m_camera->update(m_focusPoint);
+	m_cameraCount = 0;
 
 	//}
 
