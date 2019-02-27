@@ -52,15 +52,15 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 	m_pistolSpriteComponent->setScale(c2v{ 0.2f, 0.2f });
 	m_pistolSpriteComponent->loadFromFile("assets/pistol.png", renderer);
 
-	m_shotgunSpriteComponent = new SpriteComponent(0, 0, 27, 133);
+	m_shotgunSpriteComponent = new SpriteComponent(0, 0, 33, 139);
 	m_shotgunSpriteComponent->setPosition(c2v{ 999999, 999999 });
 	m_shotgunSpriteComponent->setScale(c2v{ 2.0f, 1.5f });
-	m_shotgunSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/Shotgun3.png", renderer);
+	m_shotgunSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/ShotgunGlow2.png", renderer);
 
 	m_juicerSpriteComponent = new SpriteComponent(0, 0, 100, 150);
 	m_juicerSpriteComponent->setPosition(c2v{ 999999, 999999 });
 	m_juicerSpriteComponent->setScale(c2v{ 2.0f, 2.0f });
-	m_juicerSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/MiniGun.png", renderer);
+	m_juicerSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/MiniGunGlow.png", renderer);
 
 	m_stabbyboySpriteComponent = new SpriteComponent(0, 0, 12, 136);
 	m_stabbyboySpriteComponent->setPosition(c2v{ 999999, 999999 });
@@ -73,12 +73,14 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 	m_grenadeSpriteComponent->loadFromFile("assets/grenade.png", renderer);
 
 
-	m_guns.push_back(new Gun(renderer, 1, 1500, 100,gunAmount,m_pistolSpriteComponent->getTexture()));
+	m_guns.push_back(new Gun(renderer, 4, 1500, 100,gunAmount, m_grenadeSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 3, 1000, 100,gunAmount, m_juicerSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 2, 300, 100,gunAmount, m_shotgunSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
+	//m_guns.push_back(new Gun(renderer, 4, 300, 100, gunAmount, m_grenadeSpriteComponent->getTexture()));
+	//gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 5, 700, 100,gunAmount, m_stabbyboySpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
 
@@ -299,13 +301,10 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		entityIndex++;
 	}
 
-	//if (m_cameraCount > TIME_BETWEEN_CAMERA_CHANGES)
-	//{
 	m_focusPoint = m_camera->focus(m_playerPositions);
 	m_camera->update(m_focusPoint);
-	//m_cameraCount = 0;
+	m_cameraCount = 0;
 
-	//}
 
 	//if (m_focusPoint->w > 0) {
 	//	(SCREEN_WIDTH / m_focusPoint->w) > 1.0f ? ((m_screenScale < 1.0f) ? m_screenScale += 0.01f : m_screenScale = 1.0f) : (m_screenScale > 0.55f ? m_screenScale -= 0.01f : m_screenScale = 0.55f);
@@ -326,6 +325,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		if (m_timerCounter > 20) {
 			m_timer--;
 			initialiseText(std::to_string(m_timer), 0, 700);
+			renderQuad->x = 1000;
 			m_timerCounter = 0;
 		}
 		
@@ -425,6 +425,8 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	if (m_gameOver) {
 		initialiseText("Victory", 0, 500);
+		renderQuad->x = 600;
+
 		endRound();
 	}
 	
@@ -548,7 +550,7 @@ void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_T
 		int text_height = textSurface->h;
 		SDL_FreeSurface(textSurface);
 		renderQuad = new SDL_Rect{ 150, y, text_width, text_height };
-		renderQuad->x = 800 - (renderQuad->w / 2);
+		//renderQuad->x = 800 - (renderQuad->w / 2);
 	}
 	else {
 		textSurface = TTF_RenderText_Solid(Font, message.c_str(), textColor);
@@ -557,7 +559,7 @@ void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_T
 		int text_height = textSurface->h;
 		SDL_FreeSurface(textSurface);
 		winnerRenderQuad = new SDL_Rect{ 150, y, text_width, text_height };
-		winnerRenderQuad->x = 900 - (winnerRenderQuad->w / 2);
+		//winnerRenderQuad->x = 900 - (winnerRenderQuad->w / 2);
 	}
 	
 }
@@ -582,8 +584,10 @@ bool PlayScreen::onlineRoundOver() {
 	
 	if (dead >= (playerAmount - 1)) {
 		if (!m_drawRoundText) {
-			initialiseText("Player Wins", 1, 200);
-			m_drawRoundText = true;
+		initialiseText("Player Wins", 1, 200);
+		winnerRenderQuad->x = 150;
+
+		m_drawRoundText = true;
 		}
 		if(m_timer < 5)
 			m_timer = 10;
@@ -637,7 +641,7 @@ void PlayScreen::endRound() {
 		m_ps.startRoundCount = 0;
 		m_BGRect.x = -2400; m_BGRect.y = 0;
 		initialiseText(std::to_string(m_timer), 0, 700);
-
+		renderQuad->x = 1000;
 		if (m_gameOver) {
 			*m_currentGameState = GameState::Menu;
 
@@ -667,6 +671,8 @@ void PlayScreen::checkRoundOver() {
 			if (!control->getAlive()) {
 				if (!m_drawRoundText) {
 					initialiseText("AI Wins", 1, 200);
+					winnerRenderQuad->x = 600;
+
 					m_drawRoundText = true;
 				}
 				if (m_timer < 5)
@@ -701,6 +707,7 @@ void PlayScreen::checkRoundOver() {
 					if (control->getAlive()) {
 						tag->setScore(tag->getScore() + 1);
 						initialiseText(tag->getSubTag() + " Wins!", 1, 200);
+						winnerRenderQuad->x = 150;
 						checkScore();
 					}
 				}

@@ -8,7 +8,7 @@
 #include "ControlSystem.h"
 #include "../ObserverPattern/Subject.h"
 #include "../ObserverPattern/AudioObserver.h"
-
+#include "../Camera.h"
 #include "../ParticleExample.h"
 
 
@@ -59,7 +59,7 @@ public:
 	std::vector<Bullet*> pistolBullets;
 	std::vector<Bullet*> juicerBullets;
 	std::vector<Bullet*> shotgunBullets;
-	void animateExplosion(SDL_Renderer * renderer, TagComponent * tc,PositionComponent * pc);
+	void animateExplosion(SDL_Renderer * renderer, TagComponent * tc,PositionComponent * pc, Camera* camera);
 
 
 	void setGun(TagComponent *tc,ControlComponent *cc,PositionComponent *pc,SpriteComponent *sc, PositionComponent *ownerPosC, ControlComponent * ownerConC);

@@ -23,9 +23,9 @@ Gun::Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos,int id,SDL_Te
 	}
 	else if(gunValue == 2)
 	{
-		m_spriteComponent = new SpriteComponent(0, 0, 27, 133);
+		m_spriteComponent = new SpriteComponent(0, 0, 33, 139);
 		m_spriteComponent->setPosition(c2v{ xPos, yPos });
-		m_spriteComponent->setTexture(gunTexture,27,133);
+		m_spriteComponent->setTexture(gunTexture,33,139);
 		m_spriteComponent->setScale(c2v{ 2.0f, 1.5f });
 		this->addComponent(m_spriteComponent);
 		m_spriteComponent->loadFromFile("assets/art/character/finished_character_assets/Shotgun2.png", renderer);

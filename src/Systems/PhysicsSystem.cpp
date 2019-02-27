@@ -433,8 +433,10 @@ void PhysicsSystem::pickUpAgain(TagComponent * tc, SpriteComponent * sc, Collisi
 	{
 		if (tc->getGrabableCount() > 10)
 		{
+
 			tc->setGrabable(true);
 			tc->setGrabableCount(0);
+		
 			colisionc->setW(sc->getWidth());
 			colisionc->setH(sc->getHeight());
 		}
@@ -547,7 +549,7 @@ void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc, Collisi
 	}
 	else if (tc->getSubTag() == "shotgun")
 	{
-		pc->setVelX(-tc->getXOffset() * 2);		
+		pc->setVelX(-tc->getXOffset() / 2);		
 		pc->setVelY(-15);
 
 	}
@@ -582,7 +584,7 @@ void PhysicsSystem::setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc
 
 void PhysicsSystem::setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, PositionComponent * ownerPosition, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC)
 {
-	double handAngle = gunTagC->getAngle(); // :)
+	double handAngle = gunTagC->getAngle();
 
 	sc->setRotation((gunTagC->getAngle() - 90)*-1); //rotate hand
 
@@ -609,7 +611,7 @@ void PhysicsSystem::setHandOnPistol(SpriteComponent * sc, PositionComponent *pc,
 }
 void PhysicsSystem::setHandOnStabby(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, PositionComponent * ownerPosition, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC)
 {
-	double handAngle = gunTagC->getAngle(); // :)
+	double handAngle = gunTagC->getAngle();
 
 	if (handAngle <= 0) // Make hands look right for top left
 	{
@@ -617,9 +619,7 @@ void PhysicsSystem::setHandOnStabby(SpriteComponent * sc, PositionComponent *pc,
 	}
 
 	float radiusHandle = 50;
-	float HandleRadAng = (gunTagC->getAngle()) * 3.14159265359f / 180.0f; // :)
-																			 //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
-																			 //float shotgunTipY = 207.2 * (sin(shotgunRadAng));
+	float HandleRadAng = (gunTagC->getAngle()) * 3.14159265359f / 180.0f;
 	float HandleX = radiusHandle * (cos(HandleRadAng));
 	float HandleY = radiusHandle * (sin(HandleRadAng));
 	
@@ -653,7 +653,7 @@ void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc
 	if (tc->getSubTag2() == "right")
 	{
 		float radiusHandle = 50;
-		float shotgunHandleRadAng = (gunTagC->getAngle()) * 3.14159265359f / 180.0f; // :)
+		float shotgunHandleRadAng = (gunTagC->getAngle()) * 3.14159265359f / 180.0f;
 																						//float shotgunTipX = 207.2 * (cos(shotgunRadAng));
 																						//float shotgunTipY = 207.2 * (sin(shotgunRadAng));
 		float shotgunHandleX = radiusHandle * (cos(shotgunHandleRadAng));
@@ -675,9 +675,7 @@ void PhysicsSystem::setHandOnShotgun(SpriteComponent * sc, PositionComponent *pc
 	{
 
 		float radiusPump = 50 - (ownerPosC->getShotgunPumpCount() * 2.5f);  // Change the radius so hand moves along radius line and looks like pumping
-		float shotgunPumpRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180;  // :)
-																					   //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
-																					   //float shotgunTipY = 207.2 * (sin(shotgunRadAng));
+		float shotgunPumpRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180; 
 		float shotgunPumpX = radiusPump * (cos(shotgunPumpRadAng));
 		float shotgunPumpY = radiusPump * (sin(shotgunPumpRadAng));
 
@@ -700,9 +698,7 @@ void PhysicsSystem::setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc,
 	if (tc->getSubTag2() == "right")
 	{
 		float radiusHandle = 40;
-		float juicerHandleRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180; // :)
-																					   //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
-																					   //float shotgunTipY = 207.2 * (sin(shotgunRadAng));
+		float juicerHandleRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180;
 		float juicerHandleX = radiusHandle * (cos(juicerHandleRadAng));
 		float juicerHandleY = radiusHandle * (sin(juicerHandleRadAng));
 
@@ -722,9 +718,7 @@ void PhysicsSystem::setHandOnJuicer(SpriteComponent * sc, PositionComponent *pc,
 	{
 
 		float radiusPump = 45.0f - (ownerPosC->getJuicerCount());
-		float shotgunPumpRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180; // :)
-																					  //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
-																					  //float shotgunTipY = 207.2 * (sin(shotgunRadAng));
+		float shotgunPumpRadAng = (gunTagC->getAngle()) * 3.14159265359 / 180;
 		float shotgunPumpX = radiusPump * (cos(shotgunPumpRadAng));
 		float shotgunPumpY = radiusPump * (sin(shotgunPumpRadAng)) - 20;
 
@@ -931,6 +925,10 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 
 
 				}
+				else if (tc->getTag() == "Player" && cc->getAlive() == false)
+				{
+					throwGunFun(cc);
+				}
 				if (tc->getSubTag2() == "AI_Player")
 				{
 					aiPositionX = pc->getX();
@@ -1011,7 +1009,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 					flipNone(sc);
 
 				}
-				if (tc->getGrabbed() == true) { // :)
+				if (tc->getGrabbed() == true) { 
 
 					sc->m_flipValue = ownerSpriteC->m_flipValue;
 
@@ -1205,7 +1203,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 							}
 						}
 
-						float shotgunRadAng = (tc->getAngle()) * 3.14159265359 / 180; // :)
+						float shotgunRadAng = (tc->getAngle()) * 3.14159265359 / 180;
 
 						notifyAudioObservers(AudioObserver::SFX::SHOTGUN_SHOOT);
 
@@ -1215,7 +1213,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						for (int i = 0; i < 7; i++)
 						{
 							float random = rand() % 40 - 20;
-							float radAng = ((tc->getAngle()) + random) * 3.14159265359 / 180;  // :)
+							float radAng = ((tc->getAngle()) + random) * 3.14159265359 / 180;
 							float radius = 10;
 
 							float shotgunXOffset = radius * (cos(radAng));
@@ -1229,11 +1227,11 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 
 							if (sc->m_flipValue == SDL_FLIP_NONE)
 							{
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX(), pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100,bulletTextureSpriteComp->getTexture())); // :)
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX(), pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100,bulletTextureSpriteComp->getTexture())); 
 							}
 							else {
 
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX() + 20, pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100, bulletTextureSpriteComp->getTexture())); // :)
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX() + 20, pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100, bulletTextureSpriteComp->getTexture())); 
 							}
 						}
 
@@ -1253,7 +1251,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						}
 
 						notifyAudioObservers(AudioObserver::SFX::PISTOL_SHOOT);
-						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(tc->getAngle() - 90), -tc->getXOffset(), tc->getYOffset(), 1000, bulletTextureSpriteComp->getTexture()));  // :)
+						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(tc->getAngle() - 90), -tc->getXOffset(), tc->getYOffset(), 1000, bulletTextureSpriteComp->getTexture())); 
 
 
 
@@ -1271,14 +1269,12 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 							}
 						}
-						float juicerRadAng = (tc->getAngle()) * 3.14159265359 / 180;  // :)
-																								  //float shotgunTipX = 207.2 * (cos(shotgunRadAng));
-																								  //float shotgunTipY = 207.2 * (sin(shotgunRadAng));
+						float juicerRadAng = (tc->getAngle()) * 3.14159265359 / 180; 
 
 						tagC->setJuicerTipX(180 * (cos(juicerRadAng)));
 						tagC->setJuicerTipY(200 * (sin(juicerRadAng)));
 
-						float radAng = ((tc->getAngle()) + randomJuice) * 3.14159265359 / 180; // :)
+						float radAng = ((tc->getAngle()) + randomJuice) * 3.14159265359 / 180;
 						float radius = 60;
 
 
@@ -1293,17 +1289,17 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						if (sc->m_flipValue == SDL_FLIP_NONE)
 						{
 
-							pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 100) - tagC->getJuicerTipX() / 2, pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200, bulletTextureSpriteComp->getTexture())); // :)
+							pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 100) - tagC->getJuicerTipX() / 2, pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200, bulletTextureSpriteComp->getTexture())); 
 							float x = (pc->getX() + 100) - tagC->getJuicerTipX() / 2;
 							float y = pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140;
 							tagC->setJuicerExplosionPos(c2v{ x,y });
 						}
 						else {
 
-							//pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 80) - tagC->getJuicerTipX() / 2, pc->getY() + tagC->getJuicerTipY() / 2 + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200)); // :)
+							//pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 80) - tagC->getJuicerTipX() / 2, pc->getY() + tagC->getJuicerTipY() / 2 + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200));
 							//float x = (pc->getX() + 80) - tagC->getJuicerTipX() / 2;
 							//float y = pc->getY() + tagC->getJuicerTipY() / 2 + 140;
-							pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 100) - tagC->getJuicerTipX() / 2, pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200, bulletTextureSpriteComp->getTexture())); // :)
+							pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 100) - tagC->getJuicerTipX() / 2, pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200, bulletTextureSpriteComp->getTexture()));
 							float x = (pc->getX() + 100) - tagC->getJuicerTipX() / 2;
 							float y = pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140;
 							tagC->setJuicerExplosionPos(c2v{ x, y });
@@ -1355,7 +1351,7 @@ void PhysicsSystem::bulletRender(SDL_Renderer* renderer, Camera* camera) {
 						gunPos = (PositionComponent*)entity->getCompByType("POSITION");
 					}
 				}
-				animateExplosion(renderer, tc, gunPos);
+				animateExplosion(renderer, tc, gunPos, camera);
 			}
 		}
 	}
@@ -1400,9 +1396,11 @@ void PhysicsSystem::setRenderer(SDL_Renderer * renderer)
 
 }
 
-void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc, PositionComponent * pc)
+void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc, PositionComponent * pc, Camera* camera)
 {
 	m_count++;
+
+	c2v* screenPos = new c2v{ 0, 0 };
 
 	if (tc->getGunGot() == "pistol")
 	{
@@ -1415,11 +1413,15 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
-			p->setPosition(pc->getX() - 15, pc->getY());
+			screenPos->x = (pc->getX() - 15) - camera->getCamera()->x;
+			screenPos->y = pc->getY() - camera->getCamera()->y;
+			p->setPosition((int)screenPos->x, (int)screenPos->y);
 		}
 		else
 		{
-			p->setPosition(pc->getX() + 60, pc->getY() + 10);
+			screenPos->x = (pc->getX() + 60) - camera->getCamera()->x;
+			screenPos->y = (pc->getY() + 10) - camera->getCamera()->y;
+			p->setPosition((int)screenPos->x, (int)screenPos->y);
 
 		}
 
@@ -1439,16 +1441,20 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
-			flash->setPosition(pc->getX() - tc->getShotgunTipX() + 20, pc->getY() + tc->getShotgunTipY());
+			screenPos->x = (pc->getX() - tc->getShotgunTipX() + 20) - camera->getCamera()->x;
+			screenPos->y = (pc->getY() + tc->getShotgunTipY()) - camera->getCamera()->y;
+			flash->setPosition((int)screenPos->x, (int)screenPos->y);
 
 
 			//pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70
 		}
 		else
 		{
-			flash->setPosition(pc->getX() - tc->getShotgunTipX(), pc->getY() + tc->getShotgunTipY());
 
+			screenPos->x = (pc->getX() - tc->getShotgunTipX()) - camera->getCamera()->x;
+			screenPos->y = (pc->getY() + tc->getShotgunTipY()) - camera->getCamera()->y;
 
+			flash->setPosition((int)screenPos->x, (int)screenPos->y);
 			//pc->getX() - shotgunTipX + 20, pc->getY() + shotgunTipY + 70
 		}
 
@@ -1470,11 +1476,15 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
-			flash->setPosition(tc->getJuicerExplosionPos().x, tc->getJuicerExplosionPos().y);
+			screenPos->x = tc->getJuicerExplosionPos().x - camera->getCamera()->x;
+			screenPos->y = tc->getJuicerExplosionPos().y - camera->getCamera()->y;
+			flash->setPosition((int)screenPos->x, (int)screenPos->y);
 		}
 		else
 		{
-			flash->setPosition(tc->getJuicerExplosionPos().x, tc->getJuicerExplosionPos().y);
+			screenPos->x = tc->getJuicerExplosionPos().x - camera->getCamera()->x;
+			screenPos->y = tc->getJuicerExplosionPos().y - camera->getCamera()->y;
+			flash->setPosition((int)screenPos->x, (int)screenPos->y);
 		}
 
 		flash->update();
@@ -1505,6 +1515,9 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 
 		tc->setStartAnimating(false);
 	}
+	
+	//free resource used by screenPos vector.
+	delete screenPos;
 }
 
 void PhysicsSystem::notifyAudioObservers(AudioObserver::SFX sfx)
