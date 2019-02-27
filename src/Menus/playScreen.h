@@ -121,6 +121,12 @@ public:
 
 	bool m_drawTimer = false;
 
+	SpriteComponent * m_grenadeSpriteComponent;
+	SpriteComponent * m_stabbyboySpriteComponent;
+	SpriteComponent * m_juicerSpriteComponent;
+	SpriteComponent * m_shotgunSpriteComponent;
+	SpriteComponent * m_pistolSpriteComponent;
+
 private: 
 
 	float m_screenScale = 1.0f;

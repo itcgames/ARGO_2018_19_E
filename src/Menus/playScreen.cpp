@@ -46,13 +46,39 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 
 	m_map->load("testlevel.tmx", renderer);
 
-	m_guns.push_back(new Gun(renderer, 1, 1500, 100,gunAmount));
+	m_pistolSpriteComponent = new SpriteComponent(0, 0, 210, 295);
+	m_pistolSpriteComponent->setPosition(c2v{ 999999, 999999 });
+	m_pistolSpriteComponent->setScale(c2v{ 0.2f, 0.2f });
+	m_pistolSpriteComponent->loadFromFile("assets/pistol.png", renderer);
+
+	m_shotgunSpriteComponent = new SpriteComponent(0, 0, 27, 133);
+	m_shotgunSpriteComponent->setPosition(c2v{ 999999, 999999 });
+	m_shotgunSpriteComponent->setScale(c2v{ 2.0f, 1.5f });
+	m_shotgunSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/Shotgun3.png", renderer);
+
+	m_juicerSpriteComponent = new SpriteComponent(0, 0, 100, 150);
+	m_juicerSpriteComponent->setPosition(c2v{ 999999, 999999 });
+	m_juicerSpriteComponent->setScale(c2v{ 2.0f, 2.0f });
+	m_juicerSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/MiniGun.png", renderer);
+
+	m_stabbyboySpriteComponent = new SpriteComponent(0, 0, 12, 136);
+	m_stabbyboySpriteComponent->setPosition(c2v{ 999999, 999999 });
+	m_stabbyboySpriteComponent->setScale(c2v{ 2.0f, 2.0f });
+	m_stabbyboySpriteComponent->loadFromFile("assets/art/character/finished_character_assets/Katana.png", renderer);
+
+	m_grenadeSpriteComponent = new SpriteComponent(0, 0, 150, 200);
+	m_grenadeSpriteComponent->setPosition(c2v{ 999999,999999 });
+	m_grenadeSpriteComponent->setScale(c2v{ 0.2f, 0.2f });
+	m_grenadeSpriteComponent->loadFromFile("assets/grenade.png", renderer);
+
+
+	m_guns.push_back(new Gun(renderer, 1, 1500, 100,gunAmount,m_pistolSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 2, 1000, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 3, 1000, 100,gunAmount, m_juicerSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 5, 300, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 2, 300, 100,gunAmount, m_shotgunSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 3, 700, 100,gunAmount));
+	m_guns.push_back(new Gun(renderer, 5, 700, 100,gunAmount, m_stabbyboySpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
 
 
