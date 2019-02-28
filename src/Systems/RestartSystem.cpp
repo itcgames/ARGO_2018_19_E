@@ -22,10 +22,19 @@ void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec, bo
 
 		pc->setVelX(0);
 		pc->setVelY(0);
-		pc->setX(pc->startX);
-		pc->setY(pc->startY);
-		sc->setRotation(0);
-		sc->setPosition(c2v{pc->startX, pc->startY});
+
+		if (tc->getTag() != "Gun") {
+			pc->setX(pc->startX);
+			pc->setY(pc->startY);
+			sc->setRotation(0);
+			sc->setPosition(c2v{ pc->startX, pc->startY });
+		}
+		else {
+			pc->setX(sc->getPosition().x);
+			pc->setY(sc->getPosition().y);
+			sc->setRotation(0);
+		}
+		
 
 		if (tc->getTag() == "Player") {
 			ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");

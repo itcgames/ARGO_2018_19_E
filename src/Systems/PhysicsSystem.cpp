@@ -317,11 +317,11 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 				if (sc->m_flipValue == SDL_FLIP_NONE)
 				{
 					pc->setX(ownerPosC->getX() + tc->getXOffset() - (ownerPosC->getShotgunRotationCount() * 1.5) + 50);
-					sc->setRotation(-(ownerConC->getAngle()) - ownerPosC->getShotgunRotationCount()); //rotate gun with recoil
+					sc->setRotation((-ownerConC->getAngle()) - ownerPosC->getShotgunRotationCount()); //rotate gun with recoil
 				}
 				else {
 					pc->setX(ownerPosC->getX() - tc->getXOffset() + (ownerPosC->getShotgunRotationCount() * 1.5) - 20);
-					sc->setRotation(-(ownerConC->getAngle()) + ownerPosC->getShotgunRotationCount()); //rotate gun with recoil
+					sc->setRotation((-ownerConC->getAngle()) + ownerPosC->getShotgunRotationCount()); //rotate gun with recoil
 				}
 				double angleTo = ownerConC->getCurrentAngle();
 				double angleDifference = angleTo - tc->getPreviousAngle();
@@ -1249,11 +1249,11 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 
 							if (sc->m_flipValue == SDL_FLIP_NONE)
 							{
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX(), pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100,bulletTextureSpriteComp->getTexture())); 
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX(), pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 130,bulletTextureSpriteComp->getTexture())); 
 							}
 							else {
 
-								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX() + 20, pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 100, bulletTextureSpriteComp->getTexture())); 
+								pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tagC->getShotgunTipX() + 20, pc->getY() + tagC->getShotgunTipY() + 70, -(tc->getAngle() - 270), unitX * 80, unitY * 80, 130, bulletTextureSpriteComp->getTexture())); 
 							}
 						}
 
@@ -1273,7 +1273,9 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						}
 
 						notifyAudioObservers(AudioObserver::SFX::PISTOL_SHOOT);
-						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(tc->getAngle() - 90), -tc->getXOffset(), tc->getYOffset(), 1000, bulletTextureSpriteComp->getTexture())); 
+						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tc->getXOffset(), pc->getY() + tc->getYOffset(), -(tc->getAngle() - 90), -tc->getXOffset() * 1.2, tc->getYOffset() * 1.2, 1000, bulletTextureSpriteComp->getTexture()));
+						
+						
 
 
 
@@ -1311,8 +1313,8 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						if (sc->m_flipValue == SDL_FLIP_NONE)
 						{
 
-							pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 100) - tagC->getJuicerTipX() / 2, pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200, bulletTextureSpriteComp->getTexture())); 
-							float x = (pc->getX() + 100) - tagC->getJuicerTipX() / 2;
+							pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 135) - tagC->getJuicerTipX() / 2, pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200, bulletTextureSpriteComp->getTexture())); 
+							float x = (pc->getX() + 135) - tagC->getJuicerTipX() / 2;
 							float y = pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140;
 							tagC->setJuicerExplosionPos(c2v{ x,y });
 						}
@@ -1321,8 +1323,8 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 							//pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 80) - tagC->getJuicerTipX() / 2, pc->getY() + tagC->getJuicerTipY() / 2 + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200));
 							//float x = (pc->getX() + 80) - tagC->getJuicerTipX() / 2;
 							//float y = pc->getY() + tagC->getJuicerTipY() / 2 + 140;
-							pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 100) - tagC->getJuicerTipX() / 2, pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200, bulletTextureSpriteComp->getTexture()));
-							float x = (pc->getX() + 100) - tagC->getJuicerTipX() / 2;
+							pc->bullets.push_back(fc->makeBullet(renderer, (pc->getX() + 55) - tagC->getJuicerTipX() / 2, pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140, -(tc->getAngle() - 270), unitX * 100, unitY * 80, 200, bulletTextureSpriteComp->getTexture()));
+							float x = (pc->getX() + 55) - tagC->getJuicerTipX() / 2;
 							float y = pc->getY() + (tagC->getJuicerTipY() * 0.8) + 140;
 							tagC->setJuicerExplosionPos(c2v{ x, y });
 						}
@@ -1463,7 +1465,7 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 
 		if (flipval == SDL_FLIP_HORIZONTAL)
 		{
-			screenPos->x = (pc->getX() - tc->getShotgunTipX() + 20) - camera->getCamera()->x;
+			screenPos->x = (pc->getX() - tc->getShotgunTipX()) - camera->getCamera()->x;
 			screenPos->y = (pc->getY() + tc->getShotgunTipY()) - camera->getCamera()->y;
 			flash->setPosition((int)screenPos->x, (int)screenPos->y);
 
@@ -1473,7 +1475,7 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 		else
 		{
 
-			screenPos->x = (pc->getX() - tc->getShotgunTipX()) - camera->getCamera()->x;
+			screenPos->x = (pc->getX() - tc->getShotgunTipX() + 25) - camera->getCamera()->x;
 			screenPos->y = (pc->getY() + tc->getShotgunTipY()) - camera->getCamera()->y;
 
 			flash->setPosition((int)screenPos->x, (int)screenPos->y);
