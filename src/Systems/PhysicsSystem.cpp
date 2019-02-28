@@ -1278,12 +1278,12 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 								printf("Warning: Unable to play rumble! %s\n", SDL_GetError());
 							}
 						}
-						float juicerRadAng = (tc->getAngle()) * 3.14159265359 / 180; 
+						float juicerRadAng = (tc->getAngle()) * 3.14159265359 / 180.0f; 
 
 						tagC->setJuicerTipX(180 * (cos(juicerRadAng)));
 						tagC->setJuicerTipY(200 * (sin(juicerRadAng)));
 
-						float radAng = ((tc->getAngle()) + randomJuice) * 3.14159265359 / 180;
+						float radAng = ((tc->getAngle()) + randomJuice) * 3.14159265359 / 180.0f;
 						float radius = 60;
 
 
