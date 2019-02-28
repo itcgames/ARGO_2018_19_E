@@ -40,7 +40,7 @@ std::string CollisionSystem::rectCollision(c2AABB A, c2AABB B)
 	return(collision);
 }
 
-void CollisionSystem::update(std::vector<std::shared_ptr<Tile>> tiles) {
+void CollisionSystem::update(std::vector<std::shared_ptr<Tile>> tiles, Camera* camera) {
 	for (Entity * entity : m_entities) {
 		
 		TagComponent * tag = (TagComponent*)entity->getCompByType("TAG");
@@ -131,14 +131,14 @@ void CollisionSystem::update(std::vector<std::shared_ptr<Tile>> tiles) {
 				
 			}
 
-			checkBullets(pc, tiles);
+			checkBullets(pc, tiles, camera);
 
 		}
 		
 	}
 }
 
-void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::shared_ptr<Tile>> tiles) {
+void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::shared_ptr<Tile>> tiles, Camera* camera) {
 
 	std::vector<Bullet *> * bullets = &poc->bullets;
 	
@@ -177,11 +177,13 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 							control->setHitFrom("right");
 							if (!control->isDead)
 							{
+								c2v * screenPos = new c2v{ 0,0 };
 								auto particle = new ParticleExample();
-
+								screenPos->x = pc->getX() - camera->getCamera()->x;
+								screenPos->y = pc->getY() - camera->getCamera()->y;
 								particle->setRenderer(m_renderer);
 								particle->setStyle(ParticleExample::BLOOD);
-								particle->setPosition(pc->getX(), pc->getY());
+								particle->setPosition(screenPos->x, screenPos->y);
 								m_blood.push_back(particle);
 								control->isDead = true;
 							}
@@ -191,11 +193,13 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 							control->setHitFrom("left");
 							if (!control->isDead)
 							{
+								c2v * screenPos = new c2v{ 0,0 };
 								auto particle = new ParticleExample();
-
+								screenPos->x = pc->getX() - camera->getCamera()->x;
+								screenPos->y = pc->getY() - camera->getCamera()->y;
 								particle->setRenderer(m_renderer);
 								particle->setStyle(ParticleExample::BLOOD);
-								particle->setPosition(pc->getX(), pc->getY());
+								particle->setPosition(screenPos->x, screenPos->y);
 								m_blood.push_back(particle);
 								control->isDead = true;
 							}
@@ -218,8 +222,8 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 					if (tiles.at(i)->health <= 0) {
 						tiles.at(i)->dead = true;
 					}
+					c2v screenPos = c2v{ 0,0 };
 					auto particle = new ParticleExample();
-
 					particle->setRenderer(m_renderer);
 					particle->setStyle(ParticleExample::SMOKE);
 					particle->setPosition(bullets->at(j)->m_spriteComponent->getPosition().x, bullets->at(j)->m_spriteComponent->getPosition().y);

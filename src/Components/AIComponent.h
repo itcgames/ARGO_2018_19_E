@@ -78,7 +78,7 @@ public:
 	c2v lastPosition = { 0,0 };
 
 	bool m_landed;
-	bool detect = false;
+	bool detect = true;
 
 	std::vector<std::pair<double, c2v>> m_distances;
 
@@ -92,6 +92,8 @@ public:
 	int m_count = 0;
 
 	bool hasGun = false;
+
+	bool initRecieve = false;
 private:
 
 	bool m_left = false;

@@ -31,7 +31,7 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 
 
 
-	m_spriteComponent->loadFromFile("assets/art/character/RedBody.png", renderer);
+	//m_spriteComponent->loadFromFile("assets/art/character/BlueBody.png", renderer);
 	m_spriteComponentCrown->loadFromFile("assets/art/character/finished_character_assets/crown.png", renderer);
 
 	m_spriteComponentHead->setPosition(c2v{ xPos, yPos });
@@ -92,18 +92,21 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 	{
 		tag->setSubTag("Player 2");
 		tag->setSubTag2("AI_Player");
+		m_spriteComponent->loadFromFile("assets/art/character/BlueBody.png", renderer);
 		
 	}
 	else if (noOfPlayers == 2)
 	{
 		tag->setSubTag("Player 3");
 		tag->setSubTag2("AI_Player");
+		m_spriteComponent->loadFromFile("assets/art/character/YellowBody.png", renderer);
 		
 	}
 	else if (noOfPlayers == 3)
 	{
 		tag->setSubTag("Player 4");
 		tag->setSubTag2("AI_Player");
+		m_spriteComponent->loadFromFile("assets/art/character/PinkBody.png", renderer);
 		
 	}
 
