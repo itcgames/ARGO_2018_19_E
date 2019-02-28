@@ -64,5 +64,6 @@ void AudioObserver::load()
 	m_weaponThrow = Mix_LoadWAV("assets/sfx/weaponThrow.wav");
 	
 	m_bgm1 = Mix_LoadMUS("assets/sfx/bgm1.wav");
+	m_bgm2 = Mix_LoadMUS("assets/sfx/happy.wav");
 	Mix_VolumeMusic(25);
 }

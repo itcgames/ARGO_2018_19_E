@@ -36,9 +36,11 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Menu);
+	*m_currentGameState = (GameState::Splash);
 
-
+	aObserver = new AudioObserver();
+	aObserver->load();
+	aObserver->StartBGM(1);
 
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
