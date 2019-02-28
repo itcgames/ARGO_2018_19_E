@@ -13,6 +13,7 @@ public:
 	TagComponent* m_tagComponent;
 	CollisionComponent* m_collisionComponent;
 	SpriteComponent* m_spriteComponent;
+	PositionComponent* m_positionComponent;
 
 	void setGunAs(SDL_Renderer* renderer, int gunValue, float xPos, float yPos, int id, SpriteComponent * gunTexture);
 private:
