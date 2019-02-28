@@ -303,7 +303,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	m_ps.bulletUpdate(m_renderer);
 
-	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players, m_camera);
+	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players, m_camera, m_audioObserver);
 	//m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
@@ -693,6 +693,7 @@ void PlayScreen::endRound() {
 		initialiseText(std::to_string(m_timer), 0, 700);
 		renderQuad->x = 1000;
 		if (m_gameOver) {
+			m_audioObserver->StartBGM(1);
 			*m_currentGameState = GameState::Menu;
 
 			for (Player * p : m_players) {

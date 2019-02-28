@@ -66,5 +66,6 @@ void AudioObserver::load()
 	Mix_VolumeChunk(m_swordSlash, 150);
 	
 	m_bgm1 = Mix_LoadMUS("assets/sfx/bgm1.wav");
+	m_bgm2 = Mix_LoadMUS("assets/sfx/happy.wav");
 	Mix_VolumeMusic(25);
 }
