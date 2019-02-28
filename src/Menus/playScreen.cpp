@@ -73,15 +73,19 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 	m_grenadeSpriteComponent->loadFromFile("assets/grenade.png", renderer);
 
 
-	m_guns.push_back(new Gun(renderer, 4, 1500, 100,gunAmount, m_grenadeSpriteComponent->getTexture()));
+	m_guns.push_back(new Gun(renderer, 1, 1500, 100,gunAmount, m_pistolSpriteComponent->getTexture()));
+	m_guns[0]->setGunAs(renderer, 3, 1500, 100, gunAmount, m_juicerSpriteComponent);
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 3, 1000, 100,gunAmount, m_juicerSpriteComponent->getTexture()));
+	m_guns[1]->setGunAs(renderer, 3, 1000, 100, gunAmount, m_juicerSpriteComponent);
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 2, 300, 100,gunAmount, m_shotgunSpriteComponent->getTexture()));
+	m_guns[2]->setGunAs(renderer, 3, 300, 100, gunAmount, m_juicerSpriteComponent);
 	gunAmount = gunAmount + 1;
 	//m_guns.push_back(new Gun(renderer, 4, 300, 100, gunAmount, m_grenadeSpriteComponent->getTexture()));
 	//gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 5, 700, 100,gunAmount, m_stabbyboySpriteComponent->getTexture()));
+	m_guns[3]->setGunAs(renderer, 3, 700, 100, gunAmount, m_juicerSpriteComponent);
 	gunAmount = gunAmount + 1;
 
 
@@ -280,6 +284,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	SDL_RenderSetScale(m_renderer, m_windowScale.x, m_windowScale.y);
 
 	m_ps.bulletUpdate(m_renderer);
+
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players, m_camera);
 	m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
@@ -299,6 +304,19 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		PositionComponent* pc = (PositionComponent*)m_aiCharacters.at(i)->getCompByType("POSITION");
 		m_playerPositions.at(entityIndex) = c2v{ pc->getX(), pc->getY() };
 		entityIndex++;
+	}
+
+	for (int i = 0; i < m_networkCharacters.size(); i++)
+	{
+		PositionComponent* pc = (PositionComponent*)m_networkCharacters.at(i)->getCompByType("POSITION");
+		m_playerPositions.at(entityIndex) = c2v{ pc->getX(), pc->getY() };
+		entityIndex++;
+	}
+
+	if (entityIndex < 4 && *online) {
+		while (m_playerPositions.size() != entityIndex) {
+			m_playerPositions.pop_back();
+		}
 	}
 
 	m_focusPoint = m_camera->focus(m_playerPositions);

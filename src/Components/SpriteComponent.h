@@ -73,6 +73,14 @@ public:
 	//\param height: height of the texture
 	void setTexture(SDL_Texture* texture, int width, int height);
 
+	//Function to set the source rectangle for a texture
+	//\param rect: Pointer to an SDL_Rect object
+	void setSRect(SDL_Rect* rect);
+
+	//Function to return the source rectangle for a texture
+	SDL_Rect* getSRect();
+	
+
 	//Functions for getting properties of a sprite after transformations have been applied
 	c2v getPosition();
 	c2v getScale();
