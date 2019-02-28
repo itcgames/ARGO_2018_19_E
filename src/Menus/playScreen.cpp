@@ -306,6 +306,19 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		entityIndex++;
 	}
 
+	for (int i = 0; i < m_networkCharacters.size(); i++)
+	{
+		PositionComponent* pc = (PositionComponent*)m_networkCharacters.at(i)->getCompByType("POSITION");
+		m_playerPositions.at(entityIndex) = c2v{ pc->getX(), pc->getY() };
+		entityIndex++;
+	}
+
+	if (entityIndex < 4 && *online) {
+		while (m_playerPositions.size() != entityIndex) {
+			m_playerPositions.pop_back();
+		}
+	}
+
 	m_focusPoint = m_camera->focus(m_playerPositions);
 	m_camera->update(m_focusPoint);
 	m_cameraCount = 0;
