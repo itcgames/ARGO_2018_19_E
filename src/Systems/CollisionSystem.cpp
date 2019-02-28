@@ -149,6 +149,7 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 			CollisionComponent * cc = (CollisionComponent*)entity->getCompByType("COLLISION");
 			PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 			SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
+			ControlComponent * control = (ControlComponent*)entity->getCompByType("CONTROL");
 
 			if (pc->getY() > 3000 && tag->getTag() == "Player") {
 				ControlComponent * control = (ControlComponent*)entity->getCompByType("CONTROL");
@@ -162,14 +163,13 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 					bullets->erase(bullets->begin() + i);
 					delete temp;
 				}
-				if (val != "none") {
+				if (val != "none" && control->getAlive()) {
 					Bullet * temp = bullets->at(i);
 					bullets->erase(bullets->begin() + i);
 					delete temp;
 					
 
 					if (tag->getTag() == "Player") {
-						ControlComponent * control = (ControlComponent*)entity->getCompByType("CONTROL");
 						PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 
 						if (val == "right") {
