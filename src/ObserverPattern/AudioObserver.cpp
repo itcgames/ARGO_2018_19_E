@@ -62,6 +62,8 @@ void AudioObserver::load()
 	m_shotgunShoot = Mix_LoadWAV("assets/sfx/shotgunShoot.wav");
 	m_swordSlash = Mix_LoadWAV("assets/sfx/swordSlash.wav");
 	m_weaponThrow = Mix_LoadWAV("assets/sfx/weaponThrow.wav");
+
+	Mix_VolumeChunk(m_swordSlash, 150);
 	
 	m_bgm1 = Mix_LoadMUS("assets/sfx/bgm1.wav");
 	Mix_VolumeMusic(25);
