@@ -78,6 +78,7 @@ bool SpriteComponent::loadFromFile(std::string path, SDL_Renderer* gRenderer)
 
 void SpriteComponent::setTexture(SDL_Texture* texture, int width, int height)
 {
+
 	m_texture = texture;
 	m_width = width;
 	m_height = height;
@@ -194,4 +195,14 @@ int SpriteComponent::getHeight()
 SDL_Texture* SpriteComponent::getTexture()
 {
 	return m_texture;
+}
+
+void SpriteComponent::setSRect(SDL_Rect* rect)
+{
+	m_sRect = rect;
+}
+
+SDL_Rect* SpriteComponent::getSRect()
+{
+	return m_sRect;
 }
