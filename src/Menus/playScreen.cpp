@@ -277,14 +277,15 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	}
 	
 	m_cs.update(event);
-	m_collSys.update(m_map->getTiles());
+	m_collSys.update(m_map->getTiles(), m_camera);
 	m_ps.update(m_renderer);
 	m_gunSys.update();
 
 	SDL_RenderSetScale(m_renderer, m_windowScale.x, m_windowScale.y);
 
 	m_ps.bulletUpdate(m_renderer);
-	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
+
+	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players, m_camera);
 	m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
