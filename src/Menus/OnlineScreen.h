@@ -16,7 +16,7 @@ public:
 	SDL_Texture* loadFromFile(std::string path, SDL_Renderer* gRenderer);
 	~OnlineScreen();
 
-	void update();
+	void update(bool fscreen);
 	void render(SDL_Renderer* renderer);
 
 	void fillLobby();
@@ -93,5 +93,7 @@ private:
 
 	bool animateIn = true;
 	bool animateOut = false;
+
+	bool set = false;
 };
 

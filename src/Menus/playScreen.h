@@ -33,7 +33,7 @@
 class PlayScreen 
 {
 public:
-	PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font, SDL_GameController * controller);
+	PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font, TTF_Font* smallerFont, SDL_GameController * controller);
 	~PlayScreen() {}
 
 	void update(bool * online, SDL_Event event, int size, Client * client);

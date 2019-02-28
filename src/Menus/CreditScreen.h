@@ -14,7 +14,7 @@ public:
 	CreditScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Font, TTF_Font* menuFont, SDL_GameController* controller);
 	~CreditScreen() {};
 
-	void update();
+	void update(bool fscreen);
 	void render(SDL_Renderer * renderer);
 	SDL_Texture* loadFromFile(std::string path, SDL_Renderer* gRenderer);
 
@@ -39,5 +39,7 @@ private:
 	SDL_Rect exitRenderQuad;
 
 	SDL_GameController * gameController = NULL;
+
+	bool set = false;
 };
 

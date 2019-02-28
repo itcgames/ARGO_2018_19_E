@@ -50,7 +50,7 @@ CreditScreen::CreditScreen(GameState * state, SDL_Renderer * renderer, TTF_Font*
 }
 
 
-void CreditScreen::update() {
+void CreditScreen::update(bool fscreen) {
 	for (int i = 0; i < renderQuads.size(); i++) {
 		renderQuads.at(i)->w = renderQuads.at(i)->y ;
 		renderQuads.at(i)->x = 600 - (renderQuads.at(i)->w / 2);
@@ -67,6 +67,12 @@ void CreditScreen::update() {
 			renderQuads.at(i)->y = 650 + (i * 150);
 		}
 		*m_currentGameState = GameState::Menu;
+	}
+
+	if (fscreen && !set)
+	{
+		m_width = m_width + 100;
+		set = true;
 	}
 }
 

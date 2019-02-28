@@ -396,7 +396,7 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 						notifyAudioObservers(AudioObserver::SFX::SWORD_SLASH);
 					}
 
-					if (!cc->isDead)
+					if (!ownerConC->isDead)
 					{
 						c2v * screenPos = new c2v{ 0,0 };
 						auto particle = new ParticleExample();
@@ -406,7 +406,7 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 						particle->setStyle(ParticleExample::BLOOD);
 						particle->setPosition(screenPos->x, screenPos->y);
 						m_blood.push_back(particle);
-						cc->isDead = true;
+						ownerConC->isDead = true;
 					}
 					ownerConC->setAlive(false);
 
@@ -784,21 +784,20 @@ void PhysicsSystem::movePlayer(ControlComponent * cc, PositionComponent *pc, Tag
 		speed = 3.0;
 		jumpSpeed = 20;
 	}
-	if (pc->getX() > 100) {
-		if (cc->getLeft()) {
-			if (pc->getVelX() > -8.0) {
-				pc->setVelX(pc->getVelX() - speed);
-			}
+	
+	if (cc->getLeft()) {
+		if (pc->getVelX() > -8.0) {
+			pc->setVelX(pc->getVelX() - speed);
 		}
 	}
-	if (pc->getX() < m_width - 150) {
-		if (cc->getRight()) {
+	
+	if (cc->getRight()) {
 
-			if (pc->getVelX() < 8.0) {
-				pc->setVelX(pc->getVelX() + speed);
-			}
+		if (pc->getVelX() < 8.0) {
+			pc->setVelX(pc->getVelX() + speed);
 		}
 	}
+	
 	if (cc->getJump() && pc->jumpNum < 2) {
 		pc->setVelY(-jumpSpeed);
 		cc->setJump(false);

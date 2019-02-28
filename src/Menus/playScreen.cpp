@@ -1,6 +1,6 @@
 #include "playScreen.h"
 
-PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font, SDL_GameController * controller) {
+PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font, TTF_Font* smallerFont, SDL_GameController * controller) {
 
 	m_gameController = controller;
 	Font = font;
@@ -303,7 +303,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	m_ps.bulletUpdate(m_renderer);
 
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players, m_camera, m_audioObserver);
-	//m_ais.update();
+	m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
 
@@ -586,7 +586,7 @@ void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_T
 		int text_width = textSurface->w;
 		int text_height = textSurface->h;
 		SDL_FreeSurface(textSurface);
-		renderQuad = new SDL_Rect{ 130, y, text_width, text_height };
+		renderQuad = new SDL_Rect{ 150, y, text_width, text_height };
 		//renderQuad->x = 800 - (renderQuad->w / 2);
 	}
 	else {
@@ -595,7 +595,7 @@ void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_T
 		int text_width = textSurface->w;
 		int text_height = textSurface->h;
 		SDL_FreeSurface(textSurface);
-		winnerRenderQuad = new SDL_Rect{ 30, y, text_width, text_height };
+		winnerRenderQuad = new SDL_Rect{ 150, y, text_width, text_height };
 		//winnerRenderQuad->x = 900 - (winnerRenderQuad->w / 2);
 	}
 	

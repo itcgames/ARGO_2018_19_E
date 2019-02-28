@@ -24,8 +24,6 @@ void AISystem::recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints,
 	m_width = width;
 	m_height = height;
 	m_tiles = tiles;
-
-	
 }
 
 

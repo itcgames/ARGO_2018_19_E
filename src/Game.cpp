@@ -36,7 +36,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Menu);
+	*m_currentGameState = (GameState::Splash);
 	aObserver = new AudioObserver();
 	aObserver->load();
 	aObserver->StartBGM(1);
@@ -45,7 +45,7 @@ Game::Game()
 		printf("TTF_Init: %s\n", TTF_GetError());
 	}
 
-	Font = TTF_OpenFont("arial.ttf", 200);
+	Font = TTF_OpenFont("arial.ttf", 300);
 	if (!Font) {
 		printf("TTF_OpenFont: %s\n", TTF_GetError());
 		// handle error
@@ -83,7 +83,7 @@ Game::Game()
 	m_client = new Client("149.153.106.155", 54000);
 	setUpController();
 	m_creditsScreen = new CreditScreen(m_currentGameState, m_renderer, creditsFont, menuFont, gGameController);
-	m_playScreen = new PlayScreen(m_currentGameState, m_renderer, Font, gGameController);
+	m_playScreen = new PlayScreen(m_currentGameState, m_renderer, Font, splashFont, gGameController);
 	m_splash = new SplashScreen(m_currentGameState, m_renderer, headerFont, splashFont);
 	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont, gGameController);
 	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client, m_online);
@@ -161,7 +161,7 @@ void Game::update() {
 		m_menu->update(m_window, fScreen);
 		break;
 	case GameState::Online:
-		m_onlineScreen->update();
+		m_onlineScreen->update(fScreen);
 		break;
 	case GameState::Options:
 		break;
@@ -169,7 +169,7 @@ void Game::update() {
 		m_playScreen->update(m_online, event, m_onlineScreen->m_lobbySize, m_client);
 		break;
 	case GameState::Credits:
-		m_creditsScreen->update();
+		m_creditsScreen->update(fScreen);
 		break;
 	default:
 		break;

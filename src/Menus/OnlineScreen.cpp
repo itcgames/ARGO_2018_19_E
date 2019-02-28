@@ -52,7 +52,14 @@ OnlineScreen::OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font 
 
 OnlineScreen::~OnlineScreen() {}
 
-void OnlineScreen::update() {
+void OnlineScreen::update(bool fscreen) {
+
+	if (fscreen && !set)
+	{
+		m_width = m_width + 75;
+		set = true;
+	}
+
 	if (!m_joined && !m_firstRunThrough) {
 		m_firstRunThrough = true;
 		
