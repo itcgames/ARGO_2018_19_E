@@ -528,9 +528,8 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 
 		{
 		
-			if (cc->getAngle() + 90 < 90)  // Could be wrong
+			if (cc->getAngle() + 90 < 90)
 			{
-
 				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
 				left = false;
 				right = false;
@@ -543,9 +542,8 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 		}
 		else {
 
-			if (cc->getAngle() + 90 < 90)  // Could be wrong
+			if (cc->getAngle() + 90 < 90)
 			{
-
 				sc->m_flipValue = SDL_FLIP_HORIZONTAL;
 				left = false;
 				right = false;
@@ -821,12 +819,10 @@ void PhysicsSystem::setPosition(PositionComponent * pc) {
 }
 void PhysicsSystem::flipNone(SpriteComponent * sc) {
 	sc->m_flipValue = SDL_FLIP_NONE;
-	flipval = sc->m_flipValue;
 }
 
 void PhysicsSystem::flipHorizontal(SpriteComponent * sc) {
 	sc->m_flipValue = SDL_FLIP_HORIZONTAL;
-	flipval = sc->m_flipValue;
 }
 void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent * ownerConC, TagComponent * ownerTagC) {
 	for (Entity * entity : m_entities) {
@@ -1273,6 +1269,8 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 
 						notifyAudioObservers(AudioObserver::SFX::PISTOL_SHOOT);
 						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tc->getXOffset(), pc->getY() + tc->getYOffset(), -(tc->getAngle() - 90), -tc->getXOffset() * 1.2, tc->getYOffset() * 1.2, 1000, bulletTextureSpriteComp->getTexture()));
+						tagC->setPistolTipX(pc->getX() - tc->getXOffset());
+						tagC->setPistolTipY(pc->getY() + tc->getYOffset());
 						
 						
 
@@ -1367,6 +1365,7 @@ void PhysicsSystem::bulletRender(SDL_Renderer* renderer, Camera* camera) {
 		{
 			if (tc->getStartAnimating() == true) {
 				PositionComponent * gunPos = (PositionComponent*)entity->getCompByType("POSITION");
+				SpriteComponent * sc = (SpriteComponent*)entity->getCompByType("SPRITE");
 				for (Entity * entity : m_entities) {
 					TagComponent * gunTag = (TagComponent*)entity->getCompByType("TAG");
 					if (tc->getGunGot() == gunTag->getTag())
@@ -1374,7 +1373,7 @@ void PhysicsSystem::bulletRender(SDL_Renderer* renderer, Camera* camera) {
 						gunPos = (PositionComponent*)entity->getCompByType("POSITION");
 					}
 				}
-				animateExplosion(renderer, tc, gunPos, camera);
+				animateExplosion(renderer, tc, gunPos, camera,sc);
 			}
 		}
 	}
@@ -1419,7 +1418,7 @@ void PhysicsSystem::setRenderer(SDL_Renderer * renderer)
 
 }
 
-void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc, PositionComponent * pc, Camera* camera)
+void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc, PositionComponent * pc, Camera* camera,SpriteComponent * sc)
 {
 	m_count++;
 
@@ -1434,18 +1433,13 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 		p->setStartSize(30);
 		p->setStartSpinVar(90);
 
-		if (flipval == SDL_FLIP_HORIZONTAL)
+		if (sc->m_flipValue == SDL_FLIP_HORIZONTAL)
 		{
-			screenPos->x = (pc->getX() - 15) - camera->getCamera()->x;
-			screenPos->y = pc->getY() - camera->getCamera()->y;
-			p->setPosition((int)screenPos->x, (int)screenPos->y);
+			p->setPosition((tc->getPistolTipX() - camera->getCamera()->x) + 60, tc->getPistolTipY() - camera->getCamera()->y);
 		}
 		else
 		{
-			screenPos->x = (pc->getX() + 60) - camera->getCamera()->x;
-			screenPos->y = (pc->getY() + 10) - camera->getCamera()->y;
-			p->setPosition((int)screenPos->x, (int)screenPos->y);
-
+			p->setPosition(tc->getPistolTipX() - camera->getCamera()->x, tc->getPistolTipY() - camera->getCamera()->y);
 		}
 
 		p->update();
@@ -1462,7 +1456,7 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 		flash->setStartSpinVar(0);
 
 
-		if (flipval == SDL_FLIP_HORIZONTAL)
+		if (sc->m_flipValue == SDL_FLIP_HORIZONTAL)
 		{
 			screenPos->x = (pc->getX() - tc->getShotgunTipX()) - camera->getCamera()->x;
 			screenPos->y = (pc->getY() + tc->getShotgunTipY()) - camera->getCamera()->y;
@@ -1497,7 +1491,7 @@ void PhysicsSystem::animateExplosion(SDL_Renderer * renderer, TagComponent * tc,
 		flash->setStartSpinVar(0);
 
 
-		if (flipval == SDL_FLIP_HORIZONTAL)
+		if (sc->m_flipValue == SDL_FLIP_HORIZONTAL)
 		{
 			screenPos->x = tc->getJuicerExplosionPos().x - camera->getCamera()->x;
 			screenPos->y = tc->getJuicerExplosionPos().y - camera->getCamera()->y;

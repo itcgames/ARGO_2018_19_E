@@ -54,12 +54,13 @@ public:
 
 	bool left = false;
 	bool right = false;
-	SDL_RendererFlip flipval;
+
+	//SDL_RendererFlip flipval;
 
 	std::vector<Bullet*> pistolBullets;
 	std::vector<Bullet*> juicerBullets;
 	std::vector<Bullet*> shotgunBullets;
-	void animateExplosion(SDL_Renderer * renderer, TagComponent * tc,PositionComponent * pc, Camera* camera);
+	void animateExplosion(SDL_Renderer * renderer, TagComponent * tc,PositionComponent * pc, Camera* camera, SpriteComponent *sc);
 
 
 	void setGun(TagComponent *tc,ControlComponent *cc,PositionComponent *pc,SpriteComponent *sc, PositionComponent *ownerPosC, ControlComponent * ownerConC);

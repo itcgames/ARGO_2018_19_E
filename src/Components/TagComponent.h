@@ -59,6 +59,13 @@ public:
 	void setShotgunTipX(float value) { shotgunTipX = value; }
 	void setShotgunTipY(float value) { shotgunTipY = value; }
 
+	float pistolTipX;
+	float pistolTipY;
+	float getPistolTipX() { return pistolTipX; }
+	float getPistolTipY() { return pistolTipY; }
+	void setPistolTipX(float value) { pistolTipX = value; }
+	void setPistolTipY(float value) { pistolTipY = value; }
+
 	float juicerTipX;
 	float juicerTipY;
 	float getJuicerTipX() { return juicerTipX; }

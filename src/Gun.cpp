@@ -12,10 +12,10 @@ Gun::Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos,int id,SDL_Te
 
 	if (gunValue == 1)
 	{
-		m_spriteComponent = new SpriteComponent(0, 0, 210, 295);
+		m_spriteComponent = new SpriteComponent(0, 0, 292, 295);
 		m_spriteComponent->setPosition(c2v{ xPos, yPos });
 		m_spriteComponent->setScale(c2v{ 0.2f, 0.2f });
-		m_spriteComponent->setTexture(gunTexture,210,295);
+		m_spriteComponent->setTexture(gunTexture, 292, 295);
 		this->addComponent(m_spriteComponent);
 		m_tagComponent->setSubTag("pistol");
 		m_collisionComponent = new CollisionComponent(xPos, yPos, m_spriteComponent->getWidth(), m_spriteComponent->getHeight());
@@ -88,7 +88,7 @@ void Gun::setGunAs(SDL_Renderer* renderer, int gunValue, float xPos, float yPos,
 		m_spriteComponent->setSRect(gunSprite->getSRect());
 		m_spriteComponent->setPosition(c2v{ xPos, yPos });
 		m_spriteComponent->setScale(c2v{ 0.2f, 0.2f });
-		m_spriteComponent->setTexture(gunSprite->getTexture(), 210, 295);
+		m_spriteComponent->setTexture(gunSprite->getTexture(), 292, 295);
 		m_tagComponent->setSubTag("pistol");
 		m_collisionComponent->setW(m_spriteComponent->getWidth());
 		m_collisionComponent->setH(m_spriteComponent->getHeight());
