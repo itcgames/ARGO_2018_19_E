@@ -161,6 +161,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 				else {
 					pc->setX(ownerPosC->getX() - tc->getXOffset() - 80);  // set gun position + offset for player centre - offset for angle
 				}
+				pc->setY(ownerPosC->getY() - 100 + tc->getYOffset());
 			}
 			else if (tc->getSubTag() == "shotgun"){
 				if (sc->m_flipValue == SDL_FLIP_NONE)
@@ -170,6 +171,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 				else {
 					pc->setX(ownerPosC->getX() - tc->getXOffset() - 20);
 				}
+				pc->setY(ownerPosC->getY() - 55 + tc->getYOffset());
 			}
 			else {
 				pc->setX(ownerPosC->getX() - tc->getXOffset());
@@ -177,27 +179,12 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 			if (tc->getSubTag() == "pistol")
 			{
 				pc->setX(ownerPosC->getX() - tc->getXOffset());  // set gun position + offset for player centre - offset for angle
-			}
-			if (tc->getSubTag() == "pistol" || tc->getSubTag() == "grenade")
-			{
 				pc->setY(ownerPosC->getY() + tc->getYOffset());
 			}
 			if (tc->getSubTag() == "stabbyboy")
 			{
 				pc->setX(ownerPosC->getX() - tc->getXOffset() * 2);  // set gun position + offset for player centre - offset for angle
-			}
-			if (tc->getSubTag() == "stabbyboy")
-			{
 				pc->setY(ownerPosC->getY() + (tc->getYOffset() * 2) - 100);
-			}
-			else if (tc->getSubTag() == "shotgun")
-			{
-				pc->setY(ownerPosC->getY() - 55 + tc->getYOffset());
-			}
-			else if (tc->getSubTag() == "juicer")
-			{
-				pc->setY(ownerPosC->getY() - 100 + tc->getYOffset());
-
 			}
 			if (tc->getGrabbed() == true) {
 				if (tc->getSubTag() == "juicer")  // Slow down rotation for juicer balance
@@ -258,7 +245,21 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 		// Animations for gun recoil
 		else
 		{
-			if (tc->getSubTag() == "pistol" || tc->getSubTag() == "grenade")
+			if (tc->getSubTag() == "stabbyboy")
+			{
+				pc->setX(ownerPosC->getX() - tc->getXOffset() * 2);  // set gun position + offset for player centre - offset for angle
+				pc->setY(ownerPosC->getY() + (tc->getYOffset() * 2) - 100);
+
+				double angleTo = ownerConC->getCurrentAngle();
+				double angleDifference = angleTo - tc->getPreviousAngle();
+				double ease = 0.1;
+				float previousAngle = tc->getPreviousAngle();
+				//tc->setPreviousAngle(previousAngle += angleDifference * ease);
+				tc->setPreviousAngle(previousAngle += angleDifference);
+				sc->setRotation(-tc->getPreviousAngle()); //rotate gun
+			}
+			
+			else if (tc->getSubTag() == "pistol" || tc->getSubTag() == "grenade")
 			{
 				pc->setY(ownerPosC->getY() + tc->getYOffset());
 				if (sc->m_flipValue == SDL_FLIP_NONE)
@@ -361,22 +362,6 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
 		ControlComponent * cc = (ControlComponent*)entity->getCompByType("CONTROL");
 		CollisionComponent * colisionc = (CollisionComponent*)entity->getCompByType("COLLISION");
-		if (tc->getTag() == "Gun" && tc->getGrabable() == false && tc->getGrabbed() == true && tc->getSubTag() == "stabbyboy")
-		{
-			std::string val = rectCollision(colc->getCollider(), colisionc->getCollider());
-			if (val != "none")
-			{
-				if (tc->getSubTag2() != tagc->getGunGotID())
-				{					
-					if (ownerConC->getAlive() == true)
-					{
-						notifyAudioObservers(AudioObserver::SFX::SWORD_SLASH);
-					}
-					ownerConC->setAlive(false);
-
-				}
-			}
-		}
 		if (tc->getTag() == "Gun" && tc->getGrabable() == true && tc->getGrabbed() == false)
 		{
 			std::string val = rectCollision(colc->getCollider(), colisionc->getCollider());
@@ -392,6 +377,22 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 					setPlayerGunGot(tc->getSubTag(), tagc,tc->getSubTag2());
 					tc->setGrabbed(true);
 					tc->setGrabable(false);
+				}
+			}
+		}
+		if (tc->getTag() == "Gun" && tc->getGrabable() == false && tc->getGrabbed() == true && tc->getSubTag() == "stabbyboy")
+		{
+			std::string val = rectCollision(colc->getCollider(), colisionc->getCollider());
+			if (val != "none")
+			{
+				if (tc->getSubTag2() != tagc->getGunGotID())
+				{					
+					if (ownerConC->getAlive() == true)
+					{
+						notifyAudioObservers(AudioObserver::SFX::SWORD_SLASH);
+					}
+					ownerConC->setAlive(false);
+
 				}
 			}
 		}
@@ -510,7 +511,7 @@ void PhysicsSystem::playerFlip(PositionComponent * pc, SpriteComponent * sc, Con
 
 		{
 		
-			if (cc->getAngle() + 90 > -90)  // Could be wrong
+			if (cc->getAngle() + 90 < 90)  // Could be wrong
 			{
 
 				sc->m_flipValue = SDL_FLIP_HORIZONTAL;

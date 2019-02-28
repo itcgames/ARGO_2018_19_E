@@ -52,10 +52,10 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 	m_pistolSpriteComponent->setScale(c2v{ 0.2f, 0.2f });
 	m_pistolSpriteComponent->loadFromFile("assets/pistol.png", renderer);
 
-	m_shotgunSpriteComponent = new SpriteComponent(0, 0, 33, 139);
+	m_shotgunSpriteComponent = new SpriteComponent(0, 0, 34, 140);
 	m_shotgunSpriteComponent->setPosition(c2v{ 999999, 999999 });
 	m_shotgunSpriteComponent->setScale(c2v{ 2.0f, 1.5f });
-	m_shotgunSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/ShotgunGlow2.png", renderer);
+	m_shotgunSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/ShotgunGlow123.png", renderer);
 
 	m_juicerSpriteComponent = new SpriteComponent(0, 0, 100, 150);
 	m_juicerSpriteComponent->setPosition(c2v{ 999999, 999999 });
