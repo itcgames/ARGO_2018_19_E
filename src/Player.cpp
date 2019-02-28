@@ -185,46 +185,85 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 	renderQuad.w = startBalloonCount * 30;  //30
 	renderQuad.h = startBalloonCount * 50;  //50
 	
-	if (controlComp->getAlive() == false) {
+	if (!controlComp->getAlive()) {
+
+		if (!startDeath) {
+			randNum = (rand() % 2) + 1;
+			startDeath = true;
+		}
+
+
 		if (controlComp->getHitFrom() == "right")
 		{
-			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentLeftFoot->getPosition().y + 10 - camera->getCamera()->y });
-			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10 - camera->getCamera()->x, m_spriteComponentRightFoot->getPosition().y + 10 - camera->getCamera()->y });
-			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentHead->getPosition().y - 10 - camera->getCamera()->y });
-			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x - 10 - camera->getCamera()->x, m_spriteComponentCrown->getPosition().y - 10 - camera->getCamera()->y });
+			if (randNum == 1) {
+				m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount - offSet,positionComp->getY() + 52 + offSet });
+				m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount + offSet,positionComp->getY() + 52 + offSet });
+				m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 - offSet,positionComp->getY() - 50 + headCount - offSet });
+				m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + offSet, m_spriteComponentCrown->getPosition().y - offSet });
 
-			m_spriteComponentHead->rotate(3);
-			m_spriteComponentCrown->rotate(3);
-			m_spriteComponentLeftFoot->rotate(3);
-			m_spriteComponentRightFoot->rotate(3);
+				m_spriteComponentHead->rotate(3);
+				m_spriteComponentCrown->rotate(3);
+				m_spriteComponentLeftFoot->rotate(3);
+				m_spriteComponentRightFoot->rotate(3);
+			}
+			else {
+				m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 - offSet,positionComp->getY() - 50 + headCount - offSet });
+
+				m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount,positionComp->getY() + 52 });
+				m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount,positionComp->getY() + 52 });
+				m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x, m_spriteComponentCrown->getPosition().y });
+			}
+
 		}
 		else if (controlComp->getHitFrom() == "left")
 		{
-			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x - 10 - camera->getCamera()->x, m_spriteComponentLeftFoot->getPosition().y + 10 - camera->getCamera()->y });
-			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentRightFoot->getPosition().y + 10 - camera->getCamera()->y });
-			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x - 10 - camera->getCamera()->x, m_spriteComponentHead->getPosition().y - 10 - camera->getCamera()->y });
-			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentCrown->getPosition().y - 10 - camera->getCamera()->y });
+			if (randNum == 1) {
+				m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount + offSet,positionComp->getY() + 52 - offSet });
+				m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount - offSet,positionComp->getY() + 52 - offSet });
+				m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 + offSet,positionComp->getY() - 50 + headCount + offSet });
+				m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x - offSet, m_spriteComponentCrown->getPosition().y - offSet });
+
+				m_spriteComponentHead->rotate(-3);
+				m_spriteComponentCrown->rotate(-3);
+				m_spriteComponentLeftFoot->rotate(-3);
+				m_spriteComponentRightFoot->rotate(-3);
+			}
+			else {
+				m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 + offSet,positionComp->getY() - 50 + headCount + offSet });
+
+				m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount,positionComp->getY() + 52 });
+				m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount,positionComp->getY() + 52 });
+				m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x, m_spriteComponentCrown->getPosition().y });
+
+			}
 
 
-			m_spriteComponentHead->rotate(-3);
-			m_spriteComponentCrown->rotate(-3);
-			m_spriteComponentLeftFoot->rotate(-3);
-			m_spriteComponentRightFoot->rotate(-3);
 		}
 		else
 		{
-			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentLeftFoot->getPosition().y + 10 - camera->getCamera()->y });
-			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10 - camera->getCamera()->x, m_spriteComponentRightFoot->getPosition().y + 10 - camera->getCamera()->y });
-			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentHead->getPosition().y - 10 - camera->getCamera()->y });
-			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentCrown->getPosition().y - 10 - camera->getCamera()->y });
+			if (randNum == 1) {
+				m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount - offSet,positionComp->getY() + 52 - offSet });
+				m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount - offSet,positionComp->getY() + 52 - offSet });
+				m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 + offSet,positionComp->getY() - 50 + headCount + offSet });
+				m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + offSet, m_spriteComponentCrown->getPosition().y - offSet });
 
 
-			m_spriteComponentHead->rotate(3);
-			m_spriteComponentCrown->rotate(3);
-			m_spriteComponentLeftFoot->rotate(3);
-			m_spriteComponentRightFoot->rotate(3);
+				m_spriteComponentHead->rotate(3);
+				m_spriteComponentCrown->rotate(3);
+				m_spriteComponentLeftFoot->rotate(3);
+				m_spriteComponentRightFoot->rotate(3);
+			}
+			else {
+				m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 + offSet,positionComp->getY() - 50 + headCount + offSet });
+
+				m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount,positionComp->getY() + 52 });
+				m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount,positionComp->getY() + 52 });
+				m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x, m_spriteComponentCrown->getPosition().y });
+
+			}
+
 		}
-
+		offSet += 15;
 		controlComp->setRight(false);
 		controlComp->setLeft(false);
 

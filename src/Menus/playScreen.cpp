@@ -655,6 +655,14 @@ void PlayScreen::endRound() {
 		m_roundEnd = false;
 
 		m_restart = true;
+
+		for (AI * ai : m_aiCharacters) {
+			ai->startDeath = false;
+		}
+		for (Player * p : m_players) {
+			p->startDeath = false;
+		}
+
 		m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getTiles(), m_map->getWidth(), m_map->getHeight());
 		m_ps.recieveLevel(m_map->getWidth(), m_map->getHeight());
 		m_ps.startRoundCount = 0;
