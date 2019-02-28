@@ -47,10 +47,10 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 
 	m_map->load("testlevel.tmx", renderer);
 
-	m_pistolSpriteComponent = new SpriteComponent(0, 0, 210, 295);
+	m_pistolSpriteComponent = new SpriteComponent(0, 0, 292, 295);
 	m_pistolSpriteComponent->setPosition(c2v{ 999999, 999999 });
 	m_pistolSpriteComponent->setScale(c2v{ 0.2f, 0.2f });
-	m_pistolSpriteComponent->loadFromFile("assets/pistol.png", renderer);
+	m_pistolSpriteComponent->loadFromFile("assets/art/character/pistol.png", renderer);
 
 	m_shotgunSpriteComponent = new SpriteComponent(0, 0, 34, 140);
 	m_shotgunSpriteComponent->setPosition(c2v{ 999999, 999999 });
