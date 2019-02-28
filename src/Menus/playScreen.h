@@ -158,7 +158,6 @@ private:
 	SDL_GameController * m_gameController;
 
 	void replaceWeapons();
-	void deleteWeapons();
 
 	bool firstTime = true;
 	int buttonTimer = 0;
