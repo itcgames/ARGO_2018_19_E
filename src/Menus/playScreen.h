@@ -162,4 +162,9 @@ private:
 	bool firstTime = true;
 	int buttonTimer = 0;
 	bool m_pressed = false;
+
+	SDL_Texture * m_staticTexture;
+
+	int m_width;
+	int m_height;
 };

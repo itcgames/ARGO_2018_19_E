@@ -565,7 +565,7 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 	testLight->render(m_renderer);
 	m_grenadeSys.render();
 	m_collSys.render();
-	SDL_SetRenderDrawColor(renderer, 183, 110, 121, 255);
+	SDL_SetRenderDrawColor(renderer, 204, 162, 146, 255);
 	SDL_RenderFillRect(renderer, &m_BGRect);
 	if (m_drawRoundText) {
 		
@@ -586,7 +586,7 @@ void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_T
 		int text_width = textSurface->w;
 		int text_height = textSurface->h;
 		SDL_FreeSurface(textSurface);
-		renderQuad = new SDL_Rect{ 150, y, text_width, text_height };
+		renderQuad = new SDL_Rect{ 130, y, text_width, text_height };
 		//renderQuad->x = 800 - (renderQuad->w / 2);
 	}
 	else {
@@ -595,7 +595,7 @@ void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_T
 		int text_width = textSurface->w;
 		int text_height = textSurface->h;
 		SDL_FreeSurface(textSurface);
-		winnerRenderQuad = new SDL_Rect{ 150, y, text_width, text_height };
+		winnerRenderQuad = new SDL_Rect{ 30, y, text_width, text_height };
 		//winnerRenderQuad->x = 900 - (winnerRenderQuad->w / 2);
 	}
 	

@@ -36,7 +36,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Splash);
+	*m_currentGameState = (GameState::Menu);
 	aObserver = new AudioObserver();
 	aObserver->load();
 	aObserver->StartBGM(1);
@@ -45,7 +45,7 @@ Game::Game()
 		printf("TTF_Init: %s\n", TTF_GetError());
 	}
 
-	Font = TTF_OpenFont("joystixmonospace.ttf", 200);
+	Font = TTF_OpenFont("arial.ttf", 200);
 	if (!Font) {
 		printf("TTF_OpenFont: %s\n", TTF_GetError());
 		// handle error
@@ -158,8 +158,7 @@ void Game::update() {
 		m_splash->update();
 		break;
 	case GameState::Menu:
-		
-		m_menu->update(m_window);
+		m_menu->update(m_window, fScreen);
 		break;
 	case GameState::Online:
 		m_onlineScreen->update();

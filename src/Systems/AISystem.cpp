@@ -262,19 +262,20 @@ void AISystem::update() {
 
 				con->setAngle(desired);
 
+				if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
+				{
+					con->setFire(true);
+				}
+				else
+				{
+					con->setFire(false);
+				}
+
 				if (!ac->detect && ac->initRecieve) 
 				{
 					ac->setLeft(false);
 					ac->setRight(false);
 
-					if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
-					{
-						con->setFire(true);
-					}
-					else
-					{
-						con->setFire(false);
-					}	
 				}
 				else if (ac->detect)
 				{

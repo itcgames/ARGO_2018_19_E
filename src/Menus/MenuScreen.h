@@ -12,7 +12,7 @@ public:
 	MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Font, SDL_GameController* controller);
 	~MenuScreen();
 
-	void update(SDL_Window *window);
+	void update(SDL_Window *window, bool fscreen);
 	void render(SDL_Renderer* renderer);
 	void resetMenu();
 	SDL_Texture* loadFromFile(std::string path, SDL_Renderer* gRenderer);
@@ -81,6 +81,8 @@ private:
 
 	double m_alpha = 0;
 	
+	bool set = false;
+
 	bool animateIn = true;
 	bool animateOut = false;
 };

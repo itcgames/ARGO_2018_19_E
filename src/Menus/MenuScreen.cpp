@@ -146,7 +146,7 @@ void MenuScreen::resetMenu()
 }
 
 
-void MenuScreen::update(SDL_Window *window)
+void MenuScreen::update(SDL_Window *window, bool fscreen)
 {
 	bool AButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_A);
 	bool BButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_B);
@@ -154,6 +154,11 @@ void MenuScreen::update(SDL_Window *window)
 	bool YButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_Y);
 	bool StartButton = SDL_GameControllerGetButton(gGameController, SDL_CONTROLLER_BUTTON_START);
 
+	if (fscreen && !set)
+	{
+		m_width = m_width + 75;
+		set = true;
+	}
 
 	if (m_startInTransition)
 	{
