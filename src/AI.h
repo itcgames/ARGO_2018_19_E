@@ -49,4 +49,6 @@ private:
 	ControlComponent * control;
 
 	float rumbleCount = 0;
+
+	int offSet = 1;
 };

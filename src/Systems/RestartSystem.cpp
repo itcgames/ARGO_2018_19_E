@@ -43,7 +43,7 @@ void RestartSystem::reset(int level, std::vector<std::pair<bool, c2v>*>  vec, bo
 
 			if (tc->getSubTag2() == "AI_Player")
 			{
-
+				ac->initRecieve = false;
 				ac->set = false;
 				pc->setX(vec.at(count)->second.x);
 				pc->setY(vec.at(count)->second.y);

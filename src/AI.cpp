@@ -31,7 +31,7 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 
 
 
-	m_spriteComponent->loadFromFile("assets/art/character/RedBody.png", renderer);
+	//m_spriteComponent->loadFromFile("assets/art/character/BlueBody.png", renderer);
 	m_spriteComponentCrown->loadFromFile("assets/art/character/finished_character_assets/crown.png", renderer);
 
 	m_spriteComponentHead->setPosition(c2v{ xPos, yPos });
@@ -92,18 +92,21 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 	{
 		tag->setSubTag("Player 2");
 		tag->setSubTag2("AI_Player");
+		m_spriteComponent->loadFromFile("assets/art/character/BlueBody.png", renderer);
 		
 	}
 	else if (noOfPlayers == 2)
 	{
 		tag->setSubTag("Player 3");
 		tag->setSubTag2("AI_Player");
+		m_spriteComponent->loadFromFile("assets/art/character/YellowBody.png", renderer);
 		
 	}
 	else if (noOfPlayers == 3)
 	{
 		tag->setSubTag("Player 4");
 		tag->setSubTag2("AI_Player");
+		m_spriteComponent->loadFromFile("assets/art/character/PinkBody.png", renderer);
 		
 	}
 
@@ -117,43 +120,53 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 void AI::render(SDL_Renderer* renderer, Camera* camera) {
 
 	if (!control->getAlive()) {
+
 		if (control->getHitFrom() == "right")
 		{
-			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
-			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
-			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10, m_spriteComponentHead->getPosition().y - 10 });
+			m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount - offSet,positionComp->getY() + 52  + offSet});
+			m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount + offSet,positionComp->getY() + 52 + offSet});
+			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 - offSet,positionComp->getY() - 50 + headCount - offSet});
+			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + offSet, m_spriteComponentCrown->getPosition().y - offSet });
 
 			m_spriteComponentHead->rotate(3);
+			m_spriteComponentCrown->rotate(3);
 			m_spriteComponentLeftFoot->rotate(3);
 			m_spriteComponentRightFoot->rotate(3);
 		}
 		else if (control->getHitFrom() == "left")
 		{
-			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x - 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
-			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x + 10, m_spriteComponentRightFoot->getPosition().y + 10 });
-			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x - 10, m_spriteComponentHead->getPosition().y - 10 });
+			m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount + offSet,positionComp->getY() + 52 - offSet});
+			m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount - offSet,positionComp->getY() + 52 - offSet});
+			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 + offSet,positionComp->getY() - 50 + headCount + offSet});
+			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x - offSet, m_spriteComponentCrown->getPosition().y - offSet});
+
 
 			m_spriteComponentHead->rotate(-3);
+			m_spriteComponentCrown->rotate(-3);
 			m_spriteComponentLeftFoot->rotate(-3);
 			m_spriteComponentRightFoot->rotate(-3);
 		}
 		else
 		{
-			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
-			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
-			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10, m_spriteComponentHead->getPosition().y - 10 });
+			m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount - offSet,positionComp->getY() + 52 - offSet});
+			m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount - offSet,positionComp->getY() + 52 - offSet});
+			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2,positionComp->getY() - 50 + headCount });
+			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x, m_spriteComponentCrown->getPosition().y });
+
 
 			m_spriteComponentHead->rotate(3);
+			m_spriteComponentCrown->rotate(3);
 			m_spriteComponentLeftFoot->rotate(3);
 			m_spriteComponentRightFoot->rotate(3);
 		}
-
+		offSet += 15;
 		controlComp->setRight(false);
 		controlComp->setLeft(false);
 
 	}
 	else if (control->getAlive())
 	{
+		offSet = 1;
 		// Animation loop for head when hitting ground
 		if (animateHead == true)
 		{

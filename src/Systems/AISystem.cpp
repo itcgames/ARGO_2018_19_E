@@ -51,16 +51,18 @@ void AISystem::receive(std::vector<Entity*> guns, std::vector<Entity*> players)
 				ControlComponent * con = (ControlComponent*)(*e)->getCompByType("CONTROL");
 				TagComponent * tC = (TagComponent*)entity->getCompByType("TAG");
 
-				m_position = c2v{ pos->getX(), pos->getY() };
 
-				ac->m_distances[count].first = distance(ac->curPosition, m_position);
+				if (tC->getGrabbed() == false) {
+					m_position = c2v{ pos->getX(), pos->getY() };
 
-				vec.x = pos->getX();
-				vec.y = pos->getY();
-				
+					ac->m_distances[count].first = distance(ac->curPosition, m_position);
 
-				ac->m_distances[count].second = vec;
+					vec.x = pos->getX();
+					vec.y = pos->getY();
 
+
+					ac->m_distances[count].second = vec;
+				}
 
 				count++;
 			}
@@ -246,20 +248,25 @@ void AISystem::update() {
 			}
 			
 			
-			rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
-			rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
+			
 
 			//ai shooting entities
 			if (tag->gotGunBool)
 			{
+				rayCast->setStartPosition(ac->curPosition.x, ac->curPosition.y);
+				rayCast->setCastPosition(ac->closestEnemy.second.x, ac->closestEnemy.second.y);
+
 				ac->detect = tileCollision(rayCast->getStartPosition().x, rayCast->getStartPosition().y, rayCast->getCastPosition().x, rayCast->getCastPosition().y);
 
 				double desired = getAngleToPlayer(ac->curPosition, ac->closestEnemy);
 
 				con->setAngle(desired);
 
-				if (!ac->detect) 
+				if (!ac->detect && ac->initRecieve) 
 				{
+					ac->setLeft(false);
+					ac->setRight(false);
+
 					if (con->getCurrentAngle() > desired - 5 && con->getCurrentAngle() < desired + 5)
 					{
 						con->setFire(true);
@@ -268,6 +275,18 @@ void AISystem::update() {
 					{
 						con->setFire(false);
 					}	
+				}
+				else if (ac->detect)
+				{
+					ac->closestEnemy = checkClosest(ac->m_distances, ac->m_realDist);
+				}
+
+				
+				
+				
+				if (!ac->initRecieve)
+				{
+					ac->initRecieve = true;
 				}
 			}	
 			
@@ -283,19 +302,16 @@ void AISystem::update() {
 					{
 						ac->setRight(false);
 						ac->setLeft(true);
-
 					}
 				}
 
-				if (ac->direction == "RIGHT" && ac->curPosition.x < ac->closestEnemy.second.x)
+				if (ac->direction == "RIGHT" )
 				{
 					if (ac->curPosition.x < ac->closestEnemy.second.x)
 					{
 						ac->setRight(true);
 						ac->setLeft(false);
-
 					}
-
 				}
 
 			}

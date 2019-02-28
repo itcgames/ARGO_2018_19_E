@@ -184,15 +184,14 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 	renderQuad.y = m_marker->getPosition().y + (startBalloonCount * 30);
 	renderQuad.w = startBalloonCount * 30;  //30
 	renderQuad.h = startBalloonCount * 50;  //50
-
+	
 	if (controlComp->getAlive() == false) {
 		if (controlComp->getHitFrom() == "right")
 		{
-			c2v* screenPos = new c2v{ 0 , 0 };
-			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
-			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
-			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10, m_spriteComponentHead->getPosition().y - 10 });
-			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x - 10, m_spriteComponentCrown->getPosition().y - 10 });
+			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentLeftFoot->getPosition().y + 10 - camera->getCamera()->y });
+			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10 - camera->getCamera()->x, m_spriteComponentRightFoot->getPosition().y + 10 - camera->getCamera()->y });
+			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentHead->getPosition().y - 10 - camera->getCamera()->y });
+			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x - 10 - camera->getCamera()->x, m_spriteComponentCrown->getPosition().y - 10 - camera->getCamera()->y });
 
 			m_spriteComponentHead->rotate(3);
 			m_spriteComponentCrown->rotate(3);
@@ -201,10 +200,10 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 		}
 		else if (controlComp->getHitFrom() == "left")
 		{
-			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x - 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
-			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x + 10, m_spriteComponentRightFoot->getPosition().y + 10 });
-			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x - 10, m_spriteComponentHead->getPosition().y - 10 });
-			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + 10, m_spriteComponentCrown->getPosition().y - 10 });
+			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x - 10 - camera->getCamera()->x, m_spriteComponentLeftFoot->getPosition().y + 10 - camera->getCamera()->y });
+			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentRightFoot->getPosition().y + 10 - camera->getCamera()->y });
+			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x - 10 - camera->getCamera()->x, m_spriteComponentHead->getPosition().y - 10 - camera->getCamera()->y });
+			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentCrown->getPosition().y - 10 - camera->getCamera()->y });
 
 
 			m_spriteComponentHead->rotate(-3);
@@ -214,10 +213,10 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 		}
 		else
 		{
-			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
-			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
-			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10, m_spriteComponentHead->getPosition().y - 10 });
-			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + 10, m_spriteComponentCrown->getPosition().y - 10 });
+			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentLeftFoot->getPosition().y + 10 - camera->getCamera()->y });
+			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10 - camera->getCamera()->x, m_spriteComponentRightFoot->getPosition().y + 10 - camera->getCamera()->y });
+			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentHead->getPosition().y - 10 - camera->getCamera()->y });
+			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + 10 - camera->getCamera()->x, m_spriteComponentCrown->getPosition().y - 10 - camera->getCamera()->y });
 
 
 			m_spriteComponentHead->rotate(3);
