@@ -36,7 +36,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Splash);
+	*m_currentGameState = (GameState::Menu);
 	aObserver = new AudioObserver();
 	aObserver->load();
 	aObserver->StartBGM(1);
