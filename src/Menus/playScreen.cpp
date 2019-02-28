@@ -73,27 +73,6 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 	m_grenadeSpriteComponent->loadFromFile("assets/grenade.png", renderer);
 
 
-	m_guns.push_back(new Gun(renderer, 4, 1500, 100,gunAmount, m_grenadeSpriteComponent->getTexture()));
-	//m_guns[0]->setGunAs(renderer, 3, 1500, 100, gunAmount, m_juicerSpriteComponent);
-	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 3, 1000, 100,gunAmount, m_juicerSpriteComponent->getTexture()));
-	//m_guns[1]->setGunAs(renderer, 3, 1000, 100, gunAmount, m_juicerSpriteComponent);
-	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 4, 300, 100, gunAmount, m_grenadeSpriteComponent->getTexture()));
-	//m_guns[2]->setGunAs(renderer, 3, 300, 100, gunAmount, m_juicerSpriteComponent);
-	gunAmount = gunAmount + 1;
-	//m_guns.push_back(new Gun(renderer, 4, 300, 100, gunAmount, m_grenadeSpriteComponent->getTexture()));
-	//gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 5, 700, 100,gunAmount, m_stabbyboySpriteComponent->getTexture()));
-	//m_guns[3]->setGunAs(renderer, 3, 700, 100, gunAmount, m_juicerSpriteComponent);
-	gunAmount = gunAmount + 1;
-
-
-
-
-	for (Gun * g : m_guns) {
-		m_Gunents.push_back((Entity*)g);	
-	}
 
 	m_BGRect.x = -2400; m_BGRect.y = 0; m_BGRect.w = 2400; m_BGRect.h = 1400;
 }
@@ -108,6 +87,45 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	}
 	else {
 		m_multiplayer = false;
+	}
+
+	for (int i = 0; i < m_map->getGunPoints().size(); i++)
+	{
+		int gunValue = 0;
+		SDL_Texture* gunTex = NULL;
+		if (m_map->getGunPoints().at(i)->second == "Juicer")
+		{
+			gunValue = 3;
+			gunTex = m_juicerSpriteComponent->getTexture();
+			gunAmount++;
+		}
+
+		else if (m_map->getGunPoints().at(i)->second == "Pistol")
+		{
+			gunValue = 1;
+			gunTex = m_pistolSpriteComponent->getTexture();
+			gunAmount++;
+		}
+
+		else if (m_map->getGunPoints().at(i)->second == "Shotgun")
+		{
+			gunValue = 2;
+			gunTex = m_shotgunSpriteComponent->getTexture();
+			gunAmount++;
+		}
+
+		else if (m_map->getGunPoints().at(i)->second == "Stabbyboy")
+		{
+			gunValue = 5;
+			gunTex = m_stabbyboySpriteComponent->getTexture();
+			gunAmount++;
+		}
+		
+		m_guns.push_back(new Gun(m_renderer, gunValue, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, gunTex));
+
+		for (Gun * g : m_guns) {
+			m_Gunents.push_back((Entity*)g);
+		}
 	}
 	
 	if (online) {
@@ -633,22 +651,27 @@ void PlayScreen::endRound() {
 		if (randNum == 1) {
 			m_map->load("testlevel.tmx", m_renderer);
 			m_currentLevel = m_backgroundSpriteOne;
+			replaceWeapons();
 		}
 		else if (randNum == 2) {
 			m_map->load("level3.tmx", m_renderer);
 			m_currentLevel = m_backgroundSpriteTwo;
+			replaceWeapons();
 		}
 		else if (randNum == 3) {
 			m_map->load("level5.tmx", m_renderer);
 			m_currentLevel = m_backgroundSpriteThree;
+			replaceWeapons();
 		}
 		else if (randNum == 4) {
 			m_map->load("level6.tmx", m_renderer);
 			m_currentLevel = m_backgroundSpriteThree;
+			replaceWeapons();
 		}
 		else if (randNum == 5) {
 			m_map->load("level7.tmx", m_renderer);
 			m_currentLevel = m_backgroundSpriteTwo;
+			replaceWeapons();
 		}
 		m_roundCounter = 0;
 		m_drawRoundText = false;
@@ -768,5 +791,44 @@ void PlayScreen::checkScore()
 			tag->setLeader(false);
 		}
 
+	}
+}
+
+void PlayScreen::replaceWeapons()
+{
+	gunAmount = 1;
+	for (int i = 0; i < m_map->getGunPoints().size(); i++)
+	{
+		int gunValue = 0;
+		SpriteComponent* temp = NULL;
+		if (m_map->getGunPoints().at(i)->second == "Juicer")
+		{
+			gunValue = 3;
+			temp = m_juicerSpriteComponent;
+			gunAmount++;
+		}
+
+		else if (m_map->getGunPoints().at(i)->second == "Pistol")
+		{
+			gunValue = 1;
+			temp = m_pistolSpriteComponent;
+			gunAmount++;
+		}
+
+		else if (m_map->getGunPoints().at(i)->second == "Shotgun")
+		{
+			gunValue = 2;
+			temp = m_shotgunSpriteComponent;
+			gunAmount++;
+		}
+
+		else if (m_map->getGunPoints().at(i)->second == "Stabbyboy")
+		{
+			gunValue = 5;
+			temp = m_stabbyboySpriteComponent;
+			gunAmount++;
+		}
+
+		m_guns[i]->setGunAs(m_renderer, gunValue, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, temp);
 	}
 }
