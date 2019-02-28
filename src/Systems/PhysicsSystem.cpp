@@ -181,6 +181,10 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 				pc->setX(ownerPosC->getX() - tc->getXOffset());  // set gun position + offset for player centre - offset for angle
 				pc->setY(ownerPosC->getY() + tc->getYOffset());
 			}
+			if (tc->getSubTag() == "grenade")
+			{
+				pc->setY(ownerPosC->getY() + tc->getYOffset());
+			}
 			if (tc->getSubTag() == "stabbyboy")
 			{
 				pc->setX(ownerPosC->getX() - tc->getXOffset() * 2);  // set gun position + offset for player centre - offset for angle
@@ -574,13 +578,17 @@ void PhysicsSystem::launchGun(PositionComponent * pc, TagComponent * tc, Collisi
 void PhysicsSystem::setHandOnGrenade(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC) {
 	double handAngle = gunTagC->getAngle();
 
-	sc->setRotation(gunTagC->getAngle()*-1); //rotate hand
+	sc->setRotation(gunTagC->getAngle()*-1 + 90); //rotate hand
 	pc->setX(gunPosition->getX());
-	if (handAngle < 0)
+
+	if (sc->m_flipValue == SDL_FLIP_NONE)
 	{
 		handAngle = handAngle * -1;
+		pc->setY(gunPosition->getY() + (handAngle / 5) + 35);
 	}
-	pc->setY(gunPosition->getY() + (handAngle / 5));
+	else {
+		pc->setY(gunPosition->getY() + (handAngle / 5));
+	}
 }
 
 void PhysicsSystem::setHandOnPistol(SpriteComponent * sc, PositionComponent *pc, ControlComponent * cc, PositionComponent * ownerPosition, ControlComponent * ownerConC, PositionComponent * gunPosition, TagComponent * gunTagC)

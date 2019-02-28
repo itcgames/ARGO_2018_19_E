@@ -127,43 +127,81 @@ void AI::render(SDL_Renderer* renderer, Camera* camera) {
 
 	if (!control->getAlive()) {
 
+		if (!startDeath) {
+			randNum = (rand() % 2) + 1;
+			startDeath = true;
+		}
+		
+
 		if (control->getHitFrom() == "right")
 		{
-			m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount - offSet,positionComp->getY() + 52  + offSet});
-			m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount + offSet,positionComp->getY() + 52 + offSet});
-			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 - offSet,positionComp->getY() - 50 + headCount - offSet});
-			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + offSet, m_spriteComponentCrown->getPosition().y - offSet });
+			if (randNum == 1) {
+				m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount - offSet,positionComp->getY() + 52 + offSet });
+				m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount + offSet,positionComp->getY() + 52 + offSet });
+				m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 - offSet,positionComp->getY() - 50 + headCount - offSet });
+				m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + offSet, m_spriteComponentCrown->getPosition().y - offSet });
 
-			m_spriteComponentHead->rotate(3);
-			m_spriteComponentCrown->rotate(3);
-			m_spriteComponentLeftFoot->rotate(3);
-			m_spriteComponentRightFoot->rotate(3);
+				m_spriteComponentHead->rotate(3);
+				m_spriteComponentCrown->rotate(3);
+				m_spriteComponentLeftFoot->rotate(3);
+				m_spriteComponentRightFoot->rotate(3);
+			}
+			else {
+				m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 - offSet,positionComp->getY() - 50 + headCount - offSet });
+
+				m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount,positionComp->getY() + 52 });
+				m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount,positionComp->getY() + 52 });
+				m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x, m_spriteComponentCrown->getPosition().y });
+			}
+			
 		}
 		else if (control->getHitFrom() == "left")
 		{
-			m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount + offSet,positionComp->getY() + 52 - offSet});
-			m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount - offSet,positionComp->getY() + 52 - offSet});
-			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 + offSet,positionComp->getY() - 50 + headCount + offSet});
-			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x - offSet, m_spriteComponentCrown->getPosition().y - offSet});
+			if (randNum == 1) {
+				m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount + offSet,positionComp->getY() + 52 - offSet });
+				m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount - offSet,positionComp->getY() + 52 - offSet });
+				m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 + offSet,positionComp->getY() - 50 + headCount + offSet });
+				m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x - offSet, m_spriteComponentCrown->getPosition().y - offSet });
 
+				m_spriteComponentHead->rotate(-3);
+				m_spriteComponentCrown->rotate(-3);
+				m_spriteComponentLeftFoot->rotate(-3);
+				m_spriteComponentRightFoot->rotate(-3);
+			}
+			else {
+				m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 + offSet,positionComp->getY() - 50 + headCount + offSet });
 
-			m_spriteComponentHead->rotate(-3);
-			m_spriteComponentCrown->rotate(-3);
-			m_spriteComponentLeftFoot->rotate(-3);
-			m_spriteComponentRightFoot->rotate(-3);
+				m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount,positionComp->getY() + 52 });
+				m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount,positionComp->getY() + 52 });
+				m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x, m_spriteComponentCrown->getPosition().y });
+
+			}
+
+			
 		}
 		else
 		{
-			m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount - offSet,positionComp->getY() + 52 - offSet});
-			m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount - offSet,positionComp->getY() + 52 - offSet});
-			m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 + offSet,positionComp->getY() - 50 + headCount + offSet});
-			m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + offSet, m_spriteComponentCrown->getPosition().y - offSet });
+			if (randNum == 1) {
+				m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount - offSet,positionComp->getY() + 52 - offSet });
+				m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount - offSet,positionComp->getY() + 52 - offSet });
+				m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 + offSet,positionComp->getY() - 50 + headCount + offSet });
+				m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x + offSet, m_spriteComponentCrown->getPosition().y - offSet });
 
 
-			m_spriteComponentHead->rotate(3);
-			m_spriteComponentCrown->rotate(3);
-			m_spriteComponentLeftFoot->rotate(3);
-			m_spriteComponentRightFoot->rotate(3);
+				m_spriteComponentHead->rotate(3);
+				m_spriteComponentCrown->rotate(3);
+				m_spriteComponentLeftFoot->rotate(3);
+				m_spriteComponentRightFoot->rotate(3);
+			}
+			else {
+				m_spriteComponentHead->setPosition(c2v{ positionComp->getX() + headCount / 2 + offSet,positionComp->getY() - 50 + headCount + offSet });
+
+				m_spriteComponentLeftFoot->setPosition(c2v{ positionComp->getX() + runCount,positionComp->getY() + 52 });
+				m_spriteComponentRightFoot->setPosition(c2v{ positionComp->getX() - runCount,positionComp->getY() + 52 });
+				m_spriteComponentCrown->setPosition(c2v{ m_spriteComponentCrown->getPosition().x, m_spriteComponentCrown->getPosition().y });
+
+			}
+			
 		}
 		offSet += 15;
 		controlComp->setRight(false);

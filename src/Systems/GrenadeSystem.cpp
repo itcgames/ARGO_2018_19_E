@@ -22,7 +22,7 @@ void GrenadeSystem::update(std::vector<std::shared_ptr<Tile>> tiles, std::vector
 			
 			for (int i = 0; i < tiles.size(); i++) 
 			{
-				c2v v1 = { (float)tiles.at(i)->dRect.x + 35, (float)tiles.at(i)->dRect.y + 35 };
+				c2v v1 = { (float)tiles.at(i)->dRect.x + 35 - camera->getCamera()->x, (float)tiles.at(i)->dRect.y + 35 - camera->getCamera()->y };
 					
 				if (dist(v1, v2) < 250.0) 
 				{

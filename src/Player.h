@@ -20,6 +20,7 @@ public:
 
 	int m_index = -1;
 
+	bool startDeath = false;
 private:
 	float startBalloonCount = 0.0f;
 	float totalBalloonCount = 0.0f;
@@ -67,5 +68,6 @@ private:
 
 	float rumbleCount = 0;
 
-	
+	int offSet = 1;
+	int randNum = 0;
 };
