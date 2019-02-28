@@ -187,6 +187,24 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			}
 		}
 
+		gunAmount = 1;
+		int gunEntSize = m_Gunents.size();
+		for (int i = 0; i < gunEntSize; i++)
+		{
+			if (!m_Gunents.empty())
+			{
+				m_Gunents.pop_back();
+			}
+		}
+		int gunVectorSize = m_guns.size();
+		for (int i = 0; i < gunVectorSize; i++)
+		{
+			if (!m_guns.empty())
+			{
+				m_guns.pop_back();
+			}
+		}
+
 		for (int i = 0; i < m_map->getGunPoints().size(); i++)
 		{
 			if (m_map->getGunPoints().at(i)->second == "Pistol")
@@ -197,26 +215,26 @@ void PlayScreen::initialise(bool online, int size, int num) {
 
 			else if (m_map->getGunPoints().at(i)->second == "Shotgun")
 			{
-				{
-					m_guns.push_back(new Gun(m_renderer, 2, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_shotgunSpriteComponent->getTexture()));
-					gunAmount++;
-				}
+				
+				m_guns.push_back(new Gun(m_renderer, 2, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_shotgunSpriteComponent->getTexture()));
+				gunAmount++;
+				
 			}
 
 			else if (m_map->getGunPoints().at(i)->second == "Juicer")
 			{
-				{
-					m_guns.push_back(new Gun(m_renderer, 3, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_juicerSpriteComponent->getTexture()));
-					gunAmount++;
-				}
+				
+				m_guns.push_back(new Gun(m_renderer, 3, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_juicerSpriteComponent->getTexture()));
+				gunAmount++;
+				
 			}
 
 			else if (m_map->getGunPoints().at(i)->second == "Stabbyboy")
 			{
-				{
-					m_guns.push_back(new Gun(m_renderer, 5, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_stabbyboySpriteComponent->getTexture()));
-					gunAmount++;
-				}
+				
+				m_guns.push_back(new Gun(m_renderer, 5, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_stabbyboySpriteComponent->getTexture()));
+				gunAmount++;
+				
 			}
 			
 		}
@@ -313,7 +331,6 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
-    //m_ais.update();
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
 
@@ -495,11 +512,9 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 		p->renderMarker(m_renderer);
 	}
 
-	//m_animationsSys.render();
-	testLight->render(m_renderer);
+
 	m_grenadeSys.render();
 	m_collSys.render();
-	//m_emitter->update();
 	SDL_SetRenderDrawColor(renderer, 183, 110, 121, 255);
 	SDL_RenderFillRect(renderer, &m_BGRect);
 	if (m_drawRoundText) {

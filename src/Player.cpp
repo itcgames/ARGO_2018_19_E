@@ -166,6 +166,7 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 	if (controlComp->getAlive() == false) {
 		if (controlComp->getHitFrom() == "right")
 		{
+			c2v* screenPos = new c2v{ 0 , 0 };
 			m_spriteComponentLeftFoot->setPosition(c2v{ m_spriteComponentLeftFoot->getPosition().x + 10, m_spriteComponentLeftFoot->getPosition().y + 10 });
 			m_spriteComponentRightFoot->setPosition(c2v{ m_spriteComponentRightFoot->getPosition().x - 10, m_spriteComponentRightFoot->getPosition().y + 10 });
 			m_spriteComponentHead->setPosition(c2v{ m_spriteComponentHead->getPosition().x + 10, m_spriteComponentHead->getPosition().y - 10 });
