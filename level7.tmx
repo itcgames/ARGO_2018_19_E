@@ -70,10 +70,10 @@
   <object id="29" name="LEFT" x="712" y="961">
    <point/>
   </object>
-  <object id="31" name="LEFT" x="143" y="1161">
+  <object id="31" name="LEFT" x="1610" y="1163">
    <point/>
   </object>
-  <object id="32" name="RIGHT" x="1608" y="1159">
+  <object id="32" name="RIGHT" x="134" y="1160">
    <point/>
   </object>
  </objectgroup>

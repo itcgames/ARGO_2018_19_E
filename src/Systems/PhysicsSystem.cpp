@@ -360,7 +360,7 @@ void PhysicsSystem::setGun(TagComponent * tc, ControlComponent * cc, PositionCom
 		//pc->setY(aiPositionY);
 	}
 }
-void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent * tagc, ControlComponent * ownerConC) {
+void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent * tagc, ControlComponent * ownerConC, PositionComponent * ownerPosC, Camera * camera) {
 	for (Entity * entity : m_entities) {
 
 		TagComponent * tc = (TagComponent*)entity->getCompByType("TAG");
@@ -394,6 +394,19 @@ void PhysicsSystem::checkWeaponCollision(CollisionComponent * colc, TagComponent
 					if (ownerConC->getAlive() == true)
 					{
 						notifyAudioObservers(AudioObserver::SFX::SWORD_SLASH);
+					}
+
+					if (!cc->isDead)
+					{
+						c2v * screenPos = new c2v{ 0,0 };
+						auto particle = new ParticleExample();
+						screenPos->x = ownerPosC->getX() - camera->getCamera()->x;
+						screenPos->y = ownerPosC->getY() - camera->getCamera()->y;
+						particle->setRenderer(m_renderer);
+						particle->setStyle(ParticleExample::BLOOD);
+						particle->setPosition(screenPos->x, screenPos->y);
+						m_blood.push_back(particle);
+						cc->isDead = true;
 					}
 					ownerConC->setAlive(false);
 
@@ -876,7 +889,7 @@ void PhysicsSystem::setHands(PositionComponent * handOwnerPos, ControlComponent 
 }
 
 
-void PhysicsSystem::update(SDL_Renderer* renderer) {
+void PhysicsSystem::update(SDL_Renderer* renderer, Camera * camera) {
 		randomJuice = rand() % 30 - 15;
 		startRoundCount = startRoundCount + 1;
 
@@ -901,7 +914,7 @@ void PhysicsSystem::update(SDL_Renderer* renderer) {
 				{
 					handOwnerPosC = (PositionComponent*)entity->getCompByType("POSITION");
 					setHands(handOwnerPosC, ownerConC, ownerTagC);
-					checkWeaponCollision(colc, tc,ownerConC);
+					checkWeaponCollision(colc, tc,ownerConC, ownerPosC, camera);
 
 					if (tc->getGunGot() == "none")
 					{
@@ -1260,7 +1273,9 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						}
 
 						notifyAudioObservers(AudioObserver::SFX::PISTOL_SHOOT);
-						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(tc->getAngle() - 90), -tc->getXOffset() * 1.5, tc->getYOffset() * 1.5, 1000, bulletTextureSpriteComp->getTexture())); 
+						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX() - tc->getXOffset(), pc->getY() + tc->getYOffset(), -(tc->getAngle() - 90), -tc->getXOffset() * 1.2, tc->getYOffset() * 1.2, 1000, bulletTextureSpriteComp->getTexture()));
+						
+						
 
 
 
@@ -1388,7 +1403,7 @@ void PhysicsSystem::bulletRender(SDL_Renderer* renderer, Camera* camera) {
 
 	}
 
-
+	animateBlood();
 }
 
 void PhysicsSystem::setRenderer(SDL_Renderer * renderer)
@@ -1549,4 +1564,33 @@ void PhysicsSystem::recieveLevel(int width, int height)
 {
 	m_width = width;
 	m_height = height;
+}
+
+void PhysicsSystem::animateBlood()
+{
+
+	for (int i = 0; i < m_blood.size(); i++)
+	{
+		m_blood[i]->count++;
+
+		m_blood[i]->setStartSpin(90);
+		m_blood[i]->setEndSpin(90);
+		m_blood[i]->setDuration(.2);
+		m_blood[i]->setStartSize(15);
+		m_blood[i]->setStartSpinVar(180);// set the renderer
+		m_blood[i]->setSpeed(100);
+		m_blood[i]->setSpeedVar(100);
+
+		m_blood[i]->update();
+		m_blood[i]->draw();
+
+		if (m_blood[i]->count > 15)
+		{
+			ParticleExample * temp = m_blood.at(i);
+			m_blood.erase(m_blood.begin() + i);
+			delete temp;
+			m_blood.resize(m_blood.size());
+		}
+
+	}
 }

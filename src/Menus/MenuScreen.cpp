@@ -25,6 +25,9 @@ MenuScreen::MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Fon
 	
 	m_texture3 = loadFromFile("assets/art/environment/MainMenu.png", m_renderer);
 
+	m_staticTexture = loadFromFile("assets/art/environment/static.png", m_renderer);
+
+
 	std::cout << "CALLED" << std::endl;
 	m_drawTexture = m_texture;
 	
@@ -47,7 +50,9 @@ MenuScreen::MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Fon
 	m_dRect->x = 0;
 	m_dRect->y = -480;
 
-	
+	m_staticRect = new SDL_Rect();
+	m_staticRect->x = 0;
+	m_staticRect->y = 0;
 }
 
 SDL_Texture* MenuScreen::init(TTF_Font* Font, std::string & text, SDL_Texture* texture, SDL_Rect & quad, int x, int y) {
@@ -161,6 +166,7 @@ void MenuScreen::update(SDL_Window *window)
 			m_dRectangle->y = 0;
 			m_dRect->y = 240;
 		}
+		animateScreen();
 	}
 	if (!m_startInTransition) {
 		if (AButton && !firstTime) {
@@ -223,6 +229,7 @@ void MenuScreen::update(SDL_Window *window)
 		m_dRect->y -= 10;
 		m_dRectangle->y -= 10;
 		transitionTimer++;
+		animateScreen();
 	}
 
 	if (transitionTimer > 100 && lastButton == "A")
@@ -243,10 +250,44 @@ void MenuScreen::update(SDL_Window *window)
 	
 }
 
+void MenuScreen::animateScreen()
+{
+	if (animateIn) {
+		if (m_alpha <= 200)
+		{
+			m_alpha+= 20;
+		}
+		else
+		{
+			m_alpha = 200;
+			animateIn = false;
+			animateOut = true;
+		}
+	}
+	if (animateOut)
+	{
+		if (m_alpha >= 160)
+		{
+			m_alpha-= 20;
+		}
+		else
+		{
+			m_alpha = 160;
+			animateIn = true;
+			animateOut = false;
+		}
+	}
+}
+
 
 void MenuScreen::render(SDL_Renderer * renderer)
 {
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+	SDL_SetTextureAlphaMod(m_staticTexture, m_alpha);
+	m_staticRect->w = m_width;
+	m_staticRect->h = m_height;
+	SDL_RenderCopyEx(renderer, m_staticTexture, m_sRectangle, m_staticRect, 0, NULL, SDL_FLIP_NONE);
 
 	m_dRectangle->w = m_width;
 	m_dRectangle->h = m_height;

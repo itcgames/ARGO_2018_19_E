@@ -29,6 +29,9 @@ public:
 	Client * m_client;
 
 	int m_lobbySize = 0;
+
+	void animateScreen();
+
 private: 
 	GameState * m_currentGameState;
 
@@ -69,11 +72,15 @@ private:
 
 
 	SDL_Texture* m_texture;
+	SDL_Texture * m_staticTexture;
+
 	int m_width;
 	int m_height;
 
 	SDL_Rect * m_sRectangle;
 	SDL_Rect * m_dRectangle;
+
+	SDL_Rect * m_staticRect;
 
 	bool inAnimation = true;
 	bool outAnimation = false;
@@ -81,5 +88,10 @@ private:
 	double animationTimer = 0;
 
 	std::string lastButton = "";
+
+	double m_alpha = 0;
+
+	bool animateIn = true;
+	bool animateOut = false;
 };
 

@@ -114,6 +114,8 @@ private:
 	bool *m_online = new bool(false);
 
 	TTF_Font* Font;
+	TTF_Font* splashFont;
+	TTF_Font* headerFont;
 
 	std::string round_text;
 	SDL_Texture* text;

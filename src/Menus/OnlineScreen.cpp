@@ -26,6 +26,8 @@ OnlineScreen::OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font 
 	
 	m_texture = loadFromFile("assets/art/environment/Lobby.png", m_renderer);
 
+	m_staticTexture = loadFromFile("assets/art/environment/static.png", m_renderer);
+
 	m_client = client;
 	
 
@@ -42,6 +44,10 @@ OnlineScreen::OnlineScreen(GameState * state, SDL_Renderer * renderer, TTF_Font 
 	m_sRectangle->h = 700;
 	m_dRectangle->x = 0;
 	m_dRectangle->y = 700;
+
+	m_staticRect = new SDL_Rect;
+	m_staticRect->x = 0;
+	m_staticRect->y = 0;
 }
 
 OnlineScreen::~OnlineScreen() {}
@@ -149,7 +155,9 @@ void OnlineScreen::update() {
 			m_dRectangle->y = 0;
 			m_BGRect.y = 200;
 		}
+		
 	}
+	animateScreen();
 
 	if (outAnimation)
 	{
@@ -170,6 +178,36 @@ void OnlineScreen::update() {
 		*m_currentGameState = GameState::Game;
 	}
 }
+
+void OnlineScreen::animateScreen()
+{
+	if (animateIn) {
+		if (m_alpha <= 200)
+		{
+			m_alpha += 20;
+		}
+		else
+		{
+			m_alpha = 200;
+			animateIn = false;
+			animateOut = true;
+		}
+	}
+	if (animateOut)
+	{
+		if (m_alpha >= 160)
+		{
+			m_alpha -= 20;
+		}
+		else
+		{
+			m_alpha = 160;
+			animateIn = true;
+			animateOut = false;
+		}
+	}
+}
+
 
 void OnlineScreen::removeMember() {
 	int i = 0;
@@ -239,15 +277,22 @@ void OnlineScreen::render(SDL_Renderer * renderer) {
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 28, 32, 82, 255);
 
+	SDL_SetTextureAlphaMod(m_staticTexture, m_alpha);
+	m_staticRect->w = m_width;
+	m_staticRect->h = m_height;
+	SDL_RenderCopyEx(renderer, m_staticTexture, m_sRectangle, m_staticRect, 0, NULL, SDL_FLIP_NONE);
+
 	m_dRectangle->w = m_width;
 	m_dRectangle->h = m_height;
 	SDL_RenderCopyEx(renderer, m_texture, m_sRectangle, m_dRectangle, 0, NULL, SDL_FLIP_NONE);
+
+	
 
 	SDL_RenderFillRect(renderer, &m_BGRect);
 
 	//SDL_RenderCopy(renderer, exittexture, NULL, &exitRenderQuad);
 	//SDL_RenderCopy(renderer, titletexture, NULL, &titleRenderQuad);
-	if (!inAnimation) {
+	if (!inAnimation && !outAnimation) {
 		if (m_ready2Play) {
 			SDL_RenderCopy(renderer, playtexture, NULL, &playRenderQuad);
 		}
@@ -255,10 +300,11 @@ void OnlineScreen::render(SDL_Renderer * renderer) {
 		if (!m_joined) {
 			SDL_RenderCopy(renderer, noServerTexture, NULL, &noServerRenderQuad);
 		}
-	}
+	
 
-	for (int i = 0; i < m_textures.size(); i++) {
-		SDL_RenderCopy(renderer, m_textures[i], NULL, &m_quads[i]);
+		for (int i = 0; i < m_textures.size(); i++) {
+			SDL_RenderCopy(renderer, m_textures[i], NULL, &m_quads[i]);
+		}
 	}
 
 	

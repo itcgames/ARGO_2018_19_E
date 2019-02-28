@@ -25,7 +25,7 @@ public:
 	PhysicsSystem();
 	//PhysicsSystem(SDL_Surface* screen);
 	void addEntity(Entity * e);
-	void update(SDL_Renderer* renderer);
+	void update(SDL_Renderer* renderer, Camera * camera);
 	void bulletUpdate(SDL_Renderer* renderer);
 	void bulletRender(SDL_Renderer* renderer, Camera* camera);
 	void receive(Entity * e);
@@ -83,7 +83,7 @@ public:
 	void flipHorizontal(SpriteComponent * sc);
 	void updateShooting(SDL_Renderer* renderer, ControlComponent * ownerConC);
 	void makeBullets(SDL_Renderer* renderer, TagComponent *tagC,ControlComponent *ownerConC);
-	void checkWeaponCollision(CollisionComponent * colc, TagComponent *tagC, ControlComponent *ownerConC);
+	void checkWeaponCollision(CollisionComponent * colc, TagComponent * tagc, ControlComponent * ownerConC, PositionComponent * ownerPosC, Camera * camera);
 	void setHands(PositionComponent *handOwnerPos, ControlComponent *handOwnerConC, TagComponent * ownerTagC);
 
 	
@@ -120,5 +120,8 @@ public:
 
 	int m_width;
 	int m_height;
+
+	void animateBlood();
+	std::vector<ParticleExample*> m_blood;
 };
 #endif // !PHYSICSSYSTEM_H
