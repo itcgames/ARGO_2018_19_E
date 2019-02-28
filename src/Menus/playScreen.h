@@ -157,6 +157,8 @@ private:
 
 	SDL_GameController * m_gameController;
 
+	void replaceWeapons();
+
 	bool firstTime = true;
 	int buttonTimer = 0;
 	bool m_pressed = false;

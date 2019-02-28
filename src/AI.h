@@ -13,6 +13,8 @@ public:
 	AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers);
 
 	void render(SDL_Renderer* renderer, Camera* camera);
+	bool startDeath = false;
+
 private:
 	std::vector<Component*> m_components;
 	PositionComponent* positionComp;
@@ -22,6 +24,7 @@ private:
 	SpriteComponent* m_spriteComponentHead2;
 	SpriteComponent* m_spriteComponentHead3;
 	SpriteComponent* m_spriteComponentHead4;
+	SpriteComponent* m_spriteComponentHead5;
 	SpriteComponent* m_spriteComponentHeadNorm;
 	SpriteComponent* m_spriteComponentCrown;
 
@@ -51,4 +54,6 @@ private:
 	float rumbleCount = 0;
 
 	int offSet = 1;
+	int randNum = 0;
+	
 };

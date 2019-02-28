@@ -8,7 +8,7 @@ void GrenadeSystem::addEntity(Entity * e) {
 	m_entities.push_back(e);
 }
 
-void GrenadeSystem::update(std::vector<std::shared_ptr<Tile>> tiles, std::vector<AI *> aiChars, std::vector<Player *> playerChars, Camera * camera) {
+void GrenadeSystem::update(std::vector<std::shared_ptr<Tile>> tiles, std::vector<AI *> aiChars, std::vector<Player *> playerChars, Camera * camera, AudioObserver * observer) {
 	
 	
 	for (Entity * entity : m_entities) {
@@ -16,13 +16,16 @@ void GrenadeSystem::update(std::vector<std::shared_ptr<Tile>> tiles, std::vector
 		PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
 		GrenadeComponent * gc = (GrenadeComponent*)entity->getCompByType("GRENADE");
 		if (gc->getExplode()) {
+
+			observer->onNotify(AudioObserver::SFX::GRENADE_EXPLOSION);
+
 			explodeX = pc->getX() - camera->getCamera()->x;
 			explodeY = pc->getY() - camera->getCamera()->y;
 			c2v v2 = { explodeX, explodeY };
 			
 			for (int i = 0; i < tiles.size(); i++) 
 			{
-				c2v v1 = { (float)tiles.at(i)->dRect.x + 35, (float)tiles.at(i)->dRect.y + 35 };
+				c2v v1 = { (float)tiles.at(i)->dRect.x + 35 - camera->getCamera()->x, (float)tiles.at(i)->dRect.y + 35 - camera->getCamera()->y };
 					
 				if (dist(v1, v2) < 250.0) 
 				{

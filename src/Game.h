@@ -128,6 +128,8 @@ private:
 
 	bool m_startPlay;
 	bool fScreen = false;
+
+	AudioObserver * aObserver;
 };
 
 
