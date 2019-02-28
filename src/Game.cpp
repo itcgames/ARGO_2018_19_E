@@ -36,7 +36,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Menu);
+	*m_currentGameState = (GameState::Splash);
 
 
 
@@ -44,11 +44,29 @@ Game::Game()
 		printf("TTF_Init: %s\n", TTF_GetError());
 	}
 
-	Font = TTF_OpenFont("arial.ttf", 300);
+	Font = TTF_OpenFont("joystixmonospace.ttf", 200);
 	if (!Font) {
 		printf("TTF_OpenFont: %s\n", TTF_GetError());
 		// handle error
 	}
+
+	splashFont = TTF_OpenFont("joystixmonospace.ttf", 50);
+	if (!Font) {
+		printf("TTF_OpenFont: %s\n", TTF_GetError());
+		// handle error
+	}
+
+	headerFont = TTF_OpenFont("joystixmonospace.ttf", 65);
+	if (!Font) {
+		printf("TTF_OpenFont: %s\n", TTF_GetError());
+		// handle error
+	}
+
+	//SplashFont = TTF_OpenFont("joystixmonospace.ttf", 100);
+	//if (!Font) {
+	//	printf("TTF_OpenFont: %s\n", TTF_GetError());
+	//	// handle error
+	//}
 
 	TTF_Font* creditsFont = TTF_OpenFont("arial.ttf", 100);
 	if (!creditsFont) {
@@ -65,7 +83,7 @@ Game::Game()
 	setUpController();
 	m_creditsScreen = new CreditScreen(m_currentGameState, m_renderer, creditsFont, menuFont, gGameController);
 	m_playScreen = new PlayScreen(m_currentGameState, m_renderer, Font, gGameController);
-	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
+	m_splash = new SplashScreen(m_currentGameState, m_renderer, headerFont, splashFont);
 	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont, gGameController);
 	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client, m_online);
 	m_options = new OptionScreen();

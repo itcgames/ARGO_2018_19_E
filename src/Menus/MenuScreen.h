@@ -20,6 +20,8 @@ public:
 
 	SDL_Texture* init(TTF_Font* Font, std::string & text, SDL_Texture* texture, SDL_Rect & quad, int x, int y);
 
+	void animateScreen();
+
 	bool m_toggleFS = false;
 private:
 	GameState * m_currentGameState;
@@ -50,6 +52,7 @@ private:
 	SDL_Texture* m_texture;
 	SDL_Texture* m_texture2;
 	SDL_Texture* m_texture3;
+	SDL_Texture * m_staticTexture;
 	SDL_Texture* m_drawTexture;
 	int m_width;
 	int m_height;
@@ -63,6 +66,8 @@ private:
 	SDL_Rect * m_sRectangle;
 	SDL_Rect * m_dRectangle;
 
+	SDL_Rect * m_staticRect;
+
 	SDL_GameController* gGameController = NULL;
 
 	bool firstTime = true;
@@ -73,5 +78,10 @@ private:
 	int buttonTimer = 0;
 	int setSecondTime = 60;
 	int count = 0;
+
+	double m_alpha = 0;
+	
+	bool animateIn = true;
+	bool animateOut = false;
 };
 

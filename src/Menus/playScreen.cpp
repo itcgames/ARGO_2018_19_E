@@ -73,7 +73,7 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 	m_grenadeSpriteComponent->loadFromFile("assets/grenade.png", renderer);
 
 
-	m_guns.push_back(new Gun(renderer, 4, 1500, 100,gunAmount, m_grenadeSpriteComponent->getTexture()));
+	m_guns.push_back(new Gun(renderer, 1, 1500, 100,gunAmount, m_pistolSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
 	m_guns.push_back(new Gun(renderer, 3, 1000, 100,gunAmount, m_juicerSpriteComponent->getTexture()));
 	gunAmount = gunAmount + 1;
@@ -274,7 +274,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 	
 	m_cs.update(event);
 	m_collSys.update(m_map->getTiles(), m_camera);
-	m_ps.update(m_renderer);
+	m_ps.update(m_renderer, m_camera);
 	m_gunSys.update();
 
 	SDL_RenderSetScale(m_renderer, m_windowScale.x, m_windowScale.y);
@@ -417,12 +417,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		}
 	}
 
-	if (m_restart)
-	{
-		std::random_shuffle(m_map->getSpawnPoints().begin(), m_map->getSpawnPoints().end());
-		m_restartSys.reset(randNum, m_map->getSpawnPoints(), *online, client->number, size);
-		m_restart = false;
-	}
+	
 
 	if (m_gameOver) {
 		initialiseText("Victory", 0, 500);
@@ -430,6 +425,13 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 		endRound();
 	}
+	if (m_restart)
+	{
+		std::random_shuffle(m_map->getSpawnPoints().begin(), m_map->getSpawnPoints().end());
+		m_restartSys.reset(randNum, m_map->getSpawnPoints(), *online, client->number, size);
+		m_restart = false;
+	}
+
 	
 }
 
@@ -514,7 +516,7 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 	}
 
 	m_rs.render(m_renderer, m_camera);
-	m_ps.bulletRender(m_renderer, m_camera);
+	
 
 	for (Player *p : m_networkCharacters) {
 		p->render(m_renderer, m_camera);
@@ -523,12 +525,11 @@ void PlayScreen::render(SDL_Renderer * renderer) {
 	for (Player *p : m_players) {
 		p->renderMarker(m_renderer);
 	}
-
+	m_ps.bulletRender(m_renderer, m_camera);
 	//m_animationsSys.render();
 	testLight->render(m_renderer);
 	m_grenadeSys.render();
 	m_collSys.render();
-	//m_emitter->update();
 	SDL_SetRenderDrawColor(renderer, 183, 110, 121, 255);
 	SDL_RenderFillRect(renderer, &m_BGRect);
 	if (m_drawRoundText) {
@@ -650,6 +651,8 @@ void PlayScreen::endRound() {
 				Entity * ent = (Entity *)p;
 				TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
 				tag->setScore(0);
+				highest = 0;
+				tag->setLeader(false);
 			}
 			SDL_RenderSetScale(m_renderer, 1.0f, 1.0f);
 			m_timer = 5;
