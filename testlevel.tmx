@@ -31,13 +31,13 @@
   <object id="43" x="140" y="350">
    <point/>
   </object>
-  <object id="44" x="140" y="980">
+  <object id="44" x="136" y="938">
    <point/>
   </object>
   <object id="45" x="1680" y="350">
    <point/>
   </object>
-  <object id="46" x="1680" y="980">
+  <object id="46" x="1615" y="889">
    <point/>
   </object>
  </objectgroup>
@@ -52,12 +52,6 @@
    <point/>
   </object>
   <object id="50" name="Pistol" x="1610" y="980">
-   <point/>
-  </object>
-  <object id="51" name="Shotgun" x="875.5" y="389.833">
-   <point/>
-  </object>
-  <object id="52" name="Shotgun" x="876.167" y="815.667">
    <point/>
   </object>
  </objectgroup>

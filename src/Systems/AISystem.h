@@ -29,6 +29,8 @@ public:
 
 	void renderLine(SDL_Renderer * renderer);
 	void addEntity(Entity * e);
+	void removeEntity(int index);
+
 	void receive(std::vector<Entity*> guns, std::vector<Entity*> players);
 	void recieveLevel(std::vector<std::pair<c2v, std::string>> walkpoints, std::vector<std::pair<c2v, std::string>> jumpPoints, std::vector<std::shared_ptr<Tile>> tiles, int width, int height);
 	void update();

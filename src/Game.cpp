@@ -36,7 +36,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 	m_currentGameState = new GameState;
-	*m_currentGameState = (GameState::Game);
+	*m_currentGameState = (GameState::Menu);
 
 
 
@@ -64,13 +64,15 @@ Game::Game()
 	m_client = new Client("149.153.106.155", 54000);
 	setUpController();
 	m_creditsScreen = new CreditScreen(m_currentGameState, m_renderer, creditsFont, menuFont, gGameController);
-	m_playScreen = new PlayScreen(m_currentGameState, m_renderer, Font);
+	m_playScreen = new PlayScreen(m_currentGameState, m_renderer, Font, gGameController);
 	m_splash = new SplashScreen(m_currentGameState, m_renderer, Font);
 	m_menu = new MenuScreen(m_currentGameState, m_renderer, menuFont, gGameController);
 	m_onlineScreen = new OnlineScreen(m_currentGameState, m_renderer, menuFont, gGameController, m_client, m_online);
 	m_options = new OptionScreen();
 	
 	m_screenSize = { 0,0,1200,700 };
+
+	vignettetexture = m_menu->loadFromFile("assets/art/environment/vignette.png", m_renderer);
 }
 
 Game::~Game()
@@ -82,6 +84,13 @@ void Game::fullScreenToggle(SDL_Window* Window) {
 	bool IsFullscreen = SDL_GetWindowFlags(Window) & FullscreenFlag;
 	SDL_SetWindowFullscreen(Window, IsFullscreen ? 0 : FullscreenFlag);
 	SDL_ShowCursor(IsFullscreen);
+
+	if (fScreen) {
+		fScreen = false;
+	}
+	else {
+		fScreen = true;
+	}
 }
 
 void Game::run()
@@ -159,6 +168,8 @@ void Game::render() {
 	SDL_RenderClear(m_renderer);
 	SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
 
+	m_startPlay = false;
+
 	switch (*m_currentGameState)
 	{
 	case GameState::None:
@@ -177,8 +188,14 @@ void Game::render() {
 		m_options->render(m_renderer);
 		break;
 	case GameState::Game:
+		m_startPlay = true;
 		m_playScreen->render(m_renderer);
-		
+		if (!fScreen) {
+			SDL_RenderCopyEx(m_renderer, vignettetexture, new SDL_Rect{ 0,0,1200,700 }, new SDL_Rect{ 0,0,(int)(1200 / 0.55), (int)(700 / 0.55) }, 0, NULL, SDL_FLIP_NONE);
+		}
+		else {
+			SDL_RenderCopyEx(m_renderer, vignettetexture, new SDL_Rect{ 0,0,1200,700 }, new SDL_Rect{ 0,0,(int)(1280 / 0.55), (int)(720 / 0.55) }, 0, NULL, SDL_FLIP_NONE);
+		}
 		break;
 	case GameState::Credits:
 		m_creditsScreen->render(m_renderer);
@@ -186,6 +203,17 @@ void Game::render() {
 	default:
 		break;
 	}
+
+	if (!m_startPlay) {
+		if (!fScreen) {
+			SDL_RenderCopyEx(m_renderer, vignettetexture, new SDL_Rect{ 0,0,1200,700 }, new SDL_Rect{ 0,0,1200,700 }, 0, NULL, SDL_FLIP_NONE);
+		}
+		else {
+			SDL_RenderCopyEx(m_renderer, vignettetexture, new SDL_Rect{ 0,0,1200,700 }, new SDL_Rect{ 0,0,1280,720 }, 0, NULL, SDL_FLIP_NONE);
+
+		}
+	}
+	
 	SDL_RenderPresent(m_renderer);
 }
 

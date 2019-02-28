@@ -11,6 +11,7 @@ public:
 	ControlSystem();
 	SDL_Haptic* init(SDL_GameController* controller);
 	void addEntity(Entity * e);
+	void removeEntity(int index);
 	void update(SDL_Event e);
 
 	SDL_Haptic * haptic;

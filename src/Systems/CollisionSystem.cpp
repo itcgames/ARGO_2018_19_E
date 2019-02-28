@@ -168,25 +168,42 @@ void CollisionSystem::checkBullets(PositionComponent * poc, std::vector<std::sha
 					delete temp;
 					
 
-					// Possible error here
-
 					if (tag->getTag() == "Player") {
 						ControlComponent * control = (ControlComponent*)entity->getCompByType("CONTROL");
+						PositionComponent * pc = (PositionComponent*)entity->getCompByType("POSITION");
+
 						if (val == "right") {
 							control->setAlive(false);
 							control->setHitFrom("right");
+							if (!control->isDead)
+							{
+								auto particle = new ParticleExample();
+
+								particle->setRenderer(m_renderer);
+								particle->setStyle(ParticleExample::BLOOD);
+								particle->setPosition(pc->getX(), pc->getY());
+								m_blood.push_back(particle);
+								control->isDead = true;
+							}
 						}
 						if (val == "left") {
 							control->setAlive(false);
 							control->setHitFrom("left");
+							if (!control->isDead)
+							{
+								auto particle = new ParticleExample();
+
+								particle->setRenderer(m_renderer);
+								particle->setStyle(ParticleExample::BLOOD);
+								particle->setPosition(pc->getX(), pc->getY());
+								m_blood.push_back(particle);
+								control->isDead = true;
+							}
 						}
 					}
 				}
-
-
 			}
 		}
-
 	}
 
 
@@ -253,7 +270,39 @@ void CollisionSystem::animateExplosion()
 	}	
 }
 
+
+void CollisionSystem::animateBlood()
+{
+
+	for (int i = 0; i < m_blood.size(); i++)
+	{
+		m_blood[i]->count++;
+
+		m_blood[i]->setStartSpin(90);
+		m_blood[i]->setEndSpin(90);
+		m_blood[i]->setDuration(.2);
+		m_blood[i]->setStartSize(15);
+		m_blood[i]->setStartSpinVar(180);// set the renderer
+		m_blood[i]->setSpeed(100);
+		m_blood[i]->setSpeedVar(100);
+
+		m_blood[i]->update();
+		m_blood[i]->draw();
+
+		if (m_blood[i]->count > 15)
+		{
+			ParticleExample * temp = m_blood.at(i);
+			m_blood.erase(m_blood.begin() + i);
+			delete temp;
+			m_blood.resize(m_blood.size());
+		}
+
+	}
+}
+
+
 void CollisionSystem::render()
 {
 	animateExplosion();
+	animateBlood();
 }

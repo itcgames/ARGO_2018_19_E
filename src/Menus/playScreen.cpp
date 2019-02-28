@@ -1,7 +1,8 @@
 #include "playScreen.h"
 
-PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font) {
+PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font, SDL_GameController * controller) {
 
+	m_gameController = controller;
 	Font = font;
 
 	m_renderer = renderer;
@@ -47,15 +48,15 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 	m_pistolSpriteComponent->setScale(c2v{ 0.2f, 0.2f });
 	m_pistolSpriteComponent->loadFromFile("assets/pistol.png", renderer);
 
-	m_shotgunSpriteComponent = new SpriteComponent(0, 0, 27, 133);
+	m_shotgunSpriteComponent = new SpriteComponent(0, 0, 33, 139);
 	m_shotgunSpriteComponent->setPosition(c2v{ 999999, 999999 });
 	m_shotgunSpriteComponent->setScale(c2v{ 2.0f, 1.5f });
-	m_shotgunSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/Shotgun3.png", renderer);
+	m_shotgunSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/ShotgunGlow2.png", renderer);
 
 	m_juicerSpriteComponent = new SpriteComponent(0, 0, 100, 150);
 	m_juicerSpriteComponent->setPosition(c2v{ 999999, 999999 });
 	m_juicerSpriteComponent->setScale(c2v{ 2.0f, 2.0f });
-	m_juicerSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/MiniGun.png", renderer);
+	m_juicerSpriteComponent->loadFromFile("assets/art/character/finished_character_assets/MiniGunGlow.png", renderer);
 
 	m_stabbyboySpriteComponent = new SpriteComponent(0, 0, 12, 136);
 	m_stabbyboySpriteComponent->setPosition(c2v{ 999999, 999999 });
@@ -68,6 +69,7 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 	m_grenadeSpriteComponent->loadFromFile("assets/grenade.png", renderer);
 
 
+
 	//m_guns.push_back(new Gun(renderer, 1, 1500, 100,gunAmount,m_pistolSpriteComponent->getTexture()));
 	//gunAmount = gunAmount + 1;
 	//m_guns.push_back(new Gun(renderer, 3, 1000, 100,gunAmount, m_juicerSpriteComponent->getTexture()));
@@ -76,7 +78,6 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 	//gunAmount = gunAmount + 1;
 	//m_guns.push_back(new Gun(renderer, 5, 700, 100,gunAmount, m_stabbyboySpriteComponent->getTexture()));
 	//gunAmount = gunAmount + 1;
-
 
 
 
@@ -100,6 +101,8 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	}
 	
 	if (online) {
+
+		replaceWeapons();
 
 		if (m_map->getSpawnPoints().at(num - 1)->first == false)
 		{
@@ -151,6 +154,8 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	}
 	else {
 
+		replaceWeapons();
+
 		for (int i = 0; i < SDL_NumJoysticks(); i++) 
 		{
 			for (int j = 0; j < m_map->getSpawnPoints().size(); j++)
@@ -187,62 +192,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 			}
 		}
 
-		gunAmount = 1;
-		int gunEntSize = m_Gunents.size();
-		for (int i = 0; i < gunEntSize; i++)
-		{
-			if (!m_Gunents.empty())
-			{
-				m_Gunents.pop_back();
-			}
-		}
-		int gunVectorSize = m_guns.size();
-		for (int i = 0; i < gunVectorSize; i++)
-		{
-			if (!m_guns.empty())
-			{
-				m_guns.pop_back();
-			}
-		}
 
-		for (int i = 0; i < m_map->getGunPoints().size(); i++)
-		{
-			if (m_map->getGunPoints().at(i)->second == "Pistol")
-			{
-				m_guns.push_back(new Gun(m_renderer, 1, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_pistolSpriteComponent->getTexture()));
-				gunAmount++;
-			}
-
-			else if (m_map->getGunPoints().at(i)->second == "Shotgun")
-			{
-				
-				m_guns.push_back(new Gun(m_renderer, 2, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_shotgunSpriteComponent->getTexture()));
-				gunAmount++;
-				
-			}
-
-			else if (m_map->getGunPoints().at(i)->second == "Juicer")
-			{
-				
-				m_guns.push_back(new Gun(m_renderer, 3, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_juicerSpriteComponent->getTexture()));
-				gunAmount++;
-				
-			}
-
-			else if (m_map->getGunPoints().at(i)->second == "Stabbyboy")
-			{
-				
-				m_guns.push_back(new Gun(m_renderer, 5, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_stabbyboySpriteComponent->getTexture()));
-				gunAmount++;
-				
-			}
-			
-		}
-
-		for (Gun* g : m_guns)
-		{
-			m_Gunents.push_back((Entity*)g);
-		}
 
 		//std::cout << noOfPlayers << std::endl;
 	}
@@ -331,6 +281,9 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 
 	m_ps.bulletUpdate(m_renderer);
 	m_grenadeSys.update(m_map->getTiles(), m_aiCharacters, m_players);
+
+	m_ais.update();
+
 	m_ais.receive(m_Gunents, m_playerents);
 	m_hs.update();
 
@@ -350,14 +303,10 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		entityIndex++;
 	}
 
-	//if (m_cameraCount > TIME_BETWEEN_CAMERA_CHANGES)
-	//{
-
 	m_focusPoint = m_camera->focus(m_playerPositions);
 	m_camera->update(m_focusPoint);
 	m_cameraCount = 0;
 
-	//}
 
 	//if (m_focusPoint->w > 0) {
 	//	(SCREEN_WIDTH / m_focusPoint->w) > 1.0f ? ((m_screenScale < 1.0f) ? m_screenScale += 0.01f : m_screenScale = 1.0f) : (m_screenScale > 0.55f ? m_screenScale -= 0.01f : m_screenScale = 0.55f);
@@ -378,6 +327,7 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		if (m_timerCounter > 20) {
 			m_timer--;
 			initialiseText(std::to_string(m_timer), 0, 700);
+			renderQuad->x = 1000;
 			m_timerCounter = 0;
 		}
 		
@@ -416,9 +366,70 @@ void PlayScreen::update(bool * online, SDL_Event event, int size, Client * clien
 		
 	}
 
+	bool BackButton = SDL_GameControllerGetButton(m_gameController, SDL_CONTROLLER_BUTTON_BACK);
+
+
+	if (BackButton && !firstTime) {
+		firstTime = true;
+		m_pressed = true;
+		buttonTimer = 0;
+	}
+
+	buttonTimer++;
+	
+
+
+	if (buttonTimer > 100)
+	{
+		firstTime = false;
+	}
+
+
+	for (Player * p : m_players) {
+		Entity * ent = (Entity *)p;
+		TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
+		ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
+		
+		if (m_pressed && control->isPlayer)
+		{
+			std::cout << "hello" << std::endl;
+			if (!ent->checkComponent("AI"))
+			{
+				ent->addComponent(new AIComponent());
+			}
+			if (!ent->checkComponent("Ray"))
+			{
+				ent->addComponent(new RayCastComponent());
+			}
+			m_ais.addEntity(ent);
+			tag->setSubTag2("AI_Player");
+			control->isPlayer = false;
+			m_cs.removeEntity(tag->getID());
+			m_pressed = false;
+		}
+		if (m_pressed && !control->isPlayer)
+		{
+
+			tag->setSubTag2("");
+			m_cs.addEntity(ent);
+			control->isPlayer = true;
+			m_ais.removeEntity(tag->getID());
+			m_pressed = false;
+			
+		}
+	}
+
+	if (m_restart)
+	{
+		std::random_shuffle(m_map->getSpawnPoints().begin(), m_map->getSpawnPoints().end());
+		m_restartSys.reset(randNum, m_map->getSpawnPoints(), *online, client->number, size);
+		m_restart = false;
+	}
 
 	if (m_gameOver) {
 		initialiseText("Victory", 0, 500);
+		renderQuad->x = 600;
+
 		endRound();
 	}
 	
@@ -488,6 +499,9 @@ void PlayScreen::sendPacket(Entity * ent, Client * client) {
 	for (Player * p : m_networkCharacters) {
 		Entity * ent = (Entity*)p;
 		ControlComponent * cc = (ControlComponent*)ent->getCompByType("CONTROL");
+		if (cc->getRoundOver()) {
+			//m_roundEnd = true;
+		}
 	}
 }
 
@@ -537,7 +551,7 @@ void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_T
 		int text_height = textSurface->h;
 		SDL_FreeSurface(textSurface);
 		renderQuad = new SDL_Rect{ 150, y, text_width, text_height };
-		renderQuad->x = 800 - (renderQuad->w / 2);
+		//renderQuad->x = 800 - (renderQuad->w / 2);
 	}
 	else {
 		textSurface = TTF_RenderText_Solid(Font, message.c_str(), textColor);
@@ -546,7 +560,7 @@ void PlayScreen::initialiseText(std::string message, int index, int y) {// SDL_T
 		int text_height = textSurface->h;
 		SDL_FreeSurface(textSurface);
 		winnerRenderQuad = new SDL_Rect{ 150, y, text_width, text_height };
-		winnerRenderQuad->x = 900 - (winnerRenderQuad->w / 2);
+		//winnerRenderQuad->x = 900 - (winnerRenderQuad->w / 2);
 	}
 	
 }
@@ -571,8 +585,10 @@ bool PlayScreen::onlineRoundOver() {
 	
 	if (dead >= (playerAmount - 1)) {
 		if (!m_drawRoundText) {
-			initialiseText("Player Wins", 1, 200);
-			m_drawRoundText = true;
+		initialiseText("Player Wins", 1, 200);
+		winnerRenderQuad->x = 150;
+
+		m_drawRoundText = true;
 		}
 		if(m_timer < 5)
 			m_timer = 10;
@@ -591,7 +607,7 @@ void PlayScreen::endRound() {
 			randNum = 1;
 		}
 		else {
-			randNum = (rand() % 3) + 1;
+			randNum = (rand() % 5) + 1;
 		}
 
 		
@@ -599,26 +615,39 @@ void PlayScreen::endRound() {
 		if (randNum == 1) {
 			m_map->load("testlevel.tmx", m_renderer);
 			m_currentLevel = m_backgroundSpriteOne;
+			replaceWeapons();
 		}
 		else if (randNum == 2) {
 			m_map->load("level3.tmx", m_renderer);
 			m_currentLevel = m_backgroundSpriteTwo;
+			replaceWeapons();
 		}
 		else if (randNum == 3) {
 			m_map->load("level5.tmx", m_renderer);
 			m_currentLevel = m_backgroundSpriteThree;
+			replaceWeapons();
+		}
+		else if (randNum == 4) {
+			m_map->load("level6.tmx", m_renderer);
+			m_currentLevel = m_backgroundSpriteThree;
+			replaceWeapons();
+		}
+		else if (randNum == 5) {
+			m_map->load("level7.tmx", m_renderer);
+			m_currentLevel = m_backgroundSpriteTwo;
+			replaceWeapons();
 		}
 		m_roundCounter = 0;
 		m_drawRoundText = false;
 		m_roundEnd = false;
 
-		m_restartSys.reset(randNum, m_map->getSpawnPoints());
+		m_restart = true;
 		m_ais.recieveLevel(m_map->getWalkPoints(), m_map->getJumpPoints(), m_map->getTiles(), m_map->getWidth(), m_map->getHeight());
 		m_ps.recieveLevel(m_map->getWidth(), m_map->getHeight());
 		m_ps.startRoundCount = 0;
 		m_BGRect.x = -2400; m_BGRect.y = 0;
 		initialiseText(std::to_string(m_timer), 0, 700);
-
+		renderQuad->x = 1000;
 		if (m_gameOver) {
 			*m_currentGameState = GameState::Menu;
 
@@ -648,6 +677,8 @@ void PlayScreen::checkRoundOver() {
 			if (!control->getAlive()) {
 				if (!m_drawRoundText) {
 					initialiseText("AI Wins", 1, 200);
+					winnerRenderQuad->x = 600;
+
 					m_drawRoundText = true;
 				}
 				if (m_timer < 5)
@@ -675,12 +706,14 @@ void PlayScreen::checkRoundOver() {
 		}
 		if (dead >= 3) {
 			if (!m_drawRoundText) {
-				for (Entity * ent : m_playerents) {
+				for (Player * p : m_players) {
+					Entity * ent = (Entity *)p;
 					ControlComponent * control = (ControlComponent*)ent->getCompByType("CONTROL");
 					TagComponent * tag = (TagComponent*)ent->getCompByType("TAG");
 					if (control->getAlive()) {
 						tag->setScore(tag->getScore() + 1);
 						initialiseText(tag->getSubTag() + " Wins!", 1, 200);
+						winnerRenderQuad->x = 150;
 						checkScore();
 					}
 				}
@@ -713,5 +746,65 @@ void PlayScreen::checkScore()
 			tag->setLeader(false);
 		}
 
+	}
+}
+
+void PlayScreen::replaceWeapons()
+{
+	gunAmount = 1;
+	int gunEntSize = m_Gunents.size();
+	for (int i = 0; i < gunEntSize; i++)
+	{
+		if (!m_Gunents.empty())
+		{
+			m_Gunents.pop_back();
+		}
+	}
+	int gunVectorSize = m_guns.size();
+	for (int i = 0; i < gunVectorSize; i++)
+	{
+		if (!m_guns.empty())
+		{
+			m_guns.pop_back();
+		}
+	}
+
+	for (int i = 0; i < m_map->getGunPoints().size(); i++)
+	{
+		if (m_map->getGunPoints().at(i)->second == "Pistol")
+		{
+			m_guns.push_back(new Gun(m_renderer, 1, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_pistolSpriteComponent->getTexture()));
+			gunAmount++;
+		}
+
+		else if (m_map->getGunPoints().at(i)->second == "Shotgun")
+		{
+
+			m_guns.push_back(new Gun(m_renderer, 2, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_shotgunSpriteComponent->getTexture()));
+			gunAmount++;
+
+		}
+
+		else if (m_map->getGunPoints().at(i)->second == "Juicer")
+		{
+
+			m_guns.push_back(new Gun(m_renderer, 3, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_juicerSpriteComponent->getTexture()));
+			gunAmount++;
+
+		}
+
+		else if (m_map->getGunPoints().at(i)->second == "Stabbyboy")
+		{
+
+			m_guns.push_back(new Gun(m_renderer, 5, m_map->getGunPoints().at(i)->first.x, m_map->getGunPoints().at(i)->first.y, gunAmount, m_stabbyboySpriteComponent->getTexture()));
+			gunAmount++;
+
+		}
+
+	}
+
+	for (Gun* g : m_guns)
+	{
+		m_Gunents.push_back((Entity*)g);
 	}
 }

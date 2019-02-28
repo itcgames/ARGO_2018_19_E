@@ -16,10 +16,41 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 	m_spriteComponent->setColor(255, 255, 0);
 	this->addComponent(m_spriteComponent);
 
-	m_spriteComponentHead = new SpriteComponent(0, 0, 107, 91);
-	m_spriteComponentHead->loadFromFile("assets/Head2.png", renderer);
+	m_spriteComponentHead = new SpriteComponent(0, 0, 330, 330);
+	m_spriteComponentCrown = new SpriteComponent(0, 0, 404, 255);
+	m_spriteComponentHead2 = new SpriteComponent(0, 0, 330, 330);
+	m_spriteComponentHead3 = new SpriteComponent(0, 0, 330, 330);
+	m_spriteComponentHead4 = new SpriteComponent(0, 0, 330, 330);
+	m_spriteComponentHeadNorm = new SpriteComponent(0, 0, 330, 330);
+
+	m_spriteComponentHead->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+	m_spriteComponentHead2->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadNinja.png", renderer);
+	m_spriteComponentHead3->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadRambo.png", renderer);
+	m_spriteComponentHead4->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadArmy.png", renderer);
+	m_spriteComponentHeadNorm->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
+
+
+
+	m_spriteComponent->loadFromFile("assets/art/character/RedBody.png", renderer);
+	m_spriteComponentCrown->loadFromFile("assets/art/character/finished_character_assets/crown.png", renderer);
+
 	m_spriteComponentHead->setPosition(c2v{ xPos, yPos });
-	m_spriteComponentHead->setScale(c2v{ 0.5f, 0.5f });
+	m_spriteComponentHead->setScale(c2v{ 0.7f, 0.7f });
+
+	m_spriteComponentCrown->setPosition(c2v{ xPos, yPos });
+	m_spriteComponentCrown->setScale(c2v{ 0.2f, 0.2f });
+
+	m_spriteComponentHead2->setPosition(c2v{ xPos, yPos });
+	m_spriteComponentHead2->setScale(c2v{ 0.7f, 0.7f });
+
+	m_spriteComponentHead3->setPosition(c2v{ xPos, yPos });
+	m_spriteComponentHead3->setScale(c2v{ 0.7f, 0.7f });
+
+	m_spriteComponentHead4->setPosition(c2v{ xPos, yPos });
+	m_spriteComponentHead4->setScale(c2v{ 0.7f, 0.7f });
+
+	m_spriteComponentHeadNorm->setPosition(c2v{ xPos, yPos });
+	m_spriteComponentHeadNorm->setScale(c2v{ 0.7f, 0.7f });
 
 
 	m_spriteComponentLeftFoot = new SpriteComponent(0, 0, 107, 91);
@@ -33,6 +64,14 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 	m_spriteComponentRightFoot->setScale(c2v{ 0.5f, 0.5f });
 
 	m_spriteComponentHead->setColor(255, 255, 255);
+	m_spriteComponentCrown->setColor(255, 255, 255);
+	m_spriteComponentHead2->setColor(255, 255, 255);
+	m_spriteComponentHead3->setColor(255, 255, 255);
+	m_spriteComponentHead4->setColor(255, 255, 255);
+	m_spriteComponentHeadNorm->setColor(255, 255, 255);
+
+	control = new ControlComponent();
+	this->addComponent(control);
 
 	//creating and adding ray cast for AI
 	m_rayCastComp = new RayCastComponent();
@@ -46,6 +85,7 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 	{
 		tag->setSubTag("Player 1");
 		tag->setSubTag2("AI_Player");
+		
 		
 	}
 	else if (noOfPlayers == 1)
@@ -68,8 +108,6 @@ AI::AI(SDL_Renderer* renderer,float xPos,float yPos, int noOfPlayers)
 	}
 
 	this->addComponent(tag);
-	control = new ControlComponent();
-	this->addComponent(control);
 	controlComp = new AIComponent();
 	this->addComponent(controlComp);
 	positionComp = new PositionComponent(xPos, yPos);
@@ -289,6 +327,7 @@ void AI::render(SDL_Renderer* renderer, Camera* camera) {
 	c2v* screenPos = new c2v{ m_spriteComponentHead->getPosition().x - camera->getCamera()->x, m_spriteComponentHead->getPosition().y - camera->getCamera()->y };
 	m_spriteComponentHead->setPosition(*screenPos);
 	m_spriteComponentHead->render(renderer);
+	
 
 	screenPos->x = static_cast<float>(m_spriteComponentLeftFoot->getPosition().x - camera->getCamera()->x);
 	screenPos->y = static_cast<float>(m_spriteComponentLeftFoot->getPosition().y - camera->getCamera()->y);

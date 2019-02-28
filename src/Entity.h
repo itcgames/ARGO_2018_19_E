@@ -26,7 +26,30 @@ public:
 		m_components.push_back(newComp);
 	}
 
-	void removeComponent(Component * removeComp) {
+	void removeComponent(std::string removeComp) {
+		int val = 0;
+		int count = 0;
+		for (Component * c : m_components)
+		{
+			if (c->getType() == removeComp)
+			{
+				val = count;
+			}
+			count++;
+		}
+		m_components.erase(m_components.begin() + val);
+	}
+
+	bool checkComponent(std::string comp) {
+		for (Component * c : m_components)
+		{
+			if (c->getType() == comp)
+			{
+				return true;
+			}
+			
+		}
+		return false;
 
 	}
 

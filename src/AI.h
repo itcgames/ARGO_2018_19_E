@@ -19,6 +19,14 @@ private:
 	AIComponent* controlComp;
 	SpriteComponent* m_spriteComponent;
 	SpriteComponent* m_spriteComponentHead;
+	SpriteComponent* m_spriteComponentHead2;
+	SpriteComponent* m_spriteComponentHead3;
+	SpriteComponent* m_spriteComponentHead4;
+	SpriteComponent* m_spriteComponentHeadNorm;
+	SpriteComponent* m_spriteComponentCrown;
+
+	TagComponent * tag;
+
 	SpriteComponent* m_spriteComponentLeftFoot;
 	SpriteComponent* m_spriteComponentRightFoot;
 	RayCastComponent * m_rayCastComp;

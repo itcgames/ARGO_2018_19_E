@@ -24,6 +24,8 @@ MenuScreen::MenuScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* Fon
 	m_texture2 = loadFromFile("assets/art/environment/banner1.png", m_renderer);
 	
 	m_texture3 = loadFromFile("assets/art/environment/MainMenu.png", m_renderer);
+
+	std::cout << "CALLED" << std::endl;
 	m_drawTexture = m_texture;
 	
 	m_sRectangle = new SDL_Rect;
@@ -101,7 +103,7 @@ SDL_Texture* MenuScreen::loadFromFile(std::string path, SDL_Renderer* gRenderer)
 			//Get image dimensions
 			if (count < 2)
 			{
-				m_width2 = loadedSurface->w + 300;
+				m_width2 = loadedSurface->w + 400;
 				m_height2 = loadedSurface->h;
 			}
 			else
@@ -239,7 +241,6 @@ void MenuScreen::update(SDL_Window *window)
 		*m_currentGameState = GameState::Credits;
 	}
 	
-	std::cout << transitionTimer << std::endl;
 }
 
 

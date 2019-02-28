@@ -20,6 +20,7 @@ public:
 	void checkBullets(PositionComponent * gun, std::vector<std::shared_ptr<Tile>> tiles);
 	void setRenderer(SDL_Renderer * renderer);
 	void animateExplosion();
+	void animateBlood();
 	void render();
 
 
@@ -30,6 +31,7 @@ public:
 	bool m_startAnimating = false;
 	std::vector<c2v*> positions;
 	std::vector<ParticleExample*> m_particles;
+	std::vector<ParticleExample*> m_blood;
 
 	SDL_Renderer * m_renderer;
 };

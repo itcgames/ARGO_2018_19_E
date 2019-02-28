@@ -33,7 +33,7 @@
 class PlayScreen 
 {
 public:
-	PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font);
+	PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* font, SDL_GameController * controller);
 	~PlayScreen() {}
 
 	void update(bool * online, SDL_Event event, int size, Client * client);
@@ -153,4 +153,14 @@ private:
 	bool m_gameOver = false;
 
 	int highest = 0;
+	bool m_restart = false;
+
+	SDL_GameController * m_gameController;
+
+	void replaceWeapons();
+	void deleteWeapons();
+
+	bool firstTime = true;
+	int buttonTimer = 0;
+	bool m_pressed = false;
 };
