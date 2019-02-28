@@ -79,7 +79,7 @@ PlayScreen::PlayScreen(GameState * state, SDL_Renderer * renderer, TTF_Font* fon
 	m_guns.push_back(new Gun(renderer, 3, 1000, 100,gunAmount, m_juicerSpriteComponent->getTexture()));
 	//m_guns[1]->setGunAs(renderer, 3, 1000, 100, gunAmount, m_juicerSpriteComponent);
 	gunAmount = gunAmount + 1;
-	m_guns.push_back(new Gun(renderer, 4, 300, 100, gunAmount, m_grenadeSpriteComponent->getTexture()));
+	m_guns.push_back(new Gun(renderer, 2, 300, 100, gunAmount, m_shotgunSpriteComponent->getTexture()));
 	//m_guns[2]->setGunAs(renderer, 3, 300, 100, gunAmount, m_juicerSpriteComponent);
 	gunAmount = gunAmount + 1;
 	//m_guns.push_back(new Gun(renderer, 4, 300, 100, gunAmount, m_grenadeSpriteComponent->getTexture()));
