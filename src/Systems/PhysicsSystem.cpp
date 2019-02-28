@@ -1260,7 +1260,7 @@ void PhysicsSystem::makeBullets(SDL_Renderer* renderer, TagComponent* tagC, Cont
 						}
 
 						notifyAudioObservers(AudioObserver::SFX::PISTOL_SHOOT);
-						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(tc->getAngle() - 90), -tc->getXOffset(), tc->getYOffset(), 1000, bulletTextureSpriteComp->getTexture())); 
+						pc->bullets.push_back(fc->makeBullet(renderer, pc->getX(), pc->getY(), -(tc->getAngle() - 90), -tc->getXOffset() * 1.5, tc->getYOffset() * 1.5, 1000, bulletTextureSpriteComp->getTexture())); 
 
 
 
