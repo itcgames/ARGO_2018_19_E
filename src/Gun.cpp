@@ -80,7 +80,6 @@ Gun::Gun(SDL_Renderer* renderer,int gunValue,float xPos,float yPos,int id,SDL_Te
 void Gun::setGunAs(SDL_Renderer* renderer, int gunValue, float xPos, float yPos, int id, SpriteComponent * gunSprite) {
 
 	//std::cout << "X = " << xPos << std::endl;
-	m_tagComponent->setSubTag2(std::to_string(id));
 	m_positionComponent->setX(xPos);
 	m_positionComponent->setY(yPos);
 	if (gunValue == 1)
