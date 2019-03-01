@@ -92,6 +92,7 @@ void PlayScreen::initialise(bool online, int size, int num) {
 	{
 		int gunValue = 0;
 		SDL_Texture* gunTex = NULL;
+		
 		if (m_map->getGunPoints().at(i)->second == "Juicer")
 		{
 			gunValue = 3;
@@ -117,6 +118,12 @@ void PlayScreen::initialise(bool online, int size, int num) {
 		{
 			gunValue = 5;
 			gunTex = m_stabbyboySpriteComponent->getTexture();
+			gunAmount++;
+		}
+		else if (m_map->getGunPoints().at(i)->second == "Grenade")
+		{
+			gunValue = 4;
+			gunTex = m_grenadeSpriteComponent->getTexture();
 			gunAmount++;
 		}
 		

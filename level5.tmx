@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="25" height="20" tilewidth="70" tileheight="70" infinite="0" nextlayerid="6" nextobjectid="38">
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="25" height="20" tilewidth="70" tileheight="70" infinite="0" nextlayerid="6" nextobjectid="38">
  <tileset firstgid="1" name="purpleSheet" tilewidth="70" tileheight="70" tilecount="4" columns="1">
   <image source="purpleSheet.png" width="70" height="280"/>
  </tileset>
@@ -28,7 +28,7 @@
 </data>
  </layer>
  <objectgroup id="5" name="GunPoints">
-  <object id="32" name="Stabbyboy" x="840" y="36">
+  <object id="32" name="Stabbyboy" x="840" y="12">
    <point/>
   </object>
   <object id="35" name="Pistol" x="208" y="1050">
