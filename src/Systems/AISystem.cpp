@@ -271,8 +271,11 @@ void AISystem::update() {
 
 				if (!ac->detect && ac->initRecieve) 
 				{
-					ac->setLeft(false);
-					ac->setRight(false);
+					if (tag->getGunGot() != "stabbyboy") {
+						ac->setLeft(false);
+						ac->setRight(false);
+					}
+					
 
 				}
 				else if (ac->detect)
