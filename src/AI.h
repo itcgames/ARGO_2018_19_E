@@ -25,6 +25,7 @@ private:
 	SpriteComponent* m_spriteComponentHead3;
 	SpriteComponent* m_spriteComponentHead4;
 	SpriteComponent* m_spriteComponentHead5;
+	SpriteComponent* m_spriteComponentHead6;
 	SpriteComponent* m_spriteComponentHeadNorm;
 	SpriteComponent* m_spriteComponentCrown;
 

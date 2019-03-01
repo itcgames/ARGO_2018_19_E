@@ -28,30 +28,30 @@
 </data>
  </layer>
  <objectgroup id="6" name="PlayerSpawnPoints">
-  <object id="43" x="140" y="350">
+  <object id="43" x="50" y="334">
    <point/>
   </object>
-  <object id="44" x="136" y="938">
+  <object id="44" x="59" y="937">
    <point/>
   </object>
   <object id="45" x="1680" y="350">
    <point/>
   </object>
-  <object id="46" x="1615" y="889">
+  <object id="46" x="1655" y="923">
    <point/>
   </object>
  </objectgroup>
  <objectgroup id="7" name="GunPoints">
-  <object id="47" name="Pistol" x="70" y="350">
+  <object id="47" name="Pistol" x="144" y="344">
    <point/>
   </object>
-  <object id="48" name="Pistol" x="70" y="980">
+  <object id="48" name="Pistol" x="127" y="927">
    <point/>
   </object>
   <object id="49" name="Pistol" x="1610" y="350">
    <point/>
   </object>
-  <object id="50" name="Pistol" x="1610" y="980">
+  <object id="50" name="Pistol" x="1580" y="949">
    <point/>
   </object>
  </objectgroup>

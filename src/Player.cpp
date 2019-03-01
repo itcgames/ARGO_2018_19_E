@@ -25,6 +25,7 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	m_spriteComponentHead3 = new SpriteComponent(0, 0, 330, 330);
 	m_spriteComponentHead4 = new SpriteComponent(0, 0, 330, 330);
 	m_spriteComponentHead5 = new SpriteComponent(0, 0, 330, 330);
+	m_spriteComponentHead6 = new SpriteComponent(0, 0, 330, 330);
 	m_spriteComponentHeadNorm = new SpriteComponent(0, 0, 330, 330);
 	m_marker = new SpriteComponent(0, 0, 100, 100);
 
@@ -34,6 +35,7 @@ Player::Player(SDL_Renderer* renderer, float x, float y, SDL_GameController* con
 	m_spriteComponentHead4->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadArmy.png", renderer);
 	m_spriteComponentHeadNorm->loadFromFile("assets/art/character/finished_character_assets/PlayerHead.png", renderer);
 	m_spriteComponentHead5->loadFromFile("assets/art/character/finished_character_assets/PlayerHeadHillbilly.png", renderer);
+	m_spriteComponentHead6->loadFromFile("assets/art/character/finished_character_assets/PistolHead.png", renderer);
 
 	if (index == 0)
 	{
@@ -494,6 +496,9 @@ void Player::render(SDL_Renderer* renderer, Camera* camera) {
 	}
 	else if (tag->getGunGot() == "shotgun") {
 		m_spriteComponentHead->setTexture(m_spriteComponentHead5->getTexture(), 180, 140);
+	}
+	else if (tag->getGunGot() == "pistol") {
+		m_spriteComponentHead->setTexture(m_spriteComponentHead6->getTexture(), 100, 100);
 	}
 	else if (tag->getGunGot() == "none") {
 		m_spriteComponentHead->setTexture(m_spriteComponentHeadNorm->getTexture(), 100, 100);
