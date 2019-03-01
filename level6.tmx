@@ -34,10 +34,10 @@
   <object id="32" name="Shotgun" x="840" y="980">
    <point/>
   </object>
-  <object id="33" name="Grenade" x="398" y="81">
+  <object id="33" name="Juicer" x="398" y="81">
    <point/>
   </object>
-  <object id="34" name="Grenade" x="1299" y="81">
+  <object id="34" name="Stabbyboy" x="1299" y="81">
    <point/>
   </object>
  </objectgroup>
